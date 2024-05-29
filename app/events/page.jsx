@@ -1,8 +1,17 @@
 "use client";
 import PageContainer from "@/components/providers/PageContainer";
 import { Input } from "@/components/ui/input";
-import { Settings } from "lucide-react";
+import { Sheet, SheetContent } from "@/components/ui/sheet";
+import { Plus, Settings } from "lucide-react";
 import { useState } from "react";
+
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { useMediaQuery } from "react-responsive";
+// import { CurrencyFormatter } from "@/utilis/CurrencyFormatter";
+// import { FormattedDate } from "@/utilis/FormatDate";
+// import { format } from "date-fns";
+// import EditTransaction from "./EditTransactions";
 
 const defaultData = [
 	{ id: 1, name: "Pir Faisal Masood Faridabad", amount: 10000 },
@@ -19,8 +28,23 @@ const defaultData = [
 
 const Page = () => {
 	const [data, setData] = useState(defaultData);
+	const [value, setValue] = useState("");
+	const [openAddModal, setOpenAddModal] = useState(false);
 
 	const totalSum = data?.reduce((acc, item) => acc + item.amount, 0);
+
+	const onSearch = (userValue) => {
+		setValue(userValue);
+
+		if (userValue !== "") {
+			const temp = defaultData?.filter((item) =>
+				item.name.toLowerCase().includes(userValue.toLowerCase())
+			);
+			setData(temp);
+		} else {
+			setData(defaultData);
+		}
+	};
 
 	return (
 		<PageContainer>
@@ -42,10 +66,12 @@ const Page = () => {
 				<Settings />
 			</div>
 
-			<div className="flex flex-col pb-24 mt-4">
+			<div className="flex flex-col pb-28 mt-4">
 				<Input
 					className="text-[16px] h-14 mb-4"
 					placeholder="Type to search..."
+					value={value}
+					onChange={(e) => onSearch(e.target.value)}
 				/>
 
 				<div className="flex flex-col gap-2">
@@ -54,6 +80,15 @@ const Page = () => {
 					))}
 				</div>
 			</div>
+
+			<div
+				className="fixed bottom-8 cursor-pointer right-8 z-10 w-[4.5rem] h-[4.5rem] flex items-center justify-center rounded-full bg-primary"
+				onClick={() => setOpenAddModal(true)}
+			>
+				<Plus className="text-white w-10 h-10" />
+			</div>
+
+			<AddModal open={openAddModal} onOpen={setOpenAddModal} />
 		</PageContainer>
 	);
 };
@@ -69,5 +104,53 @@ const SingleItem = ({ data }) => {
 				<span className="font-semibold text-xl">{data.amount}</span>
 			</div>
 		</div>
+	);
+};
+
+const AddModal = ({ open, onOpen }) => {
+	const isDesktop = useMediaQuery({
+		query: "(min-width: 1024px)",
+	});
+
+	return (
+		<Sheet open={open} onOpenChange={onOpen} defaultOpen={false}>
+			<SheetContent
+				className={cn(
+					"pb-8 lg:pb-14 overflow-auto min-h-fit max-h-screen"
+				)}
+				side={isDesktop ? "right" : "bottom"}
+			>
+				<div className="flex flex-col w-full min-h-full pt-4">
+					{/* Date & Close */}
+					<div className="flex items-center space-x-2 justify-between mb-4 lg:mb-16">
+						<div className="flex items-center space-x-2 font-semibold text-primary">
+							New Entry
+						</div>
+					</div>
+
+					<div className="flex flex-col gap-5 w-full items-center justify-center py-6 lg:py-10">
+						<div className="w-full flex flex-col gap-1">
+							<label className="text-sm font-medium">
+								Name of Person
+							</label>
+							<Input type="text" autofocus={"false"} />
+						</div>
+						<div className="w-full flex flex-col gap-1">
+							<label className="text-sm font-medium">
+								Amount
+							</label>
+							<Input type="number" autofocus={"false"} />
+						</div>
+					</div>
+
+					{/* Buttons */}
+					<div className="flex items-center justify-between space-x-3">
+						<Button className="w-full h-12 text-base font-semibold hover:bg-primary/80">
+							Save Entry
+						</Button>
+					</div>
+				</div>
+			</SheetContent>
+		</Sheet>
 	);
 };
