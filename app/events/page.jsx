@@ -2,10 +2,17 @@
 import PageContainer from "@/components/providers/PageContainer";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
-import { Plus, Settings } from "lucide-react";
+import { Edit, Plus, Settings, Trash2, X } from "lucide-react";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import {
+	ContextMenu,
+	ContextMenuContent,
+	ContextMenuItem,
+	ContextMenuTrigger,
+} from "@/components/ui/context-menu";
+import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { useMediaQuery } from "react-responsive";
 // import { CurrencyFormatter } from "@/utilis/CurrencyFormatter";
@@ -48,17 +55,17 @@ const Page = () => {
 
 	return (
 		<PageContainer>
-			<div className="sticky top-10 z-10 bg-white -mx-4 px-4 pt-4 pb-2 shadow-sm flex flex-col gap-4">
-				<h2 className="text-2xl font-semibold text-primary">
+			<div className="sticky top-11 z-10 bg-white -mx-4 px-4 pt-10 pb-2 shadow-sm flex flex-col gap-4 select-none">
+				<h2 className="text-2xl font-semibold text-primary select-none pointer-events-none">
 					Sikandar Ki Mehndi
 				</h2>
-				<div className="flex gap-2 justify-end items-center relative">
+				<div className="flex gap-2 justify-end items-center relative select-none pointer-events-none">
 					<span>Rs</span>
 					<span className="font-bold text-xl">{totalSum}</span>
 				</div>
 			</div>
 
-			<div className="fixed top-4 z-20 left-1/2 -translate-x-1/2 font-medium text-sm bg-white">
+			<div className="fixed top-4 z-20 left-1/2 -translate-x-1/2 font-medium text-sm bg-white select-none">
 				10 March 2023
 			</div>
 
@@ -97,13 +104,30 @@ export default Page;
 
 const SingleItem = ({ data }) => {
 	return (
-		<div className="bg-muted/50 hover:bg-muted p-4 rounded-md shadow cursor-pointer flex justify-between gap-4">
-			<span className="font-medium">{data.name}</span>
-			<div className="flex gap-2 justify-end items-center relative flex-shrink-0">
-				<span className="text-sm">Rs</span>
-				<span className="font-semibold text-xl">{data.amount}</span>
-			</div>
-		</div>
+		<ContextMenu>
+			<ContextMenuTrigger>
+				<div className="bg-muted/50 hover:bg-muted select-none p-4 rounded-md shadow cursor-pointer flex justify-between gap-4">
+					<span className="font-medium">{data.name}</span>
+					<div className="flex gap-2 justify-end items-center relative flex-shrink-0 select-none">
+						<span className="text-sm select-none">Rs</span>
+						<span className="font-semibold text-xl select-none">
+							{data.amount}
+						</span>
+					</div>
+				</div>
+			</ContextMenuTrigger>
+			<ContextMenuContent>
+				<ContextMenuItem className="flex items-center gap-2">
+					<Edit className="w-4 h-4" />
+					<span className="font-medium">Edit</span>
+				</ContextMenuItem>
+				<Separator />
+				<ContextMenuItem className="flex items-center gap-2">
+					<Trash2 className="w-4 h-4" />
+					<span className="font-medium">Delete</span>
+				</ContextMenuItem>
+			</ContextMenuContent>
+		</ContextMenu>
 	);
 };
 
@@ -115,17 +139,23 @@ const AddModal = ({ open, onOpen }) => {
 	return (
 		<Sheet open={open} onOpenChange={onOpen} defaultOpen={false}>
 			<SheetContent
-				className={cn(
-					"pb-8 lg:pb-14 overflow-auto min-h-fit max-h-screen"
-				)}
+				className={cn("pb-8 lg:pb-14 overflow-auto max-h-fit")}
 				side={isDesktop ? "right" : "bottom"}
 			>
-				<div className="flex flex-col w-full min-h-full pt-4">
+				<div className="flex flex-col w-full min-h-full pt-4 justify-start">
 					{/* Date & Close */}
-					<div className="flex items-center space-x-2 justify-between mb-4 lg:mb-16">
+					<div className="flex items-center space-x-2 justify-between mb-4">
 						<div className="flex items-center space-x-2 font-semibold text-primary">
 							New Entry
 						</div>
+
+						<Button
+							variant="outline"
+							size="icon"
+							onClick={() => onOpen(false)}
+						>
+							<X className="h-4 w-4" />
+						</Button>
 					</div>
 
 					<div className="flex flex-col gap-5 w-full items-center justify-center py-6 lg:py-10">
@@ -145,7 +175,11 @@ const AddModal = ({ open, onOpen }) => {
 
 					{/* Buttons */}
 					<div className="flex items-center justify-between space-x-3">
-						<Button className="w-full h-12 text-base font-semibold hover:bg-primary/80">
+						<Button
+							onClick={() => onOpen(false)}
+							size="2xl"
+							stretched
+						>
 							Save Entry
 						</Button>
 					</div>
