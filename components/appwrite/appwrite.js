@@ -1,6 +1,6 @@
 import { Account, Client, Databases } from "appwrite";
 
-const ENDPOINT = "http://209.38.184.145/v1";
+const ENDPOINT = "https://bank.aasaan-apps.store/v1";
 const PROJECT_ID = "6660a1af002848880bed";
 const DATABASE_ID = "6660a667000df842286c";
 const COLLECTION_ID_EVENTS = "6660a671001bf5b13854";
