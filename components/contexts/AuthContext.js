@@ -53,7 +53,7 @@ export const AuthProvider = ({ children }) => {
 		// 	email: "sikandar.chishty@gmail.com",
 		// };
 		// setUser(fakeUser);
-		spush(redirectRoutes.loggedIn);
+		router.push(redirectRoutes.loggedIn);
 		// addUserCookie("Sikandar Ali");
 	};
 
