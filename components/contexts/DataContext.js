@@ -22,7 +22,7 @@ export const DataProvider = ({ children }) => {
 	};
 
 	useEffect(() => {
-		init();
+		if (userID) init();
 	}, []);
 
 	const getEventName = async (id) => {

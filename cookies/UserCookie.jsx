@@ -12,3 +12,14 @@ export const getUserCookie = () => {
 	const cookie = cookies().get("currentUser");
 	return cookie;
 };
+
+export async function getSessionCookie() {
+	return cookies().get("skrSession");
+}
+export async function createSessionCookie(cookieValue) {
+	cookies().set("skrSession", cookieValue);
+}
+
+export async function deleteSessionCookie() {
+	cookies().delete("skrSession");
+}

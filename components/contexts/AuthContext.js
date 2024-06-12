@@ -1,85 +1,65 @@
 // context/AuthContext.js
-import { addUserCookie, deleteUserCookie } from "@/cookies/UserCookie";
-import { redirectRoutes } from "@/lib/utils";
+
+import {
+	createSessionCookie,
+	deleteSessionCookie,
+	getSessionCookie,
+} from "@/cookies/UserCookie";
 import { usePathname, useRouter } from "next/navigation";
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useLayoutEffect, useState } from "react";
 import { account } from "../appwrite/appwrite";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
 	const [user, setUser] = useState(null);
+	const [loading, setLoading] = useState(true);
 	const router = useRouter();
 
-	const pathname = usePathname(router);
+	const pathname = usePathname();
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		const getUser = async () => {
 			try {
 				const response = await account.get();
+				const session = await account.getSession("current");
+
 				setUser(response);
+				createSessionCookie(session?.$id);
+
+				// router.push("/");
 			} catch (error) {
 				setUser(null);
 			}
 		};
 
-		getUser();
-		console.log("runing");
-		// if (!getUserCookie()) redirect("/login");
+		if (!user) {
+			getUser();
+			setLoading(false);
+		}
 	}, []);
 
-	// const ifUserLogged = async (second) => {
-	// 	const userSession = await account.getSession("current");
-	// 	// if (!userSession) sreplace("/login");
-	// };
-
-	// useEffect(() => {
-	// 	ifUserLogged();
-	// }, [router]);
-
-	const login = async (email, password) => {
-		try {
-			await account.createEmailPasswordSession(email, password);
-			const response = await account.get();
-			setUser(response);
-			addUserCookie(response.name);
-			// spush(redirectRoutes.loggedIn);
-		} catch (error) {
-			console.error(error.message);
-		}
-
-		// const fakeUser = {
-		// 	name: "Sikandar Ali",
-		// 	email: "sikandar.chishty@gmail.com",
-		// };
-		// setUser(fakeUser);
-		router.push(redirectRoutes.loggedIn);
-		// addUserCookie("Sikandar Ali");
-	};
-
-	const signup = async (email, password, name) => {
-		try {
-			await account.create("unique()", email, password, name);
-			await login(email, password);
-		} catch (error) {
-			console.error(error);
-		}
-	};
+	useLayoutEffect(() => {
+		if (!user) deleteSessionCookie();
+	}, []);
+	useLayoutEffect(() => {
+		if (getSessionCookie()) setLoading(false);
+	}, []);
 
 	const logout = async () => {
 		try {
 			await account.deleteSession("current");
-			deleteUserCookie("currentUser");
 			setUser(null);
-			console.log("reched heer");
-			// redirect("/login");
+
+			deleteSessionCookie();
+			router.push("/login");
 		} catch (error) {
 			console.error(error);
 		}
 	};
 
 	return (
-		<AuthContext.Provider value={{ user, login, signup, logout }}>
+		<AuthContext.Provider value={{ user, logout }}>
 			{children}
 		</AuthContext.Provider>
 	);

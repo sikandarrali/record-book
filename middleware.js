@@ -1,21 +1,38 @@
+import { NextResponse } from "next/server";
+
+const publicPaths = ["/login"];
+
 export async function middleware(request) {
-	await new Promise((resolve) => setTimeout(resolve, 100)); // Short delay
+	// await new Promise((resolve) => setTimeout(resolve, 10)); // Short delay
 
-	const currentUser = request.cookies.get("currentUser")?.value;
+	const pathname = request.nextUrl.pathname;
+	const isPublicPath = publicPaths.includes(pathname);
+	// const user = getLoggedInUser();
 
-	if (currentUser && !request.nextUrl.pathname.startsWith("/")) {
-		return Response.redirect(new URL("/", request.url));
+	let sessionCookie = request.cookies.get("skrSession");
+
+	// if (user) console.log("user found");
+	// else console.log("user not found");
+
+	// console.log("user: ", getLoggedInUser());
+
+	if (sessionCookie && isPublicPath) {
+		console.log("logged in");
+		return NextResponse.rewrite(new URL("/", request.url));
 	}
 
-	if (!currentUser && !request.nextUrl.pathname.startsWith("/login")) {
-		return Response.redirect(new URL("/login", request.url));
-	}
-
-	if (currentUser && request.nextUrl.pathname.startsWith("/login")) {
-		return Response.redirect(new URL("/", request.url));
+	if (!sessionCookie && !isPublicPath) {
+		console.log("NOT logged in");
+		return NextResponse.rewrite(new URL("/login", request.url));
 	}
 }
 
 export const config = {
-	matcher: ["/((?!api|_next/static|_next/image|.*\\.png$).*)"],
+	matcher: [
+		"/((?!api|_next/static|_next/image|favicon.ico).*)",
+		"/",
+		"/login",
+		"/events",
+		"/event",
+	],
 };

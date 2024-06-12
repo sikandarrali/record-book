@@ -1,15 +1,22 @@
 "use client";
+import { account } from "@/components/appwrite/appwrite";
 import { useAuth } from "@/components/contexts/AuthContext";
-import Login from "@/components/login";
 import PageContainer from "@/components/providers/PageContainer";
-import Signup from "@/components/signup";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 export default function Home() {
 	const { user } = useAuth();
 	const router = useRouter();
+
+	const onLogin = (second) => {
+		account.createOAuth2Session(
+			"google",
+			"http://localhost:3000/",
+			"http://localhost:3000/404"
+		);
+	};
 
 	return (
 		<PageContainer hideNavbar>
@@ -22,22 +29,9 @@ export default function Home() {
 					className="mx-auto"
 				/>
 
-				<Tabs defaultValue="login" className="mt-10">
-					<TabsList className="grid w-full grid-cols-2 h-12 ">
-						<TabsTrigger value="login" className="h-full">
-							Login
-						</TabsTrigger>
-						<TabsTrigger value="signup" className="h-full">
-							Signup
-						</TabsTrigger>
-					</TabsList>
-					<TabsContent value="login">
-						<Login />
-					</TabsContent>
-					<TabsContent value="signup">
-						<Signup />
-					</TabsContent>
-				</Tabs>
+				<Button onClick={() => onLogin()} className="mx-4 mt-20">
+					Login with Google
+				</Button>
 			</div>
 		</PageContainer>
 	);

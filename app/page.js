@@ -47,38 +47,6 @@ export default function Home() {
 		<PageContainer hideTopbar>
 			<Text variant="h2">Events</Text>
 
-			{/* <AnimatePresence mode="wait"> */}
-			{/* {loading && (
-					<motion.div
-						initial={{ opacity: 1 }}
-						animate={{
-							opacity: 1,
-							transition: { duration: 0.3 },
-						}}
-						exit={{ opacity: 0 }}
-						className="flex flex-col gap-4 -mx-4 px-4 mt-2"
-					>
-						{[1, 2, 3, 4, 5].map((item) => (
-							<div
-								key={item}
-								className="border shadow rounded-md px-4 py-6 max-w-sm w-full mx-auto"
-							>
-								<div className="animate-pulse flex space-x-4">
-									<div className="flex-1 space-y-4 py-1">
-										<div className="h-2 bg-slate-200 rounded"></div>
-										<div className="space-y-3">
-											<div className="grid grid-cols-3 gap-4">
-												<div className="h-2 bg-slate-200 rounded col-span-2"></div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						))}
-					</motion.div>
-				)} */}
-
-			{/* {!loading && ( */}
 			<motion.div
 				initial={{ opacity: 0 }}
 				animate={{
@@ -99,8 +67,6 @@ export default function Home() {
 					<Item key={event?.$id} eventData={event} />
 				))}
 			</motion.div>
-			{/* )} */}
-			{/* </AnimatePresence> */}
 
 			<AddModal open={openAddModal} onOpenChange={setOpenAddModal} />
 		</PageContainer>

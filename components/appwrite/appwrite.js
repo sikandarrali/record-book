@@ -1,10 +1,11 @@
 import { Account, Client, Databases } from "appwrite";
 
-const ENDPOINT = "https://bank.aasaan-apps.store/v1";
-const PROJECT_ID = "6660a1af002848880bed";
-const DATABASE_ID = "6660a667000df842286c";
-const COLLECTION_ID_EVENTS = "6660a671001bf5b13854";
-const COLLECTION_ID_EVENT_ITEMS = "6660a9920026bf69ebea";
+const ENDPOINT = process.env.NEXT_PUBLIC_ENDPOINT;
+const PROJECT_ID = process.env.NEXT_PUBLIC_PROJECT_ID;
+const DATABASE_ID = process.env.NEXT_PUBLIC_DATABASE_ID;
+const COLLECTION_ID_EVENTS = process.env.NEXT_PUBLIC_COLLECTION_ID_EVENTS;
+const COLLECTION_ID_EVENT_ITEMS =
+	process.env.NEXT_PUBLIC_COLLECTION_ID_EVENT_ITEMS;
 
 const client = new Client();
 client.setEndpoint(ENDPOINT).setProject(PROJECT_ID);

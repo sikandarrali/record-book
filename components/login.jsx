@@ -18,7 +18,7 @@ const LoginSchema = Yup.object().shape({
 const Login = (second) => {
 	const [showPassword, setShowPassword] = useState(false);
 
-	const { login, user } = useAuth();
+	const { login, user, logout } = useAuth();
 
 	const onLogin = async (values) => {
 		console.log(values);
@@ -111,6 +111,13 @@ const Login = (second) => {
 					)}
 				</Formik>
 			</CardContent>
+
+			<br />
+			<Button className="w-full" size="2xl" stretched onClick={logout}>
+				Logout
+			</Button>
+			<br />
+			<br />
 		</Card>
 	);
 };
