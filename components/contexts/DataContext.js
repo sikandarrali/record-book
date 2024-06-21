@@ -1,50 +1,68 @@
-// context/DataContext.js
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { useMyStore } from "@/store/store";
+import { Query } from "appwrite";
+import {
+	createContext,
+	useCallback,
+	useContext,
+	useEffect,
+	useMemo,
+} from "react";
 import { db } from "../appwrite/database";
-import { useAuth } from "./AuthContext";
-
 const DataContext = createContext();
 
 export const DataProvider = ({ children }) => {
-	const { user } = useAuth();
-	const userID = user?.$id;
+	const events = useMyStore((state) => state.events);
+	const updateEvents = useMyStore((state) => state.updateEvents);
+	const updateEventItems = useMyStore((state) => state.updateEventItems);
 
-	const [events, setEvents] = useState([]);
+	const getEvents = useCallback(async () => {
+		try {
+			const getEvents = await db.events.list([
+				Query.orderDesc("$createdAt"),
+			]);
+			updateEvents(getEvents.documents);
 
-	const [eventItems, setEventItems] = useState([]);
-
-	const init = async () => {
-		const getEvents = await db.events.list();
-		const getEventItems = await db.eventItems.list();
-
-		setEvents(getEvents.documents);
-		setEventItems(getEventItems.documents);
-	};
-
-	useEffect(() => {
-		if (userID) init();
+			const getEventItems = await db.eventItems.list([
+				Query.orderDesc("$createdAt"),
+			]);
+			updateEventItems(getEventItems.documents);
+		} catch (error) {
+			console.error("Error fetching events:", error);
+		}
 	}, []);
 
-	const getEventName = async (id) => {
-		const name = await db.events.get(id);
-		return name;
-	};
+	const getEventItems = useCallback(async () => {
+		try {
+			const getEventItems = await db.eventItems.list([
+				Query.orderDesc("$createdAt"),
+			]);
+			updateEventItems(getEventItems.documents);
+		} catch (error) {
+			console.error("Error fetching event items:", error);
+		}
+	}, []);
+
+	const getCurrentEvent = useCallback(
+		(eventID) => {
+			return events.find((event) => event.$id === eventID);
+		},
+		[events]
+	);
+
+	useEffect(() => {
+		getEvents();
+	}, [getEvents]);
+
+	useEffect(() => {
+		getEventItems();
+	}, [getEventItems]);
 
 	const values = useMemo(
 		() => ({
-			userID,
-			events,
-			eventItems,
-			getEventName,
+			getCurrentEvent,
 		}),
-		[events, userID, eventItems]
+		[events]
 	);
-
-	// const values = {
-	// 	userID,
-	// 	events,
-	// 	eventItems,
-	// };
 
 	return (
 		<DataContext.Provider value={values}>{children}</DataContext.Provider>

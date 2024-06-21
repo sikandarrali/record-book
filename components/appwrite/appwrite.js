@@ -15,6 +15,38 @@ const databases = new Databases(client);
 
 export { ID } from "appwrite";
 
+const login = async () => {
+	account.createOAuth2Session(
+		"google",
+		process.env.NEXT_PUBLIC_CALLBACK_AFTER_LOGIN,
+		process.env.NEXT_PUBLIC_CALLBACK_AFTER_LOGIN_FAILED
+	);
+};
+
+const logout = async () => {
+	try {
+		return account.deleteSession("current");
+	} catch (error) {
+		console.error(error);
+	}
+};
+
+const getCurrentUser = async () => {
+	try {
+		return account.get();
+	} catch (error) {
+		console.log(error);
+	}
+};
+
+const getCurrentSession = async () => {
+	try {
+		return account.getSession("current");
+	} catch (error) {
+		console.log(error);
+	}
+};
+
 export {
 	COLLECTION_ID_EVENTS,
 	COLLECTION_ID_EVENT_ITEMS,
@@ -22,4 +54,8 @@ export {
 	account,
 	client,
 	databases,
+	getCurrentSession,
+	getCurrentUser,
+	login,
+	logout,
 };

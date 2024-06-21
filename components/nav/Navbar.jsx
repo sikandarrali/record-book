@@ -3,10 +3,11 @@
 import { CalendarRange, Home, LogOut, MenuIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { Button } from "../ui/button";
-import { Sheet, SheetContent } from "../ui/sheet";
+import {Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle} from "../ui/sheet";
 
 const Navbar = () => {
 	const [isMenuOpen, setisMenuOpen] = useState(false);
@@ -31,16 +32,19 @@ const Navbar = () => {
 export default Navbar;
 
 const Sidebar = ({ open, onOpenChange }) => {
-	const { user, logout } = useAuth();
+	const { user, session, onLogout } = useAuth();
+
+	const router = useRouter();
 
 	return (
 		<Sheet open={open} onOpenChange={onOpenChange}>
 			<SheetContent className="bg-primary border-l-0 px-0 outline-0 stroke-none">
+				<div className={'hidden'}><SheetHeader><SheetTitle/><SheetDescription/></SheetHeader></div>
 				<div className="h-full flex flex-col">
 					<div className="flex items-center -ml-4 my-14">
 						<div className="p-3 rounded-full self-start bg-primary shrink-0">
 							<Image
-								src={"/person.png"}
+								src={user?.picture}
 								width={80}
 								height={80}
 								className="rounded-full w-20 h-20"
@@ -54,11 +58,11 @@ const Sidebar = ({ open, onOpenChange }) => {
 					</div>
 
 					<div className="flex flex-col px-6 h-full">
-						<MenuItem
-							label={"Home"}
-							href={"/"}
-							icon={<Home className="w-[18px] h-[18px]" />}
-						/>
+						{/*<MenuItem*/}
+						{/*	label={"Home"}*/}
+						{/*	href={"/"}*/}
+						{/*	icon={<Home className="w-[18px] h-[18px]" />}*/}
+						{/*/>*/}
 						<MenuItem
 							label={"Events"}
 							href={"/events"}
@@ -67,10 +71,9 @@ const Sidebar = ({ open, onOpenChange }) => {
 							}
 						/>
 
-						{/* <div className="absolute bottom-0 mb-6 w-full"> */}
 						<div className="mt-auto mb-0 w-full">
 							<div
-								onClick={logout}
+								onClick={onLogout}
 								className="flex cursor-pointer text-background hover:bg-muted hover:text-foreground items-center gap-2 px-4 py-4 rounded-md"
 							>
 								<LogOut className="w-[18px] h-[18px]" />

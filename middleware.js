@@ -17,13 +17,11 @@ export async function middleware(request) {
 	// console.log("user: ", getLoggedInUser());
 
 	if (sessionCookie && isPublicPath) {
-		console.log("logged in");
-		return NextResponse.rewrite(new URL("/", request.url));
+		return NextResponse.redirect(new URL("/events", request.url));
 	}
 
 	if (!sessionCookie && !isPublicPath) {
-		console.log("NOT logged in");
-		return NextResponse.rewrite(new URL("/login", request.url));
+		return NextResponse.redirect(new URL("/login", request.url));
 	}
 }
 

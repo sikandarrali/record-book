@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Form, Formik } from "formik";
 import { Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import * as Yup from "yup";
 import { useAuth } from "./contexts/AuthContext";
 import FormLabel from "./theme/FormLabel";
@@ -18,13 +18,17 @@ const LoginSchema = Yup.object().shape({
 const Login = (second) => {
 	const [showPassword, setShowPassword] = useState(false);
 
-	const { login, user, logout } = useAuth();
+	const { login, user, logout, setLoading } = useAuth();
 
 	const onLogin = async (values) => {
 		console.log(values);
 
 		await login(values.email, values.password);
 	};
+
+	useEffect(() => {
+		setLoading(false);
+	}, []);
 
 	return (
 		<Card>

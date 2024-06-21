@@ -5,6 +5,7 @@ import PagesProvider from "@/components/providers/PagesProvider";
 import Providers from "@/components/providers/Providers";
 import { Toaster } from "@/components/ui/toaster";
 import { cn } from "@/lib/utils";
+import {NetworkStatusIndicator} from "@/components/NetworkStatus/NetworkStatusIndicator";
 
 const fontSans = FontSans({
 	subsets: ["latin"],
@@ -66,7 +67,9 @@ export default function RootLayout({ children }) {
 					fontSans.variable
 				)}
 			>
-				<Toaster />
+			<NetworkStatusIndicator />
+
+			<Toaster />
 				<Providers>
 					<PagesProvider>{children}</PagesProvider>
 				</Providers>
