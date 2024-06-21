@@ -13,11 +13,21 @@ export const useMyStore = create(
 			},
 			deleteEvent: (deleteID) => {
 				set((state) => ({
-					events: state.events.filter((item) => item.id !== deleteID),
+					events: state.events.filter(
+						(item) => item.$id !== deleteID
+					),
 				}));
 			},
+			updateEvent: (updatedAttributes, id) =>
+				set((state) => ({
+					events: state.events.map((item) =>
+						item.$id === id
+							? { ...item, ...updatedAttributes }
+							: item
+					),
+				})),
 			updateEvents: (newEvents) => set({ events: newEvents }),
-			emptyEvents: () => set([]),
+			emptyEvents: () => set({ events: [] }),
 
 			addEventItem: (single) => {
 				set((state) => ({
@@ -27,7 +37,7 @@ export const useMyStore = create(
 			deleteEventItem: (deleteID) => {
 				set((state) => ({
 					eventItems: state.eventItems.filter(
-						(item) => item.id !== deleteID
+						(item) => item.$id !== deleteID
 					),
 				}));
 			},
@@ -41,7 +51,7 @@ export const useMyStore = create(
 				})),
 			updateEventItems: (newEventItems) =>
 				set({ eventItems: newEventItems }),
-			emptyEventItems: () => set({ events: [] }),
+			emptyEventItems: () => set({ eventItems: [] }),
 		}),
 		{
 			name: "shadi-kharcha-record-store", // name of the item in the storage (must be unique)

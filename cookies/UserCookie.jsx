@@ -20,6 +20,10 @@ export async function createSessionCookie(cookieValue) {
 	cookies().set("skrSession", cookieValue);
 }
 
+export async function createCookie(cookieName, cookieValue) {
+	cookies().set(cookieName, cookieValue);
+}
+
 export async function deleteSessionCookie() {
 	cookies().delete("skrSession");
 }
