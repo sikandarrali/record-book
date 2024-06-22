@@ -1,12 +1,6 @@
 {
 	"name": "Shadi Kharcha App",
-	"short_name": "Shadi Kharcha",
-	"theme_color": "#E11D48",
-	"background_color": "#fff",
-	"display": "standalone",
-	"orientation": "portrait",
-	"scope": "/",
-	"start_url": "/",
+	"short_name": "S K A",
 	"icons": [
 		{
 			"src": "images/icons/icon-72x72.png",
@@ -48,5 +42,12 @@
 			"sizes": "512x512",
 			"type": "image/png"
 		}
-	]
+	],
+	"theme_color": "#FFFFFF",
+	"background_color": "#FFFFFF",
+	"start_url": "/",
+	"display": "standalone",
+	"orientation": "portrait"
 }
+
+

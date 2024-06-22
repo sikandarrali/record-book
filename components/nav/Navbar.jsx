@@ -3,28 +3,27 @@
 import { CalendarRange, Home, LogOut, MenuIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { Button } from "../ui/button";
 import {Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle} from "../ui/sheet";
 
 const Navbar = () => {
-	const [isMenuOpen, setisMenuOpen] = useState(false);
+	const [isMenuOpen, setIsMenuOpen] = useState(false);
 
 	return (
 		<div className="flex items-center justify-between sticky top-0 mb-4 bg-white shadow-sm -mx-6 py-4 px-6">
-			<Image src={"/logo.png"} width={120} height={40} alt="Logo" />
+			<Image src={"/logo.png"} width={120} height={40} alt="Logo" priority />
 
 			<Button
 				variant="outline"
 				size="icon"
-				onClick={() => setisMenuOpen(!isMenuOpen)}
+				onClick={() => setIsMenuOpen(!isMenuOpen)}
 			>
 				<MenuIcon />
 			</Button>
 
-			<Sidebar open={isMenuOpen} onOpenChange={setisMenuOpen} />
+			<Sidebar open={isMenuOpen} onOpenChange={setIsMenuOpen} />
 		</div>
 	);
 };
@@ -32,9 +31,7 @@ const Navbar = () => {
 export default Navbar;
 
 const Sidebar = ({ open, onOpenChange }) => {
-	const { user, session, onLogout } = useAuth();
-
-	const router = useRouter();
+	const { user, onLogout } = useAuth();
 
 	return (
 		<Sheet open={open} onOpenChange={onOpenChange}>

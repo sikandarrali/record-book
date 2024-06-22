@@ -52,7 +52,7 @@ export const SingleListItem = ({ item }) => {
 				className="flex flex-col w-full px-6 hover:bg-muted select-none py-4 cursor-pointer "
 			>
 				<div className="flex w-full justify-between gap-5 text-left">
-					<span className="font-medium">{item.name}</span>
+					<span className="font-medium text-[18px]">{item.name}</span>
 					<div className="flex gap-2 justify-end items-center relative flex-shrink-0 select-none">
 						<span className="text-sm select-none">Rs</span>
 						<span className="font-semibold text-xl select-none">
