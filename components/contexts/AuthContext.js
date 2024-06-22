@@ -4,8 +4,9 @@ import { createSessionCookie, deleteSessionCookie } from "@/cookies/UserCookie";
 import axios from "axios";
 import { usePathname, useRouter } from "next/navigation";
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
-import { account, getCurrentUser } from "../appwrite/appwrite";
+import {account, getCurrentSession, getCurrentUser} from "../appwrite/appwrite";
 import LoadingFallback from "../loaders/LoadingFallback";
+import {useMyStore} from "@/store/store";
 
 const AuthContext = createContext();
 
@@ -16,19 +17,24 @@ export const AuthProvider = ({ children }) => {
 	const [loading, setLoading] = useState(true);
 	const router = useRouter();
 	const [session, setSession] = useState(null);
+	const emptyStoreEvent = useMyStore((state) => state.emptyEvents)
+	const emptyStoreEventItems = useMyStore((state) => state.emptyEventItems)
 
 	useEffect(() => {
 		getLoggedInGoogleUser();
 	}, []);
 
 	const getLoggedInGoogleUser = async () => {
+
 		try {
-			const currentSession = await account.getSession("current");
+			const currentSession = await getCurrentSession();
+
 			if (currentSession) {
 				const userData = await getCurrentUser();
 				await createSessionCookie(userData.$id);
 
 				if (userData) {
+
 					fetchGoogleUserData(currentSession?.providerAccessToken)
 						.then((googleData) => {
 							setUser({
@@ -43,10 +49,7 @@ export const AuthProvider = ({ children }) => {
 							});
 						})
 						.catch((error) => {
-							console.error(
-								"Error fetching Google user data:",
-								error
-							);
+
 						});
 				}
 
@@ -55,6 +58,7 @@ export const AuthProvider = ({ children }) => {
 				}, 1000);
 			}
 		} catch (error) {
+			router.replace('/login')
 			setLoading(false)
 		}
 	};
@@ -69,15 +73,23 @@ export const AuthProvider = ({ children }) => {
 
 	const onLogout = async () => {
 		setLoading(true);
-		await account.deleteSession("current").then(() => {
-			setUser(null);
-			deleteSessionCookie();
-		});
 
-		setTimeout(() => {
-			setLoading(false);
+		try {
+			await account.deleteSession("current").then(() => {
+				setUser(null);
+				deleteSessionCookie();
+				emptyStoreEvent();
+				emptyStoreEventItems()
+			});
+
+			setTimeout(() => {
+				setLoading(false);
+				router.replace("/login");
+			}, 1000);
+		}catch (e){
+			// console.log("error logging out: ", e)
 			router.replace("/login");
-		}, 1000);
+		}
 	};
 
 	// const testUSer = {
