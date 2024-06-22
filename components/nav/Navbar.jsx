@@ -13,7 +13,7 @@ const Navbar = () => {
 
 	return (
 		<div className="flex items-center justify-between sticky top-0 mb-4 bg-white shadow-sm -mx-6 py-4 px-6">
-			<Image src={"/logo.png"} width={120} height={40} alt="Logo" priority />
+			<Image src={"/logo.png"} width={120} height={47} alt="Logo" priority />
 
 			<Button
 				variant="outline"

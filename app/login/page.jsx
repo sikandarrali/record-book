@@ -10,13 +10,17 @@ export default function Home() {
 	return (
 		<PageContainer hideNavbar>
 			<div className="flex flex-col pt-8 w-full flex-1">
-				<Image
-					src={"/logo.png"}
-					width={200}
-					height={150}
-					alt="Logo"
-					className="mx-auto"
-				/>
+
+				{/*<div className={"relative w-[200px] h-[150px]"}>*/}
+					<Image
+						src="/logo.png"
+						alt="Logo"
+						className="mx-auto"
+						priority
+						width={200}
+						height={79}
+					/>
+				{/*</div>*/}
 
 				<Button
 					onClick={() => onGoogleWithLogin()}

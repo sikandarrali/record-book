@@ -54,13 +54,13 @@ export const metadata = {
 };
 
 export const viewport = {
-	themeColor: "#FFFFFF",
+	themeColor: "#E11D48",
 };
 
 export default function RootLayout({ children }) {
 	return (
 		<html lang="en" suppressHydrationWarning>
-			<head />
+			<head ><title>Shadi Kharcha Record</title></head>
 			<body
 				className={cn(
 					"min-h-screen bg-background font-sans antialiased",
