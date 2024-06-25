@@ -18,7 +18,7 @@ const Page = () => {
 		onLogout()
 	};
 
-	return <div>If you're not logged out automatically, click here <Button onClick={()=> onLogout()}>Logout</Button></div>;
+	return <div>If you&apos;re not logged out automatically, click here <Button onClick={()=> onLogout()}>Logout</Button></div>;
 };
 
 export default Page;
