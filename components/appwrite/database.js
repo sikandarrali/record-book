@@ -1,9 +1,10 @@
-import {
-	COLLECTION_ID_EVENTS,
-	COLLECTION_ID_EVENT_ITEMS,
-	DATABASE_ID,
-	databases,
-} from "./appwrite";
+import {databases} from "./appwrite";
+
+const DATABASE_ID = process.env.NEXT_PUBLIC_DATABASE_ID;
+const COLLECTION_ID_EVENTS = process.env.NEXT_PUBLIC_COLLECTION_ID_EVENTS;
+const COLLECTION_ID_EVENT_ITEMS = process.env.NEXT_PUBLIC_COLLECTION_ID_EVENT_ITEMS;
+const COLLECTION_ID_USERS = process.env.NEXT_PUBLIC_COLLECTION_ID_USERS;
+
 
 import { ID } from "appwrite";
 
@@ -17,6 +18,11 @@ const collections = [
 		databaseID: DATABASE_ID,
 		id: COLLECTION_ID_EVENT_ITEMS,
 		name: "eventItems",
+	},
+	{
+		databaseID: DATABASE_ID,
+		id: COLLECTION_ID_USERS,
+		name: "users",
 	},
 ];
 
@@ -57,6 +63,3 @@ collections.forEach((collection) => {
 });
 
 export { db };
-
-const id = ID;
-const id2 = COLLECTION_ID_EVENT_ITEMS;

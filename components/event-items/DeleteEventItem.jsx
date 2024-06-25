@@ -9,7 +9,6 @@ import {
 	AlertDialogHeader,
 	AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import * as Yup from "yup";
 
 export const DeleteEventItem = ({ open, onOpenChange, personName, onDelete }) => {
 	return (

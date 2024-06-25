@@ -4,9 +4,18 @@ import { createSessionCookie, deleteSessionCookie } from "@/cookies/UserCookie";
 import axios from "axios";
 import { usePathname, useRouter } from "next/navigation";
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
-import {account, getCurrentSession, getCurrentUser} from "../appwrite/appwrite";
+import {
+	account,
+	getCurrentSession,
+	getCurrentUser,
+	getUserInCollection,
+	refreshCurrentSession
+} from "../appwrite/appwrite";
 import LoadingFallback from "../loaders/LoadingFallback";
 import {useMyStore} from "@/store/store";
+import {db} from "@/components/appwrite/database";
+import {Query} from "appwrite";
+import {error} from "next/dist/build/output/log";
 
 const AuthContext = createContext();
 
@@ -20,6 +29,8 @@ export const AuthProvider = ({ children }) => {
 	const emptyStoreEvent = useMyStore((state) => state.emptyEvents)
 	const emptyStoreEventItems = useMyStore((state) => state.emptyEventItems)
 	const updateUser = useMyStore((state)=> state.updateUser)
+	const [refreshChanges, setRefreshChanges] = useState(false)
+	const [tempUser, setTempUser] = useState(null)
 
 	useEffect(() => {
 		getLoggedInGoogleUser();
@@ -32,28 +43,19 @@ export const AuthProvider = ({ children }) => {
 			const currentSession = await getCurrentSession();
 
 			if (currentSession) {
-				const userData = await getCurrentUser();
-				await createSessionCookie(userData.$id);
+				const currentUser = await getCurrentUser();
+				setUser(currentUser)
+				await createSessionCookie(currentUser.$id);
 
-				if (userData) {
+				if (currentUser) {
 					fetchGoogleUserData(currentSession.providerAccessToken)
 						.then((googleData) => {
-							updateUser({
-								id: userData?.$id,
-								email: googleData?.email,
-								verifiedUser: userData?.emailVerification,
-								prefs: userData?.prefs,
-								status: userData?.status,
-								labels: userData?.labels,
-								picture: googleData?.picture,
-								name: googleData?.name,
-							});
+							updateUserPrefs(googleData?.picture)
 						})
 						.catch((error) => {
 							console.log(error)
 						});
 				}
-
 				setTimeout(() => {
 					setLoading(false);
 				}, 1000);
@@ -63,6 +65,14 @@ export const AuthProvider = ({ children }) => {
 			setLoading(false)
 		}
 	};
+
+	const updateUserPrefs = async (picture) => {
+		await account.updatePrefs({
+			picture: picture,
+			lang: 'en',
+			theme: 'light'
+		})
+	}
 
 	const onGoogleWithLogin = async () => {
 		account.createOAuth2Session(
@@ -81,7 +91,6 @@ export const AuthProvider = ({ children }) => {
 				deleteSessionCookie();
 				emptyStoreEvent();
 				emptyStoreEventItems();
-				updateUser({});
 			});
 
 			setTimeout(() => {
@@ -93,12 +102,6 @@ export const AuthProvider = ({ children }) => {
 			router.replace("/login");
 		}
 	};
-
-	// const testUSer = {
-	// 	id: "fsafdsfdsf324r32qr3e",
-	// 	email: "sikandar.chishty@gmail.com",
-	// 	name: "Sikandar",
-	// };
 
 	const memoedValues = useMemo(
 		() => ({
@@ -146,3 +149,4 @@ const fetchGoogleUserData = async (accessToken) => {
 
 	}
 };
+

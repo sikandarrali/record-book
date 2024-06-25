@@ -3,25 +3,18 @@ import { db } from "@/components/appwrite/database";
 import FormLabel from "@/components/theme/FormLabel";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle} from "@/components/ui/sheet";
 import { Textarea } from "@/components/ui/textarea";
-import { useToast } from "@/components/ui/use-toast";
-import { cn } from "@/lib/utils";
-import { useMyStore } from "@/store/store";
 import { Form, Formik } from "formik";
 import { Loader2Icon, X } from "lucide-react";
 import { useState } from "react";
 import { NumericFormat } from "react-number-format";
-import { useMediaQuery } from "react-responsive";
 import * as Yup from "yup";
-import {DialogDescription, DialogHeader, DialogTitle} from "@/components/ui/dialog";
 import {toast} from "react-toastify";
 import {ToastOptions} from "@/lib/ToastOptions";
 import {
 	Drawer,
 	DrawerContent,
 	DrawerDescription,
-	DrawerFooter,
 	DrawerHeader,
 	DrawerTitle
 } from "@/components/ui/drawer";
@@ -39,11 +32,6 @@ const AddEventItemSchema = Yup.object().shape({
 });
 
 export const AddEventItem = ({ open, onOpenChange, eventID, refreshItems, setRefreshItems }) => {
-	const isDesktop = useMediaQuery({
-		query: "(min-width: 1024px)",
-	});
-
-	const addEventStore = useMyStore((state) => state.addEventItem);
 	const [adding, setAdding] = useState(false);
 	const [disabled, setDisabled] = useState(false);
 
@@ -61,9 +49,6 @@ export const AddEventItem = ({ open, onOpenChange, eventID, refreshItems, setRef
 				details: values.details,
 				eventID: eventID,
 			};
-
-			// addEventStore(eventItemData);
-			// setRefreshItems(!refreshItems);
 			await db.eventItems.create(eventItemData);
 			onOpenChange(false);
 			toast.success("New Item Added", ToastOptions);

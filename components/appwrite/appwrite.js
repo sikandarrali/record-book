@@ -1,10 +1,12 @@
 import {Account, Client, Databases, Query} from "appwrite";
+import {db} from "@/components/appwrite/database";
 
 const ENDPOINT = process.env.NEXT_PUBLIC_ENDPOINT;
 const PROJECT_ID = process.env.NEXT_PUBLIC_PROJECT_ID;
 const DATABASE_ID = process.env.NEXT_PUBLIC_DATABASE_ID;
 const COLLECTION_ID_EVENTS = process.env.NEXT_PUBLIC_COLLECTION_ID_EVENTS;
 const COLLECTION_ID_EVENT_ITEMS = process.env.NEXT_PUBLIC_COLLECTION_ID_EVENT_ITEMS;
+const COLLECTION_ID_USERS = process.env.NEXT_PUBLIC_COLLECTION_ID_USERS;
 
 const client = new Client();
 client.setEndpoint(ENDPOINT).setProject(PROJECT_ID);
@@ -54,9 +56,14 @@ const refreshCurrentSession = async () => {
 	}
 };
 
+
+
+
+
 export {
 	COLLECTION_ID_EVENTS,
 	COLLECTION_ID_EVENT_ITEMS,
+	COLLECTION_ID_USERS,
 	DATABASE_ID,
 	account,
 	client,
@@ -65,5 +72,5 @@ export {
 	refreshCurrentSession,
 	getCurrentUser,
 	login,
-	logout,
+	logout
 };
