@@ -26,14 +26,12 @@ const Page = ({ params }) => {
 	const [totalSum, setTotalSum] = useState(0);
 	const [noItems, setNoItems] = useState(false);
 	const [refreshItems, setRefreshItems] = useState(false)
+	const [searchResultsMessage, setSearchResultsMessage] = useState('')
 
 	const eventsStore = useMyStore((state) => state.events);
-	const eventItemsStore = useMyStore((state) => state.eventItems);
-	const addSingleItemInLocalStore = useMyStore((state) => state.addEventItem);
-	const addAllItemsInLocalStore = useMyStore((state) => state.updateEventItems);
-
 	const eventPageID = params.id;
 	const [items, setItems] = useState([])
+	const [itemsDefault, setItemsDefault] = useState([])
 
 	useLayoutEffect(() => {
 		const getEvent = eventsStore.some((item) => item.$id === eventPageID);
@@ -57,7 +55,8 @@ const Page = ({ params }) => {
 				setNoItems(true)
 			}else{
 				setItems(response.documents)
-				addAllItemsInLocalStore(response.documents)
+				setItemsDefault(response.documents)
+				setNoItems(false)
 			}
 		} catch (error) {
 			console.error("Error fetching event items:", error);
@@ -67,32 +66,55 @@ const Page = ({ params }) => {
 		getEventItems();
 	}, []);
 
-
 	// re-populate events when created, fixes missing $id issue
 	useEffect(() => {
 		const unsubscribe = client.subscribe(`databases.${process.env.NEXT_PUBLIC_DATABASE_ID}.collections.${process.env.NEXT_PUBLIC_COLLECTION_ID_EVENT_ITEMS}.documents`, (response) => {
 			if(response.events.includes("databases.*.collections.*.documents.*.create")){
 				setItems(prev=> [response.payload, ...prev])
+				setItemsDefault(prev=> [response.payload, ...prev])
+				if(items.length > 0){
+					setNoItems(false)
+				}
+			}
+			if(response.events.includes("databases.*.collections.*.documents.*.delete")){
+				setItems(prev=> items.filter(item=> item.$id !== response.payload.$id))
+				setItemsDefault(prev=> items.filter(item=> item.$id !== response.payload.$id))
 			}
 		});
 
 		return ()=> unsubscribe()
 	}, []);
 
-
 	const onSearch = (userValue) => {
 		setSearchValue(userValue);
 		if (userValue !== "") {
-			const temp = items?.filter((item) =>
+			const temp = itemsDefault?.filter((item) =>
 				item.name.toLowerCase().includes(userValue.toLowerCase())
 			);
+			if(temp.length === 0){
+				setSearchResultsMessage('No Items Matching your Search')
+			}else{
+				setSearchResultsMessage('')
+			}
 			setItems(temp);
+		}else{
+			resetSearch()
 		}
 	};
 
+	useEffect(()=>{
+		if(items.length > 0){
+			setNoItems(false)
+		}else{
+			if(itemsDefault.length === 0){
+				setNoItems(true)
+			}
+		}
+	}, [items])
+
 	const resetSearch = () =>{
 		setSearchValue('')
-		setItems(eventItemsStore)
+		setItems(itemsDefault)
 	}
 
 	useEffect(() => {
@@ -169,7 +191,7 @@ const Page = ({ params }) => {
 						className="flex flex-col divide-y -mx-6"
 						// ref={scrollRef}
 					>
-						{noItems ? (
+						{noItems && searchValue === '' && items.length===0 && (
 							<div className="flex flex-col justify-center items-center gap-10 px-6 mt-10">
 								<p className="text-center text-lg font-medium">
 									No Data Found
@@ -182,34 +204,29 @@ const Page = ({ params }) => {
 									Add New Data
 								</Button>
 							</div>
-						) : (
-							// eventItemsStore.filter((item)=> item.eventID===eventPageID).map(
-							// eventItems.map(
-							items.map(
-								(item, i) => (
-									<motion.div
-										initial={{ opacity: 0, y: 5 }}
-										animate={{
-											opacity: 1,
-											y: 0,
-											transition: { delay: 0.3 + i / 10 },
-										}}
-										key={i + item.name}
-									>
-										<SingleListItem
-											item={item}
-											// populateItems={populateItems}
-											refreshItems={refreshItems}
-											setRefreshItems={setRefreshItems}
-										/>
-									</motion.div>
-								)
-								// ) : (
-								// 	<div className="flex flex-col">
-								// 		{[1, 2, 3, 4, 5].map((item) => (
-								// 			<ItemsSkeleton key={item} />
-								// 		))}
-								// 	</div>
+						)}
+
+						{searchValue !== '' && searchResultsMessage !== '' && (
+							<div className="flex flex-col justify-center items-center gap-10 px-6 mt-10">
+								<p className="text-center text-lg font-medium">
+									{searchResultsMessage}
+								</p>
+							</div>
+						)}
+
+						{items.map(
+							(item, i) => (
+								<motion.div
+									initial={{ opacity: 0, y: 5 }}
+									animate={{
+										opacity: 1,
+										y: 0,
+										transition: { delay: 0.00002 + i / 10 },
+									}}
+									key={i + item.name}
+								>
+									<SingleListItem item={item}/>
+								</motion.div>
 							)
 						)}
 					</div>

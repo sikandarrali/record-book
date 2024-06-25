@@ -1,11 +1,5 @@
 import Text from "@/components/theme/Text";
 import { Button } from "@/components/ui/button";
-import {
-	Dialog,
-	DialogContent, DialogDescription,
-	DialogFooter,
-	DialogHeader, DialogTitle,
-} from "@/components/ui/dialog";
 import { Info, Pen, Trash2, XIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import {useEffect, useState} from "react";
@@ -19,13 +13,11 @@ import {toast} from "react-toastify";
 import {ToastOptions} from "@/lib/ToastOptions";
 import {
 	Drawer,
-	DrawerClose,
 	DrawerContent,
 	DrawerDescription,
 	DrawerFooter,
-	DrawerHeader, DrawerOverlay,
+	DrawerHeader,
 	DrawerTitle,
-	DrawerTrigger,
 } from "@/components/ui/drawer"
 
 const EventInfo = ({ eventData, sum }) => {

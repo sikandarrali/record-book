@@ -2,20 +2,10 @@
 import { db } from "@/components/appwrite/database";
 import Text from "@/components/theme/Text";
 import { Button } from "@/components/ui/button";
-import {
-	AlertDialog,
-	AlertDialogContent,
-	AlertDialogDescription,
-	AlertDialogFooter,
-	AlertDialogHeader,
-	AlertDialogTitle
-} from "@/components/ui/alert-dialog";
-import { useToast } from "@/components/ui/use-toast";
 import { useMyStore } from "@/store/store";
 import { Pen, Trash2, XIcon } from "lucide-react";
 import {useEffect, useState} from "react";
 import { NumericFormat } from "react-number-format";
-import { useMediaQuery } from "react-responsive";
 import { DeleteEventItem } from "./DeleteEventItem";
 import { EditEventItem } from "./EditEventItem";
 import {toast} from "react-toastify";
@@ -28,10 +18,8 @@ import {
 	DrawerHeader,
 	DrawerTitle
 } from "@/components/ui/drawer";
-import {Table, TableBody, TableCell, TableRow} from "@/components/ui/table";
 
-export const SingleListItem = ({ item, refreshItems, setRefreshItems }) => {
-	const isDesktop = useMediaQuery({ query: "(min-width: 1024px)" });
+export const SingleListItem = ({ item }) => {
 	const [isOpen, setIsOpen] = useState(false);
 	const [openEdit, setOpenEdit] = useState(false);
 	const [openDelete, setOpenDelete] = useState(false);
@@ -44,7 +32,6 @@ export const SingleListItem = ({ item, refreshItems, setRefreshItems }) => {
 		setOpenDelete(false);
 		setIsOpen(false);
 		deleteItem(item.$id);
-		// setRefreshItems(!refreshItems);
 		await db.eventItems.delete(item.$id);
 		toast.success("Deleted!", ToastOptions);
 	};

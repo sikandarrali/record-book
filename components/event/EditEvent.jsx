@@ -1,12 +1,10 @@
 "use client";
 import { db } from "@/components/appwrite/database";
-import { useAuth } from "@/components/contexts/AuthContext";
 import FormLabel from "@/components/theme/FormLabel";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle} from "@/components/ui/sheet";
 import { Textarea } from "@/components/ui/textarea";
-import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
 import { useMyStore } from "@/store/store";
 import { Form, Formik } from "formik";

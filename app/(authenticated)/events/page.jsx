@@ -10,6 +10,8 @@ import Link from "next/link";
 import {client, DATABASE_ID, COLLECTION_ID_EVENTS, databases} from "@/components/appwrite/appwrite";
 import {db} from "@/components/appwrite/database";
 import {ID, Query} from "appwrite";
+import {useAuth} from "@/components/contexts/AuthContext";
+import {Button} from "@/components/ui/button";
 
 
 export default function Home() {
@@ -24,6 +26,8 @@ export default function Home() {
 	const addAllEventsInLocalStore = useMyStore((state) => state.updateEvents);
 
 	const [eventsState, setEventsState] = useState([])
+
+	const{user, setUser} = useAuth()
 
 	const getEvents = async () =>{
 		try {
@@ -57,6 +61,7 @@ export default function Home() {
 			FixStickyHeaderScrollError(scrollRef.current);
 		}
 	}, []);
+
 
 
 	return (

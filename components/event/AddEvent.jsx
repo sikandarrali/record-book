@@ -1,14 +1,11 @@
 "use client";
 import { db } from "@/components/appwrite/database";
-import { useAuth } from "@/components/contexts/AuthContext";
 import FormLabel from "@/components/theme/FormLabel";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle} from "@/components/ui/sheet";
 import { Textarea } from "@/components/ui/textarea";
-import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
-import { useMyStore } from "@/store/store";
 import { Form, Formik } from "formik";
 import { Loader2Icon, X } from "lucide-react";
 import { useState } from "react";
@@ -30,10 +27,8 @@ const AddEventSchema = Yup.object().shape({
 
 export const AddEvent = ({ open, onOpenChange, refreshItems, setRefreshItems }) => {
 	const isDesktop = useMediaQuery({ query: "(min-width: 1024px)" });
-	const addEventStore = useMyStore((state) => state.addEvent);
 	const [adding, setAdding] = useState(false);
 	const [disabled, setDisabled] = useState(false);
-	const { user } = useAuth();
 
 	const onAdd = async (values) => {
 		setAdding(true);
