@@ -4,6 +4,11 @@ import { createJSONStorage, persist } from "zustand/middleware";
 export const useMyStore = create(
 	persist(
 		(set) => ({
+			user: {},
+			updateUser: (newUser) =>
+				set((state) => ({
+					user: { ...newUser }
+				})),
 			events: [],
 			eventItems: [],
 			addEvent: (single) => {
@@ -52,6 +57,7 @@ export const useMyStore = create(
 			updateEventItems: (newEventItems) =>
 				set({ eventItems: newEventItems }),
 			emptyEventItems: () => set({ eventItems: [] }),
+
 		}),
 		{
 			name: "shadi-kharcha-record-store", // name of the item in the storage (must be unique)

@@ -14,6 +14,8 @@ import { Loader2Icon, X } from "lucide-react";
 import { useState } from "react";
 import { useMediaQuery } from "react-responsive";
 import * as Yup from "yup";
+import {ToastOptions} from "@/lib/ToastOptions";
+import {toast} from "react-toastify";
 
 const EditEventSchema = Yup.object().shape({
 	name: Yup.string()
@@ -25,16 +27,14 @@ const EditEventSchema = Yup.object().shape({
 	details: Yup.string().min(1).max(300, "max 300 characters"),
 });
 
-export const EditEvent = ({ open, onOpen, eventData }) => {
+export const EditEvent = ({ open, onOpenChange, eventData }) => {
 	const isDesktop = useMediaQuery({
 		query: "(min-width: 1024px)",
 	});
 
-	const { toast } = useToast();
 	const updateEventStore = useMyStore((state) => state.updateEvent);
 	const [adding, setAdding] = useState(false);
 	const [disabled, setDisabled] = useState(false);
-	const { user } = useAuth();
 
 	const onUpdate = async (values) => {
 		setAdding(true);
@@ -46,11 +46,7 @@ export const EditEvent = ({ open, onOpen, eventData }) => {
 			values.venue === eventData.venue &&
 			values.details === eventData.details
 		) {
-			toast({
-				title: "No changes detected!",
-				variant: "info",
-			});
-
+			toast.info("Nothing to update", ToastOptions);
 			setAdding(false);
 			setDisabled(false);
 			return;
@@ -66,25 +62,19 @@ export const EditEvent = ({ open, onOpen, eventData }) => {
 
 			await db.events.update(eventDataValues, eventData.$id);
 			updateEventStore(eventDataValues, eventData.$id);
-			onOpen(false);
-			toast({
-				title: "Event Updated!",
-				variant: "success",
-			});
+			toast.success("Updated!", ToastOptions);
 			setAdding(false);
 			setDisabled(false);
 		} catch (error) {
-			toast({
-				title: `"Error Updating Event! ${error}`,
-				variant: "destructive",
-			});
+			toast.error(`"Update failed: ${error}`, ToastOptions);
 			setAdding(false);
 			setDisabled(false);
 		}
+		onOpenChange(false);
 	};
 
 	return (
-		<Sheet open={open} onOpen={onOpen} defaultOpen={false}>
+		<Sheet open={open} onOpenChange={onOpenChange} defaultOpen={false}>
 			<SheetContent
 				className={cn("pb-8 lg:pb-14 overflow-auto max-h-fit")}
 				side={isDesktop ? "right" : "bottom"}
@@ -100,7 +90,7 @@ export const EditEvent = ({ open, onOpen, eventData }) => {
 						<Button
 							variant="outline"
 							size="icon"
-							onClick={() => onOpen(false)}
+							onClick={() => onOpenChange(false)}
 						>
 							<X className="h-4 w-4" />
 						</Button>

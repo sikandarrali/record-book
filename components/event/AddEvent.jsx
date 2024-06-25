@@ -14,13 +14,8 @@ import { Loader2Icon, X } from "lucide-react";
 import { useState } from "react";
 import { useMediaQuery } from "react-responsive";
 import * as Yup from "yup";
-
-const defaultData = [
-	{ id: 1, name: "Sikandar ki Mehndi" },
-	{ id: 2, name: "Sikandar ki Gharoli" },
-	{ id: 3, name: "Sikandar ki Barat" },
-	{ id: 4, name: "Sikandar ka Walima" },
-];
+import {toast} from "react-toastify";
+import {ToastOptions} from "@/lib/ToastOptions";
 
 const AddEventSchema = Yup.object().shape({
 	name: Yup.string()
@@ -33,12 +28,8 @@ const AddEventSchema = Yup.object().shape({
 	details: Yup.string().min(1).max(300, "max 300 characters"),
 });
 
-export const AddEvent = ({ open, onOpenChange }) => {
-	const isDesktop = useMediaQuery({
-		query: "(min-width: 1024px)",
-	});
-
-	const { toast } = useToast();
+export const AddEvent = ({ open, onOpenChange, refreshItems, setRefreshItems }) => {
+	const isDesktop = useMediaQuery({ query: "(min-width: 1024px)" });
 	const addEventStore = useMyStore((state) => state.addEvent);
 	const [adding, setAdding] = useState(false);
 	const [disabled, setDisabled] = useState(false);
@@ -55,21 +46,14 @@ export const AddEvent = ({ open, onOpenChange }) => {
 				venue: values.venue,
 				details: values.details,
 			};
-
 			await db.events.create(eventData);
-			addEventStore(eventData);
+			// logic for adding events in localStore is available in events/page
 			onOpenChange(false);
-			toast({
-				title: "Event Created!",
-				variant: "success",
-			});
+			toast.success("Event created", ToastOptions);
 			setAdding(false);
 			setDisabled(false);
 		} catch (error) {
-			toast({
-				title: `"Error Adding Event!: ${error}`,
-				variant: "destructive",
-			});
+			toast.error(`Unable to Add: ${error}`, ToastOptions);
 			setAdding(false);
 			setDisabled(false);
 		}

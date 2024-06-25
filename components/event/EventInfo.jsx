@@ -8,11 +8,25 @@ import {
 } from "@/components/ui/dialog";
 import { Info, Pen, Trash2, XIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import { NumericFormat } from "react-number-format";
 import { Table, TableBody, TableCell, TableRow } from "../ui/table";
 import { DeleteEvent } from "./DeleteEvent";
 import { EditEvent } from "./EditEvent";
+import {useMyStore} from "@/store/store";
+import {db} from "@/components/appwrite/database";
+import {toast} from "react-toastify";
+import {ToastOptions} from "@/lib/ToastOptions";
+import {
+	Drawer,
+	DrawerClose,
+	DrawerContent,
+	DrawerDescription,
+	DrawerFooter,
+	DrawerHeader, DrawerOverlay,
+	DrawerTitle,
+	DrawerTrigger,
+} from "@/components/ui/drawer"
 
 const EventInfo = ({ eventData, sum }) => {
 	const [openDetails, setOpenDetails] = useState(false);
@@ -20,18 +34,61 @@ const EventInfo = ({ eventData, sum }) => {
 	const [openDelete, setOpenDelete] = useState(false);
 	const router = useRouter();
 
+	const deleteEventStore = useMyStore((state) => state.deleteEvent);
+
+	const onDelete = async () => {
+		await db.events.delete(eventData?.$id);
+		deleteEventStore(eventData?.$id);
+		setOpenDelete(false);
+		setOpenDetails(false);
+		toast.success("Deleted!", ToastOptions);
+		router.replace("/events");
+	};
+
+
+	// const DeleteAllItemsInThisEvent = async () => {
+	// 	const promises = [];
+	// 	const getItems = await db.eventItems.list([
+	// 		Query.orderDesc("$createdAt"),
+	// 		Query.equal('eventID', deleteID)
+	// 	]);
+	// 	items = getItems.documents;
+	//
+	//
+	// };
+
+	// fixes dialog adding pointer-events:none to body
+	// document.body.style.pointerEvents = "auto";
+	useEffect(() => {
+		if (openDetails) {
+			// Pushing the change to the end of the call stack
+			const timer = setTimeout(() => {
+				document.body.style.pointerEvents = "";
+			}, 0);
+			return () => clearTimeout(timer);
+		} else {
+			document.body.style.pointerEvents = "auto";
+		}
+	}, [openDetails]);
+
 	return (
 		<>
 			<div className="font-semibold" onClick={() => setOpenDetails(true)}>
 				<Info className="cursor-pointer hover:scale-125 duration-300 text-background" />
 			</div>
 
-			<Dialog open={openDetails} onOpen={setOpenDetails}>
-				<DialogContent className={"w-[90%] rounded-xl pt-0"} hideClose>
-					<DialogHeader>
+			<Drawer
+				onRelease={()=> setOpenDetails(false)}
+				open={openDetails}
+				onOpen={setOpenDetails}
+			>
+				<DrawerContent className={'p-6'}>
+					<DrawerHeader className={'mb-0 px-0 pb-0.5'}>
+						<div className={'hidden'}><DrawerTitle/><DrawerDescription/></div>
+
 						<div
 							className={
-								"flex flex-row justify-between mt-4 border-b mb-4 py-4 pt-1"
+								"flex flex-row justify-between pt-1 pb-4 border-b"
 							}
 						>
 							<Button
@@ -51,21 +108,18 @@ const EventInfo = ({ eventData, sum }) => {
 								<Pen className="h-4 w-4" />
 							</Button>
 						</div>
-						<div className="flex gap-4 text-center justify-center">
-							<Text
-								variant={"h2"}
-								className="text-primary text-center self-center"
-							>
-								{eventData?.name}
-							</Text>
-						</div>
+					</DrawerHeader>
 
-						<div className={'hidden'}><DialogTitle/></div>
-					</DialogHeader>
+					<div className="flex gap-4 my-6 text-center justify-center">
+						<Text
+							variant={"h2"}
+							className="text-primary text-center self-center"
+						>
+							{eventData?.name}
+						</Text>
+					</div>
 
-					<div className={'hidden'}><DialogDescription/></div>
-
-					<Table className="mt-6">
+					<Table>
 						<TableBody className="font-medium text-base">
 							<TableRow>
 								<TableCell>Total</TableCell>
@@ -95,7 +149,7 @@ const EventInfo = ({ eventData, sum }) => {
 						</TableBody>
 					</Table>
 
-					<DialogFooter className={"mt-10 justify-center"}>
+					<DrawerFooter>
 						<Button
 							type="submit"
 							variant="outline"
@@ -106,15 +160,16 @@ const EventInfo = ({ eventData, sum }) => {
 						>
 							<XIcon className="text-primary" />
 						</Button>
-					</DialogFooter>
-				</DialogContent>
-			</Dialog>
+					</DrawerFooter>
+				</DrawerContent>
+			</Drawer>
 
-			<EditEvent open={openEdit} onOpen={setOpenEdit} eventData={eventData} />
+			<EditEvent open={openEdit} onOpenChange={setOpenEdit} eventData={eventData} />
 			<DeleteEvent
 				open={openDelete}
-				onOpen={setOpenDelete}
-				deleteID={eventData?.$id}
+				onOpenChange={setOpenDelete}
+				onDelete={onDelete}
+				eventName={eventData?.name}
 			/>
 		</>
 	);

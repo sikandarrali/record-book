@@ -8,60 +8,27 @@ import {
 	AlertDialogHeader,
 	AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { useMyStore } from "@/store/store";
-import { useRouter } from "next/navigation";
-import { useToast } from "../ui/use-toast";
-import {db} from "@/components/appwrite/database";
-import {Query} from "appwrite";
 
-export const DeleteEvent = ({ open, onOpen, deleteID }) => {
-	const router = useRouter();
-	const { toast } = useToast();
-	const deleteEventStore = useMyStore((state) => state.deleteEvent);
-
-	const onDelete = async () => {
-		await db.events.delete(deleteID);
-		deleteEventStore(deleteID);
-		toast({
-			title: "Event Deleted.",
-			variant: "success",
-		});
-		onOpen(false);
-		router.replace("/events");
-	};
-
-	const DeleteAllItemsInThisEvent = async () => {
-		const promises = [];
-		const getItems = await db.eventItems.list([
-			Query.orderDesc("$createdAt"),
-			Query.equal('eventID', deleteID)
-		]);
-		items = getItems.documents;
-
-
-	};
-
+export const DeleteEvent = ({ open, onOpenChange, onDelete, eventName }) => {
 	return (
-		<AlertDialog open={open} onOpen={onOpen}>
-			<AlertDialogContent className="max-w-[90%]">
+		<AlertDialog open={open} onOpenChange={onOpenChange} modal={false}>
+			<AlertDialogContent className={"w-[90%]"}>
 				<AlertDialogHeader>
-					<AlertDialogTitle>Delete Event?</AlertDialogTitle>
-					<AlertDialogDescription>
-						This action cannot be undone. This will permanently
-						delete your account and remove your data from our
-						servers.
+					<AlertDialogTitle>Delete <span className={'font-semibold text-primary text-xl'}>{eventName}</span> Event?</AlertDialogTitle>
+					<AlertDialogDescription className={"mt-2"}>
+						This will permanently delete{" "}
+						<span className={'font-semibold'}>{eventName}</span>
+						{" "}and remove all its records.<br/>
+						<span className={'font-semibold text-muted-foreground'}>This action is permanent cannot be undone.</span>
 					</AlertDialogDescription>
 				</AlertDialogHeader>
-				<AlertDialogFooter>
-					<AlertDialogCancel onClick={() => onOpen(false)}>
+				<AlertDialogFooter className={'!flex-row items-center justify-center gap-4'}>
+					<AlertDialogAction onClick={() => onOpenChange(false)}>
 						Cancel
-					</AlertDialogCancel>
-					<AlertDialogAction onClick={() => onDelete(deleteID)}>
-						Yes, Delete
 					</AlertDialogAction>
-					{/* <AlertDialogAction onClick={() => MakeToast()}>
+					<AlertDialogCancel className={'mt-0'} onClick={() => onDelete()}>
 						Yes, Delete
-					</AlertDialogAction> */}
+					</AlertDialogCancel>
 				</AlertDialogFooter>
 			</AlertDialogContent>
 		</AlertDialog>

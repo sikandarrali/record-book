@@ -1,5 +1,4 @@
 "use client";
-import { useData } from "@/components/contexts/DataContext";
 import { AddEventItem } from "@/components/event-items/AddEventItem";
 import { SingleListItem } from "@/components/event-items/SingleListItem";
 import EventInfo from "@/components/event/EventInfo";
@@ -8,80 +7,106 @@ import PageContainer from "@/components/providers/PageContainer";
 import Text from "@/components/theme/Text";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { FixStickyHeaderScrollError } from "@/lib/utils";
 import { useMyStore } from "@/store/store";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowLeft, Plus, XIcon } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { Suspense, useEffect, useRef, useState } from "react";
+import {redirect, useRouter} from "next/navigation";
+import {Suspense, useCallback, useEffect, useLayoutEffect, useRef, useState} from "react";
 import { NumericFormat } from "react-number-format";
+import {db} from "@/components/appwrite/database";
+import {Query} from "appwrite";
+import {client} from "@/components/appwrite/appwrite";
 
 const Page = ({ params }) => {
-	const [value, setValue] = useState("");
+	const [searchValue, setSearchValue] = useState("");
 	const [currentEvent, setCurrentEvent] = useState(null)
 	const [eventItems, setEventItems] = useState([]);
 	const [openAddModal, setOpenAddModal] = useState(false);
 	const [totalSum, setTotalSum] = useState(0);
-	const [openEventDetails, setOpenEventDetails] = useState(false);
-	const [openEditEventDetails, setOpenEditEventDetails] = useState(false);
-	const [loading, setLoading] = useState(true);
 	const [noItems, setNoItems] = useState(false);
-	const router = useRouter();
-
-	const { getCurrentEvent } = useData();
+	const [refreshItems, setRefreshItems] = useState(false)
 
 	const eventsStore = useMyStore((state) => state.events);
 	const eventItemsStore = useMyStore((state) => state.eventItems);
-	const deleteAllItems = useMyStore((state) => state.emptyEventItems);
+	const addSingleItemInLocalStore = useMyStore((state) => state.addEventItem);
+	const addAllItemsInLocalStore = useMyStore((state) => state.updateEventItems);
 
-	const populateItems = () =>{
-		const filter = eventItemsStore.filter(
-			(item) => item.eventID === params.id
-		);
-		setEventItems(filter);
+	const eventPageID = params.id;
+	const [items, setItems] = useState([])
 
-		if (filter.length === 0) {
-			setNoItems(true);
+	useLayoutEffect(() => {
+		const getEvent = eventsStore.some((item) => item.$id === eventPageID);
+		if(!getEvent) redirect('/events')
+	}, []);
+
+	const getCurrentEvent = useCallback(
+		(eventID) => {
+			return eventsStore.find((event) => event.$id === eventID);
+		},
+		[eventsStore]
+	);
+
+	const getEventItems = async () =>{
+		try {
+			const response = await db.eventItems.list([
+				Query.orderDesc("$createdAt"),
+				Query.equal('eventID', params.id)
+			]);
+			if(response.documents.length === 0){
+				setNoItems(true)
+			}else{
+				setItems(response.documents)
+				addAllItemsInLocalStore(response.documents)
+			}
+		} catch (error) {
+			console.error("Error fetching event items:", error);
 		}
 	}
-
 	useEffect(() => {
-		if(!openAddModal){ // updates store list items when adding new
-			populateItems()
-		}
-	}, [eventItemsStore, openAddModal, params.id]);
+		getEventItems();
+	}, []);
+
+
+	// re-populate events when created, fixes missing $id issue
+	useEffect(() => {
+		const unsubscribe = client.subscribe(`databases.${process.env.NEXT_PUBLIC_DATABASE_ID}.collections.${process.env.NEXT_PUBLIC_COLLECTION_ID_EVENT_ITEMS}.documents`, (response) => {
+			if(response.events.includes("databases.*.collections.*.documents.*.create")){
+				setItems(prev=> [response.payload, ...prev])
+			}
+		});
+
+		return ()=> unsubscribe()
+	}, []);
+
 
 	const onSearch = (userValue) => {
-		setValue(userValue);
+		setSearchValue(userValue);
 		if (userValue !== "") {
-			const temp = eventItems?.filter((item) =>
+			const temp = items?.filter((item) =>
 				item.name.toLowerCase().includes(userValue.toLowerCase())
 			);
-			setEventItems(temp);
-		} else {
-			populateItems()
+			setItems(temp);
 		}
 	};
 
+	const resetSearch = () =>{
+		setSearchValue('')
+		setItems(eventItemsStore)
+	}
+
 	useEffect(() => {
-		setCurrentEvent(getCurrentEvent(params.id))
+		setCurrentEvent(getCurrentEvent(eventPageID))
 	}, [eventsStore]);
 
 	useEffect(() => {
 		setTotalSum(eventItems?.reduce((acc, item) => acc + item.amount, 0));
 	}, [eventItems]);
 
-	// // fixes warning: Skipping auto-scroll behavior due to `position: sticky` or `position: fixed` on element
-	// const scrollRef = useRef(null);
-	// useEffect(() => {
-	// 	FixStickyHeaderScrollError(scrollRef);
-	// }, [eventItems]);
-
 	return (
 		<Suspense fallback={<LoadingFallback />}>
 			<PageContainer hideNavbar>
-				<div className="flex flex-col bg-primary text-background shadow-lg rounded-b-3xl -mx-6 gap-4 sticky -top-14 z-10">
+				<div className="flex flex-col bg-primary text-background shadow-lg rounded-b-3xl -mx-6 gap-4 z-10">
 					<div className="flex justify-between items-center h-14 w-full z-20 border-b border-primary-foreground/40 px-6">
 						<Link href={"/events"} prefetch>
 							<ArrowLeft />
@@ -116,7 +141,7 @@ const Page = ({ params }) => {
 									initial={{ opacity: 0 }}
 									animate={{ opacity: 1 }}
 								>
-									{(getCurrentEvent(params.id))?.name}
+									{(getCurrentEvent(eventPageID))?.name}
 								</motion.span>
 							</AnimatePresence>
 						</Text>
@@ -128,14 +153,14 @@ const Page = ({ params }) => {
 						<Input
 							className="text-[16px] h-full"
 							placeholder="Type to search..."
-							value={value}
+							value={searchValue}
 							onChange={(e) => onSearch(e.target.value)}
 						/>
 
-						{value !== "" && (
+						{searchValue !== "" && (
 							<XIcon
 								className="w-4 h-4 text-primary absolute right-0 top-1/2 -translate-y-1/2 mr-3 cursor-pointer hover:scale-125 duration-300"
-								onClick={() => setEventItems()}
+								onClick={() => resetSearch()}
 							/>
 						)}
 					</div>
@@ -158,7 +183,9 @@ const Page = ({ params }) => {
 								</Button>
 							</div>
 						) : (
-							eventItems?.map(
+							// eventItemsStore.filter((item)=> item.eventID===eventPageID).map(
+							// eventItems.map(
+							items.map(
 								(item, i) => (
 									<motion.div
 										initial={{ opacity: 0, y: 5 }}
@@ -171,8 +198,9 @@ const Page = ({ params }) => {
 									>
 										<SingleListItem
 											item={item}
-											eventItems={eventItems}
-											setEventItems={setEventItems}
+											// populateItems={populateItems}
+											refreshItems={refreshItems}
+											setRefreshItems={setRefreshItems}
 										/>
 									</motion.div>
 								)
@@ -196,8 +224,10 @@ const Page = ({ params }) => {
 
 				<AddEventItem
 					open={openAddModal}
-					onOpen={setOpenAddModal}
-					eventID={params.id}
+					onOpenChange={setOpenAddModal}
+					eventID={eventPageID}
+					refreshItems={refreshItems}
+					setRefreshItems={setRefreshItems}
 				/>
 			</PageContainer>
 		</Suspense>

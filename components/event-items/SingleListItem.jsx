@@ -3,29 +3,35 @@ import { db } from "@/components/appwrite/database";
 import Text from "@/components/theme/Text";
 import { Button } from "@/components/ui/button";
 import {
-	Dialog,
-	DialogContent,
-	DialogDescription,
-	DialogFooter,
-	DialogHeader,
-	DialogTitle
-} from "@/components/ui/dialog";
+	AlertDialog,
+	AlertDialogContent,
+	AlertDialogDescription,
+	AlertDialogFooter,
+	AlertDialogHeader,
+	AlertDialogTitle
+} from "@/components/ui/alert-dialog";
 import { useToast } from "@/components/ui/use-toast";
 import { useMyStore } from "@/store/store";
 import { Pen, Trash2, XIcon } from "lucide-react";
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import { NumericFormat } from "react-number-format";
 import { useMediaQuery } from "react-responsive";
 import { DeleteEventItem } from "./DeleteEventItem";
 import { EditEventItem } from "./EditEventItem";
+import {toast} from "react-toastify";
+import {ToastOptions} from "@/lib/ToastOptions";
+import {
+	Drawer,
+	DrawerContent,
+	DrawerDescription,
+	DrawerFooter,
+	DrawerHeader,
+	DrawerTitle
+} from "@/components/ui/drawer";
+import {Table, TableBody, TableCell, TableRow} from "@/components/ui/table";
 
-export const SingleListItem = ({ item }) => {
-	const isDesktop = useMediaQuery({
-		query: "(min-width: 1024px)",
-	});
-	const [isExpanded, setIsExpanded] = useState(false);
-	const { toast } = useToast();
-
+export const SingleListItem = ({ item, refreshItems, setRefreshItems }) => {
+	const isDesktop = useMediaQuery({ query: "(min-width: 1024px)" });
 	const [isOpen, setIsOpen] = useState(false);
 	const [openEdit, setOpenEdit] = useState(false);
 	const [openDelete, setOpenDelete] = useState(false);
@@ -35,15 +41,27 @@ export const SingleListItem = ({ item }) => {
 	const onEdit = () => {};
 
 	const onDelete = async () => {
-		await db.eventItems.delete(item.$id);
-		deleteItem(item.$id);
-		toast({
-			title: "Deleted!",
-			variant: "success",
-		});
-		setIsOpen(false);
 		setOpenDelete(false);
+		setIsOpen(false);
+		deleteItem(item.$id);
+		// setRefreshItems(!refreshItems);
+		await db.eventItems.delete(item.$id);
+		toast.success("Deleted!", ToastOptions);
 	};
+
+	// fixes dialog adding pointer-events:none to body
+	// document.body.style.pointerEvents = "auto";
+	useEffect(() => {
+		if (isOpen) {
+			// Pushing the change to the end of the call stack
+			const timer = setTimeout(() => {
+				document.body.style.pointerEvents = "";
+			}, 0);
+			return () => clearTimeout(timer);
+		} else {
+			document.body.style.pointerEvents = "auto";
+		}
+	}, [isOpen]);
 
 	return (
 		<>
@@ -69,33 +87,41 @@ export const SingleListItem = ({ item }) => {
 				</div>
 			</div>
 
-			<Dialog open={isOpen} onOpen={setIsOpen}>
-				<DialogContent className={"w-[90%] rounded-xl pt-0"} hideClose>
-					<div className={'hidden'}><DialogHeader><DialogTitle/><DialogDescription/></DialogHeader></div>
-					<div
-						className={
-							"flex flex-row justify-between mt-4 border-b py-4 pt-1"
-						}
-					>
-						<Button
-							type="submit"
-							variant="outline"
-							size="icon"
-							onClick={() => setOpenDelete(true)}
-						>
-							<Trash2 className="h-5 w-5 text-primary" />
-						</Button>
-						<Button
-							type="submit"
-							variant="outline"
-							size="icon"
-							onClick={() => setOpenEdit(true)}
-						>
-							<Pen className="h-4 w-4" />
-						</Button>
-					</div>
 
-					<div className="flex flex-col gap-4 justify-center items-center my-10">
+			<Drawer
+				onRelease={()=> setIsOpen(false)}
+				open={isOpen}
+				onOpen={setIsOpen}
+			>
+				<DrawerContent className={'p-6'}>
+					<DrawerHeader className={'mb-0 px-0 pb-0.5'}>
+						<div className={'hidden'}><DrawerTitle/><DrawerDescription/></div>
+
+						<div
+							className={
+								"flex flex-row justify-between pt-1 pb-4 border-b"
+							}
+						>
+							<Button
+								type="submit"
+								variant="outline"
+								size="icon"
+								onClick={() => setOpenDelete(true)}
+							>
+								<Trash2 className="h-5 w-5 text-primary" />
+							</Button>
+							<Button
+								type="submit"
+								variant="outline"
+								size="icon"
+								onClick={() => setOpenEdit(true)}
+							>
+								<Pen className="h-4 w-4" />
+							</Button>
+						</div>
+					</DrawerHeader>
+
+					<div className="flex flex-col gap-4 !mt-12 justify-center items-center my-10">
 						<Text variant={"h2"}>
 							{item.name}
 						</Text>
@@ -113,9 +139,15 @@ export const SingleListItem = ({ item }) => {
 								/>
 							</span>
 						</div>
+
+						{item.details &&
+							<Text className={'mt-6'}>
+								{item.details}
+							</Text>
+						}
 					</div>
 
-					<DialogFooter className={"justify-center"}>
+					<DrawerFooter>
 						<Button
 							type="submit"
 							variant="outline"
@@ -126,20 +158,20 @@ export const SingleListItem = ({ item }) => {
 						>
 							<XIcon className="text-primary" />
 						</Button>
-					</DialogFooter>
-				</DialogContent>
-			</Dialog>
+					</DrawerFooter>
+				</DrawerContent>
+			</Drawer>
 
 			<EditEventItem
 				item={item}
 				open={openEdit}
-				onOpen={setOpenEdit}
+				onOpenChange={setOpenEdit}
 				onEdit={onEdit}
 			/>
 			<DeleteEventItem
-				deleteID={item.id}
+				personName={item.name}
 				open={openDelete}
-				onOpen={setOpenDelete}
+				onOpenChange={setOpenDelete}
 				onDelete={onDelete}
 			/>
 		</>
