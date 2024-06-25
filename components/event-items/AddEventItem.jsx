@@ -1,7 +1,5 @@
 "use client";
 import { db } from "@/components/appwrite/database";
-import { useAuth } from "@/components/contexts/AuthContext";
-import { useData } from "@/components/contexts/DataContext";
 import FormLabel from "@/components/theme/FormLabel";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,6 +15,16 @@ import { NumericFormat } from "react-number-format";
 import { useMediaQuery } from "react-responsive";
 import * as Yup from "yup";
 import {DialogDescription, DialogHeader, DialogTitle} from "@/components/ui/dialog";
+import {toast} from "react-toastify";
+import {ToastOptions} from "@/lib/ToastOptions";
+import {
+	Drawer,
+	DrawerContent,
+	DrawerDescription,
+	DrawerFooter,
+	DrawerHeader,
+	DrawerTitle
+} from "@/components/ui/drawer";
 
 const AddEventItemSchema = Yup.object().shape({
 	name: Yup.string()
@@ -30,17 +38,14 @@ const AddEventItemSchema = Yup.object().shape({
 	details: Yup.string().min(1).max(500, "max 500 characters"),
 });
 
-export const AddEventItem = ({ open, onOpen, eventID }) => {
+export const AddEventItem = ({ open, onOpenChange, eventID, refreshItems, setRefreshItems }) => {
 	const isDesktop = useMediaQuery({
 		query: "(min-width: 1024px)",
 	});
 
-	const { toast } = useToast();
 	const addEventStore = useMyStore((state) => state.addEventItem);
 	const [adding, setAdding] = useState(false);
 	const [disabled, setDisabled] = useState(false);
-	const { user } = useAuth();
-	const { name } = useData();
 
 	const onAdd = async (values) => {
 		setAdding(true);
@@ -57,138 +62,127 @@ export const AddEventItem = ({ open, onOpen, eventID }) => {
 				eventID: eventID,
 			};
 
+			// addEventStore(eventItemData);
+			// setRefreshItems(!refreshItems);
 			await db.eventItems.create(eventItemData);
-			addEventStore(eventItemData);
-			onOpen(false);
-			toast({
-				title: "items Added!",
-				variant: "success",
-			});
+			onOpenChange(false);
+			toast.success("New Item Added", ToastOptions);
 			setAdding(false);
 			setDisabled(false);
 		} catch (error) {
-			toast({
-				title: "Error Adding items!",
-				variant: "destructive",
-			});
+			toast.error(`Unable to Add: ${error}`, ToastOptions);
 			setAdding(false);
 			setDisabled(false);
 		}
 	};
 
 	return (
-		<Sheet open={open} onOpen={onOpen} defaultOpen={false}>
-			<SheetContent
-				className={cn("pb-8 lg:pb-14 overflow-auto max-h-fit")}
-				side={isDesktop ? "right" : "bottom"}
-			>
-				<div className={'hidden'}><SheetHeader><SheetTitle/><SheetDescription/></SheetHeader></div>
-				<div className="flex flex-col w-full min-h-full pt-4 justify-start">
-					{/* Date & Close */}
-					<div className="flex items-center space-x-2 justify-between mb-4">
-						<div className="flex items-center text-xl pt-2 space-x-2 font-semibold text-primary">
-							Add New Items
-						</div>
+		<Drawer open={open} onOpenChange={onOpenChange}>
+			<DrawerContent className={'p-6 pb-10'}>
+				<DrawerHeader className={'py-8'}>
+					<DrawerTitle className={'text-primary'}>Add New Record</DrawerTitle>
+					<DrawerDescription className={'hidden'}/>
+				</DrawerHeader>
 
-						<Button
-							type="button"
-							variant="outline"
-							size="icon"
-							onClick={() => onOpen(false)}
-						>
-							<X className="h-4 w-4" />
-						</Button>
-					</div>
 
-					<div className="flex flex-col gap-5 w-full items-center justify-center py-6 lg:py-10">
-						<Formik
-							initialValues={{
-								name: "",
-								amount: "",
-								returned_amount: [],
-								details: "",
-							}}
-							validationSchema={AddEventItemSchema}
-							onSubmit={(values) => {
-								onAdd(values);
-							}}
-						>
-							{({
-								errors,
-								touched,
-								values,
-								handleChange,
-								handleBlur,
-								handleSubmit,
-								setFieldValue,
-							}) => (
-								<Form className="flex flex-col w-full space-y-6">
-									<div className="flex flex-col">
-										<FormLabel
-											title="Name of Person"
-											errors={errors.name}
-											touched={touched.name}
-										/>
-										<Input
-											onChange={handleChange}
-											onBlur={handleBlur}
-											name="name"
-											disabled={disabled}
-										/>
-									</div>
-									<div className="flex flex-col">
-										<FormLabel
-											title="Amount"
-											errors={errors.amount}
-											touched={touched.amount}
-										/>
-										<NumericFormat
-											allowNegative={false}
-											thousandSeparator={","}
-											decimalSeparator={"."}
-											decimalScale={2}
-											className="flex h-12 w-full rounded-md text-[16px] border border-input bg-transparent px-3 py-1 shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
-											onChange={handleChange}
-											onBlur={handleBlur}
-											disabled={disabled}
-											name="amount"
-										/>
-									</div>
-									<div className="flex flex-col">
-										<FormLabel
-											title="Detailes (if any)"
-											errors={errors.details}
-											touched={touched.details}
-										/>
-										<Textarea
-											onChange={handleChange}
-											onBlur={handleBlur}
-											name="details"
-											disabled={disabled}
-										/>
-									</div>
-
-									<Button
-										className="w-full"
-										size="2xl"
-										stretched
+				<div className="flex flex-col gap-5 w-full items-center justify-center lg:py-10">
+					<Formik
+						initialValues={{
+							name: "",
+							amount: "",
+							returned_amount: [],
+							details: "",
+						}}
+						validationSchema={AddEventItemSchema}
+						onSubmit={(values) => {
+							onAdd(values);
+						}}
+					>
+						{({
+							  errors,
+							  touched,
+							  values,
+							  handleChange,
+							  handleBlur,
+							  handleSubmit,
+							  setFieldValue,
+						  }) => (
+							<Form className="flex flex-col w-full space-y-6">
+								<div className="flex flex-col">
+									<FormLabel
+										title="Name of Person"
+										errors={errors.name}
+										touched={touched.name}
+									/>
+									<Input
+										onChange={handleChange}
+										onBlur={handleBlur}
+										name="name"
 										disabled={disabled}
-										type="submit"
-									>
-										{adding ? (
-											<>
-												<Loader2Icon className="animate animate-spin w-5 h-5 stroke-[3]" />
-											</>
-										) : (
-											"Save Entry"
-										)}
-									</Button>
-								</Form>
-							)}
-						</Formik>
-					</div>
+									/>
+								</div>
+								<div className="flex flex-col">
+									<FormLabel
+										title="Amount"
+										errors={errors.amount}
+										touched={touched.amount}
+									/>
+									<NumericFormat
+										allowNegative={false}
+										thousandSeparator={","}
+										decimalSeparator={"."}
+										decimalScale={2}
+										className="flex h-12 w-full rounded-md text-[16px] border border-input bg-transparent px-3 py-1 shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+										onChange={handleChange}
+										onBlur={handleBlur}
+										disabled={disabled}
+										name="amount"
+									/>
+								</div>
+								<div className="flex flex-col">
+									<FormLabel
+										title="Detailes (if any)"
+										errors={errors.details}
+										touched={touched.details}
+									/>
+									<Textarea
+										onChange={handleChange}
+										onBlur={handleBlur}
+										name="details"
+										disabled={disabled}
+									/>
+								</div>
+
+								<Button
+									className="w-full"
+									size="2xl"
+									stretched
+									disabled={disabled}
+									type="submit"
+								>
+									{adding ? (
+										<>
+											<Loader2Icon className="animate animate-spin w-5 h-5 stroke-[3]" />
+										</>
+									) : (
+										"Save Entry"
+									)}
+								</Button>
+							</Form>
+						)}
+					</Formik>
 				</div>
-			</SheetContent>
-		</Sheet>
+				<Button
+					className="w-full mt-3"
+					size="2xl"
+					stretched
+					disabled={disabled}
+					variant={'outline'}
+					onClick={()=> onOpenChange(false)}
+				>
+					Cancel
+				</Button>
+			</DrawerContent>
+		</Drawer>
 	);
 };

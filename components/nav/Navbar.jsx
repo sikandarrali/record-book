@@ -7,6 +7,7 @@ import { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { Button } from "../ui/button";
 import {Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle} from "../ui/sheet";
+import {useMyStore} from "@/store/store";
 
 const Navbar = () => {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -31,7 +32,8 @@ const Navbar = () => {
 export default Navbar;
 
 const Sidebar = ({ open, onOpenChange }) => {
-	const { user, onLogout } = useAuth();
+	const { onLogout } = useAuth();
+	const user = useMyStore((state)=> state.user)
 
 	return (
 		<Sheet open={open} onOpenChange={onOpenChange}>

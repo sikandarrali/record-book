@@ -11,38 +11,27 @@ import {
 } from "@/components/ui/alert-dialog";
 import * as Yup from "yup";
 
-const AddEventItemSchema = Yup.object().shape({
-	name: Yup.string()
-		.min(1)
-		.max(300, "max 300 characters")
-		.required("required"),
-	amount: Yup.string()
-		.min(1)
-		.max(100, "max 100 characters")
-		.required("required"),
-	details: Yup.string().min(1).max(500, "max 500 characters"),
-});
-export const DeleteEventItem = ({ open, onOpen, deleteID, onDelete }) => {
+export const DeleteEventItem = ({ open, onOpenChange, personName, onDelete }) => {
 	return (
-		<AlertDialog open={open} onOpen={onOpen}>
-			<AlertDialogContent className="max-w-[90%]">
+		<AlertDialog open={open} onOpenChange={onOpenChange}>
+			<AlertDialogContent className={"w-[90%] rounded-xl"}>
 				<AlertDialogHeader>
-					<AlertDialogTitle>
-						Are you absolutely sure?
-					</AlertDialogTitle>
-					<AlertDialogDescription>
-						This action cannot be undone. This will permanently
-						delete your account and remove your items from our
-						servers.
+					<AlertDialogTitle>Delete record of <span className={'font-semibold text-primary text-xl'}>{personName}</span>?</AlertDialogTitle>
+					<AlertDialogDescription className={"mt-2"}>
+						This will permanently delete{" "}
+						<span className={'font-semibold'}>{personName}{`'s`}</span>
+						{" "}record.<br/>
+						<span className={'font-semibold text-muted-foreground'}>This action is permanent cannot be undone.</span>
 					</AlertDialogDescription>
 				</AlertDialogHeader>
-				<AlertDialogFooter>
-					<AlertDialogCancel onClick={() => onOpen(false)}>
+
+				<AlertDialogFooter className={'!flex-row items-center justify-center gap-4'}>
+					<AlertDialogAction onClick={() => onOpenChange(false)}>
 						Cancel
-					</AlertDialogCancel>
-					<AlertDialogAction onClick={() => onDelete(deleteID)}>
-						Yes, Delete
 					</AlertDialogAction>
+					<AlertDialogCancel className={'mt-0'} onClick={() => onDelete()}>
+						Yes, Delete
+					</AlertDialogCancel>
 				</AlertDialogFooter>
 			</AlertDialogContent>
 		</AlertDialog>

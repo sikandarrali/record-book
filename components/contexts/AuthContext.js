@@ -14,17 +14,19 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
 	const [user, setUser] = useState(null);
-	const [loading, setLoading] = useState(true);
+	const [loading, setLoading] = useState(false);
 	const router = useRouter();
 	const [session, setSession] = useState(null);
 	const emptyStoreEvent = useMyStore((state) => state.emptyEvents)
 	const emptyStoreEventItems = useMyStore((state) => state.emptyEventItems)
+	const updateUser = useMyStore((state)=> state.updateUser)
 
 	useEffect(() => {
 		getLoggedInGoogleUser();
 	}, []);
 
 	const getLoggedInGoogleUser = async () => {
+		setLoading(true)
 
 		try {
 			const currentSession = await getCurrentSession();
@@ -34,10 +36,9 @@ export const AuthProvider = ({ children }) => {
 				await createSessionCookie(userData.$id);
 
 				if (userData) {
-
-					fetchGoogleUserData(currentSession?.providerAccessToken)
+					fetchGoogleUserData(currentSession.providerAccessToken)
 						.then((googleData) => {
-							setUser({
+							updateUser({
 								id: userData?.$id,
 								email: googleData?.email,
 								verifiedUser: userData?.emailVerification,
@@ -49,7 +50,7 @@ export const AuthProvider = ({ children }) => {
 							});
 						})
 						.catch((error) => {
-
+							console.log(error)
 						});
 				}
 
@@ -79,7 +80,8 @@ export const AuthProvider = ({ children }) => {
 				setUser(null);
 				deleteSessionCookie();
 				emptyStoreEvent();
-				emptyStoreEventItems()
+				emptyStoreEventItems();
+				updateUser({});
 			});
 
 			setTimeout(() => {
@@ -125,6 +127,7 @@ export const AuthProvider = ({ children }) => {
 export const useAuth = () => useContext(AuthContext);
 
 const fetchGoogleUserData = async (accessToken) => {
+
 	try {
 		const response = await axios.get(
 			"https://www.googleapis.com/oauth2/v2/userinfo",
@@ -139,5 +142,7 @@ const fetchGoogleUserData = async (accessToken) => {
 		const { name, email, picture } = response.data;
 
 		return { name, email, picture };
-	} catch (error) {}
+	} catch (error) {
+
+	}
 };

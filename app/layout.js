@@ -3,9 +3,10 @@ import { Inter as FontSans } from "next/font/google";
 
 import PagesProvider from "@/components/providers/PagesProvider";
 import Providers from "@/components/providers/Providers";
-import { Toaster } from "@/components/ui/toaster";
+import 'react-toastify/dist/ReactToastify.min.css';
 import { cn } from "@/lib/utils";
 import {NetworkStatusIndicator} from "@/components/NetworkStatus/NetworkStatusIndicator";
+import {ToastContainer} from "react-toastify";
 
 const fontSans = FontSans({
 	subsets: ["latin"],
@@ -58,6 +59,7 @@ export const viewport = {
 };
 
 export default function RootLayout({ children }) {
+
 	return (
 		<html lang="en" suppressHydrationWarning>
 			<head ><title>Shadi Kharcha Record</title></head>
@@ -67,9 +69,15 @@ export default function RootLayout({ children }) {
 					fontSans.variable
 				)}
 			>
-			<NetworkStatusIndicator />
-
-			<Toaster />
+				<NetworkStatusIndicator />
+				<ToastContainer
+					limit={1}
+					autoClose={1500}
+					position="top-center"
+					pauseOnFocusLoss
+					draggable={'touch'}
+					theme="light"
+				/>
 				<Providers>
 					<PagesProvider>{children}</PagesProvider>
 				</Providers>
