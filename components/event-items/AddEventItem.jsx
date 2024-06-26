@@ -18,6 +18,13 @@ import {
 	DrawerHeader,
 	DrawerTitle
 } from "@/components/ui/drawer";
+import {
+	Sheet,
+	SheetContent, SheetDescription, SheetHeader, SheetTitle
+} from "@/components/ui/sheet";
+import useScrollToView from "@/lib/hooks/useScrollToView";
+import {useMediaQuery} from "react-responsive";
+import Text from "@/components/theme/Text";
 
 const AddEventItemSchema = Yup.object().shape({
 	name: Yup.string()
@@ -34,6 +41,11 @@ const AddEventItemSchema = Yup.object().shape({
 export const AddEventItem = ({ open, onOpenChange, eventID, refreshItems, setRefreshItems }) => {
 	const [adding, setAdding] = useState(false);
 	const [disabled, setDisabled] = useState(false);
+	const isDesktop = useMediaQuery({
+		query: "(min-width: 1024px)",
+	});
+
+	useScrollToView()
 
 	const onAdd = async (values) => {
 		setAdding(true);
@@ -61,16 +73,18 @@ export const AddEventItem = ({ open, onOpenChange, eventID, refreshItems, setRef
 		}
 	};
 
+
 	return (
-		<Drawer open={open} onOpenChange={onOpenChange}>
-			<DrawerContent className={'p-6 pb-10'}>
-				<DrawerHeader className={'py-8'}>
-					<DrawerTitle className={'text-primary'}>Add New Record</DrawerTitle>
-					<DrawerDescription className={'hidden'}/>
-				</DrawerHeader>
+		<Sheet open={open} onOpenChange={onOpenChange}>
+			<SheetContent
+				className={'p-6 pb-10'}
+				side={isDesktop ? "right" : "bottom"}
+			>
+				<SheetHeader className={'hidden'}><SheetTitle/><SheetDescription /></SheetHeader>
 
+				<div className="flex flex-col gap-5 max-w-lg mx-auto items-center lg:py-10">
+					<Text className={'text-primary self-start py-6'} variant={'h2'}>Add New Record</Text>
 
-				<div className="flex flex-col gap-5 w-full items-center justify-center lg:py-10">
 					<Formik
 						initialValues={{
 							name: "",
@@ -86,11 +100,8 @@ export const AddEventItem = ({ open, onOpenChange, eventID, refreshItems, setRef
 						{({
 							  errors,
 							  touched,
-							  values,
 							  handleChange,
 							  handleBlur,
-							  handleSubmit,
-							  setFieldValue,
 						  }) => (
 							<Form className="flex flex-col w-full space-y-6">
 								<div className="flex flex-col">
@@ -122,6 +133,8 @@ export const AddEventItem = ({ open, onOpenChange, eventID, refreshItems, setRef
 										onBlur={handleBlur}
 										disabled={disabled}
 										name="amount"
+										thousandsGroupStyle={'lakh'}
+										inputMode="numeric"
 									/>
 								</div>
 								<div className="flex flex-col">
@@ -156,18 +169,19 @@ export const AddEventItem = ({ open, onOpenChange, eventID, refreshItems, setRef
 							</Form>
 						)}
 					</Formik>
+					<Button
+						className="w-full"
+						size="2xl"
+						stretched
+						disabled={disabled}
+						variant={'outline'}
+						onClick={()=> onOpenChange(false)}
+					>
+						Cancel
+					</Button>
 				</div>
-				<Button
-					className="w-full mt-3"
-					size="2xl"
-					stretched
-					disabled={disabled}
-					variant={'outline'}
-					onClick={()=> onOpenChange(false)}
-				>
-					Cancel
-				</Button>
-			</DrawerContent>
-		</Drawer>
+
+			</SheetContent>
+		</Sheet>
 	);
 };

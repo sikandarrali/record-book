@@ -37,6 +37,8 @@ const Sidebar = ({ open, onOpenChange }) => {
 	const { onLogout } = useAuth();
 	const {user} = useAuth()
 
+	console.log(user)
+
 	return (
 		<Sheet open={open} onOpenChange={onOpenChange}>
 			<SheetContent className="bg-primary border-l-0 px-0 outline-0 stroke-none">

@@ -3,10 +3,8 @@ import { Inter as FontSans } from "next/font/google";
 
 import PagesProvider from "@/components/providers/PagesProvider";
 import Providers from "@/components/providers/Providers";
-import 'react-toastify/dist/ReactToastify.min.css';
 import { cn } from "@/lib/utils";
 import {NetworkStatusIndicator} from "@/components/NetworkStatus/NetworkStatusIndicator";
-import {ToastContainer} from "react-toastify";
 
 const fontSans = FontSans({
 	subsets: ["latin"],
@@ -70,14 +68,6 @@ export default function RootLayout({ children }) {
 				)}
 			>
 				<NetworkStatusIndicator />
-				<ToastContainer
-					limit={1}
-					autoClose={1500}
-					position="top-center"
-					pauseOnFocusLoss
-					draggable={'touch'}
-					theme="light"
-				/>
 				<Providers>
 					<PagesProvider>{children}</PagesProvider>
 				</Providers>
