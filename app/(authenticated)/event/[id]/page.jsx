@@ -38,6 +38,10 @@ const Page = ({ params }) => {
 		if(!getEvent) redirect('/events')
 	}, []);
 
+	useEffect(() => {
+		console.log(items)
+	}, [items]);
+
 	const getCurrentEvent = useCallback(
 		(eventID) => {
 			return eventsStore.find((event) => event.$id === eventID);
@@ -77,9 +81,34 @@ const Page = ({ params }) => {
 				}
 			}
 			if(response.events.includes("databases.*.collections.*.documents.*.delete")){
-				setItems(prev=> items.filter(item=> item.$id !== response.payload.$id))
-				setItemsDefault(prev=> items.filter(item=> item.$id !== response.payload.$id))
+				setItems(prev=> prev.filter(item=> item.$id !== response.payload.$id))
+				setItemsDefault(prev=> prev.filter(item=> item.$id !== response.payload.$id))
 			}
+			if (response.events.includes("databases.*.collections.*.documents.*.update")) {
+				setItems(prev => {
+					// Find the index of the item to update
+					const index = prev.findIndex(item => item.$id === response.payload.$id);
+					if (index !== -1) {
+						// Create a new array with the updated item
+						const updatedItems = [...prev];
+						updatedItems[index] = response.payload; // Assuming response.payload contains the updated document data
+						return updatedItems;
+					}
+					return prev;
+				});
+				setItemsDefault(prev => {
+					// Find the index of the item to update
+					const index = prev.findIndex(item => item.$id === response.payload.$id);
+					if (index !== -1) {
+						// Create a new array with the updated item
+						const updatedItemsDefault = [...prev];
+						updatedItemsDefault[index] = response.payload; // Assuming response.payload contains the updated document data
+						return updatedItemsDefault;
+					}
+					return prev;
+				});
+			}
+
 		});
 
 		return ()=> unsubscribe()
@@ -129,8 +158,9 @@ const Page = ({ params }) => {
 		<Suspense fallback={<LoadingFallback />}>
 			<PageContainer hideNavbar>
 				<div className="flex flex-col bg-primary text-background shadow-lg rounded-b-3xl -mx-6 gap-4 z-10">
-					<div className="flex justify-between items-center h-14 w-full z-20 border-b border-primary-foreground/40 px-6">
-						<Link href={"/events"} prefetch>
+					<div className="flex justify-between items-center h-16 w-full z-20 border-b border-primary-foreground/40 px-6">
+
+						<Link href={"/events"} prefetch className={'p-1.5'}>
 							<ArrowLeft />
 						</Link>
 
@@ -156,8 +186,8 @@ const Page = ({ params }) => {
 						}
 					</div>
 
-					<div className="pb-4 flex flex-col justify-center items-center gap-4 select-none">
-						<Text variant={"h2"} className="text-background px-6 text-center">
+					<div className="pb-8 pt-4 flex flex-col justify-center items-center gap-4 select-none">
+						<Text variant={"h1"} className="text-background px-6 text-center">
 							<AnimatePresence>
 								<motion.span
 									initial={{ opacity: 0 }}

@@ -75,12 +75,56 @@ const EventInfo = ({ eventData, sum }) => {
 				onOpen={setOpenDetails}
 			>
 				<DrawerContent className={'p-6'}>
-					<DrawerHeader className={'mb-0 px-0 pb-0.5'}>
-						<div className={'hidden'}><DrawerTitle/><DrawerDescription/></div>
+					<div className={'hidden'}>
+						<DrawerHeader className={'mb-0 px-0 pb-0.5 pt-0'}>
+							<DrawerTitle/><DrawerDescription/>
+						</DrawerHeader>
+					</div>
+
+					<div className="flex gap-4 mt-16 mb-16 text-center justify-center">
+						<Text
+							variant={"h1"}
+							className="text-primary text-center self-center"
+						>
+							{eventData?.name}
+						</Text>
+					</div>
+
+					<Table>
+						<TableBody className="font-medium text-base">
+							<TableRow className={'border-b-muted'}>
+								<TableCell>Total</TableCell>
+								<TableCell className="text-right text-primary font-semibold text-xl">
+									<NumericFormat
+										allowNegative={false}
+										value={Number(sum)}
+										thousandSeparator={","}
+										decimalSeparator={"."}
+										displayType="text"
+										decimalScale={2}
+									/>
+								</TableCell>
+							</TableRow>
+							<TableRow className={'border-b-muted'}>
+								<TableCell>Date</TableCell>
+								<TableCell className="text-right">
+									{eventData?.date}
+								</TableCell>
+							</TableRow>
+							<TableRow className={'border-b-muted'}>
+								<TableCell>Venue</TableCell>
+								<TableCell className="text-right">
+									{eventData?.venue}
+								</TableCell>
+							</TableRow>
+						</TableBody>
+					</Table>
+
+					<DrawerFooter className={'mb-10 mt-10 flex flex-row items-center justify-between px-2'}>
 
 						<div
 							className={
-								"flex flex-row justify-between pt-1 pb-4 border-b"
+								"flex flex-row justify-end gap-4"
 							}
 						>
 							<Button
@@ -100,48 +144,7 @@ const EventInfo = ({ eventData, sum }) => {
 								<Pen className="h-4 w-4" />
 							</Button>
 						</div>
-					</DrawerHeader>
 
-					<div className="flex gap-4 my-6 text-center justify-center">
-						<Text
-							variant={"h2"}
-							className="text-primary text-center self-center"
-						>
-							{eventData?.name}
-						</Text>
-					</div>
-
-					<Table>
-						<TableBody className="font-medium text-base">
-							<TableRow>
-								<TableCell>Total</TableCell>
-								<TableCell className="text-right text-primary font-semibold text-xl">
-									<NumericFormat
-										allowNegative={false}
-										value={Number(sum)}
-										thousandSeparator={","}
-										decimalSeparator={"."}
-										displayType="text"
-										decimalScale={2}
-									/>
-								</TableCell>
-							</TableRow>
-							<TableRow>
-								<TableCell>Date</TableCell>
-								<TableCell className="text-right">
-									{eventData?.date}
-								</TableCell>
-							</TableRow>
-							<TableRow>
-								<TableCell>Venue</TableCell>
-								<TableCell className="text-right">
-									{eventData?.venue}
-								</TableCell>
-							</TableRow>
-						</TableBody>
-					</Table>
-
-					<DrawerFooter>
 						<Button
 							type="submit"
 							variant="outline"

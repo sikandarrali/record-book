@@ -81,39 +81,18 @@ export const SingleListItem = ({ item }) => {
 				onOpen={setIsOpen}
 			>
 				<DrawerContent className={'p-6'}>
-					<DrawerHeader className={'mb-0 px-0 pb-0.5'}>
-						<div className={'hidden'}><DrawerTitle/><DrawerDescription/></div>
+					<div className={'hidden'}>
+						<DrawerHeader className={'mb-0 px-0 pb-0.5'}>
+							<DrawerTitle/><DrawerDescription/>
+						</DrawerHeader>
+					</div>
 
-						<div
-							className={
-								"flex flex-row justify-between pt-1 pb-4 border-b"
-							}
-						>
-							<Button
-								type="submit"
-								variant="outline"
-								size="icon"
-								onClick={() => setOpenDelete(true)}
-							>
-								<Trash2 className="h-5 w-5 text-primary" />
-							</Button>
-							<Button
-								type="submit"
-								variant="outline"
-								size="icon"
-								onClick={() => setOpenEdit(true)}
-							>
-								<Pen className="h-4 w-4" />
-							</Button>
-						</div>
-					</DrawerHeader>
-
-					<div className="flex flex-col gap-4 !mt-12 justify-center items-center my-10">
+					<div className="flex flex-col justify-center items-center my-10">
 						<Text variant={"h2"}>
 							{item.name}
 						</Text>
 
-						<div className="flex text-foreground gap-2 justify-center items-center relative select-none pointer-events-none">
+						<div className="flex text-foreground gap-2 mt-8 justify-center items-center relative select-none pointer-events-none">
 							<span className="text-lg font-medium">Rs</span>
 							<span className="font-bold text-3xl text-primary">
 								<NumericFormat
@@ -128,13 +107,39 @@ export const SingleListItem = ({ item }) => {
 						</div>
 
 						{item.details &&
-							<Text className={'mt-6'}>
-								{item.details}
+							<Text className={'mt-20 self-start flex flex-col px-2'}>
+								<span className={'font-semibold text-sm mb-1'}>Details</span>
+								<span>{item.details}</span>
 							</Text>
 						}
 					</div>
 
-					<DrawerFooter>
+					<DrawerFooter className={'mb-10 mt-10 flex flex-row items-center justify-between px-2'}>
+						<div
+							className={
+								"flex flex-row justify-end gap-4"
+							}
+						>
+							<Button
+								type="submit"
+								variant="outline"
+								size="icon"
+								onClick={() => setOpenDelete(true)}
+							>
+								<Trash2 className="h-5 w-5 text-primary" />
+							</Button>
+							<Button
+								type="submit"
+								variant="outline"
+								size="icon"
+								onClick={() => {
+									setIsOpen(false)
+									setOpenEdit(true)
+								}}
+							>
+								<Pen className="h-4 w-4" />
+							</Button>
+						</div>
 						<Button
 							type="submit"
 							variant="outline"

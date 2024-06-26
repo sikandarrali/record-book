@@ -39,6 +39,18 @@ export const EditEventItem = ({ open, onOpenChange, item }) => {
 		setAdding(true);
 		setDisabled(true);
 
+		// let cleanAmount = null;
+		let cleanAmount = parseFloat(values.amount.toString().replace(/,/g, ""));
+		// let valuesAmount = parseFloat(values.amount.replace(/,/g, ""));
+
+
+		// if(valuesAmount === item.amount){
+		// 	cleanAmount = valuesAmount
+		// }else{
+		// 	cleanAmount =
+		// }
+
+
 		if (
 			values.name === item.name &&
 			values.amount === item.amount &&
@@ -57,7 +69,7 @@ export const EditEventItem = ({ open, onOpenChange, item }) => {
 		try {
 			const eventItemData = {
 				name: values.name,
-				amount: values.amount,
+				amount: cleanAmount,
 				returned_amount: values.returned_amount,
 				details: values.details,
 			};
@@ -103,11 +115,8 @@ export const EditEventItem = ({ open, onOpenChange, item }) => {
 						{({
 							  errors,
 							  touched,
-							  values,
 							  handleChange,
 							  handleBlur,
-							  handleSubmit,
-							  setFieldValue,
 						  }) => (
 							<Form className="flex flex-col w-full space-y-6">
 								<div className="flex flex-col">
@@ -141,6 +150,8 @@ export const EditEventItem = ({ open, onOpenChange, item }) => {
 										disabled={disabled}
 										name="amount"
 										defaultValue={item.amount}
+										thousandsGroupStyle={'lakh'}
+										inputmode="numeric"
 									/>
 								</div>
 								<div className="flex flex-col">
