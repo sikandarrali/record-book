@@ -86,9 +86,9 @@ export const AuthProvider = ({ children }) => {
 		setLoading(true);
 
 		try {
+			await deleteSessionCookie();
 			await account.deleteSession("current").then(() => {
 				setUser(null);
-				deleteSessionCookie();
 				emptyStoreEvent();
 				emptyStoreEventItems();
 			});
