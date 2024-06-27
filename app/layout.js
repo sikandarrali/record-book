@@ -11,9 +11,9 @@ const fontSans = FontSans({
 	variable: "--font-sans",
 });
 
-const APP_NAME = "Shadi Kharcha Record";
-const APP_DEFAULT_TITLE = "Shadi Kharcha Record";
-const APP_TITLE_TEMPLATE = "%s - Shadi Kharcha Record";
+const APP_NAME = "Shadi Kharcha";
+const APP_DEFAULT_TITLE = "Shadi Kharcha";
+const APP_TITLE_TEMPLATE = "%s - Shadi Kharcha";
 const APP_DESCRIPTION = "All your Shadi Records at one place";
 
 export const metadata = {
