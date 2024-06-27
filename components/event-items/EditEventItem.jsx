@@ -13,7 +13,8 @@ import { useMediaQuery } from "react-responsive";
 import * as Yup from "yup";
 import {toast} from "react-toastify";
 import {ToastOptions} from "@/lib/ToastOptions";
-import {Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle} from "@/components/ui/drawer";
+import {SheetDescription, SheetHeader, SheetTitle, SheetContent, Sheet} from "@/components/ui/sheet";
+import Text from "@/components/theme/Text";
 
 const AddEventItemSchema = Yup.object().shape({
 	name: Yup.string()
@@ -39,17 +40,7 @@ export const EditEventItem = ({ open, onOpenChange, item }) => {
 		setAdding(true);
 		setDisabled(true);
 
-		// let cleanAmount = null;
 		let cleanAmount = parseFloat(values.amount.toString().replace(/,/g, ""));
-		// let valuesAmount = parseFloat(values.amount.replace(/,/g, ""));
-
-
-		// if(valuesAmount === item.amount){
-		// 	cleanAmount = valuesAmount
-		// }else{
-		// 	cleanAmount =
-		// }
-
 
 		if (
 			values.name === item.name &&
@@ -93,13 +84,16 @@ export const EditEventItem = ({ open, onOpenChange, item }) => {
 
 	return (
 
-		<Drawer open={open} onOpenChange={onOpenChange} onRelease={()=> onOpenChange(false)}>
-			<DrawerContent className={'p-6 pb-10'}>
-				<DrawerHeader className={'py-8'}>
-					<DrawerTitle className={'text-primary'}>Edit Event</DrawerTitle>
-					<DrawerDescription className={'hidden'}/>
-				</DrawerHeader>
-				<div className="flex flex-col gap-5 w-full items-center justify-center lg:py-10">
+		<Sheet open={open} onOpenChange={onOpenChange}>
+			<SheetContent
+				className={'p-6 pb-10'}
+				side={isDesktop ? "right" : "bottom"}
+				onOpenAutoFocus={(e) => e.preventDefault()}
+			>
+				<SheetHeader className={'hidden'}><SheetTitle/><SheetDescription /></SheetHeader>
+
+				<div className="flex flex-col gap-5 max-w-lg mx-auto items-center lg:py-10">
+					<Text className={'text-primary self-start py-6'} variant={'h2'}>Edit Record</Text>
 					<Formik
 						initialValues={{
 							name: item.name,
@@ -151,7 +145,7 @@ export const EditEventItem = ({ open, onOpenChange, item }) => {
 										name="amount"
 										defaultValue={item.amount}
 										thousandsGroupStyle={'lakh'}
-										inputmode="numeric"
+										inputMode="numeric"
 									/>
 								</div>
 								<div className="flex flex-col">
@@ -187,18 +181,18 @@ export const EditEventItem = ({ open, onOpenChange, item }) => {
 							</Form>
 						)}
 					</Formik>
+					<Button
+						className="w-full"
+						size="2xl"
+						stretched
+						disabled={disabled}
+						variant={'outline'}
+						onClick={()=> onOpenChange(false)}
+					>
+						Cancel
+					</Button>
 				</div>
-				<Button
-					className="w-full mt-3"
-					size="2xl"
-					stretched
-					disabled={disabled}
-					variant={'outline'}
-					onClick={()=> onOpenChange(false)}
-				>
-					Cancel
-				</Button>
-			</DrawerContent>
-		</Drawer>
+			</SheetContent>
+		</Sheet>
 	);
 };

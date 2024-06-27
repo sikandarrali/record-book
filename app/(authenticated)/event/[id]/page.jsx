@@ -38,10 +38,6 @@ const Page = ({ params }) => {
 		if(!getEvent) redirect('/events')
 	}, []);
 
-	useEffect(() => {
-		console.log(items)
-	}, [items]);
-
 	const getCurrentEvent = useCallback(
 		(eventID) => {
 			return eventsStore.find((event) => event.$id === eventID);

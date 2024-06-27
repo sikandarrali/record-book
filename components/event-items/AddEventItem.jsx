@@ -79,6 +79,7 @@ export const AddEventItem = ({ open, onOpenChange, eventID, refreshItems, setRef
 			<SheetContent
 				className={'p-6 pb-10'}
 				side={isDesktop ? "right" : "bottom"}
+				onOpenAutoFocus={(e) => e.preventDefault()}
 			>
 				<SheetHeader className={'hidden'}><SheetTitle/><SheetDescription /></SheetHeader>
 
