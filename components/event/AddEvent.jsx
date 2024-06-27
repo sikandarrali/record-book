@@ -59,6 +59,7 @@ export const AddEvent = ({ open, onOpenChange, refreshItems, setRefreshItems }) 
 			<SheetContent
 				className={cn("pb-8 lg:pb-14 overflow-auto max-h-fit")}
 				side={isDesktop ? "right" : "bottom"}
+				onOpenAutoFocus={(e) => e.preventDefault()}
 			>
 				<div className={'hidden'}><SheetHeader><SheetTitle/><SheetDescription/></SheetHeader></div>
 				<div className="flex flex-col w-full min-h-full pt-4 justify-start">

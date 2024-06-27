@@ -19,6 +19,7 @@ import {
 	DrawerHeader,
 	DrawerTitle,
 } from "@/components/ui/drawer"
+import {Query} from "appwrite";
 
 const EventInfo = ({ eventData, sum }) => {
 	const [openDetails, setOpenDetails] = useState(false);
@@ -30,6 +31,7 @@ const EventInfo = ({ eventData, sum }) => {
 
 	const onDelete = async () => {
 		await db.events.delete(eventData?.$id);
+		await DeleteAllItemsInThisEvent()
 		deleteEventStore(eventData?.$id);
 		setOpenDelete(false);
 		setOpenDetails(false);
@@ -38,16 +40,17 @@ const EventInfo = ({ eventData, sum }) => {
 	};
 
 
-	// const DeleteAllItemsInThisEvent = async () => {
-	// 	const promises = [];
-	// 	const getItems = await db.eventItems.list([
-	// 		Query.orderDesc("$createdAt"),
-	// 		Query.equal('eventID', deleteID)
-	// 	]);
-	// 	items = getItems.documents;
-	//
-	//
-	// };
+	const DeleteAllItemsInThisEvent = async () => {
+		let items = []
+		const getItems = await db.eventItems.list([
+			Query.orderDesc("$createdAt"),
+			Query.equal('eventID', eventData?.$id)
+		]);
+		// Iterate over each document and delete it
+		for (const item of getItems.documents) {
+			await db.eventItems.delete(item.$id);
+		}
+	};
 
 	// fixes dialog adding pointer-events:none to body
 	// document.body.style.pointerEvents = "auto";
