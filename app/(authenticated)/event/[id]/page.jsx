@@ -186,7 +186,7 @@ const Page = ({ params }) => {
 						}
 					</div>
 
-					<div className="pb-8 pt-4 flex flex-col justify-center items-center gap-4 select-none">
+					<div className="pb-4 pt-1 flex flex-col justify-center items-center gap-4 select-none">
 						<Text variant={"h1"} className="text-background px-6 text-center">
 							<AnimatePresence>
 								<motion.span

@@ -1,20 +1,20 @@
 "use client";
 import { AuthProvider } from "../contexts/AuthContext";
 import PagesProvider from "./PagesProvider";
-import PullToRefresh from "pulltorefreshjs";
+// import PullToRefresh from "pulltorefreshjs";
 
 const Providers = ({ children }) => {
 
-	if (typeof window !== 'undefined') {
-		const standalone = window.matchMedia("(display-mode: standalone)").matches
-		if (standalone) {
-			PullToRefresh.init({
-				onRefresh() {
-					window.location.reload()
-				},
-			})
-		}
-	}
+	// if (typeof window !== 'undefined') {
+	// 	const standalone = window.matchMedia("(display-mode: standalone)").matches
+	// 	if (standalone) {
+	// 		PullToRefresh.init({
+	// 			onRefresh() {
+	// 				window.location.reload()
+	// 			},
+	// 		})
+	// 	}
+	// }
 
 
 
