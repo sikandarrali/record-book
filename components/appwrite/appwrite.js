@@ -1,4 +1,4 @@
-import {Account, Client, Databases, Query} from "appwrite";
+import {Account, Client, Databases, Query, Teams} from "appwrite";
 import {db} from "@/components/appwrite/database";
 
 const ENDPOINT = process.env.NEXT_PUBLIC_ENDPOINT;
@@ -13,6 +13,7 @@ client.setEndpoint(ENDPOINT).setProject(PROJECT_ID);
 
 const account = new Account(client);
 const databases = new Databases(client);
+const teams = new Teams(client);
 
 export { ID } from "appwrite";
 
@@ -68,6 +69,7 @@ export {
 	account,
 	client,
 	databases,
+	teams,
 	getCurrentSession,
 	refreshCurrentSession,
 	getCurrentUser,

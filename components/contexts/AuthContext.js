@@ -8,8 +8,8 @@ import {
 	account,
 	getCurrentSession,
 	getCurrentUser,
-	getUserInCollection,
-	refreshCurrentSession
+	getUserInCollection, ID,
+	refreshCurrentSession, teams
 } from "../appwrite/appwrite";
 import LoadingFallback from "../loaders/LoadingFallback";
 import {useMyStore} from "@/store/store";
@@ -50,7 +50,9 @@ export const AuthProvider = ({ children }) => {
 				if (currentUser) {
 					fetchGoogleUserData(currentSession.providerAccessToken)
 						.then((googleData) => {
-							updateUserPrefs(googleData?.picture)
+							if(googleData){
+								updateUserPrefs(googleData?.picture)
+							}
 						})
 						.catch((error) => {
 							console.log(error)

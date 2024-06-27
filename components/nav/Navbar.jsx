@@ -1,6 +1,6 @@
 "use client";
 
-import {CalendarRange, Heart, Home, LogOut, MenuIcon} from "lucide-react";
+import {CalendarRange, Heart, Home, LogOut, MenuIcon, Users} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import {useEffect, useState} from "react";
@@ -10,6 +10,7 @@ import {Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle} from "..
 import {useMyStore} from "@/store/store";
 import {db} from "@/components/appwrite/database";
 import {Query} from "appwrite";
+import {Badge} from "@/components/ui/badge";
 
 const Navbar = () => {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -37,8 +38,6 @@ const Sidebar = ({ open, onOpenChange }) => {
 	const { onLogout } = useAuth();
 	const {user} = useAuth()
 
-	console.log(user)
-
 	return (
 		<Sheet open={open} onOpenChange={onOpenChange}>
 			<SheetContent className="bg-primary border-l-0 px-0 outline-0 stroke-none">
@@ -61,10 +60,13 @@ const Sidebar = ({ open, onOpenChange }) => {
 							</div>
 						}
 
-						<div className={'flex flex-col gap-2'}>
-							<span className={'text-xs text-muted'}>Logged in as:</span>
+						<div className={'flex flex-col gap-1'}>
+							<Badge variant={'secondary'} className={'self-start'}>Google</Badge>
 							<p className="text-white font-semibold text-xl pr-8">
 								{user?.name}
+							</p>
+							<p className="text-white text-sm pr-8">
+								{user?.email}
 							</p>
 						</div>
 					</div>

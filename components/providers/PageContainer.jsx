@@ -5,7 +5,7 @@ const PageContainer = ({ children, hideNavbar, className }) => {
 	return (
 		<div
 			className={cn(
-				"flex flex-col min-h-screen relative px-6 bg-muted/50",
+				"flex flex-col min-h-screen relative px-6",
 				className
 			)}
 		>
