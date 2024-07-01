@@ -60,7 +60,6 @@ const refreshCurrentSession = async () => {
 
 
 
-
 export {
 	COLLECTION_ID_EVENTS,
 	COLLECTION_ID_EVENT_ITEMS,

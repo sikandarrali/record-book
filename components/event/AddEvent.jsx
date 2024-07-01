@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle} from "@/components/ui/sheet";
 import { Textarea } from "@/components/ui/textarea";
-import { cn } from "@/lib/utils";
+import {cn, scrollToTop} from "@/lib/utils";
 import { Form, Formik } from "formik";
 import { Loader2Icon, X } from "lucide-react";
 import { useState } from "react";
@@ -42,11 +42,11 @@ export const AddEvent = ({ open, onOpenChange, refreshItems, setRefreshItems }) 
 				details: values.details,
 			};
 			await db.events.create(eventData);
-			// logic for adding events in localStore is available in events/page
 			onOpenChange(false);
 			toast.success("Event created", ToastOptions);
 			setAdding(false);
 			setDisabled(false);
+			scrollToTop()
 		} catch (error) {
 			toast.error(`Unable to Add: ${error}`, ToastOptions);
 			setAdding(false);

@@ -25,6 +25,7 @@ import {
 import useScrollToView from "@/lib/hooks/useScrollToView";
 import {useMediaQuery} from "react-responsive";
 import Text from "@/components/theme/Text";
+import {scrollToTop} from "@/lib/utils";
 
 const AddEventItemSchema = Yup.object().shape({
 	name: Yup.string()
@@ -66,6 +67,7 @@ export const AddEventItem = ({ open, onOpenChange, eventID, refreshItems, setRef
 			toast.success("New Item Added", ToastOptions);
 			setAdding(false);
 			setDisabled(false);
+			scrollToTop()
 		} catch (error) {
 			toast.error(`Unable to Add: ${error}`, ToastOptions);
 			setAdding(false);

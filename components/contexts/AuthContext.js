@@ -101,6 +101,7 @@ export const AuthProvider = ({ children }) => {
 			}, 1000);
 		}catch (e){
 			// console.log("error logging out: ", e)
+			setLoading(false);
 			router.replace("/login");
 		}
 	};

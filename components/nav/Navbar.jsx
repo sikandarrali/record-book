@@ -1,6 +1,6 @@
 "use client";
 
-import {CalendarRange, Heart, Home, LogOut, MenuIcon, Users} from "lucide-react";
+import {CalendarRange, Copyright, Heart, Home, LogOut, MenuIcon, Users} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import {useEffect, useState} from "react";
@@ -11,6 +11,8 @@ import {useMyStore} from "@/store/store";
 import {db} from "@/components/appwrite/database";
 import {Query} from "appwrite";
 import {Badge} from "@/components/ui/badge";
+import {Switch} from "@/components/ui/switch";
+import LanguageSwitcher from "@/components/nav/LangugeSwitcher";
 
 const Navbar = () => {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -71,7 +73,13 @@ const Sidebar = ({ open, onOpenChange }) => {
 						</div>
 					</div>
 
-					<div className="flex flex-col px-6 h-full mt-20 gap-4">
+
+					{/*<div className={'flex items-center justify-between flex-1 px-10'}>*/}
+					{/*	<p className={'text-muted font-medium'}>Language</p>*/}
+					{/*	<LanguageSwitcher />*/}
+					{/*</div>*/}
+
+					<div className="flex flex-col px-6 h-full mt-20">
 						<MenuItem
 							label={"Events"}
 							href={"/events"}
@@ -80,26 +88,30 @@ const Sidebar = ({ open, onOpenChange }) => {
 							}
 						/>
 
-						<div className="mb-0 w-full">
-							<div
-								onClick={onLogout}
-								className="flex cursor-pointer text-background hover:bg-muted hover:text-foreground items-center gap-2 px-4 py-4 rounded-md"
-							>
-								<LogOut className="w-[18px] h-[18px]" />
-								<span className="text-base font-medium">
+						<MenuItem
+							label={"Groups"}
+							href={"/groups"}
+							icon={
+								<Users className="w-[18px] h-[18px]" />
+							}
+						/>
+					</div>
+
+					<div className="mb-0  mx-2 px-4">
+						<div
+							onClick={onLogout}
+							className="flex cursor-pointer text-background hover:bg-muted hover:text-foreground items-center gap-2 px-4 py-4 rounded-md"
+						>
+							<LogOut className="w-[18px] h-[18px]" />
+							<span className="text-base font-medium">
 									Logout
 								</span>
-							</div>
 						</div>
+					</div>
 
-						<div className={'px-5 pb-4 text-muted mt-auto flex flex-col gap-1 items-center'}>
-							<p className={'flex items-center text-xs gap-1'}>
-								<span>Created with</span>
-								<span><Heart className={'w-3.5 h-3.5'} /></span>
-								<span>by</span>
-							</p>
-							<span className={'font-semibold text-sm'}>Sikandar Ali Chishty</span>
-						</div>
+					<div className={'mx-6 pb-4 !mt-4 pt-6 text-muted flex items-center justify-center gap-1'}>
+						<Copyright className={'w-3.5 h-3.5 stroke-[1.5]'}/>
+						<span className={'font-medium text-sm'}>Sikandar Ali Chishty</span>
 					</div>
 				</div>
 
