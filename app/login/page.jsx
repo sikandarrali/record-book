@@ -3,6 +3,7 @@ import { useAuth } from "@/components/contexts/AuthContext";
 import PageContainer from "@/components/providers/PageContainer";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import Logo from "../../public/logo.png"
 
 export default function Home() {
 	const { onGoogleWithLogin, setLoading } = useAuth();
@@ -13,7 +14,7 @@ export default function Home() {
 
 				{/*<div className={"relative w-[200px] h-[150px]"}>*/}
 					<Image
-						src="/logo.png"
+						src={Logo}
 						alt="Logo"
 						className="mx-auto"
 						priority
