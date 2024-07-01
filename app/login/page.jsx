@@ -3,9 +3,6 @@ import { useAuth } from "@/components/contexts/AuthContext";
 import PageContainer from "@/components/providers/PageContainer";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import {Input} from "@/components/ui/input";
-import {NumericFormat} from "react-number-format";
-import {AddEventItem} from "@/components/event-items/AddEventItem";
 
 export default function Home() {
 	const { onGoogleWithLogin, setLoading } = useAuth();

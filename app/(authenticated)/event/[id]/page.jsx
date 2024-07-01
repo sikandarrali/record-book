@@ -18,10 +18,11 @@ import {db} from "@/components/appwrite/database";
 import {Query} from "appwrite";
 import {client} from "@/components/appwrite/appwrite";
 
+const perPageList = [10, 20, 30, 50, 100, 200];
+
 const Page = ({ params }) => {
 	const [searchValue, setSearchValue] = useState("");
 	const [currentEvent, setCurrentEvent] = useState(null)
-	const [eventItems, setEventItems] = useState([]);
 	const [openAddModal, setOpenAddModal] = useState(false);
 	const [totalSum, setTotalSum] = useState(0);
 	const [noItems, setNoItems] = useState(false);
@@ -32,6 +33,15 @@ const Page = ({ params }) => {
 	const eventPageID = params.id;
 	const [items, setItems] = useState([])
 	const [itemsDefault, setItemsDefault] = useState([])
+
+	// pagination
+	const [itemsPerPage, setItemsPerPage] = useState(perPageList[0]);
+	const [currentPage, setCurrentPage] = useState(1);
+	const indexOfLastItem = currentPage * itemsPerPage;
+	const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+	const currentItems = items?.slice(indexOfFirstItem, indexOfLastItem);
+	const [paginatedItems, setPaginatedItems] = useState(currentItems);
+	const totalPages = Math.ceil(items?.length / itemsPerPage);
 
 	useLayoutEffect(() => {
 		const getEvent = eventsStore.some((item) => item.$id === eventPageID);
@@ -104,7 +114,6 @@ const Page = ({ params }) => {
 					return prev;
 				});
 			}
-
 		});
 
 		return ()=> unsubscribe()
@@ -121,8 +130,10 @@ const Page = ({ params }) => {
 			}else{
 				setSearchResultsMessage('')
 			}
-			setItems(temp);
+			setPaginatedItems(temp);
+			setCurrentPage(1); // Reset to the first page for new search results
 		}else{
+			console.log('no search value')
 			resetSearch()
 		}
 	};
@@ -139,7 +150,7 @@ const Page = ({ params }) => {
 
 	const resetSearch = () =>{
 		setSearchValue('')
-		setItems(itemsDefault)
+		paginateItems()
 	}
 
 	useEffect(() => {
@@ -147,8 +158,30 @@ const Page = ({ params }) => {
 	}, [eventsStore]);
 
 	useEffect(() => {
-		setTotalSum(eventItems?.reduce((acc, item) => acc + item.amount, 0));
-	}, [eventItems]);
+		setTotalSum(itemsDefault?.reduce((acc, item) => acc + item.amount, 0));
+	}, [itemsDefault]);
+
+	const scrollToTop = () => {
+		window.scrollTo({ top: 0, behavior: "smooth" });
+	};
+
+	const paginateItems = () =>{
+		const indexOfLastItem = currentPage * itemsPerPage;
+		const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+		const currentItems = items?.slice(indexOfFirstItem, indexOfLastItem);
+		setPaginatedItems(currentItems);
+	}
+
+	useEffect(() => {
+		paginateItems()
+	}, [currentPage, items, itemsPerPage]);
+
+	const handlePageChange = (newPage) => {
+		if (newPage >= 1 && newPage <= Math.ceil(items.length / itemsPerPage)) {
+			scrollToTop();
+			setCurrentPage(newPage);
+		}
+	};
 
 	return (
 		<Suspense fallback={<LoadingFallback />}>
@@ -240,7 +273,7 @@ const Page = ({ params }) => {
 							</div>
 						)}
 
-						{items.map(
+						{paginatedItems.map(
 							(item, i) => (
 								<motion.div
 									initial={{ opacity: 0, y: 5 }}
@@ -256,15 +289,43 @@ const Page = ({ params }) => {
 							)
 						)}
 					</div>
+
+					{paginatedItems.length > 0 && (
+						<div className="flex items-center flex-1 justify-center pb-20 pt-8">
+							<Button
+								variant="outline"
+								onClick={() => handlePageChange(currentPage - 1)}
+								disabled={currentPage === 1}
+								className="h-8 px-3"
+							>
+								Previous
+							</Button>
+							<div className="flex items-center justify-center space-x-2 text-xs w-28 md:w-32">
+								<span>Page</span>
+								<span>{currentPage}</span>
+								<span>of</span>
+								<span>{Math.ceil(items?.length / itemsPerPage)}</span>
+							</div>
+
+							<Button
+								variant="outline"
+								onClick={() => handlePageChange(currentPage + 1)}
+								disabled={currentPage === totalPages}
+								className="h-8 px-3 md:mr-28 lg:mr-0"
+							>
+								Next
+							</Button>
+						</div>
+					)}
 				</div>
 
+				{/* Add Item Button */}
 				<div
 					className="fixed bottom-8 cursor-pointer right-8 z-10 w-[4.5rem] h-[4.5rem] flex items-center justify-center rounded-full bg-primary"
 					onClick={() => setOpenAddModal(true)}
 				>
 					<Plus className="text-white w-10 h-10" />
 				</div>
-
 				<AddEventItem
 					open={openAddModal}
 					onOpenChange={setOpenAddModal}
