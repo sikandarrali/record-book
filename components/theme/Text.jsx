@@ -5,6 +5,8 @@ const Text = ({ children, className, variant, urdu }) => {
 		<p
 			className={cn(
 				"text-base",
+				variant === "xs" && "text-xs",
+				variant === "sm" && "text-sm",
 				variant === "h1" && "text-2xl font-semibold",
 				variant === "h2" && "text-xl font-semibold",
 				variant === "h3" && "text-lg font-semibold",

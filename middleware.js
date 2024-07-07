@@ -32,5 +32,6 @@ export const config = {
 		"/login",
 		"/events",
 		"/event",
+		"/groups"
 	],
 };

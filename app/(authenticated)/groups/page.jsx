@@ -6,80 +6,75 @@ import { FixStickyHeaderScrollError } from "@/lib/utils";
 import { useMyStore } from "@/store/store";
 import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
-import {teams} from "@/components/appwrite/appwrite";
+import {listUserGroups, teams} from "@/components/appwrite/appwrite";
 import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
+import {toast} from "react-toastify";
+import {ToastOptions} from "@/lib/ToastOptions";
+import {Info, Trash, Trash2} from "lucide-react";
+import {Label} from "@/components/ui/label";
+import {DeleteGroupMember} from "@/components/groups/DeleteGroupMember";
+import {useAuth} from "@/components/contexts/AuthContext";
+import {ID} from "appwrite";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import {AddGroup} from "@/components/groups/AddGroup";
+import SingleGroup from "@/components/groups/SingleGroup";
+
 
 export default function Home() {
 
-    const [userEmail, setUserEmail] = useState('sikandar14012@gmail.com')
+    const {user} = useAuth()
+    const [userEmail, setUserEmail] = useState('')
     const [usersInTeam, setUsersInTeam] = useState([])
     const [userTeam, setUserTeam] = useState(null)
+    const [refresh, setRefresh] = useState(false)
 
-    const getTeams = async () => {
 
-        console.log('hey')
-        try {
-            const getTeam = await teams.list()
-            if(getTeam){
-                setUserTeam(getTeam.teams[0])
-                const getMemberships = await teams.listMemberships(getTeam.teams[0].$id);
-                if(getMemberships){
-                    setUsersInTeam(getMemberships.memberships)
-                }
-            }
-        } catch (error) {
-            console.log(error);
-        }
-    };
+    const [openAddGroup, setOpenAddGroup] = useState(false)
+    const [groups, setGroups] = useState([])
 
-    // re-populate events when created, fixes missing $id issue
     useEffect(() => {
-        getTeams()
-
-    }, []);
-
-
-    const onAddToGroup = async () =>{
-
-        // const result = await teams.createMembership(
-        //     userTeam.$id, // teamId
-        //     userEmail, // email (optional)
-        //     [], // roles
-        //     'https://shadi.aasaan-apps.store', // url (optional)
-        // );
-
-        // const result = await teams.createMembership(
-        //     userTeam.$id, // teamId
-        //     [], // roles
-        //     userEmail, // email (optional)
-        //     'https://shadi.aasaan.com'
-        // );
-
-        // if(result){
-        //     console.log(result)
-        // }
-
-        console.log(usersInTeam)
-
-    }
+        const unsub = async() =>{
+            const groupsList = await listUserGroups()
+            if(groupsList){
+                setGroups(groupsList.teams)
+            }
+        }
+        return ()=> unsub()
+    }, [refresh]);
 
     return (
         <PageContainer hideTopbar>
             <Text variant="h2">Groups</Text>
+            <Text>Groups are a way of sharing your Events Data with others. When a new user is added they will receive an invitation email to join the group.</Text>
+            <Text className={'flex items-start gap-2 mt-4 text-sm font-medium'}><Info className={'w-5 h-5 text-primary'}/> Added user will be able to Add, Update, Delete and View Events and Data</Text>
 
-            <div className={'flex flex-col mt-10 gap-2'}>
-                <Input value={userEmail} onChange={(e)=> setUserEmail(e.target.value)} />
-                <Button onClick={()=> onAddToGroup()}>Add to Group</Button>
-            </div>
+            <Tabs defaultValue="ownedGroups" className="w-full mt-4">
+                <TabsList className={'w-full h-12'}>
+                    <TabsTrigger className={'flex-1 flex h-full'} value="ownedGroups">Your Groups</TabsTrigger>
+                    <TabsTrigger className={'flex-1 flex h-full'} value="joinedGroups">Joined Groups</TabsTrigger>
+                </TabsList>
 
-            <div className={'flex flex-col mt-10 gap-2'}>
-                <p className={'font-semibold'}>Users in Group</p>
-                {usersInTeam.map((user)=>(
-                    <div className={'bg-muted p-4'} key={user.$id}>{user.userEmail}</div>
-                ))}
-            </div>
+                {/* Owned Groups */}
+                <TabsContent value="ownedGroups" className={'bg-muted pt-6 rounded-b-lg -mt-2'}>
+                    <div className={'flex flex-col divide-y'}>
+                        {groups?.map((data)=>(
+                            <SingleGroup data={data} key={data.$id} setGroups={setGroups} setRefresh={setRefresh}/>
+                        ))}
+                    </div>
 
+                    <div className={'px-5'}>
+                        <Button stretched size={'lg'} className={'!mt-10'} onClick={()=> setOpenAddGroup(true)}>Create new Group</Button>
+                    </div>
+                </TabsContent>
+
+                {/* Joined Groups */}
+                <TabsContent value="joinedGroups" className={'bg-muted px-5 pb-4 pt-6 rounded-b-lg -mt-2 flex flex-col gap-4'}>
+                    <p>Change your password here.</p>
+                </TabsContent>
+            </Tabs>
+
+            <AddGroup open={openAddGroup} onOpenChange={setOpenAddGroup} setRefresh={setRefresh}/>
         </PageContainer>
     );
 }
