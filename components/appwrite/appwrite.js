@@ -53,10 +53,17 @@ const refreshCurrentSession = async () => {
 	try {
 		return account.updateSession("current");
 	} catch (error) {
-		console.log(error);
+		// console.log(error);
 	}
 };
 
+const listUserGroups = async () =>{
+	try {
+		return teams.list()
+	} catch (error) {
+		console.log(error);
+	}
+}
 
 
 
@@ -72,6 +79,7 @@ export {
 	getCurrentSession,
 	refreshCurrentSession,
 	getCurrentUser,
+	listUserGroups,
 	login,
 	logout
 };

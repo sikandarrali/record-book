@@ -20,6 +20,7 @@ import {
 	DrawerTitle,
 } from "@/components/ui/drawer"
 import {Query} from "appwrite";
+import {FixDrawerPointerEventsIssue} from "@/lib/hooks/FixDrawerPointerEventsIssue";
 
 const EventInfo = ({ eventData, sum }) => {
 	const [openDetails, setOpenDetails] = useState(false);
@@ -55,15 +56,7 @@ const EventInfo = ({ eventData, sum }) => {
 	// fixes dialog adding pointer-events:none to body
 	// document.body.style.pointerEvents = "auto";
 	useEffect(() => {
-		if (openDetails) {
-			// Pushing the change to the end of the call stack
-			const timer = setTimeout(() => {
-				document.body.style.pointerEvents = "";
-			}, 0);
-			return () => clearTimeout(timer);
-		} else {
-			document.body.style.pointerEvents = "auto";
-		}
+		return ()=> FixDrawerPointerEventsIssue(openDetails)
 	}, [openDetails]);
 
 	return (
