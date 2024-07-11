@@ -1,4 +1,4 @@
-import {Account, Client, Databases, Query, Teams} from "appwrite";
+import {Account, Client, Databases, Teams} from "appwrite";
 
 const ENDPOINT = process.env.NEXT_PUBLIC_ENDPOINT;
 const PROJECT_ID = process.env.NEXT_PUBLIC_PROJECT_ID;

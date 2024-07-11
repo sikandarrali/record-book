@@ -181,12 +181,12 @@ const SingleEventModal = ({ eventData }) => {
             onOpenChange={setIsOpen}
             defaultOpen={false}
         >
-            <SheetTrigger className={'flex flex-1 justify-center items-center px-6 py-7 relative'}>
-                {eventData?.name}
+            <SheetTrigger className={'flex flex-1 justify-center items-center px-6 md:px-8 pt-8 pb-7 relative'}>
+                {eventData?.name} {eventData?.name} {eventData?.name} {eventData?.name} {eventData?.name} {eventData?.name} {eventData?.name} {eventData?.name}
                 {eventData.teamId && <Users2 className={'absolute right-2 top-2 w-5 h-5'}/>}
             </SheetTrigger>
             <SheetContent
-                className={cn("!pt-0 overflow-auto h-screen max-h-screen flex flex-col justify-start")}
+                className={cn("!pt-0 overflow-auto h-screen max-h-screen border-t-0 border-r-0 flex flex-col justify-start")}
                 side={isDesktop ? "right" : "bottom"}
                 onOpenAutoFocus={(e) => e.preventDefault()}
             >
@@ -215,9 +215,6 @@ const SingleEventModal = ({ eventData }) => {
                                     />
                                 </span>
                                 </div>
-                                <Button variant="ghost" size="icon" onClick={()=> setIsOpen(false)}>
-                                    <XIcon/>
-                                </Button>
                             </div>
 
                             <Text variant={"h1"} className="text-background px-6 text-center pb-4 pt-1 flex flex-col justify-center items-center gap-4 select-none">
@@ -225,13 +222,17 @@ const SingleEventModal = ({ eventData }) => {
                             </Text>
                         </div>
 
-                        <div className="flex flex-col pb-32 mt-4">
+                        <div className="flex flex-col pb-36 mt-5">
                             <SearchItems
                                 visibleItems={visibleItems}
                                 setVisibleItems={setVisibleItems}
                                 itemsDefault={itemsDefault}
                                 itemsPerPage={itemsPerPage}
                             />
+
+                            <Text variant={'sm'} className={'py-1.5 font-medium bg-muted -mx-6 flex items-center justify-center px-6 gap-2 text-muted-foreground'}>
+                                Total Entries: <span className={'text-primary font-semibold text-base'}>{items.length}</span>
+                            </Text>
 
                             <div className="flex flex-col -mx-6 overflow-y-auto">
                                 {items.length===0 && (
@@ -250,62 +251,70 @@ const SingleEventModal = ({ eventData }) => {
                                 )}
 
                                 {visibleItems.map((item, i) => (
-                                    <motion.div
-                                        // initial={{ opacity: 0, y: 5 }}
-                                        // animate={{
-                                        //     opacity: 1,
-                                        //     y: 0,
-                                        //     transition: { delay: 0.00002 + i / 10 },
-                                        // }}
-                                        key={i + item.name}
-                                    >
+                                    <motion.div key={i + item.name}>
                                         <SingleListItem item={item} eventID={eventData.$id} />
                                     </motion.div>
                                 ))}
 
 
                                 {items.length > 0 &&
-                                    <div className={'flex flex-col self-center mt-8 !border-t-0'}>
-                                        {!hasMoreItems && <div className="mt-4 font-medium italic text-muted-foreground">No more items</div>}
-                                        {hasMoreItems && !loadingItems && (
-                                            <Button
-                                                onClick={loadMorePosts}
-                                                variant={'secondary'}
-                                                size={'lg'}
-                                            >
-                                                Load more
-                                            </Button>
-                                        )}
-                                        {loadingItems && (
+                                    <div className={'flex flex-col w-full justify-center items-center mt-8 !border-t-0'}>
+                                        {!hasMoreItems && <div className="mt-4 font-medium italic text-muted-foreground text-center">No more items</div>}
+
+                                        {loadingItems ? (
                                             <Button
                                                 disabled={loadingItems}
                                                 onClick={loadMorePosts}
                                                 variant={'outline'}
                                                 size={'lg'}
+                                                className={'w-40'}
                                             >
                                                 <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
                                                 Loading...
                                             </Button>
-                                        )}
+                                        ) :
+                                            hasMoreItems &&
+                                                <Button
+                                                    onClick={loadMorePosts}
+                                                    variant={'secondary'}
+                                                    size={'lg'}
+                                                    className={'w-40'}
+                                                >
+                                                    Load more
+                                                </Button>
+                                        }
                                     </div>
                                 }
-
-                                <Text className={'pt-4 pb-2 px-6 mt-8 font-medium'}>Total Entries: <span className={'text-primary font-semibold text-lg'}>{items.length}</span></Text>
 
                             </div>
                         </div>
 
-                        <div
-                            className="fixed bottom-14 right-10 z-10 w-[4.5rem] h-[4.5rem] flex items-center justify-center rounded-full bg-primary cursor-pointer"
-                            onClick={() => {
-                                setOpenAddModal(true)
-                                if (headerRef.current) {
-                                    headerRef.current.scrollIntoView({ behavior: 'smooth' });
-                                }
-                            }}
-                        >
-                            <Plus className="text-white w-10 h-10" />
+                        <div className={'fixed bottom-14 inset-x-0 z-10 flex justify-center'}>
+                            <div
+                                className="w-[4.5rem] h-[4.5rem] shadow-lg flex items-center justify-center rounded-full bg-primary cursor-pointer"
+                                onClick={() => {
+                                    setOpenAddModal(true)
+                                    if (headerRef.current) {
+                                        headerRef.current.scrollIntoView({ behavior: 'smooth' });
+                                    }
+                                }}
+                            >
+                                <Plus className="text-white w-10 h-10" />
+                            </div>
+
+                            <Button
+                                type="submit"
+                                variant="outline"
+                                size="icon"
+                                // stretched
+                                className="w-12 h-12 rounded-full absolute shadow-lg bg-muted-foreground right-0 mr-6 md:right-16 top-1/2 -translate-y-1/2"
+                                onClick={()=> setIsOpen(false)}
+                            >
+                                <XIcon className="text-muted" />
+                            </Button>
                         </div>
+
+
                         <AddEventItem
                             open={openAddModal}
                             onOpenChange={setOpenAddModal}

@@ -19,35 +19,31 @@ import {AddGroup} from "@/components/groups/AddGroup";
 import SingleGroup from "@/components/groups/SingleGroup";
 import Loader from "@/components/loaders/loader";
 import {Teams, Client} from "appwrite";
+import {teams} from "@/components/appwrite/appwrite";
 
-
-const client = new Client();
-client.setEndpoint(process.env.NEXT_PUBLIC_ENDPOINT).setProject(process.env.NEXT_PUBLIC_PROJECT_ID);
 
 export default function Page() {
 
     const {user} = useAuth()
-    const [refresh, setRefresh] = useState(false)
     const [openAddGroup, setOpenAddGroup] = useState(false)
     const [groups, setGroups] = useState([])
     const [loading, setLoading] = useState(true)
 
-    const teams = new Teams(client);
-
-    const fun = async () =>{
-        try {
-            const groupsList = await teams.list()
-            setGroups(groupsList.teams)
-            console.error(groupsList)
-        }catch (e) {
-            console.log(e)
+    const getGroups = async () =>{
+        if(user){
+            try {
+                const groupsList = await teams.list()
+                setGroups(groupsList.teams)
+                console.error(groupsList)
+            }catch (e) {
+                console.log(e)
+            }
         }
-
         setLoading(false)
     }
 
     useLayoutEffect(() => {
-        fun()
+        getGroups()
     }, []);
 
     return (
@@ -104,7 +100,7 @@ export default function Page() {
                     <div className={'absolute inset-0 -mt-4 z-10'}><Loader hideText/></div>
                 :
                     groups.map((data)=>(
-                        <SingleGroup data={data} key={data.$id} groups={groups} setGroups={setGroups} setRefresh={setRefresh}/>
+                        <SingleGroup data={data} key={data.$id} groups={groups} setGroups={setGroups}/>
                     ))
                 }
             </div>

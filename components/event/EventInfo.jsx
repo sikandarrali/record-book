@@ -60,7 +60,7 @@ const EventInfo = ({ eventData, sum }) => {
 
 	useLayoutEffect(() => {
 		const unsub = async () =>{
-			if(eventData?.teamId){
+			if(eventData.teamId){
 				const response = await getGroup(eventData.teamId)
 				setGroup(response)
 			}
@@ -89,7 +89,7 @@ const EventInfo = ({ eventData, sum }) => {
 
 					<div className="flex flex-col w-full min-h-full pt-4 justify-start">
 
-						<div className="flex flex-col justify-center items-center my-10 lg:mt-32">
+						<div className="flex flex-col justify-center items-center gap-5 my-10 lg:mt-32">
 							<Text
 								variant={"h1"}
 								className="text-primary text-center self-center"

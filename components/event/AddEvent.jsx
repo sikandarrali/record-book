@@ -7,7 +7,7 @@ import {Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle} from "@/
 import { Textarea } from "@/components/ui/textarea";
 import {cn, scrollToTop} from "@/lib/utils";
 import { Form, Formik } from "formik";
-import { Loader2Icon, X } from "lucide-react";
+import {Loader2Icon, X, XIcon} from "lucide-react";
 import {useLayoutEffect, useState} from "react";
 import { useMediaQuery } from "react-responsive";
 import * as Yup from "yup";
@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/select"
 import {listUserGroups} from "@/components/appwrite/appwrite";
 import {useAuth} from "@/components/contexts/AuthContext";
+import {Label} from "@/components/ui/label";
 
 
 const AddEventSchema = Yup.object().shape({
@@ -41,7 +42,7 @@ export const AddEvent = ({ open, onOpenChange, refreshItems, setRefreshItems }) 
 	const [adding, setAdding] = useState(false);
 	const [disabled, setDisabled] = useState(false);
 	const [userGroups, setUserGroups] = useState([])
-	const [selectedGroup, setSelectedGroup] = useState('')
+	const [selectedGroup, setSelectedGroup] = useState(null)
 	const {user} = useAuth()
 
 	const onAdd = async (values) => {
@@ -61,6 +62,9 @@ export const AddEvent = ({ open, onOpenChange, refreshItems, setRefreshItems }) 
 					Permission.read(Role.team(selectedGroup, "member")),
 					Permission.update(Role.team(selectedGroup, "member")),
 					Permission.delete(Role.team(selectedGroup, "member")),
+					Permission.read(Role.user(user.$id)),
+					Permission.update(Role.user(user.$id)),
+					Permission.delete(Role.user(user.$id)),
 				]);
 			}else{
 				await db.events.create(eventData);
@@ -143,26 +147,35 @@ export const AddEvent = ({ open, onOpenChange, refreshItems, setRefreshItems }) 
 								<Form className="flex flex-col w-full space-y-6">
 
 									<div className="flex flex-col">
-										<FormLabel
-											title="Share with Group"
-											errors={errors.name}
-											touched={touched.name}
-										/>
-										<Select onValueChange={(selected)=> setSelectedGroup(selected)}>
-											<SelectTrigger className="w-full h-12">
-												<SelectValue placeholder="Select Group" />
-											</SelectTrigger>
-											<SelectContent>
-												{userGroups?.map((u)=>(
-													<SelectItem
-														key={u.$id}
-														value={u.$id}
-													>
-														{u.name}
-													</SelectItem>
-												))}
-											</SelectContent>
-										</Select>
+										<Label className={"relative text-sm flex items-center justify-between gap-4"}>
+											<span className="shrink-0">Share with Group</span>
+										</Label>
+										<div className={'flex gap-4 items-center'}>
+											<Select onValueChange={(selected)=> setSelectedGroup(selected)} key={selectedGroup}>
+												<SelectTrigger className="w-full h-12 flex between">
+													{selectedGroup ? userGroups.find((group)=> group.$id=== selectedGroup)?.name : 'Select Group'}
+												</SelectTrigger>
+												<SelectContent>
+													{userGroups?.map((u)=>(
+														<SelectItem
+															key={u.$id}
+															value={u.$id}
+														>
+															{u.name}
+														</SelectItem>
+													))}
+												</SelectContent>
+											</Select>
+											<Button
+												variant={'ghost'}
+												type={'button'}
+												size={'icon'}
+												onClick={()=> setSelectedGroup(null)}
+												className={'flex items-center justify-center text-primary hover:text-primary'}
+											>
+												<XIcon className={'w-4 h-4'} />
+											</Button>
+										</div>
 									</div>
 
 									<div className="flex flex-col">

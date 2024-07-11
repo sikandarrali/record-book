@@ -62,7 +62,7 @@ export const SingleListItem = ({ item, eventID }) => {
 					</div>
 
 					{item.details &&
-						<div className={'overflow-hidden line-clamp-1 mt-1 w-3/4 text-muted-foreground text'}>{item.details}{item.details}{item.details}{item.details}{item.details}{item.details}{item.details}{item.details}{item.details}{item.details}{item.details}{item.details}{item.details}{item.details}{item.details}</div>
+						<div className={'overflow-hidden line-clamp-1 mt-1 w-3/4 text-muted-foreground text'}>{item.details}</div>
 					}
 				</div>
 			</SheetTrigger>

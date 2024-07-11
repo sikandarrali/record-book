@@ -82,8 +82,9 @@ export const AuthProvider = ({ children }) => {
 			await account.deleteSession("current");
 			setUser(null);
 		}catch (e){}
-		setLoading(false);
+
 		router.replace("/login");
+		setLoading(false)
 	};
 
 	const memoedValues = useMemo(
