@@ -43,12 +43,12 @@ export const MemberListItem = ({data, teamID, setRefetchMembers, groupName, isGr
                 {data.confirm ?
                     <div className={'flex gap-2 items-center text-xs'}>
                         {isOwner  && <Badge variant={'secondary'}>Admin</Badge>}
-                        {isMember && <Badge variant={'outline'}>Member</Badge>}
+                        {isMember && <Badge variant={'outline'} className={'text-green-500 border-green-500'}>Member</Badge>}
                         {user.email === data.userEmail && <Badge>You</Badge>}
                     </div>
                     :
                     <Tooltip>
-                        <TooltipTrigger><Badge variant={'outline'} className={'text-xs bg-white'}>pending</Badge></TooltipTrigger>
+                        <TooltipTrigger><Badge variant={'outline'} className={'text-xs bg-white border-destructive text-destructive'}>pending</Badge></TooltipTrigger>
                         <TooltipContent className={'bg-foreground'}>
                             <p className={'font-semibold'}>User has not accepted invitation.</p>
                         </TooltipContent>

@@ -3,17 +3,12 @@ import { AddEvent } from "@/components/event/AddEvent";
 import PageContainer from "@/components/providers/PageContainer";
 import Text from "@/components/theme/Text";
 import { FixStickyHeaderScrollError } from "@/lib/utils";
-import { useMyStore } from "@/store/store";
 import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
-import Link from "next/link";
-import {client, DATABASE_ID, COLLECTION_ID_EVENTS, databases} from "@/components/appwrite/appwrite";
+import {client} from "@/components/appwrite/appwrite";
 import {db} from "@/components/appwrite/database";
-import {ID, Query} from "appwrite";
-import {useAuth} from "@/components/contexts/AuthContext";
-import {Button} from "@/components/ui/button";
+import {Query} from "appwrite";
 import SingleEventModal from "@/components/event/SingleEventModal";
-import LoadingFallback from "@/components/loaders/LoadingFallback";
 
 
 export default function Home() {

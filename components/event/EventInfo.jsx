@@ -110,14 +110,12 @@ const EventInfo = ({ eventData, sum }) => {
 
 						<Table className={'lg:mt-16'}>
 							<TableBody className="font-medium text-base">
-								{group &&
-									<TableRow className={'border-b-muted'}>
-										<TableCell>Group</TableCell>
-										<TableCell className="text-right">
-											{group?.name}
-										</TableCell>
-									</TableRow>
-								}
+								<TableRow className={'border-b-muted'}>
+									<TableCell>Group</TableCell>
+									<TableCell className="text-right">
+										{group?.name || <p>Not Shared<br className={'flex md:hidden'}/>with any Group</p>}
+									</TableCell>
+								</TableRow>
 								<TableRow className={'border-b-muted'}>
 									<TableCell>Date</TableCell>
 									<TableCell className="text-right">

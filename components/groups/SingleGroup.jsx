@@ -48,33 +48,20 @@ const SingleGroup = ({ data, setGroups, setRefresh }) => {
     const [openLeaveGroup, setOpenLeaveGroup] = useState(false)
 
     useEffect(() => {
-        const getUsers = async () => {
-            if(data?.$id){
-                try {
-                    const getMemberships = await teams.listMemberships(data.$id);
-                    if(getMemberships){
-                        // setUserInGroup(getMemberships.memberships.filter((item)=> item.userEmail !== user.email))
-                        setUserInGroup(getMemberships.memberships)
-
-                        let tempOwner = getMemberships.memberships.some((item)=>(item.userEmail===user.email && item.roles.includes('owner')))
-                        if(tempOwner) setIsOwner(true)
-                        else setIsOwner(false)
-                    }
-                } catch (error) {
-                    // console.log(error);
-                }
+        const getGroupMembers = async () => {
+            try {
+                const getMemberships = await teams.listMemberships(data.$id);
+                setUserInGroup(getMemberships.memberships)
+                let tempOwner = getMemberships.memberships.some((item)=>(item.userEmail===user.email && item.roles.includes('owner')))
+                setIsOwner(tempOwner)
+            } catch (error) {
+                setUserInGroup([])
+                setIsOwner(false)
             }
         };
 
-        return ()=> getUsers()
+        return ()=> getGroupMembers()
     }, [refetchMembers]);
-
-
-    // fixes dialog adding pointer-events:none to body
-    // document.body.style.pointerEvents = "auto";
-    useEffect(() => {
-        return ()=> FixDrawerPointerEventsIssue(open)
-    }, [open]);
 
     const onDeleteGroup = async() =>{
         const groupID = data.$id;
@@ -112,7 +99,7 @@ const SingleGroup = ({ data, setGroups, setRefresh }) => {
                 </span>
             </SheetTrigger>
             <SheetContent
-                className={cn("pb-8 lg:pb-14 overflow-auto max-h-fit bg-muted")}
+                className={cn("pb-8 lg:pb-14 overflow-auto max-h-[85vh] bg-muted")}
                 side={isDesktop ? "right" : "bottom"}
                 onOpenAutoFocus={(e) => e.preventDefault()}
             >
