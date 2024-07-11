@@ -54,10 +54,10 @@ const Page = () => {
 	}, []);
 
 
-	if(!userId || !secret || !userId || !teamId){
-		redirect('/login')
-		return <></>
-	}
+	// if(!userId || !secret || !userId || !teamId){
+	// 	redirect('/login')
+	// 	return <></>
+	// }
 
 	return(
 		<div className={'flex flex-col p-6 relative'}>

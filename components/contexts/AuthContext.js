@@ -3,7 +3,7 @@
 import { createSessionCookie, deleteSessionCookie } from "@/cookies/UserCookie";
 import axios from "axios";
 import { usePathname, useRouter } from "next/navigation";
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import {createContext, useContext, useEffect, useLayoutEffect, useMemo, useState} from "react";
 import {
 	account,
 	getCurrentSession,
@@ -16,6 +16,7 @@ import {useMyStore} from "@/store/store";
 import {db} from "@/components/appwrite/database";
 import {Query} from "appwrite";
 import {error} from "next/dist/build/output/log";
+import {HOMEPAGE_ROUTE, LOGIN_ROUTE, PROTECTED_ROUTES} from "@/lib/routes";
 
 const AuthContext = createContext();
 
@@ -23,51 +24,39 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
 	const [user, setUser] = useState(null);
-	const [loading, setLoading] = useState(false);
+	const [loading, setLoading] = useState(true);
 	const router = useRouter();
-	const [session, setSession] = useState(null);
-	const emptyStoreEvent = useMyStore((state) => state.emptyEvents)
-	const emptyStoreEventItems = useMyStore((state) => state.emptyEventItems)
-	const updateUser = useMyStore((state)=> state.updateUser)
-	const [refreshChanges, setRefreshChanges] = useState(false)
-	const [tempUser, setTempUser] = useState(null)
+	const pathname = usePathname()
 
-	useEffect(() => {
-		getLoggedInGoogleUser();
+	useLayoutEffect(() => {
+		getLoggedInGoogleUser().then(r => setLoading(false));
 	}, []);
 
 	const getLoggedInGoogleUser = async () => {
-		setLoading(true)
-
 		try {
-			const currentSession = await getCurrentSession();
+			const currentSession = await account.getSession('current');
+			const currentUser = await account.get();
+			setUser(currentUser)
 
-			if (currentSession) {
-				const currentUser = await getCurrentUser();
-				setUser(currentUser)
-				await createSessionCookie(currentUser.$id);
-
-				if (currentUser) {
-					fetchGoogleUserData(currentSession.providerAccessToken)
-						.then((googleData) => {
-							if(googleData){
-								updateUserPrefs(googleData?.picture)
-							}
-						})
-						.catch((error) => {
-							// console.log(error)
-						});
+			fetchGoogleUserData(currentSession.providerAccessToken)
+			.then((googleData) => {
+				if(googleData){
+					updateUserPrefs(googleData?.picture)
 				}
-				setTimeout(() => {
-					setLoading(false);
-				}, 1000);
-			}
-			else{
-				// router.replace('/login')
-			}
-		} catch (error) {
-			setLoading(false)
+			})
+			.catch((error) => {
+				// console.log(error)
+			});
+
+			if(pathname === LOGIN_ROUTE) router.replace(HOMEPAGE_ROUTE);
 		}
+		catch (e){
+			setUser(null)
+			if(PROTECTED_ROUTES.includes(pathname)){
+				router.replace(LOGIN_ROUTE)
+			}
+		}
+		setLoading(false)
 	};
 
 	const updateUserPrefs = async (picture) => {
@@ -90,31 +79,23 @@ export const AuthProvider = ({ children }) => {
 		setLoading(true);
 
 		try {
-			await deleteSessionCookie();
-			await account.deleteSession("current").then(() => {
-				setUser(null);
-				emptyStoreEvent();
-				emptyStoreEventItems();
-			});
-
+			await account.deleteSession("current");
+			setUser(null);
 			setTimeout(() => {
-				setLoading(false);
 				router.replace("/login");
 			}, 1000);
 		}catch (e){
-			// console.log("error logging out: ", e)
-			setLoading(false);
 			router.replace("/login");
 		}
+		setLoading(false);
 	};
 
 	const memoedValues = useMemo(
 		() => ({
 			user,
-			setUser,
-			session,
+			setUser
 		}),
-		[user, session]
+		[user]
 	);
 
 	const otherValues = {
@@ -128,7 +109,7 @@ export const AuthProvider = ({ children }) => {
 
 	return (
 		<AuthContext.Provider value={values}>
-			{loading ? <LoadingFallback /> : <>{children}</>}
+			{loading ? <LoadingFallback /> : children}
 		</AuthContext.Provider>
 	);
 };
