@@ -17,11 +17,15 @@ export async function middleware(request) {
 	let sessionCookie = request.cookies.get("skrSession");
 
 	if (sessionCookie && isPublicPath) {
-		return NextResponse.rewrite(new URL("/events", request.url));
+		const redirectResponse = NextResponse.redirect(new URL("/events", request.url))
+		redirectResponse.headers.set('x-middleware-cache', 'no-cache'); // ! FIX: Disable caching
+		return redirectResponse;
 	}
 
 	if (!sessionCookie && isProtectedPath) {
-		return NextResponse.rewrite(new URL("/login", request.url));
+		const redirectResponse = NextResponse.redirect(new URL("/login", request.url))
+		redirectResponse.headers.set('x-middleware-cache', 'no-cache'); // ! FIX: Disable caching
+		return redirectResponse;
 	}
 }
 
