@@ -29,7 +29,7 @@ const logout = async () => {
 	try {
 		return account.deleteSession("current");
 	} catch (error) {
-		console.error(error);
+		// console.error(error);
 	}
 };
 
@@ -37,7 +37,7 @@ const getCurrentUser = async () => {
 	try {
 		return account.get();
 	} catch (error) {
-		console.log(error);
+		// console.log(error);
 	}
 };
 
@@ -45,7 +45,7 @@ const getCurrentSession = async () => {
 	try {
 		return account.getSession("current");
 	} catch (error) {
-		console.log(error);
+		// console.log(error);
 	}
 };
 
@@ -61,7 +61,15 @@ const listUserGroups = async () =>{
 	try {
 		return teams.list()
 	} catch (error) {
-		console.log(error);
+		// console.log(error);
+	}
+}
+
+const getGroup = async (groupID) =>{
+	try {
+		return teams.get(groupID)
+	} catch (error) {
+		// console.log(error);
 	}
 }
 
@@ -76,6 +84,7 @@ export {
 	client,
 	databases,
 	teams,
+	getGroup,
 	getCurrentSession,
 	refreshCurrentSession,
 	getCurrentUser,

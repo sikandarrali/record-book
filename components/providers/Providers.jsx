@@ -1,6 +1,7 @@
 "use client";
 import { AuthProvider } from "../contexts/AuthContext";
 import PagesProvider from "./PagesProvider";
+import {TooltipProvider} from "@/components/ui/tooltip";
 // import PullToRefresh from "pulltorefreshjs";
 
 const Providers = ({ children }) => {
@@ -20,7 +21,9 @@ const Providers = ({ children }) => {
 
 	return (
 		<AuthProvider>
-			<PagesProvider>{children}</PagesProvider>
+			<TooltipProvider>
+				<PagesProvider>{children}</PagesProvider>
+			</TooltipProvider>
 		</AuthProvider>
 	);
 };

@@ -5,6 +5,7 @@ import PagesProvider from "@/components/providers/PagesProvider";
 import Providers from "@/components/providers/Providers";
 import { cn } from "@/lib/utils";
 import {NetworkStatusIndicator} from "@/components/NetworkStatus/NetworkStatusIndicator";
+import {ToastContainer} from "react-toastify";
 
 const fontSans = FontSans({
 	subsets: ["latin"],

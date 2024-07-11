@@ -36,11 +36,11 @@ collections.forEach((collection) => {
 				collection.id,
 				queries
 			),
-		create: (payload, id = ID.unique(), permissions) => {
+		create: (payload, permissions) => {
 			databases.createDocument(
 				collection.databaseID,
 				collection.id,
-				id,
+				ID.unique(),
 				payload,
 				permissions
 			);

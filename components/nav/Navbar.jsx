@@ -1,6 +1,6 @@
 "use client";
 
-import {CalendarRange, Copyright, Heart, Home, LogOut, MenuIcon, Users} from "lucide-react";
+import {CalendarRange, Copyright, Edit, Edit2, Heart, Home, LogOut, MenuIcon, Users} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import {useEffect, useState} from "react";
@@ -13,6 +13,7 @@ import {Query} from "appwrite";
 import {Badge} from "@/components/ui/badge";
 import {Switch} from "@/components/ui/switch";
 import LanguageSwitcher from "@/components/nav/LangugeSwitcher";
+import {EditProfile} from "@/components/nav/EditProfile";
 
 const Navbar = () => {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -39,6 +40,7 @@ export default Navbar;
 const Sidebar = ({ open, onOpenChange }) => {
 	const { onLogout } = useAuth();
 	const {user} = useAuth()
+	const [openEditProfile, setOpenEditProfile] = useState(false)
 
 	return (
 		<Sheet open={open} onOpenChange={onOpenChange}>
@@ -62,13 +64,14 @@ const Sidebar = ({ open, onOpenChange }) => {
 							</div>
 						}
 
-						<div className={'flex flex-col gap-1'}>
-							<Badge variant={'secondary'} className={'self-start'}>Google</Badge>
-							<p className="text-white font-semibold text-xl pr-8">
+						<div className={'flex flex-col text-ellipsis overflow-hidden'}>
+							<Badge variant={'secondary'} className={'self-start text-[10px] px-2'}>Google</Badge>
+							<p className="text-white font-semibold pr-8 mt-2">
 								{user?.name}
 							</p>
-							<p className="text-white text-sm pr-8">
-								{user?.email}
+							<p className="text-white text-sm pr-8 text-ellipsis overflow-hidden">
+								{/*{user?.email}*/}
+								sikandar.ali.chishty@gmail.com
 							</p>
 						</div>
 					</div>
@@ -97,15 +100,23 @@ const Sidebar = ({ open, onOpenChange }) => {
 						/>
 					</div>
 
-					<div className="mb-0  mx-2 px-4">
+					<div className="mb-0 mx-2 px-4 space-y-4">
+						<div
+							className="flex text-background hover:bg-muted hover:text-foreground items-center gap-2 px-4 py-4 hover:rounded-md cursor-pointer"
+							onClick={()=> setOpenEditProfile(true)}
+						>
+							<Edit className="w-[18px] h-[18px]" />
+							<span className="text-base font-medium">Edit Profile</span>
+						</div>
+
+						<div className={'h-[1px] bg-muted w-full'}/>
+
 						<div
 							onClick={onLogout}
 							className="flex cursor-pointer text-background hover:bg-muted hover:text-foreground items-center gap-2 px-4 py-4 rounded-md"
 						>
 							<LogOut className="w-[18px] h-[18px]" />
-							<span className="text-base font-medium">
-									Logout
-								</span>
+							<span className="text-base font-medium">Logout</span>
 						</div>
 					</div>
 
@@ -117,6 +128,8 @@ const Sidebar = ({ open, onOpenChange }) => {
 
 
 			</SheetContent>
+
+			<EditProfile open={openEditProfile} onOpenChange={setOpenEditProfile}/>
 		</Sheet>
 	);
 };

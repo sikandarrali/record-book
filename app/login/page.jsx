@@ -6,7 +6,7 @@ import Image from "next/image";
 import Logo from "../../public/logo.png"
 
 export default function Home() {
-	const { onGoogleWithLogin, setLoading } = useAuth();
+	const { onGoogleWithLogin } = useAuth();
 
 	return (
 		<PageContainer hideNavbar>

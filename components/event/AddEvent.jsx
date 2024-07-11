@@ -8,11 +8,22 @@ import { Textarea } from "@/components/ui/textarea";
 import {cn, scrollToTop} from "@/lib/utils";
 import { Form, Formik } from "formik";
 import { Loader2Icon, X } from "lucide-react";
-import { useState } from "react";
+import {useLayoutEffect, useState} from "react";
 import { useMediaQuery } from "react-responsive";
 import * as Yup from "yup";
 import {toast} from "react-toastify";
 import {ToastOptions} from "@/lib/ToastOptions";
+import {Permission, Role} from "appwrite";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select"
+import {listUserGroups} from "@/components/appwrite/appwrite";
+import {useAuth} from "@/components/contexts/AuthContext";
+
 
 const AddEventSchema = Yup.object().shape({
 	name: Yup.string()
@@ -29,6 +40,9 @@ export const AddEvent = ({ open, onOpenChange, refreshItems, setRefreshItems }) 
 	const isDesktop = useMediaQuery({ query: "(min-width: 1024px)" });
 	const [adding, setAdding] = useState(false);
 	const [disabled, setDisabled] = useState(false);
+	const [userGroups, setUserGroups] = useState([])
+	const [selectedGroup, setSelectedGroup] = useState('')
+	const {user} = useAuth()
 
 	const onAdd = async (values) => {
 		setAdding(true);
@@ -40,8 +54,18 @@ export const AddEvent = ({ open, onOpenChange, refreshItems, setRefreshItems }) 
 				date: values.date,
 				venue: values.venue,
 				details: values.details,
+				teamId: selectedGroup
 			};
-			await db.events.create(eventData);
+			if(selectedGroup){
+				await db.events.create(eventData, [
+					Permission.read(Role.team(selectedGroup, "member")),
+					Permission.update(Role.team(selectedGroup, "member")),
+					Permission.delete(Role.team(selectedGroup, "member")),
+				]);
+			}else{
+				await db.events.create(eventData);
+			}
+
 			onOpenChange(false);
 			toast.success("Event created", ToastOptions);
 			setAdding(false);
@@ -53,6 +77,22 @@ export const AddEvent = ({ open, onOpenChange, refreshItems, setRefreshItems }) 
 			setDisabled(false);
 		}
 	};
+
+	useLayoutEffect(() => {
+		const unsub = async () =>{
+			if(user){
+				const response = await listUserGroups()
+				if(response){
+					let temp = response.teams.filter((item)=> item.prefs.creatorEmail === user.email)
+					setUserGroups(temp)
+				}else{
+					setUserGroups([])
+				}
+			}
+		}
+
+		return ()=> unsub()
+	}, []);
 
 	return (
 		<Sheet open={open} onOpenChange={onOpenChange} defaultOpen={false}>
@@ -101,6 +141,30 @@ export const AddEvent = ({ open, onOpenChange, refreshItems, setRefreshItems }) 
 								setFieldValue,
 							}) => (
 								<Form className="flex flex-col w-full space-y-6">
+
+									<div className="flex flex-col">
+										<FormLabel
+											title="Share with Group"
+											errors={errors.name}
+											touched={touched.name}
+										/>
+										<Select onValueChange={(selected)=> setSelectedGroup(selected)}>
+											<SelectTrigger className="w-full h-12">
+												<SelectValue placeholder="Select Group" />
+											</SelectTrigger>
+											<SelectContent>
+												{userGroups?.map((u)=>(
+													<SelectItem
+														key={u.$id}
+														value={u.$id}
+													>
+														{u.name}
+													</SelectItem>
+												))}
+											</SelectContent>
+										</Select>
+									</div>
+
 									<div className="flex flex-col">
 										<FormLabel
 											title="Event Name"

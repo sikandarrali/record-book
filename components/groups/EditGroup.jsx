@@ -57,7 +57,7 @@ export const EditGroup = ({ open, onOpenChange, data, setGroupName, setRefresh }
             setDisabled(false);
             scrollToTop()
         } catch (error) {
-            toast.error(`Unable to Updated: ${error}`, ToastOptions);
+            toast.error(`Unable to Update: ${error}`, ToastOptions);
             setAdding(false);
             setDisabled(false);
         }
