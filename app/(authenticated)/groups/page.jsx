@@ -34,20 +34,21 @@ export default function Page() {
 
     const teams = new Teams(client);
 
-    useEffect(() => {
-        const unsub = async() =>{
-            // if(user){
-                console.log('I am in')
-                try {
-                    const groupsList = await teams.list()
-                    setGroups(groupsList.teams)
-                }catch (e) {
-                    console.log(e)
-                }
-            // }
-            setLoading(false)
+    const unsub = async() =>{
+        // if(user){
+        console.log('I am in')
+        try {
+            const groupsList = await teams.list()
+            setGroups(groupsList.teams)
+        }catch (e) {
+            console.log(e)
         }
-        return ()=> unsub()
+        // }
+        setLoading(false)
+    }
+
+    useEffect(() => {
+        return ()   => unsub()
     }, []);
 
     useEffect(() => {
