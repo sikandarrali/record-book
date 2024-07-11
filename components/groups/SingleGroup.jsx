@@ -35,13 +35,12 @@ import {useAuth} from "@/components/contexts/AuthContext";
 import {ExitIcon} from "@radix-ui/react-icons";
 import {LeaveGroup} from "@/components/groups/LeaveGroup";
 
-const SingleGroup = ({ data, setGroups, setRefresh }) => {
+const SingleGroup = ({ data, setGroups, setRefresh, groups }) => {
     const isDesktop = useMediaQuery({ query: "(min-width: 1024px)" })
     const [open, setOpen] = useState(false)
-    const [userInGroup, setUserInGroup] = useState([])
+    const [usersInGroup, setUsersInGroup] = useState([])
     const [openEdit, setOpenEdit] = useState(false);
     const [openDelete, setOpenDelete] = useState(false);
-    const [groupName, setGroupName] = useState(data.name)
     const [refetchMembers, setRefetchMembers] = useState(false)
     const [isOwner, setIsOwner] = useState(false)
     const {user} = useAuth()
@@ -52,11 +51,11 @@ const SingleGroup = ({ data, setGroups, setRefresh }) => {
             if(user){
                 try {
                     const getMemberships = await teams.listMemberships(data.$id);
-                    setUserInGroup(getMemberships.memberships)
+                    setUsersInGroup(getMemberships.memberships)
                     let tempOwner = getMemberships.memberships.some((item)=>(item.userEmail===user.email && item.roles.includes('owner')))
                     setIsOwner(tempOwner)
                 } catch (error) {
-                    setUserInGroup([])
+                    setUsersInGroup([])
                     setIsOwner(false)
                 }
             }
@@ -68,37 +67,33 @@ const SingleGroup = ({ data, setGroups, setRefresh }) => {
     const onDeleteGroup = async() =>{
         const groupID = data.$id;
         await teams.delete(groupID);
-        setRefresh(prev=> !prev)
+        setGroups(prev=> prev.filter((item)=> item.$id !== groupID))
         setOpenDelete(false);
         setOpen(false);
         toast.success("Deleted!", ToastOptions);
     }
 
-    const onLeaveGroup = async(membershipID) =>{
+    const onLeaveGroup = async(groupID) =>{
 
-        let tempMembershipID = userInGroup.find((u) => u.userEmail === user.email);
+        let tempMembershipID = usersInGroup.find((u) => u.userEmail === user.email);
 
-        const result = await teams.deleteMembership(
-            data.$id, // teamId
-            tempMembershipID.$id // membershipId
-        );
-        if(result){
-            setRefresh(prev=>!prev)
-            setOpen(false)
-            toast.success("You just left the Group.", ToastOptions);
-            setOpenLeaveGroup(false)
-        }
+        await teams.deleteMembership(data.$id, tempMembershipID.$id);
+        setRefresh(prev=>!prev)
+        setGroups(prev=> prev.filter((item)=> item.$id !== groupID))
+        setOpen(false)
+        toast.success("You just left the Group.", ToastOptions);
+        setOpenLeaveGroup(false)
     }
 
     return (
 
         <Sheet open={open} onOpenChange={setOpen} defaultOpen={false}>
-            <SheetTrigger className={'relative text-left py-5 flex gap-4 justify-between hover:bg-white/70 transition-all duration-300 px-5'}>
+            <SheetTrigger className={'relative text-left py-5 flex gap-4 justify-between border-b last-of-type:border-b-0 hover:bg-white/70 transition-all duration-300 px-5'}>
                 <span>{data.name}</span>
                 {isOwner ? <ShieldCheck className={'w-5 h-5'}/> : <Users2 className={'w-5 h-5'}/>}
             </SheetTrigger>
             <SheetContent
-                className={cn("pb-8 lg:pb-14 overflow-auto max-h-[85vh] bg-muted")}
+                className={cn("pb-8 lg:pb-14 overflow-auto max-h-[85vh] lg:max-h-screen bg-muted")}
                 side={isDesktop ? "right" : "bottom"}
                 onOpenAutoFocus={(e) => e.preventDefault()}
             >
@@ -110,7 +105,7 @@ const SingleGroup = ({ data, setGroups, setRefresh }) => {
                             variant={"h1"}
                             className="text-left flex items-center flex-wrap gap-2 border-b pb-4 justify-between"
                         >
-                            <span className={'text-primary'}>{groupName}</span>
+                            <span className={'text-primary'}>{data.name}</span>
                         </Text>
 
                         {/* Users in Group */}
@@ -121,12 +116,12 @@ const SingleGroup = ({ data, setGroups, setRefresh }) => {
                             </Text>
 
                             <div className={'flex flex-col divide-y bg-background rounded-lg'}>
-                                {userInGroup.length===0 &&
+                                {usersInGroup.length===0 &&
                                     <div className={'relative overflow-hidden flex items-center justify-between px-4 py-3'}>
                                         No Members in Group.
                                     </div>
                                 }
-                                {userInGroup?.map((person)=>(
+                                {usersInGroup?.map((person)=>(
                                     <MemberListItem
                                         data={person}
                                         key={person.$id}
@@ -145,7 +140,7 @@ const SingleGroup = ({ data, setGroups, setRefresh }) => {
                                     <Plus className={'w-5 h-5'}/>
                                     Add Members
                                 </Text>
-                                <AddGroupMember groupID={data.$id} setRefetchMembers={setRefetchMembers}/>
+                                <AddGroupMember groupID={data.$id} setUsersInGroup={setUsersInGroup} />
                             </div>
                         }
                     </div>
@@ -202,17 +197,17 @@ const SingleGroup = ({ data, setGroups, setRefresh }) => {
                 data={data}
                 open={openEdit}
                 onOpenChange={setOpenEdit}
-                setGroupName={setGroupName}
-                setRefresh={setRefresh}
+                groups={groups}
+                setGroups={setGroups}
             />
             <DeleteGroup
-                groupName={groupName}
+                groupName={data.name}
                 open={openDelete}
                 onOpenChange={setOpenDelete}
                 onDelete={onDeleteGroup}
             />
             <LeaveGroup
-                groupName={groupName}
+                group={data}
                 open={openLeaveGroup}
                 onOpenChange={setOpenLeaveGroup}
                 onLeave={onLeaveGroup}

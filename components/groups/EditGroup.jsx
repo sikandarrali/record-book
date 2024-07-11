@@ -24,7 +24,7 @@ const EditGroupSchema = Yup.object().shape({
         .required("required"),
 });
 
-export const EditGroup = ({ open, onOpenChange, data, setGroupName, setRefresh }) => {
+export const EditGroup = ({ open, onOpenChange, data, groups, setGroups}) => {
     const isDesktop = useMediaQuery({
         query: "(min-width: 1024px)",
     });
@@ -51,11 +51,18 @@ export const EditGroup = ({ open, onOpenChange, data, setGroupName, setRefresh }
         try {
             await teams.updateName(data.$id, values.name);
             toast.success("Group Name Updated", ToastOptions);
-            setGroupName(values.name);
+
+            const tempGroups = groups.map((g)=>{
+                if(g.$id=== data.$id){
+                    return{...g, name:values.name}
+                }else{
+                    return {...g}
+                }
+            })
+            setGroups(tempGroups);
+
             setAdding(false);
-            setRefresh(prev=> !prev);
             setDisabled(false);
-            scrollToTop()
         } catch (error) {
             toast.error(`Unable to Update: ${error}`, ToastOptions);
             setAdding(false);

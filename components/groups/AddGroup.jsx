@@ -24,7 +24,7 @@ const AddGroupSchema = Yup.object().shape({
         .required("required"),
 });
 
-export const AddGroup = ({ open, onOpenChange, refresh, setRefresh }) => {
+export const AddGroup = ({ open, onOpenChange, refresh, setGroups }) => {
     const isDesktop = useMediaQuery({ query: "(min-width: 1024px)" });
     const [adding, setAdding] = useState(false);
     const [disabled, setDisabled] = useState(false);
@@ -46,7 +46,7 @@ export const AddGroup = ({ open, onOpenChange, refresh, setRefresh }) => {
             toast.success("Group created", ToastOptions);
             setAdding(false);
             setDisabled(false);
-            setRefresh(prevState => !prevState)
+            setGroups(prev=> [...prev, response])
             scrollToTop()
         } catch (error) {
             toast.error(`Unable to Add: ${error}`, ToastOptions);
