@@ -12,6 +12,8 @@ import {db} from "@/components/appwrite/database";
 import {ID, Query} from "appwrite";
 import {useAuth} from "@/components/contexts/AuthContext";
 import {Button} from "@/components/ui/button";
+import SingleEventModal from "@/components/event/SingleEventModal";
+import LoadingFallback from "@/components/loaders/LoadingFallback";
 
 
 export default function Home() {
@@ -19,15 +21,7 @@ export default function Home() {
 	const scrollRef = useRef(null);
 	const [currentEvent, setCurrentEvent] = useState(null);
 	const [refreshItems, setRefreshItems] = useState(false)
-
-	const emptyAll = useMyStore((state) => state.emptyEvents);
-	const events = useMyStore((state) => state.events);
-	const addEventInLocalStore = useMyStore((state) => state.addEvent);
-	const addAllEventsInLocalStore = useMyStore((state) => state.updateEvents);
-
-	const [eventsState, setEventsState] = useState([])
-
-	const{user, setUser} = useAuth()
+	const [events, setEvents] = useState([])
 
 	const getEvents = async () =>{
 		try {
@@ -35,7 +29,7 @@ export default function Home() {
 				Query.orderDesc("$createdAt")
 			]);
 
-			addAllEventsInLocalStore(response.documents)
+			setEvents(response.documents)
 		} catch (error) {
 			console.error("Error fetching event items:", error);
 		}
@@ -49,7 +43,23 @@ export default function Home() {
 	useEffect(() => {
 		const unsubscribe = client.subscribe(`databases.${process.env.NEXT_PUBLIC_DATABASE_ID}.collections.${process.env.NEXT_PUBLIC_COLLECTION_ID_EVENTS}.documents`, (response) => {
 			if(response.events.includes("databases.*.collections.*.documents.*.create")){
-				addEventInLocalStore(response.payload)
+				setEvents(prev=> [response.payload, ...prev])
+			}
+			if(response.events.includes("databases.*.collections.*.documents.*.delete")){
+				setEvents(prev=> prev.filter(item=> item.$id !== response.payload.$id))
+			}
+			if (response.events.includes("databases.*.collections.*.documents.*.update")) {
+				setEvents(prev => {
+					// Find the index of the item to update
+					const index = prev.findIndex(item => item.$id === response.payload.$id);
+					if (index !== -1) {
+						// Create a new array with the updated item
+						const updatedItems = [...prev];
+						updatedItems[index] = response.payload; // Assuming response.payload contains the updated document data
+						return updatedItems;
+					}
+					return prev;
+				});
 			}
 		});
 
@@ -62,10 +72,9 @@ export default function Home() {
 		}
 	}, []);
 
-
-
 	return (
 		<PageContainer hideTopbar>
+
 			<Text variant="h2">Events</Text>
 
 			<motion.div
@@ -99,18 +108,15 @@ export default function Home() {
 							y: 0,
 							transition: { delay: 0.3 + i / 10 },
 						}}
-						key={i+event.name}
+						key={event.$id}
 						className={'bg-muted hover:bg-muted-foreground/10 border border-primary/20 cursor-pointer text-primary text-xl font-semibold flex items-center justify-center shadow-sm rounded-lg'}
 					>
-						<Link
-							className={"flex flex-1 px-6 py-8 text-center items-center justify-center"}
-							href={`event/${event.$id}`}
-						>
-							{event.name}
-						</Link>
+						<SingleEventModal eventData={event} />
 					</motion.div>
 				))}
 			</motion.div>
+
+
 			<AddEvent
 				open={openAddModal}
 				onOpenChange={setOpenAddModal}

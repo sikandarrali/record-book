@@ -4,90 +4,78 @@ import Text from "@/components/theme/Text";
 import { Button } from "@/components/ui/button";
 import { useMyStore } from "@/store/store";
 import { Pen, Trash2, XIcon } from "lucide-react";
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import { NumericFormat } from "react-number-format";
 import { DeleteEventItem } from "./DeleteEventItem";
 import { EditEventItem } from "./EditEventItem";
 import {toast} from "react-toastify";
 import {ToastOptions} from "@/lib/ToastOptions";
 import {
-	Drawer,
-	DrawerContent,
-	DrawerDescription,
-	DrawerFooter,
-	DrawerHeader,
-	DrawerTitle
-} from "@/components/ui/drawer";
+	Sheet,
+	SheetContent,
+	SheetDescription,
+	SheetHeader,
+	SheetTitle, SheetTrigger
+} from "@/components/ui/sheet";
+import {useMediaQuery} from "react-responsive";
+import {cn} from "@/lib/utils";
 
-export const SingleListItem = ({ item }) => {
+export const SingleListItem = ({ item, eventID }) => {
+	const isDesktop = useMediaQuery({ query: "(min-width: 1024px)" })
 	const [isOpen, setIsOpen] = useState(false);
 	const [openEdit, setOpenEdit] = useState(false);
 	const [openDelete, setOpenDelete] = useState(false);
 
-	const deleteItem = useMyStore((state) => state.deleteEventItem);
-
-	const onEdit = () => {};
-
 	const onDelete = async () => {
 		setOpenDelete(false);
 		setIsOpen(false);
-		deleteItem(item.$id);
 		await db.eventItems.delete(item.$id);
 		toast.success("Deleted!", ToastOptions);
 	};
 
-	// fixes dialog adding pointer-events:none to body
-	// document.body.style.pointerEvents = "auto";
-	useEffect(() => {
-		if (isOpen) {
-			// Pushing the change to the end of the call stack
-			const timer = setTimeout(() => {
-				document.body.style.pointerEvents = "";
-			}, 0);
-			return () => clearTimeout(timer);
-		} else {
-			document.body.style.pointerEvents = "auto";
-		}
-	}, [isOpen]);
-
 	return (
-		<>
-			<div
-				onClick={() => setIsOpen(true)}
-				className="flex flex-col w-full px-6 hover:bg-muted select-none py-4 cursor-pointer "
-			>
-				<div className="flex w-full justify-between gap-5 text-left">
-					<span className="font-medium text-[18px]">{item.name}</span>
-					<div className="flex gap-2 justify-end items-center relative flex-shrink-0 select-none">
-						<span className="text-sm select-none">Rs</span>
-						<span className="font-semibold text-xl select-none">
-							<NumericFormat
-								allowNegative={false}
-								value={item.amount}
-								thousandSeparator={","}
-								decimalSeparator={"."}
-								displayType="text"
-								decimalScale={2}
-							/>
-						</span>
+		<Sheet
+			open={isOpen}
+			onOpenChange={setIsOpen}
+			defaultOpen={false}
+		>
+			<SheetTrigger asChild>
+				<div
+					onClick={() => setIsOpen(true)}
+					className="flex flex-col w-full px-6 hover:bg-muted select-none py-4 cursor-pointer border-b"
+				>
+					<div className="flex w-full justify-between gap-5 text-left">
+						<span className="font-medium text-[18px]">{item.name}</span>
+						<div className="flex gap-2 justify-end items-center relative flex-shrink-0 select-none">
+							<span className="text-sm select-none">Rs</span>
+							<span className="font-semibold text-xl select-none text-primary">
+								<NumericFormat
+									allowNegative={false}
+									value={item.amount}
+									thousandSeparator={","}
+									decimalSeparator={"."}
+									displayType="text"
+									decimalScale={2}
+								/>
+							</span>
+						</div>
 					</div>
+
+					{item.details &&
+						<div className={'overflow-hidden line-clamp-1 mt-1 w-3/4 text-muted-foreground text'}>{item.details}{item.details}{item.details}{item.details}{item.details}{item.details}{item.details}{item.details}{item.details}{item.details}{item.details}{item.details}{item.details}{item.details}{item.details}</div>
+					}
 				</div>
-			</div>
-
-
-			<Drawer
-				onRelease={()=> setIsOpen(false)}
-				open={isOpen}
-				onOpen={setIsOpen}
+			</SheetTrigger>
+			<SheetContent
+				className={cn("pb-8 lg:pb-14 overflow-auto max-h-fit")}
+				side={isDesktop ? "right" : "bottom"}
+				onOpenAutoFocus={(e) => e.preventDefault()}
 			>
-				<DrawerContent className={'p-6'}>
-					<div className={'hidden'}>
-						<DrawerHeader className={'mb-0 px-0 pb-0.5'}>
-							<DrawerTitle/><DrawerDescription/>
-						</DrawerHeader>
-					</div>
+				<div className={'hidden'}><SheetHeader><SheetTitle/><SheetDescription/></SheetHeader></div>
 
-					<div className="flex flex-col justify-center items-center my-10">
+				<div className="flex flex-col w-full min-h-full pt-4 justify-start">
+
+					<div className="flex flex-col justify-center items-center my-10 lg:mt-32">
 						<Text variant={"h2"}>
 							{item.name}
 						</Text>
@@ -114,20 +102,22 @@ export const SingleListItem = ({ item }) => {
 						}
 					</div>
 
-					<DrawerFooter className={'mb-10 mt-10 flex flex-row items-center justify-between px-2'}>
+					<div className={'mt-auto py-14 lg:py-0 flex flex-row items-center justify-between px-2'}>
 						<div
 							className={
 								"flex flex-row justify-end gap-4"
 							}
 						>
-							<Button
-								type="submit"
-								variant="outline"
-								size="icon"
-								onClick={() => setOpenDelete(true)}
-							>
-								<Trash2 className="h-5 w-5 text-primary" />
-							</Button>
+							{/*{hasDeletePermission &&*/}
+								<Button
+									type="submit"
+									variant="outline"
+									size="icon"
+									onClick={() => setOpenDelete(true)}
+								>
+									<Trash2 className="h-5 w-5 text-primary" />
+								</Button>
+							{/*}*/}
 							<Button
 								type="submit"
 								variant="outline"
@@ -150,22 +140,23 @@ export const SingleListItem = ({ item }) => {
 						>
 							<XIcon className="text-primary" />
 						</Button>
-					</DrawerFooter>
-				</DrawerContent>
-			</Drawer>
+					</div>
+				</div>
 
-			<EditEventItem
-				item={item}
-				open={openEdit}
-				onOpenChange={setOpenEdit}
-				onEdit={onEdit}
-			/>
-			<DeleteEventItem
-				personName={item.name}
-				open={openDelete}
-				onOpenChange={setOpenDelete}
-				onDelete={onDelete}
-			/>
-		</>
+				<EditEventItem
+					item={item}
+					open={openEdit}
+					onOpenChange={setOpenEdit}
+					itemSheet={isOpen}
+					setItemSheet={setIsOpen}
+				/>
+				<DeleteEventItem
+					personName={item.name}
+					open={openDelete}
+					onOpenChange={setOpenDelete}
+					onDelete={onDelete}
+				/>
+			</SheetContent>
+		</Sheet>
 	);
 };

@@ -10,28 +10,25 @@ import {
 	AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import Text from "@/components/theme/Text";
+import {TriangleAlert} from "lucide-react";
+import {UIDialogFooter} from "@/components/theme/UIDialogFooter";
 
 export const DeleteGroup = ({ open, onOpenChange, groupName, onDelete }) => {
 	return (
 		<AlertDialog open={open} onOpenChange={onOpenChange}>
-			<AlertDialogContent className={"w-[90%] rounded-xl"}>
-				<AlertDialogHeader>
-					<AlertDialogTitle className={'text-primary'}>Delete Group</AlertDialogTitle>
-					<AlertDialogDescription className={"mt-2 flex flex-col gap-1"}>
-						<span>Do you really want to delete </span>
-						<span className={'font-semibold'}>{groupName}</span>
-						<span variant={'sm'} className={'text-primary'}>This action is permanent and cannot be reversed.</span>
+			<AlertDialogContent className={"w-[90%] rounded-xl overflow-auto"}>
+				<AlertDialogHeader className={'!text-left'}>
+					<AlertDialogTitle className={'text-primary flex items-center justify-center gap-2'}>
+						<TriangleAlert className={'w-5 h-5'}/>
+						<span>Delete Group</span>
+					</AlertDialogTitle>
+					<AlertDialogDescription className={"flex flex-col text-base items-center gap-1 !my-5"}>
+						<span>This will permanently delete</span>
+						<span className={'font-semibold text-primary'}>{groupName}</span>
 					</AlertDialogDescription>
 				</AlertDialogHeader>
 
-				<AlertDialogFooter className={'!flex-row items-center justify-center gap-4'}>
-					<AlertDialogAction onClick={() => onOpenChange(false)}>
-						Cancel
-					</AlertDialogAction>
-					<AlertDialogCancel className={'mt-0'} onClick={() => onDelete()}>
-						Yes, Delete
-					</AlertDialogCancel>
-				</AlertDialogFooter>
+				<UIDialogFooter onDelete={onDelete} onOpenChange={onOpenChange}/>
 			</AlertDialogContent>
 		</AlertDialog>
 	);

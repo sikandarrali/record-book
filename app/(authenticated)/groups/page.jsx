@@ -24,12 +24,7 @@ import SingleGroup from "@/components/groups/SingleGroup";
 export default function Home() {
 
     const {user} = useAuth()
-    const [userEmail, setUserEmail] = useState('')
-    const [usersInTeam, setUsersInTeam] = useState([])
-    const [userTeam, setUserTeam] = useState(null)
     const [refresh, setRefresh] = useState(false)
-
-
     const [openAddGroup, setOpenAddGroup] = useState(false)
     const [groups, setGroups] = useState([])
 
@@ -56,11 +51,13 @@ export default function Home() {
                 </TabsList>
 
                 {/* Owned Groups */}
-                <TabsContent value="ownedGroups" className={'bg-muted pt-6 rounded-b-lg -mt-2'}>
+                <TabsContent value="ownedGroups" className={'bg-muted py-6 rounded-b-lg -mt-2'}>
                     <div className={'flex flex-col divide-y'}>
-                        {groups?.map((data)=>(
+                        <div/>
+                        {groups?.filter((group)=> group.prefs.creatorEmail === user.email).map((data)=>(
                             <SingleGroup data={data} key={data.$id} setGroups={setGroups} setRefresh={setRefresh}/>
                         ))}
+                        <div/>
                     </div>
 
                     <div className={'px-5'}>
@@ -69,8 +66,14 @@ export default function Home() {
                 </TabsContent>
 
                 {/* Joined Groups */}
-                <TabsContent value="joinedGroups" className={'bg-muted px-5 pb-4 pt-6 rounded-b-lg -mt-2 flex flex-col gap-4'}>
-                    <p>Change your password here.</p>
+                <TabsContent value="joinedGroups" className={'bg-muted py-6 rounded-b-lg -mt-2'}>
+                    <div className={'flex flex-col divide-y'}>
+                        <div/>
+                        {groups?.filter((group)=> group.prefs.creatorEmail !== user.email).map((data)=>(
+                            <SingleGroup data={data} key={data.$id} setGroups={setGroups} setRefresh={setRefresh}/>
+                        ))}
+                        <div/>
+                    </div>
                 </TabsContent>
             </Tabs>
 

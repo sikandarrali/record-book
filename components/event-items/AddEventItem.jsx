@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Form, Formik } from "formik";
 import { Loader2Icon, X } from "lucide-react";
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import { NumericFormat } from "react-number-format";
 import * as Yup from "yup";
 import {toast} from "react-toastify";
@@ -26,6 +26,10 @@ import useScrollToView from "@/lib/hooks/useScrollToView";
 import {useMediaQuery} from "react-responsive";
 import Text from "@/components/theme/Text";
 import {scrollToTop} from "@/lib/utils";
+import {Permission, Role} from "appwrite";
+import {useAuth} from "@/components/contexts/AuthContext";
+import {useParams} from "next/navigation";
+import {useMyStore} from "@/store/store";
 
 const AddEventItemSchema = Yup.object().shape({
 	name: Yup.string()
@@ -39,12 +43,16 @@ const AddEventItemSchema = Yup.object().shape({
 	details: Yup.string().min(1).max(500, "max 500 characters"),
 });
 
-export const AddEventItem = ({ open, onOpenChange, eventID, refreshItems, setRefreshItems }) => {
+export const AddEventItem = ({open, onOpenChange, eventData}) => {
 	const [adding, setAdding] = useState(false);
 	const [disabled, setDisabled] = useState(false);
 	const isDesktop = useMediaQuery({
 		query: "(min-width: 1024px)",
 	});
+	const {user} = useAuth()
+	const eventsStore = useMyStore((state) => state.events);
+
+	const eventID = eventData.$id
 
 	useScrollToView()
 
@@ -60,9 +68,18 @@ export const AddEventItem = ({ open, onOpenChange, eventID, refreshItems, setRef
 				amount: cleanAmount,
 				returned_amount: values.returned_amount,
 				details: values.details,
-				eventID: eventID,
+				eventID: eventID
 			};
-			await db.eventItems.create(eventItemData);
+
+			if(eventData.teamId){
+				await db.eventItems.create(eventItemData, [
+					Permission.read(Role.team(eventData.teamId, "member")),
+					Permission.update(Role.team(eventData.teamId, "member")),
+					Permission.delete(Role.team(eventData.teamId, "member")),
+				]);
+			}else{
+				await db.eventItems.create(eventItemData);
+			}
 			onOpenChange(false);
 			toast.success("New Item Added", ToastOptions);
 			setAdding(false);
@@ -73,8 +90,10 @@ export const AddEventItem = ({ open, onOpenChange, eventID, refreshItems, setRef
 			setAdding(false);
 			setDisabled(false);
 		}
+
 	};
 
+	// console.log(eventData.teamId)
 
 	return (
 		<Sheet open={open} onOpenChange={onOpenChange}>

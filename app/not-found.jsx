@@ -9,7 +9,7 @@ export default function NotFound() {
         <PageContainer className={'flex flex-1'}>
             <div className={'flex flex-col flex-1 justify-center items-center gap-10'}>
                 <Text variant={'h2'}>Page Not Found</Text>
-                <Link href="/events"><Button className={'font-semibold'}> <HomeIcon className={'w-4 h-4 mr-1.5'}/> Return Home</Button></Link>
+                <Link href={"/events"}><Button className={'font-semibold'}> <HomeIcon className={'w-4 h-4 mr-1.5'}/> Return Home</Button></Link>
             </div>
         </PageContainer>
     )

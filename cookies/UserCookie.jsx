@@ -9,8 +9,7 @@ export async function deleteUserCookie(data) {
 }
 
 export const getUserCookie = () => {
-	const cookie = cookies().get("currentUser");
-	return cookie;
+	return cookies().get("currentUser");
 };
 
 export async function getSessionCookie() {

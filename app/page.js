@@ -10,5 +10,5 @@ export default function Home() {
 		router.replace("/events");
 	}, []);
 
-	return null;
+	return <></>;
 }

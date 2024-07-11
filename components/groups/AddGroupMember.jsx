@@ -20,10 +20,9 @@ const AddMemberSchema = Yup.object().shape({
 });
 
 
-export const AddMemberInput = ({groupID, setRefetchMembers}) =>{
+export const AddGroupMember = ({groupID, setRefetchMembers}) =>{
     const [adding, setAdding] = useState(false);
     const [disabled, setDisabled] = useState(false);
-    const {user} = useAuth()
 
     const onAdd = async (values) => {
         setAdding(true);
@@ -32,11 +31,11 @@ export const AddMemberInput = ({groupID, setRefetchMembers}) =>{
         try {
             const promise = await teams.createMembership(
                 groupID, // team id
-                [], // roles
+                ['member'], // roles
                 values.email, // email
                 undefined, // userId - optional
                 undefined, // phone - optional
-                'https://shadi.aasaan-apps.store/accept-invitation', // redirect url
+                "http://localhost:3000/join-group",
                 undefined // name - optional
             );
             if(promise){
@@ -74,7 +73,7 @@ export const AddMemberInput = ({groupID, setRefetchMembers}) =>{
                   setFieldValue,
               }) => (
                 <Form className="flex gap-4 items-stretch">
-                    <div className="flex flex-col w-8/12">
+                    <div className="flex flex-col w-full">
                         <Input
                             onChange={handleChange}
                             onBlur={handleBlur}
@@ -83,7 +82,7 @@ export const AddMemberInput = ({groupID, setRefetchMembers}) =>{
                             placeholder={'User Email'}
                             value={values.email}
                         />
-                        <span className={'mt-2 self-start'}>
+                        <span className={'mt-2 self-end'}>
                             <FormLabel
                                 title=""
                                 errors={errors.email}
@@ -96,14 +95,13 @@ export const AddMemberInput = ({groupID, setRefetchMembers}) =>{
                         size="2xl"
                         disabled={disabled}
                         type={'submit'}
-                        className={'w-4/12'}
                     >
                         {adding ? (
                             <>
                                 <Loader2Icon className="animate animate-spin w-5 h-5 stroke-[3]" />
                             </>
                         ) : (
-                            "Add to Group"
+                            "Add"
                         )}
                     </Button>
                 </Form>

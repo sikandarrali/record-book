@@ -6,8 +6,19 @@ import {Trash2} from "lucide-react";
 import {DeleteGroupMember} from "@/components/groups/DeleteGroupMember";
 import {useAuth} from "@/components/contexts/AuthContext";
 import {Badge} from "@/components/ui/badge";
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from "@/components/ui/tooltip"
+import {Button} from "@/components/ui/button";
 
-export const MemberListItem = ({data, teamID, setRefetchMembers}) =>{
+
+export const MemberListItem = ({data, teamID, setRefetchMembers, groupName, isGroupOwner}) =>{
+
+    const isOwner =  data.roles.includes('owner');
+    const isMember = !isOwner
 
     const [openDelete, setOpenDelete] = useState(false)
     const {user} = useAuth()
@@ -24,26 +35,46 @@ export const MemberListItem = ({data, teamID, setRefetchMembers}) =>{
     }
 
     return(
-        <div className={'relative overflow-hidden flex items-center justify-between px-4 py-3'}>
-            <span>{data?.userEmail}</span>
+        <div className={'relative overflow-hidden flex items-center justify-between gap-4 px-4 py-3'}>
 
-            {data.userEmail === user.email ?
-                <Badge>You</Badge>
-                :
-                <>
-                    <Trash2
-                        onClick={()=> setOpenDelete(true)}
-                        className={'w-4 h-4 outline-[3] text-primary cursor-pointer'}
-                    />
-                    <DeleteGroupMember
-                        membershipID={data.$id}
-                        open={openDelete}
-                        onOpenChange={setOpenDelete}
-                        onDelete={onDelete}
-                        userEmail={data.userEmail}
-                    />
-                </>
+            <div className={'flex flex-col items-start w-full gap-2 line-clamp-1'}>
+                <span className={'font-medium'}>{data?.userEmail}</span>
+
+                {data.confirm ?
+                    <div className={'flex gap-2 items-center text-xs'}>
+                        {isOwner  && <Badge variant={'secondary'}>Admin</Badge>}
+                        {isMember && <Badge variant={'outline'}>Member</Badge>}
+                        {user.email === data.userEmail && <Badge>You</Badge>}
+                    </div>
+                    :
+                    <Tooltip>
+                        <TooltipTrigger><Badge variant={'outline'} className={'text-xs bg-white'}>pending</Badge></TooltipTrigger>
+                        <TooltipContent className={'bg-foreground'}>
+                            <p className={'font-semibold'}>User has not accepted invitation.</p>
+                        </TooltipContent>
+                    </Tooltip>
+                }
+
+            </div>
+
+            {isGroupOwner && !isOwner &&
+                <Button
+                    variant={'ghost'}
+                    className={'h-8 border-primary text-primary px-2 hover:text-primary'}
+                    onClick={()=> setOpenDelete(true)}
+                >
+                    <Trash2 className={'w-4 h-4'}/>
+                </Button>
             }
+
+            <DeleteGroupMember
+                membershipID={data.$id}
+                open={openDelete}
+                onOpenChange={setOpenDelete}
+                onDelete={onDelete}
+                userEmail={data.userEmail}
+                groupName={groupName}
+            />
         </div>
     )
 }

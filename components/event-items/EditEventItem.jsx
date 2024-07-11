@@ -27,7 +27,7 @@ const AddEventItemSchema = Yup.object().shape({
 		.required("required"),
 	details: Yup.string().min(1).max(500, "max 500 characters"),
 });
-export const EditEventItem = ({ open, onOpenChange, item }) => {
+export const EditEventItem = ({ open, onOpenChange, item, setItemSheet }) => {
 	const isDesktop = useMediaQuery({
 		query: "(min-width: 1024px)",
 	});
@@ -67,13 +67,10 @@ export const EditEventItem = ({ open, onOpenChange, item }) => {
 
 			await db.eventItems.update(eventItemData, item.$id);
 			updateEventItem(item.$id, eventItemData);
-			toast({
-				title: "items Updated!",
-				variant: "success",
-			});
 			toast.success("Updated!", ToastOptions);
 			setAdding(false);
 			setDisabled(false);
+			setItemSheet(true)
 		} catch (error) {
 			toast.error(`Update failed: ${error}`, ToastOptions);
 			setAdding(false);

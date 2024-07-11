@@ -6,7 +6,6 @@ import { Input } from "@/components/ui/input";
 import {Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle} from "@/components/ui/sheet";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
-import { useMyStore } from "@/store/store";
 import { Form, Formik } from "formik";
 import { Loader2Icon, X } from "lucide-react";
 import { useState } from "react";
@@ -29,8 +28,6 @@ export const EditEvent = ({ open, onOpenChange, eventData }) => {
 	const isDesktop = useMediaQuery({
 		query: "(min-width: 1024px)",
 	});
-
-	const updateEventStore = useMyStore((state) => state.updateEvent);
 	const [adding, setAdding] = useState(false);
 	const [disabled, setDisabled] = useState(false);
 
@@ -59,16 +56,15 @@ export const EditEvent = ({ open, onOpenChange, eventData }) => {
 			};
 
 			await db.events.update(eventDataValues, eventData.$id);
-			updateEventStore(eventDataValues, eventData.$id);
 			toast.success("Updated!", ToastOptions);
 			setAdding(false);
 			setDisabled(false);
+			onOpenChange(false)
 		} catch (error) {
 			toast.error(`"Update failed: ${error}`, ToastOptions);
 			setAdding(false);
 			setDisabled(false);
 		}
-		onOpenChange(false);
 	};
 
 	return (
@@ -179,6 +175,7 @@ export const EditEvent = ({ open, onOpenChange, eventData }) => {
 										size="2xl"
 										stretched
 										disabled={disabled}
+										type={'submit'}
 									>
 										{adding ? (
 											<>

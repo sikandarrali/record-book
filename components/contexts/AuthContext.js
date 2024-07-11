@@ -55,15 +55,17 @@ export const AuthProvider = ({ children }) => {
 							}
 						})
 						.catch((error) => {
-							console.log(error)
+							// console.log(error)
 						});
 				}
 				setTimeout(() => {
 					setLoading(false);
 				}, 1000);
 			}
+			else{
+				// router.replace('/login')
+			}
 		} catch (error) {
-			router.replace('/login')
 			setLoading(false)
 		}
 	};
@@ -109,6 +111,7 @@ export const AuthProvider = ({ children }) => {
 	const memoedValues = useMemo(
 		() => ({
 			user,
+			setUser,
 			session,
 		}),
 		[user, session]

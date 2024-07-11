@@ -1,27 +1,27 @@
 import { NextResponse } from "next/server";
 
 const publicPaths = ["/login"];
+const protectedPaths = [
+	"/",
+	"/login",
+	"/events",
+	"/event",
+	"/groups"
+];
 
 export async function middleware(request) {
-	// await new Promise((resolve) => setTimeout(resolve, 10)); // Short delay
-
 	const pathname = request.nextUrl.pathname;
 	const isPublicPath = publicPaths.includes(pathname);
-	// const user = getLoggedInUser();
+	const isProtectedPath = protectedPaths.includes(pathname);
 
 	let sessionCookie = request.cookies.get("skrSession");
 
-	// if (user) console.log("user found");
-	// else console.log("user not found");
-
-	// console.log("user: ", getLoggedInUser());
-
 	if (sessionCookie && isPublicPath) {
-		return NextResponse.redirect(new URL("/events", request.url));
+		return NextResponse.rewrite(new URL("/events", request.url));
 	}
 
-	if (!sessionCookie && !isPublicPath) {
-		return NextResponse.redirect(new URL("/login", request.url));
+	if (!sessionCookie && isProtectedPath) {
+		return NextResponse.rewrite(new URL("/login", request.url));
 	}
 }
 
@@ -33,5 +33,5 @@ export const config = {
 		"/events",
 		"/event",
 		"/groups"
-	],
+	]
 };
