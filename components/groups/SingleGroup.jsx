@@ -90,10 +90,10 @@ const SingleGroup = ({ data, setGroups, setRefresh, groups }) => {
         <Sheet open={open} onOpenChange={setOpen} defaultOpen={false}>
             <SheetTrigger className={'relative text-left py-5 flex gap-4 justify-between border-b last-of-type:border-b-0 hover:bg-white/70 transition-all duration-300 px-5'}>
                 <span>{data.name}</span>
-                {isOwner ? <ShieldCheck className={'w-5 h-5'}/> : <Users2 className={'w-5 h-5'}/>}
+                {isOwner ? <ShieldCheck className={'w-5 h-5 text-primary'}/> : <Users2 className={'w-5 h-5 text-primary'}/>}
             </SheetTrigger>
             <SheetContent
-                className={cn("pb-8 lg:pb-14 overflow-auto max-h-[85vh] lg:max-h-screen bg-muted")}
+                className={cn("pb-8 lg:pb-14 overflow-auto max-h-[85vh] lg:max-h-screen bg-muted overflow-hidden")}
                 side={isDesktop ? "right" : "bottom"}
                 onOpenAutoFocus={(e) => e.preventDefault()}
             >
