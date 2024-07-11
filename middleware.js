@@ -3,9 +3,7 @@ import { NextResponse } from "next/server";
 const publicPaths = ["/login"];
 const protectedPaths = [
 	"/",
-	"/login",
 	"/events",
-	"/event",
 	"/groups"
 ];
 
@@ -17,15 +15,13 @@ export async function middleware(request) {
 	let sessionCookie = request.cookies.get("skrSession");
 
 	if (sessionCookie && isPublicPath) {
-		const redirectResponse = NextResponse.redirect(new URL("/events", request.url))
+		const redirectResponse = NextResponse.redirect(new URL("/events", request.url));
 		redirectResponse.headers.set('x-middleware-cache', 'no-cache'); // ! FIX: Disable caching
 		return redirectResponse;
 	}
 
 	if (!sessionCookie && isProtectedPath) {
-		const redirectResponse = NextResponse.redirect(new URL("/login", request.url))
-		redirectResponse.headers.set('x-middleware-cache', 'no-cache'); // ! FIX: Disable caching
-		return redirectResponse;
+		return NextResponse.redirect(new URL("/login", request.url));
 	}
 }
 
@@ -35,7 +31,6 @@ export const config = {
 		"/",
 		"/login",
 		"/events",
-		"/event",
 		"/groups"
 	]
 };
