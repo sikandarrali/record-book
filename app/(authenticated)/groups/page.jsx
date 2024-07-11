@@ -19,6 +19,7 @@ import {ID} from "appwrite";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {AddGroup} from "@/components/groups/AddGroup";
 import SingleGroup from "@/components/groups/SingleGroup";
+import Loader from "@/components/loaders/loader";
 
 
 export default function Page() {
@@ -27,10 +28,12 @@ export default function Page() {
     const [refresh, setRefresh] = useState(false)
     const [openAddGroup, setOpenAddGroup] = useState(false)
     const [groups, setGroups] = useState([])
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         const unsub = async() =>{
             if(user){
+                console.log('I am in')
                 try {
                     const groupsList = await teams.list()
                     setGroups(groupsList.teams)
@@ -38,12 +41,14 @@ export default function Page() {
                     console.error(e)
                 }
             }
+            setLoading(false)
         }
         return ()=> unsub()
-    }, [refresh]);
-
-    console.log(user)
-    console.log(groups)
+    }, []);
+    
+    useEffect(() => {
+        console.log(groups)
+    }, [groups]);
 
     return (
         <PageContainer hideTopbar>
@@ -93,15 +98,20 @@ export default function Page() {
 
             <Text className={'py-2 mt-8 font-semibold text-primary'}>Your Groups</Text>
 
-            <div className={'flex flex-col divide-y bg-muted rounded-lg'}>
-                {groups.map((data)=>(
-                    <SingleGroup data={data} key={data.$id} setGroups={setGroups} setRefresh={setRefresh}/>
-                ))}
+            <div className={'flex flex-col bg-muted rounded-lg relative'}>
+
+                {loading ?
+                    <div className={'absolute inset-0 -mt-4 z-10'}><Loader hideText/></div>
+                :
+                    groups.map((data)=>(
+                        <SingleGroup data={data} key={data.$id} groups={groups} setGroups={setGroups} setRefresh={setRefresh}/>
+                    ))
+                }
             </div>
 
             <Button stretched size={'lg'} className={'mt-5'} onClick={()=> setOpenAddGroup(true)}>Create new Group</Button>
 
-            <AddGroup open={openAddGroup} onOpenChange={setOpenAddGroup} setRefresh={setRefresh}/>
+            <AddGroup open={openAddGroup} onOpenChange={setOpenAddGroup} setGroups={setGroups}/>
         </PageContainer>
     );
 }
