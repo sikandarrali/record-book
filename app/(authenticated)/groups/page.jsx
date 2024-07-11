@@ -5,7 +5,7 @@ import Text from "@/components/theme/Text";
 import { FixStickyHeaderScrollError } from "@/lib/utils";
 import { useMyStore } from "@/store/store";
 import { motion } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import {useEffect, useLayoutEffect, useRef, useState} from "react";
 import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
 import {toast} from "react-toastify";
@@ -34,26 +34,21 @@ export default function Page() {
 
     const teams = new Teams(client);
 
-    const unsub = async() =>{
-        // if(user){
-        console.log('I am in')
+    const fun = async () =>{
         try {
             const groupsList = await teams.list()
             setGroups(groupsList.teams)
+            console.error(groupsList)
         }catch (e) {
             console.log(e)
         }
-        // }
+
         setLoading(false)
     }
 
-    useEffect(() => {
-        return ()   => unsub()
+    useLayoutEffect(() => {
+        fun()
     }, []);
-
-    useEffect(() => {
-        console.log(groups)
-    }, [groups]);
 
     return (
         <PageContainer hideTopbar>
