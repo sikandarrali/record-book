@@ -6,7 +6,6 @@ import { FixStickyHeaderScrollError } from "@/lib/utils";
 import { useMyStore } from "@/store/store";
 import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
-import {listUserGroups, teams} from "@/components/appwrite/appwrite";
 import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
 import {toast} from "react-toastify";
@@ -15,12 +14,15 @@ import {Info, Trash, Trash2} from "lucide-react";
 import {Label} from "@/components/ui/label";
 import {DeleteGroupMember} from "@/components/groups/DeleteGroupMember";
 import {useAuth} from "@/components/contexts/AuthContext";
-import {ID} from "appwrite";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {AddGroup} from "@/components/groups/AddGroup";
 import SingleGroup from "@/components/groups/SingleGroup";
 import Loader from "@/components/loaders/loader";
+import {Teams, Client} from "appwrite";
 
+
+const client = new Client();
+client.setEndpoint(process.env.NEXT_PUBLIC_ENDPOINT).setProject(process.env.NEXT_PUBLIC_PROJECT_ID);
 
 export default function Page() {
 
@@ -30,22 +32,24 @@ export default function Page() {
     const [groups, setGroups] = useState([])
     const [loading, setLoading] = useState(true)
 
+    const teams = new Teams(client);
+
     useEffect(() => {
         const unsub = async() =>{
-            if(user){
+            // if(user){
                 console.log('I am in')
                 try {
                     const groupsList = await teams.list()
                     setGroups(groupsList.teams)
                 }catch (e) {
-                    console.error(e)
+                    console.log(e)
                 }
-            }
+            // }
             setLoading(false)
         }
         return ()=> unsub()
     }, []);
-    
+
     useEffect(() => {
         console.log(groups)
     }, [groups]);
@@ -98,7 +102,7 @@ export default function Page() {
 
             <Text className={'py-2 mt-8 font-semibold text-primary'}>Your Groups</Text>
 
-            <div className={'flex flex-col bg-muted rounded-lg relative'}>
+            <div className={'flex flex-col bg-muted rounded-lg relative shadow'}>
 
                 {loading ?
                     <div className={'absolute inset-0 -mt-4 z-10'}><Loader hideText/></div>
