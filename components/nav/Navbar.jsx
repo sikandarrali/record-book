@@ -49,7 +49,7 @@ const Sidebar = ({ open, onOpenChange }) => {
 			<SheetContent className="bg-primary border-l-0 px-0 outline-0 stroke-none">
 				<div className={'hidden'}><SheetHeader><SheetTitle/><SheetDescription/></SheetHeader></div>
 				<div className="h-full flex flex-col">
-					<div className="flex items-center -ml-4 my-14">
+					<div className="flex items-center -ml-4 mt-14 mb-10">
 						{user?.prefs?.picture ?
 							<div className="p-3 rounded-full self-start bg-primary shrink-0">
 								<Image
@@ -84,7 +84,7 @@ const Sidebar = ({ open, onOpenChange }) => {
 					{/*	<LanguageSwitcher />*/}
 					{/*</div>*/}
 
-					<div className="flex flex-col px-6 h-full mt-20">
+					<div className="flex flex-col px-6 h-full mt-10">
 						<MenuItem
 							label={"Events"}
 							href={"/events"}

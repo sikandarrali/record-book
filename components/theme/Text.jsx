@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 
-const Text = ({ children, className, variant, urdu }) => {
+const Text = ({ children, className, variant, urdu, ...props }) => {
 	return (
 		<p
 			className={cn(
@@ -11,7 +11,8 @@ const Text = ({ children, className, variant, urdu }) => {
 				variant === "h2" && "text-xl font-semibold",
 				variant === "h3" && "text-lg font-semibold",
 				urdu && "font-urdu",
-				className
+				className,
+				{...props}
 			)}
 		>
 			{children}
