@@ -1,6 +1,6 @@
 import Text from "@/components/theme/Text";
 import { Button } from "@/components/ui/button";
-import {Info, Loader2Icon, Pen, Plus, Trash2, Users2, X, XIcon} from "lucide-react";
+import {Info, Loader2Icon, Pen, Plus, ShieldCheck, Trash2, Users2, X, XIcon} from "lucide-react";
 import { useRouter } from "next/navigation";
 import {useEffect, useState} from "react";
 import { NumericFormat } from "react-number-format";
@@ -49,14 +49,16 @@ const SingleGroup = ({ data, setGroups, setRefresh }) => {
 
     useEffect(() => {
         const getGroupMembers = async () => {
-            try {
-                const getMemberships = await teams.listMemberships(data.$id);
-                setUserInGroup(getMemberships.memberships)
-                let tempOwner = getMemberships.memberships.some((item)=>(item.userEmail===user.email && item.roles.includes('owner')))
-                setIsOwner(tempOwner)
-            } catch (error) {
-                setUserInGroup([])
-                setIsOwner(false)
+            if(user){
+                try {
+                    const getMemberships = await teams.listMemberships(data.$id);
+                    setUserInGroup(getMemberships.memberships)
+                    let tempOwner = getMemberships.memberships.some((item)=>(item.userEmail===user.email && item.roles.includes('owner')))
+                    setIsOwner(tempOwner)
+                } catch (error) {
+                    setUserInGroup([])
+                    setIsOwner(false)
+                }
             }
         };
 
@@ -91,12 +93,9 @@ const SingleGroup = ({ data, setGroups, setRefresh }) => {
     return (
 
         <Sheet open={open} onOpenChange={setOpen} defaultOpen={false}>
-            <SheetTrigger className={'text-left py-3 flex gap-4 justify-between hover:bg-white/70 transition-all duration-300 px-5'}>
+            <SheetTrigger className={'relative text-left py-5 flex gap-4 justify-between hover:bg-white/70 transition-all duration-300 px-5'}>
                 <span>{data.name}</span>
-                <span className={'flex items-center gap-1'}>
-                    <span>{data.total-1}</span>
-                    <span className={'text-xs'}>members</span>
-                </span>
+                {isOwner ? <ShieldCheck className={'w-5 h-5'}/> : <Users2 className={'w-5 h-5'}/>}
             </SheetTrigger>
             <SheetContent
                 className={cn("pb-8 lg:pb-14 overflow-auto max-h-[85vh] bg-muted")}

@@ -30,6 +30,7 @@ import {
 import {SearchItems} from "@/components/event-items/SearchItems";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
 import {ReloadIcon} from "@radix-ui/react-icons";
+import {useAuth} from "@/components/contexts/AuthContext";
 
 const perPageList = [10, 20, 30, 50, 100, 200];
 
@@ -45,6 +46,7 @@ const SingleEventModal = ({ eventData }) => {
 
     const [items, setItems] = useState([])
     const [itemsDefault, setItemsDefault] = useState([])
+    const {user} = useAuth()
 
     const itemsPerPage = 15;
     const [visibleItems, setVisibleItems] = useState([]); // Currently visible items
@@ -55,20 +57,22 @@ const SingleEventModal = ({ eventData }) => {
     // get items
     useEffect(() => {
         const getEventItems = async () => {
-            try {
-                const response = await db.eventItems.list([
-                    Query.orderDesc("$createdAt"),
-                    Query.equal('eventID', eventData.$id)
-                ]);
-                if (response.documents.length === 0) {
-                    setNoItems(true)
-                } else {
-                    setItems(response.documents)
-                    setItemsDefault(response.documents)
-                    setNoItems(false)
+            if(user){
+                try {
+                    const response = await db.eventItems.list([
+                        Query.orderDesc("$createdAt"),
+                        Query.equal('eventID', eventData.$id)
+                    ]);
+                    if (response.documents.length === 0) {
+                        setNoItems(true)
+                    } else {
+                        setItems(response.documents)
+                        setItemsDefault(response.documents)
+                        setNoItems(false)
+                    }
+                } catch (error) {
+                    console.error("Error fetching event items:", error);
                 }
-            } catch (error) {
-                console.error("Error fetching event items:", error);
             }
         }
 
