@@ -21,23 +21,29 @@ import {AddGroup} from "@/components/groups/AddGroup";
 import SingleGroup from "@/components/groups/SingleGroup";
 
 
-export default function Home() {
+export default function Page() {
 
     const {user} = useAuth()
     const [refresh, setRefresh] = useState(false)
     const [openAddGroup, setOpenAddGroup] = useState(false)
     const [groups, setGroups] = useState([])
-    const [showInfo, setShowInfo] = useState(false)
 
     useEffect(() => {
         const unsub = async() =>{
             if(user){
-                const groupsList = await teams.list()
-                setGroups(groupsList.teams)
+                try {
+                    const groupsList = await teams.list()
+                    setGroups(groupsList.teams)
+                }catch (e) {
+                    console.error(e)
+                }
             }
         }
         return ()=> unsub()
     }, [refresh]);
+
+    console.log(user)
+    console.log(groups)
 
     return (
         <PageContainer hideTopbar>
