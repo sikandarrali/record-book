@@ -72,8 +72,7 @@ const Sidebar = ({ open, onOpenChange }) => {
 								{user?.name}
 							</p>
 							<p className="text-white text-sm pr-8 text-ellipsis overflow-hidden">
-								{/*{user?.email}*/}
-								sikandar.ali.chishty@gmail.com
+								{user?.email}
 							</p>
 						</div>
 					</div>
@@ -100,9 +99,10 @@ const Sidebar = ({ open, onOpenChange }) => {
 								<Users className="w-[18px] h-[18px]" />
 							}
 						/>
+
 					</div>
 
-					<div className="mb-0 mx-2 px-4 space-y-4">
+					<div className="mb-0 mx-2 px-4 space-y-2">
 						<div
 							className="flex text-background hover:bg-muted hover:text-foreground items-center gap-2 px-4 py-4 hover:rounded-md cursor-pointer"
 							onClick={()=> setOpenEditProfile(true)}
@@ -110,9 +110,6 @@ const Sidebar = ({ open, onOpenChange }) => {
 							<Edit className="w-[18px] h-[18px]" />
 							<span className="text-base font-medium">Edit Profile</span>
 						</div>
-
-						<div className={'h-[1px] bg-muted w-full'}/>
-
 						<div
 							onClick={onLogout}
 							className="flex cursor-pointer text-background hover:bg-muted hover:text-foreground items-center gap-2 px-4 py-4 rounded-md"
@@ -122,9 +119,9 @@ const Sidebar = ({ open, onOpenChange }) => {
 						</div>
 					</div>
 
-					<div className={'mx-6 pb-4 !mt-4 pt-6 text-muted flex items-center justify-center gap-1'}>
-						<Copyright className={'w-3.5 h-3.5 stroke-[1.5]'}/>
-						<span className={'font-medium text-sm'}>Sikandar Ali Chishty</span>
+					<div className={'mx-6 !mt-4 px-4 pt-6 text-muted flex items-center gap-1'}>
+						<Copyright className={'w-3 h-3 stroke-[1.5]'}/>
+						<span className={'font-medium text-xs'}>Sikandar Ali Chishty</span>
 					</div>
 				</div>
 

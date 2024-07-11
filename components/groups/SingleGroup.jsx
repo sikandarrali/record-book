@@ -35,7 +35,7 @@ import {useAuth} from "@/components/contexts/AuthContext";
 import {ExitIcon} from "@radix-ui/react-icons";
 import {LeaveGroup} from "@/components/groups/LeaveGroup";
 
-const SingleGroup = ({ data, setGroups, setRefresh, groups }) => {
+const SingleGroup = ({ data, setGroups, groups }) => {
     const isDesktop = useMediaQuery({ query: "(min-width: 1024px)" })
     const [open, setOpen] = useState(false)
     const [usersInGroup, setUsersInGroup] = useState([])
@@ -78,7 +78,6 @@ const SingleGroup = ({ data, setGroups, setRefresh, groups }) => {
         let tempMembershipID = usersInGroup.find((u) => u.userEmail === user.email);
 
         await teams.deleteMembership(data.$id, tempMembershipID.$id);
-        setRefresh(prev=>!prev)
         setGroups(prev=> prev.filter((item)=> item.$id !== groupID))
         setOpen(false)
         toast.success("You just left the Group.", ToastOptions);

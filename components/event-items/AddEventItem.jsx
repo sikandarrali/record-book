@@ -76,6 +76,9 @@ export const AddEventItem = ({open, onOpenChange, eventData}) => {
 					Permission.read(Role.team(eventData.teamId, "member")),
 					Permission.update(Role.team(eventData.teamId, "member")),
 					Permission.delete(Role.team(eventData.teamId, "member")),
+					Permission.read(Role.user(user.$id)),
+					Permission.update(Role.user(user.$id)),
+					Permission.delete(Role.user(user.$id)),
 				]);
 			}else{
 				await db.eventItems.create(eventItemData);
