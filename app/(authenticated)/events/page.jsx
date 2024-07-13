@@ -4,11 +4,13 @@ import PageContainer from "@/components/providers/PageContainer";
 import Text from "@/components/theme/Text";
 import { FixStickyHeaderScrollError } from "@/lib/utils";
 import { motion } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
-import {client} from "@/components/appwrite/appwrite";
+import {useEffect, useLayoutEffect, useRef, useState} from "react";
+import {client, listUserOwnedGroups} from "@/components/appwrite/appwrite";
 import {db} from "@/components/appwrite/database";
 import {Query} from "appwrite";
 import SingleEventModal from "@/components/event/SingleEventModal";
+import {useAuth} from "@/components/contexts/AuthContext";
+import {usePathname, useRouter, useSearchParams} from "next/navigation";
 
 
 export default function Home() {
@@ -17,6 +19,9 @@ export default function Home() {
 	const [currentEvent, setCurrentEvent] = useState(null);
 	const [refreshItems, setRefreshItems] = useState(false)
 	const [events, setEvents] = useState([])
+	const [userOwnedGroups, setUserOwnedGroups] = useState([])
+	const [isOpen, setIsOpen] = useState(false)
+	const searchParams = useSearchParams()
 
 	const getEvents = async () =>{
 		try {
@@ -66,6 +71,7 @@ export default function Home() {
 			FixStickyHeaderScrollError(scrollRef.current);
 		}
 	}, []);
+
 
 	return (
 		<PageContainer hideTopbar>

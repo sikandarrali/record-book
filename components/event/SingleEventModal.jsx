@@ -9,9 +9,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useMyStore } from "@/store/store";
 import { AnimatePresence, motion } from "framer-motion";
-import {ArrowLeft, ChevronLeft, ChevronRight, Plus, Users2, XIcon} from "lucide-react";
+import {ArrowLeft, ChevronLeft, ChevronRight, Info, Link2, Plus, Users2, XIcon} from "lucide-react";
 import Link from "next/link";
-import {redirect, useRouter} from "next/navigation";
+import {redirect, usePathname, useRouter, useSearchParams} from "next/navigation";
 import {Suspense, useCallback, useEffect, useLayoutEffect, useRef, useState} from "react";
 import { NumericFormat } from "react-number-format";
 import {db} from "@/components/appwrite/database";
@@ -31,6 +31,8 @@ import {SearchItems} from "@/components/event-items/SearchItems";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
 import {ReloadIcon} from "@radix-ui/react-icons";
 import {useAuth} from "@/components/contexts/AuthContext";
+import {toast} from "react-toastify";
+import {ToastOptions} from "@/lib/ToastOptions";
 
 const perPageList = [10, 20, 30, 50, 100, 200];
 
@@ -53,6 +55,24 @@ const SingleEventModal = ({ eventData }) => {
     const [hasMoreItems, setHasMoreItems] = useState(true); // Flag to check if more items are available
     const [loadingItems, setLoadingItems] = useState(false); // To show loadingItems spinner
 
+    const router = useRouter()
+    const pathname = usePathname()
+    const searchParams = useSearchParams()
+
+    useEffect(() => {
+       if(isOpen){
+           const newParams = new URLSearchParams(searchParams);
+           newParams.set('id', eventData.$id);
+           router.push(`?${newParams.toString()}`, { shallow: true });
+       }
+    }, [isOpen]);
+
+    const onClose = () =>{
+        setIsOpen(false)
+        const newParams = new URLSearchParams(searchParams);
+        newParams.delete('id');
+        router.push(`?${newParams.toString()}`, { shallow: true });
+    }
 
     // get items
     useEffect(() => {
@@ -78,11 +98,6 @@ const SingleEventModal = ({ eventData }) => {
 
         return ()=> getEventItems();
     }, [isOpen]);
-
-    // // reset items on close
-    // useEffect(() => {
-    //     if(!isDesktop)
-    // }, [open]);
 
     // appwrite realtime functionality
     useEffect(() => {
@@ -129,17 +144,6 @@ const SingleEventModal = ({ eventData }) => {
         return ()=> unsubscribe()
     }, []);
 
-
-    useEffect(()=>{
-        if(items.length > 0){
-            setNoItems(false)
-        }else{
-            if(itemsDefault.length === 0){
-                setNoItems(true)
-            }
-        }
-    }, [items])
-
     useEffect(() => {
         setTotalSum(itemsDefault?.reduce((acc, item) => acc + item.amount, 0));
     }, [itemsDefault]);
@@ -175,6 +179,26 @@ const SingleEventModal = ({ eventData }) => {
     }, [itemsDefault]);
 
 
+    useEffect(() => {
+
+        let id = searchParams.get('id')
+
+        if (id === eventData.$id) {
+            setIsOpen(true);
+        }
+
+    }, [searchParams]);
+    // if (isOpen) return null;
+
+    const copyToClipboard = async () => {
+        try {
+            await navigator.clipboard.writeText(window.location.href);
+            toast.info("Link copied", ToastOptions);
+        } catch (err) {
+            toast.error("Link not copied", ToastOptions);
+        }
+    };
+
     return (
         <Sheet
             open={isOpen}
@@ -182,7 +206,7 @@ const SingleEventModal = ({ eventData }) => {
             defaultOpen={false}
         >
             <SheetTrigger className={'flex flex-1 justify-center items-center px-6 md:px-8 pt-8 pb-7 relative'}>
-                {eventData?.name} {eventData?.name} {eventData?.name} {eventData?.name} {eventData?.name} {eventData?.name} {eventData?.name} {eventData?.name}
+                {eventData?.name}
                 {eventData.teamId && <Users2 className={'absolute right-2 top-2 w-5 h-5'}/>}
             </SheetTrigger>
             <SheetContent
@@ -197,10 +221,21 @@ const SingleEventModal = ({ eventData }) => {
                         <div className="flex flex-col bg-primary text-background shadow-lg -mx-6 gap-4 z-10">
                             {/* header */}
                             <div className="flex justify-between items-center pt-4 pb-2 w-full z-20 border-b px-4 border-primary-foreground/40 relative" ref={headerRef}>
-                                <EventInfo
-                                    eventData={eventData}
-                                    sum={totalSum}
-                                />
+                                <div className={'flex items-center gap-4'}>
+                                    <EventInfo
+                                        eventData={eventData}
+                                        sum={totalSum}
+                                    />
+
+                                    <div
+                                        className={'w-8 h-8 cursor-pointer flex items-center justify-center'}
+                                        onClick={()=> copyToClipboard()}
+                                    >
+                                        <Link2 className={'w-7 h-7'} />
+                                    </div>
+
+                                </div>
+
 
                                 <div className="flex items-center gap-2 relative select-none pointer-events-none">
                                     <span className="text-sm">Rs</span>
@@ -235,27 +270,12 @@ const SingleEventModal = ({ eventData }) => {
                             </Text>
 
                             <div className="flex flex-col -mx-6 overflow-y-auto">
-                                {items.length===0 && (
-                                    <div className="flex flex-col justify-center items-center gap-10 px-6 mt-10">
-                                        <p className="text-center text-lg font-medium">
-                                            No Data Found
-                                        </p>
-
-                                        <Button
-                                            size="lg"
-                                            onClick={() => setOpenAddModal(true)}
-                                        >
-                                            Add New Data
-                                        </Button>
-                                    </div>
-                                )}
 
                                 {visibleItems.map((item, i) => (
-                                    <motion.div key={i + item.name}>
+                                    <motion.div key={item.$id}>
                                         <SingleListItem item={item} eventID={eventData.$id} />
                                     </motion.div>
                                 ))}
-
 
                                 {items.length > 0 &&
                                     <div className={'flex flex-col w-full justify-center items-center mt-8 !border-t-0'}>
@@ -273,7 +293,7 @@ const SingleEventModal = ({ eventData }) => {
                                                 Loading...
                                             </Button>
                                         ) :
-                                            hasMoreItems &&
+                                            hasMoreItems && items.length > itemsPerPage &&
                                                 <Button
                                                     onClick={loadMorePosts}
                                                     variant={'secondary'}
@@ -289,7 +309,7 @@ const SingleEventModal = ({ eventData }) => {
                             </div>
                         </div>
 
-                        <div className={'fixed bottom-14 inset-x-0 z-10 flex justify-center'}>
+                        <div className={'fixed bottom-14 inset-x-0 z-10 flex justify-center lg:justify-end lg:pr-14'}>
                             <div
                                 className="w-[4.5rem] h-[4.5rem] shadow-lg flex items-center justify-center rounded-full bg-primary cursor-pointer"
                                 onClick={() => {
@@ -302,18 +322,13 @@ const SingleEventModal = ({ eventData }) => {
                                 <Plus className="text-white w-10 h-10" />
                             </div>
 
-                            <Button
-                                type="submit"
-                                variant="outline"
-                                size="icon"
-                                // stretched
-                                className="w-12 h-12 rounded-full absolute shadow-lg bg-muted-foreground right-0 mr-6 md:right-16 top-1/2 -translate-y-1/2"
-                                onClick={()=> setIsOpen(false)}
+                            <div
+                                className="flex items-center justify-center w-12 h-12 lg:hidden rounded-full absolute shadow-lg bg-muted-foreground right-0 mr-6 md:right-16 top-1/2 -translate-y-1/2"
+                                onClick={()=> onClose()}
                             >
                                 <XIcon className="text-muted" />
-                            </Button>
+                            </div>
                         </div>
-
 
                         <AddEventItem
                             open={openAddModal}

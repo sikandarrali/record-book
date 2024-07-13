@@ -45,12 +45,13 @@ collections.forEach((collection) => {
 				permissions
 			);
 		},
-		update: (payload, id) => {
+		update: (payload, id, permissions) => {
 			databases.updateDocument(
 				collection.databaseID,
 				collection.id,
 				id,
-				payload
+				payload,
+				permissions
 			);
 		},
 		get: (id) => {

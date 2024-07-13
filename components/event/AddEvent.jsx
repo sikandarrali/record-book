@@ -41,9 +41,8 @@ export const AddEvent = ({ open, onOpenChange, refreshItems, setRefreshItems }) 
 	const isDesktop = useMediaQuery({ query: "(min-width: 1024px)" });
 	const [adding, setAdding] = useState(false);
 	const [disabled, setDisabled] = useState(false);
-	const [userGroups, setUserGroups] = useState([])
 	const [selectedGroup, setSelectedGroup] = useState(null)
-	const {user} = useAuth()
+	const {user, userOwnedGroups} = useAuth()
 
 	const onAdd = async (values) => {
 		setAdding(true);
@@ -67,7 +66,7 @@ export const AddEvent = ({ open, onOpenChange, refreshItems, setRefreshItems }) 
 					Permission.delete(Role.user(user.$id)),
 				]);
 			}else{
-				await db.events.create(eventData);
+				await db.events.create(eventData, );
 			}
 
 			onOpenChange(false);
@@ -82,21 +81,6 @@ export const AddEvent = ({ open, onOpenChange, refreshItems, setRefreshItems }) 
 		}
 	};
 
-	useLayoutEffect(() => {
-		const unsub = async () =>{
-			if(user){
-				const response = await listUserGroups()
-				if(response){
-					let temp = response.teams.filter((item)=> item.prefs.creatorEmail === user.email)
-					setUserGroups(temp)
-				}else{
-					setUserGroups([])
-				}
-			}
-		}
-
-		return ()=> unsub()
-	}, []);
 
 	return (
 		<Sheet open={open} onOpenChange={onOpenChange} defaultOpen={false}>
@@ -129,6 +113,7 @@ export const AddEvent = ({ open, onOpenChange, refreshItems, setRefreshItems }) 
 								date: "",
 								venue: "",
 								details: "",
+								teamId:"",
 							}}
 							validationSchema={AddEventSchema}
 							onSubmit={(values) => {
@@ -150,13 +135,13 @@ export const AddEvent = ({ open, onOpenChange, refreshItems, setRefreshItems }) 
 										<Label className={"relative text-sm flex items-center justify-between gap-4"}>
 											<span className="shrink-0">Share with Group</span>
 										</Label>
-										<div className={'flex gap-4 items-center'}>
+										<div className={'flex gap-4 items-center relative'}>
 											<Select onValueChange={(selected)=> setSelectedGroup(selected)} key={selectedGroup}>
 												<SelectTrigger className="w-full h-12 flex between">
-													{selectedGroup ? userGroups.find((group)=> group.$id=== selectedGroup)?.name : 'Select Group'}
+													{selectedGroup ? userOwnedGroups.find((group)=> group.$id=== selectedGroup)?.name : 'Select Group'}
 												</SelectTrigger>
 												<SelectContent>
-													{userGroups?.map((u)=>(
+													{userOwnedGroups?.map((u)=>(
 														<SelectItem
 															key={u.$id}
 															value={u.$id}
@@ -166,15 +151,17 @@ export const AddEvent = ({ open, onOpenChange, refreshItems, setRefreshItems }) 
 													))}
 												</SelectContent>
 											</Select>
-											<Button
-												variant={'ghost'}
-												type={'button'}
-												size={'icon'}
-												onClick={()=> setSelectedGroup(null)}
-												className={'flex items-center justify-center text-primary hover:text-primary'}
-											>
-												<XIcon className={'w-4 h-4'} />
-											</Button>
+											{selectedGroup &&
+												<Button
+													variant={'ghost'}
+													type={'button'}
+													size={'icon'}
+													onClick={()=> setSelectedGroup(null)}
+													className={'flex items-center justify-center text-primary hover:text-primary absolute right-1 bg-white'}
+												>
+													<XIcon className={'w-4 h-4'} />
+												</Button>
+											}
 										</div>
 									</div>
 
