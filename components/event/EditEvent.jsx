@@ -7,12 +7,16 @@ import {Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle} from "@/
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { Form, Formik } from "formik";
-import { Loader2Icon, X } from "lucide-react";
-import { useState } from "react";
+import {Loader2Icon, X, XIcon} from "lucide-react";
+import {useLayoutEffect, useState} from "react";
 import { useMediaQuery } from "react-responsive";
 import * as Yup from "yup";
 import {ToastOptions} from "@/lib/ToastOptions";
 import {toast} from "react-toastify";
+import {Select, SelectContent, SelectItem, SelectTrigger} from "@/components/ui/select";
+import {listUserOwnedGroups} from "@/components/appwrite/appwrite";
+import {useAuth} from "@/components/contexts/AuthContext";
+import {Permission, Query, Role} from "appwrite";
 
 const EditEventSchema = Yup.object().shape({
 	name: Yup.string()
@@ -24,12 +28,56 @@ const EditEventSchema = Yup.object().shape({
 	details: Yup.string().min(1).max(300, "max 300 characters"),
 });
 
-export const EditEvent = ({ open, onOpenChange, eventData }) => {
+export const EditEvent = ({ open, onOpenChange, eventData, setGroup }) => {
 	const isDesktop = useMediaQuery({
 		query: "(min-width: 1024px)",
 	});
 	const [adding, setAdding] = useState(false);
 	const [disabled, setDisabled] = useState(false);
+	const [selectedGroup, setSelectedGroup] = useState(null)
+	const {user, userOwnedGroups} = useAuth()
+
+	useLayoutEffect(() => {
+		if(eventData.teamId) {
+			setSelectedGroup(eventData.teamId)
+		}
+	}, []);
+
+	let teamPermissions = [
+		Permission.read(Role.team(selectedGroup, "member")),
+		Permission.update(Role.team(selectedGroup, "member")),
+		Permission.delete(Role.team(selectedGroup, "member")),
+		Permission.read(Role.user(user.$id)),
+		Permission.update(Role.user(user.$id)),
+		Permission.delete(Role.user(user.$id)),
+	]
+	let userPermissions = [
+		Permission.read(Role.user(user.$id)),
+		Permission.update(Role.user(user.$id)),
+		Permission.delete(Role.user(user.$id)),
+	]
+
+	const updateAllItemsInEvent = async (permissionsToUpdate) => {
+		const getItems = await db.eventItems.list([
+			Query.orderDesc("$createdAt"),
+			Query.equal('eventID', eventData?.$id)
+		]);
+		// Iterate over each document and delete it
+		for (const item of getItems.documents) {
+
+			let tempItem = {
+				name: item?.name,
+				details: item?.details,
+				returned_amount: item?.returned_amount,
+				eventID: item?.eventID,
+				amount: item?.amount,
+			}
+			await db.eventItems.update(tempItem, item.$id, permissionsToUpdate);
+		}
+	};
+
+	const randomIntegerInRange = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+
 
 	const onUpdate = async (values) => {
 		setAdding(true);
@@ -39,7 +87,8 @@ export const EditEvent = ({ open, onOpenChange, eventData }) => {
 			values.name === eventData.name &&
 			values.date === eventData.date &&
 			values.venue === eventData.venue &&
-			values.details === eventData.details
+			values.details === eventData.details &&
+			values.teamId === eventData.teamId
 		) {
 			toast.info("Nothing to update", ToastOptions);
 			setAdding(false);
@@ -51,11 +100,20 @@ export const EditEvent = ({ open, onOpenChange, eventData }) => {
 			const eventDataValues = {
 				name: values.name,
 				date: values.date,
-				venue: values.venue,
+				venue: randomIntegerInRange(100, 99999).toString(),
 				details: values.details,
+				teamId: selectedGroup,
 			};
 
-			await db.events.update(eventDataValues, eventData.$id);
+			if(selectedGroup){
+				await db.events.update(eventDataValues, eventData.$id, teamPermissions);
+				await updateAllItemsInEvent(teamPermissions);
+			}else{
+				await db.events.update(eventDataValues, eventData.$id, userPermissions);
+				await updateAllItemsInEvent(userPermissions);
+			}
+
+			setGroup(userOwnedGroups.filter((item)=> item.$id === selectedGroup)[0])
 			toast.success("Updated!", ToastOptions);
 			setAdding(false);
 			setDisabled(false);
@@ -113,6 +171,34 @@ export const EditEvent = ({ open, onOpenChange, eventData }) => {
 								setFieldValue,
 							}) => (
 								<Form className="flex flex-col w-full space-y-6">
+									<div className={'flex gap-4 items-center relative'}>
+										<Select onValueChange={(selected)=> setSelectedGroup(selected)} key={selectedGroup}>
+											<SelectTrigger className="w-full h-12 flex between">
+												{selectedGroup ? userOwnedGroups.find((group)=> group.$id=== selectedGroup)?.name : 'Select Group'}
+											</SelectTrigger>
+											<SelectContent>
+												{userOwnedGroups?.map((u)=>(
+													<SelectItem
+														key={u.$id}
+														value={u.$id}
+													>
+														{u.name}
+													</SelectItem>
+												))}
+											</SelectContent>
+										</Select>
+										{selectedGroup &&
+											<Button
+												variant={'ghost'}
+												type={'button'}
+												size={'icon'}
+												onClick={()=> setSelectedGroup(null)}
+												className={'flex items-center justify-center text-primary hover:text-primary absolute right-1 bg-white'}
+											>
+												<XIcon className={'w-4 h-4'} />
+											</Button>
+										}
+									</div>
 									<div className="flex flex-col">
 										<FormLabel
 											title="Event Name"

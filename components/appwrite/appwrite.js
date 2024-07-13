@@ -44,6 +44,16 @@ const listUserGroups = async () =>{
 	}
 }
 
+const listUserOwnedGroups = async(userEmail) =>{
+	try {
+		const allUserGroups = await listUserGroups()
+		return allUserGroups.teams.filter((item) => item.prefs.creatorEmail === userEmail);
+	}
+	catch (e){
+		console.log(e);
+	}
+}
+
 const getGroup = async (groupID) =>{
 	try {
 		return teams.get(groupID)
@@ -63,5 +73,6 @@ export {
 	getCurrentSession,
 	refreshCurrentSession,
 	getCurrentUser,
-	listUserGroups
+	listUserGroups,
+	listUserOwnedGroups
 };

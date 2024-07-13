@@ -58,6 +58,7 @@ const EventInfo = ({ eventData, sum }) => {
 		}
 	};
 
+	// set group
 	useLayoutEffect(() => {
 		const unsub = async () =>{
 			if(eventData.teamId){
@@ -113,7 +114,7 @@ const EventInfo = ({ eventData, sum }) => {
 								<TableRow className={'border-b-muted'}>
 									<TableCell>Group</TableCell>
 									<TableCell className="text-right">
-										{group?.name || <p>Not Shared<br className={'flex md:hidden'}/>with any Group</p>}
+										{group?.name || <p className={'italic text-muted-foreground text-sm'}>Not Shared<br className={'flex md:hidden'}/>with any Group</p>}
 									</TableCell>
 								</TableRow>
 								<TableRow className={'border-b-muted'}>
@@ -167,7 +168,7 @@ const EventInfo = ({ eventData, sum }) => {
 				</SheetContent>
 			</Sheet>
 
-			<EditEvent open={openEdit} onOpenChange={setOpenEdit} eventData={eventData} />
+			<EditEvent open={openEdit} onOpenChange={setOpenEdit} eventData={eventData} setGroup={setGroup} />
 			<DeleteEvent
 				open={openDelete}
 				onOpenChange={setOpenDelete}

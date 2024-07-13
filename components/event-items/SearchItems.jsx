@@ -45,7 +45,7 @@ export const SearchItems = ({setVisibleItems, itemsPerPage, itemsDefault}) =>{
             )}
 
             {searchValue !== '' && searchResultsMessage !== '' && (
-                <div className="flex flex-col justify-center items-center gap-10 px-6 mt-10">
+                <div className="flex flex-col justify-center items-center gap-10 px-6 mt-20">
                     <p className="text-center text-lg font-medium">
                         {searchResultsMessage}
                     </p>
