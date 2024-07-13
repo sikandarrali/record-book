@@ -34,9 +34,8 @@ export default function Page() {
             try {
                 const groupsList = await teams.list()
                 setGroups(groupsList.teams)
-                console.error(groupsList)
             }catch (e) {
-                console.log(e)
+                // console.log(e)
             }
         }
         setLoading(false)
@@ -58,39 +57,6 @@ export default function Page() {
                 <li><Text variant={'sm'}>Added user will be able to <span className={'font-semibold'}>Add</span>, <span className={'font-semibold'}>Update</span>, <span className={'font-semibold'}>Delete</span> and <span className={'font-semibold'}>View</span> Events and all its Data</Text></li>
                 <li><Text variant={'sm'}>User need to accept invitation sent to them via email before they can manage shared data</Text></li>
             </ul>
-
-            {/*<Tabs defaultValue="ownedGroups" className="w-full mt-4">*/}
-            {/*    <TabsList className={'w-full h-12'}>*/}
-            {/*        <TabsTrigger className={'flex-1 flex h-full'} value="ownedGroups">Your Groups</TabsTrigger>*/}
-            {/*        <TabsTrigger className={'flex-1 flex h-full'} value="joinedGroups">Joined Groups</TabsTrigger>*/}
-            {/*    </TabsList>*/}
-
-            {/*    /!* Owned Groups *!/*/}
-            {/*    <TabsContent value="ownedGroups" className={'bg-muted py-6 rounded-b-lg -mt-2'}>*/}
-            {/*        <div className={'flex flex-col divide-y'}>*/}
-            {/*            <div/>*/}
-            {/*            {groups?.filter((group)=> group.prefs.creatorEmail === user.email).map((data)=>(*/}
-            {/*                <SingleGroup data={data} key={data.$id} setGroups={setGroups} setRefresh={setRefresh}/>*/}
-            {/*            ))}*/}
-            {/*            <div/>*/}
-            {/*        </div>*/}
-
-            {/*        <div className={'px-5'}>*/}
-            {/*            <Button stretched size={'lg'} className={'!mt-10'} onClick={()=> setOpenAddGroup(true)}>Create new Group</Button>*/}
-            {/*        </div>*/}
-            {/*    </TabsContent>*/}
-
-            {/*    /!* Joined Groups *!/*/}
-            {/*    <TabsContent value="joinedGroups" className={'bg-muted py-6 rounded-b-lg -mt-2'}>*/}
-            {/*        <div className={'flex flex-col divide-y'}>*/}
-            {/*            <div/>*/}
-            {/*            {groups?.filter((group)=> group.prefs.creatorEmail !== user.email).map((data)=>(*/}
-            {/*                <SingleGroup data={data} key={data.$id} setGroups={setGroups} setRefresh={setRefresh}/>*/}
-            {/*            ))}*/}
-            {/*            <div/>*/}
-            {/*        </div>*/}
-            {/*    </TabsContent>*/}
-            {/*</Tabs>*/}
 
             <Text className={'py-2 mt-8 font-semibold text-primary'}>Your Groups</Text>
 
