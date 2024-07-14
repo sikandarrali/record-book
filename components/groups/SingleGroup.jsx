@@ -36,7 +36,7 @@ import {ExitIcon} from "@radix-ui/react-icons";
 import {LeaveGroup} from "@/components/groups/LeaveGroup";
 import {useData} from "@/components/contexts/DataContext";
 
-const SingleGroup = ({ data, setGroups, groups }) => {
+const SingleGroup = ({ data, setGroups, groups, userGroups, setUserGroups }) => {
     const isDesktop = useMediaQuery({ query: "(min-width: 1024px)" })
     const [open, setOpen] = useState(false)
     const [usersInGroup, setUsersInGroup] = useState([])
@@ -47,7 +47,6 @@ const SingleGroup = ({ data, setGroups, groups }) => {
     const {user} = useAuth()
     const [openLeaveGroup, setOpenLeaveGroup] = useState(false)
 
-    const {userGroups, setUserGroups} = useData()
 
     useEffect(() => {
         if(open){

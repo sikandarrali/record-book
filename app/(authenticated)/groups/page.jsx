@@ -31,7 +31,21 @@ export default function Page() {
     const [openAddGroup, setOpenAddGroup] = useState(false)
     const [groups, setGroups] = useState([])
     const [showSkeleton, setShowSkeleton] = useState(true)
-    const {userGroups, setUserGroups} = useData()
+    // const {userGroups, setUserGroups} = useData()
+    const [userGroups, setUserGroups] = useState([])
+    const [refresh, setRefresh] = useState([])
+
+    const getUserGroups = async () =>{
+        if(user){
+            const tempGroups = await listUserGroups()
+            setUserGroups(tempGroups.teams)
+        }else{
+            setUserGroups([])
+        }
+    }
+    useEffect(() => {
+        return ()=> getUserGroups()
+    }, [refresh]);
 
     return (
         <PageContainer hideTopbar>
@@ -51,14 +65,14 @@ export default function Page() {
             <div className={'flex flex-col bg-muted rounded-lg relative shadow'}>
 
                 {userGroups.map((data)=>(
-                    <SingleGroup data={data} key={data.$id} />
+                    <SingleGroup data={data} key={data.$id} userGroups={userGroups} setUserGroups={setUserGroups} />
                 ))}
 
             </div>
 
             <Button stretched size={'lg'} className={'mt-5'} onClick={()=> setOpenAddGroup(true)}>Create new Group</Button>
 
-            <AddGroup open={openAddGroup} onOpenChange={setOpenAddGroup} setUserGroups={setUserGroups}/>
+            <AddGroup open={openAddGroup} setRefresh={setRefresh} onOpenChange={setOpenAddGroup} setUserGroups={setUserGroups}/>
         </PageContainer>
     );
 }
