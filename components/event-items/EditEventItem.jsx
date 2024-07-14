@@ -3,7 +3,6 @@ import { db } from "@/components/appwrite/database";
 import FormLabel from "@/components/theme/FormLabel";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { useMyStore } from "@/store/store";
 import { Form, Formik } from "formik";
 import { useState } from "react";
 import { NumericFormat } from "react-number-format";
@@ -31,7 +30,6 @@ export const EditEventItem = ({ open, onOpenChange, item, setItemSheet }) => {
 		query: "(min-width: 1024px)",
 	});
 
-	const updateEventItem = useMyStore((state) => state.updateEventItem);
 	const [adding, setAdding] = useState(false);
 	const [disabled, setDisabled] = useState(false);
 
@@ -65,7 +63,6 @@ export const EditEventItem = ({ open, onOpenChange, item, setItemSheet }) => {
 			};
 
 			await db.eventItems.update(eventItemData, item.$id);
-			updateEventItem(item.$id, eventItemData);
 			toast.success("Updated!", ToastOptions);
 			setAdding(false);
 			setDisabled(false);
@@ -102,12 +99,7 @@ export const EditEventItem = ({ open, onOpenChange, item, setItemSheet }) => {
 							onEdit(values);
 						}}
 					>
-						{({
-							  errors,
-							  touched,
-							  handleChange,
-							  handleBlur,
-						  }) => (
+						{({errors, touched, handleChange, handleBlur,}) => (
 							<Form className="flex flex-col w-full space-y-6">
 								<div className="flex flex-col">
 									<FormLabel

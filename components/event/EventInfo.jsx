@@ -7,7 +7,6 @@ import { NumericFormat } from "react-number-format";
 import { Table, TableBody, TableCell, TableRow } from "../ui/table";
 import { DeleteEvent } from "./DeleteEvent";
 import { EditEvent } from "./EditEvent";
-import {useMyStore} from "@/store/store";
 import {db} from "@/components/appwrite/database";
 import {toast} from "react-toastify";
 import {ToastOptions} from "@/lib/ToastOptions";
@@ -15,7 +14,6 @@ import {
 	Sheet,
 	SheetContent,
 	SheetDescription,
-	SheetFooter,
 	SheetHeader,
 	SheetTitle,
 } from "@/components/ui/sheet"
@@ -23,7 +21,6 @@ import {Query} from "appwrite";
 import {cn} from "@/lib/utils";
 import {useMediaQuery} from "react-responsive";
 import {getGroup} from "@/components/appwrite/appwrite";
-import {useAuth} from "@/components/contexts/AuthContext";
 
 const EventInfo = ({ eventData, sum }) => {
 	const isDesktop = useMediaQuery({ query: "(min-width: 1024px)" })
@@ -33,12 +30,9 @@ const EventInfo = ({ eventData, sum }) => {
 	const router = useRouter();
 	const [group, setGroup] = useState(null)
 
-	const deleteEventStore = useMyStore((state) => state.deleteEvent);
-
 	const onDelete = async () => {
 		await db.events.delete(eventData?.$id);
 		await DeleteAllItemsInThisEvent()
-		deleteEventStore(eventData?.$id);
 		setOpenDelete(false);
 		setOpenDetails(false);
 		toast.success("Deleted!", ToastOptions);
@@ -46,7 +40,6 @@ const EventInfo = ({ eventData, sum }) => {
 	};
 
 	const DeleteAllItemsInThisEvent = async () => {
-		let items = []
 		const getItems = await db.eventItems.list([
 			Query.orderDesc("$createdAt"),
 			Query.equal('eventID', eventData?.$id)

@@ -83,7 +83,7 @@ const Sidebar = ({ open, onOpenChange }) => {
 					{/*	<LanguageSwitcher />*/}
 					{/*</div>*/}
 
-					<div className="flex flex-col px-6 h-full mt-10">
+					<div className="flex flex-col px-6 h-full mt-10 gap-0.5">
 						<MenuItem
 							label={"Events"}
 							href={"/events"}
