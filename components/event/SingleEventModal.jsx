@@ -228,12 +228,12 @@ const SingleEventModal = ({ eventData }) => {
                                         sum={totalSum}
                                     />
 
-                                    <div
-                                        className={'w-8 h-8 cursor-pointer flex items-center justify-center'}
-                                        onClick={()=> copyToClipboard()}
-                                    >
-                                        <Link2 className={'w-7 h-7'} />
-                                    </div>
+                                    {/*<div*/}
+                                    {/*    className={'w-8 h-8 cursor-pointer flex items-center justify-center'}*/}
+                                    {/*    onClick={()=> copyToClipboard()}*/}
+                                    {/*>*/}
+                                    {/*    <Link2 className={'w-7 h-7'} />*/}
+                                    {/*</div>*/}
 
                                 </div>
 
