@@ -3,16 +3,12 @@ import { AddEventItem } from "@/components/event-items/AddEventItem";
 import { SingleListItem } from "@/components/event-items/SingleListItem";
 import EventInfo from "@/components/event/EventInfo";
 import LoadingFallback from "@/components/loaders/LoadingFallback";
-import PageContainer from "@/components/providers/PageContainer";
 import Text from "@/components/theme/Text";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { useMyStore } from "@/store/store";
-import { AnimatePresence, motion } from "framer-motion";
-import {ArrowLeft, ChevronLeft, ChevronRight, Info, Link2, Plus, Users2, XIcon} from "lucide-react";
-import Link from "next/link";
-import {redirect, usePathname, useRouter, useSearchParams} from "next/navigation";
-import {Suspense, useCallback, useEffect, useLayoutEffect, useRef, useState} from "react";
+import { motion } from "framer-motion";
+import {Plus, Users2, XIcon} from "lucide-react";
+import {usePathname, useRouter, useSearchParams} from "next/navigation";
+import {Suspense, useCallback, useEffect, useRef, useState} from "react";
 import { NumericFormat } from "react-number-format";
 import {db} from "@/components/appwrite/database";
 import {Query} from "appwrite";
@@ -23,19 +19,14 @@ import {
     Sheet,
     SheetContent,
     SheetDescription,
-    SheetFooter,
     SheetHeader,
     SheetTitle, SheetTrigger
 } from "@/components/ui/sheet";
 import {SearchItems} from "@/components/event-items/SearchItems";
-import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
 import {ReloadIcon} from "@radix-ui/react-icons";
 import {useAuth} from "@/components/contexts/AuthContext";
 import {toast} from "react-toastify";
 import {ToastOptions} from "@/lib/ToastOptions";
-import {SheetStylesFixedHeight} from "@/lib/reusableStyles";
-
-const perPageList = [10, 20, 30, 50, 100, 200];
 
 const SingleEventModal = ({ eventData }) => {
     const isDesktop = useMediaQuery({ query: "(min-width: 1024px)" })
@@ -44,8 +35,6 @@ const SingleEventModal = ({ eventData }) => {
 
     const [openAddModal, setOpenAddModal] = useState(false);
     const [totalSum, setTotalSum] = useState(0);
-    const [noItems, setNoItems] = useState(false);
-    const [refreshItems, setRefreshItems] = useState(false)
 
     const [items, setItems] = useState([])
     const [itemsDefault, setItemsDefault] = useState([])
@@ -55,10 +44,6 @@ const SingleEventModal = ({ eventData }) => {
     const [visibleItems, setVisibleItems] = useState([]); // Currently visible items
     const [hasMoreItems, setHasMoreItems] = useState(true); // Flag to check if more items are available
     const [loadingItems, setLoadingItems] = useState(false); // To show loadingItems spinner
-
-    const router = useRouter()
-    const pathname = usePathname()
-    const searchParams = useSearchParams()
 
     // useEffect(() => {
     //    if(isOpen){
@@ -84,15 +69,10 @@ const SingleEventModal = ({ eventData }) => {
                         Query.orderDesc("$createdAt"),
                         Query.equal('eventID', eventData.$id)
                     ]);
-                    if (response.documents.length === 0) {
-                        setNoItems(true)
-                    } else {
-                        setItems(response.documents)
-                        setItemsDefault(response.documents)
-                        setNoItems(false)
-                    }
+                    setItems(response.documents)
+                    setItemsDefault(response.documents)
                 } catch (error) {
-                    console.error("Error fetching event items:", error);
+                    // console.error("Error fetching event items:", error);
                 }
             }
         }

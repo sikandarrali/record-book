@@ -2,7 +2,7 @@ import Text from "@/components/theme/Text";
 import { Button } from "@/components/ui/button";
 import { Info, Pen, Trash2, XIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
-import {useEffect, useLayoutEffect, useState} from "react";
+import {useLayoutEffect, useState} from "react";
 import { NumericFormat } from "react-number-format";
 import { Table, TableBody, TableCell, TableRow } from "../ui/table";
 import { DeleteEvent } from "./DeleteEvent";
@@ -32,7 +32,6 @@ const EventInfo = ({ eventData, sum }) => {
 	const [openDelete, setOpenDelete] = useState(false);
 	const router = useRouter();
 	const [group, setGroup] = useState(null)
-	const {user} = useAuth()
 
 	const deleteEventStore = useMyStore((state) => state.deleteEvent);
 

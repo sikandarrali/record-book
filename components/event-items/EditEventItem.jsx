@@ -1,12 +1,10 @@
 "use client";
 import { db } from "@/components/appwrite/database";
 import FormLabel from "@/components/theme/FormLabel";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useMyStore } from "@/store/store";
 import { Form, Formik } from "formik";
-import { Loader2Icon, X } from "lucide-react";
 import { useState } from "react";
 import { NumericFormat } from "react-number-format";
 import { useMediaQuery } from "react-responsive";

@@ -1,23 +1,16 @@
 "use client";
 
-import {CalendarRange, Copyright, Edit, Edit2, Heart, Home, LogOut, MenuIcon, Users} from "lucide-react";
+import {CalendarRange, Copyright, Edit, LogOut, MenuIcon, Users} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { Button } from "../ui/button";
 import {Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle} from "../ui/sheet";
-import {useMyStore} from "@/store/store";
-import {db} from "@/components/appwrite/database";
-import {Query} from "appwrite";
 import {Badge} from "@/components/ui/badge";
-import {Switch} from "@/components/ui/switch";
-import LanguageSwitcher from "@/components/nav/LangugeSwitcher";
 import {EditProfile} from "@/components/nav/EditProfile";
-import {Progress} from "@/components/ui/progress";
-import {useData} from "@/components/contexts/DataContext";
 import {cn} from "@/lib/utils";
-import {useParams, usePathname} from "next/navigation";
+import {usePathname} from "next/navigation";
 
 const Navbar = () => {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -146,7 +139,6 @@ const MenuItem = ({ label, href, icon }) => {
 	return (
 		<Link
 			href={href}
-			replace
 			className={cn("flex text-background items-center gap-2 px-4 py-4 rounded-md hover:bg-muted hover:text-foreground",
 				pathname.toString() === href.toString() && "bg-muted text-foreground")}
 		>

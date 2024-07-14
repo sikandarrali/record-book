@@ -6,11 +6,9 @@ import {Loader2Icon} from "lucide-react";
 import * as Yup from "yup";
 import {useState} from "react";
 import {teams} from "@/components/appwrite/appwrite";
-import {ID} from "appwrite";
 import {toast} from "react-toastify";
 import {ToastOptions} from "@/lib/ToastOptions";
 import {scrollToTop} from "@/lib/utils";
-import {useAuth} from "@/components/contexts/AuthContext";
 import {ParseErrorCodes} from "@/lib/parseErrorCodes";
 
 

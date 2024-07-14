@@ -1,37 +1,18 @@
 "use client";
-import { AddEvent } from "@/components/event/AddEvent";
 import PageContainer from "@/components/providers/PageContainer";
 import Text from "@/components/theme/Text";
-import { FixStickyHeaderScrollError } from "@/lib/utils";
-import { useMyStore } from "@/store/store";
 import { motion } from "framer-motion";
-import {Suspense, useEffect, useLayoutEffect, useRef, useState} from "react";
-import {Input} from "@/components/ui/input";
+import {useEffect, useState} from "react";
 import {Button} from "@/components/ui/button";
-import {toast} from "react-toastify";
-import {ToastOptions} from "@/lib/ToastOptions";
-import {ChevronDown, ChevronUp, Info, Loader2Icon, ShieldCheck, Trash, Trash2, Users2} from "lucide-react";
-import {Label} from "@/components/ui/label";
-import {DeleteGroupMember} from "@/components/groups/DeleteGroupMember";
+import {ChevronDown, ChevronUp, Info, ShieldCheck, Users2} from "lucide-react";
 import {useAuth} from "@/components/contexts/AuthContext";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {AddGroup} from "@/components/groups/AddGroup";
 import SingleGroup from "@/components/groups/SingleGroup";
-import Loader from "@/components/loaders/loader";
-import {Teams, Client} from "appwrite";
-import {listUserGroups, teams} from "@/components/appwrite/appwrite";
-import ItemsSkeleton from "@/components/loaders/ItemsSkeleton";
-import GroupSkeleton from "@/components/loaders/GroupSkeleton";
-import {useData} from "@/components/contexts/DataContext";
-
+import {teams} from "@/components/appwrite/appwrite";
 
 export default function Page() {
 
-    const {user} = useAuth()
     const [openAddGroup, setOpenAddGroup] = useState(false)
-    const [groups, setGroups] = useState([])
-    const [showSkeleton, setShowSkeleton] = useState(true)
-    // const {userGroups, setUserGroups} = useData()
     const [userGroups, setUserGroups] = useState([])
     const [refresh, setRefresh] = useState([])
     const [showInformation, setShowInformation] = useState(false)

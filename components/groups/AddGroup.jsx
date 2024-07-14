@@ -1,13 +1,9 @@
 "use client";
-import { db } from "@/components/appwrite/database";
 import FormLabel from "@/components/theme/FormLabel";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle} from "@/components/ui/sheet";
-import { Textarea } from "@/components/ui/textarea";
-import {cn, scrollToTop} from "@/lib/utils";
+import {cn} from "@/lib/utils";
 import { Form, Formik } from "formik";
-import { Loader2Icon, X } from "lucide-react";
 import { useState } from "react";
 import { useMediaQuery } from "react-responsive";
 import * as Yup from "yup";
@@ -16,8 +12,6 @@ import {ToastOptions} from "@/lib/ToastOptions";
 import {teams} from "@/components/appwrite/appwrite";
 import {ID} from "appwrite";
 import {useAuth} from "@/components/contexts/AuthContext";
-import {useData} from "@/components/contexts/DataContext";
-import {useRouter} from "next/navigation";
 import {UISheetFooter} from "@/components/theme/UISheetFooter";
 
 const AddGroupSchema = Yup.object().shape({
@@ -32,9 +26,6 @@ export const AddGroup = ({ open, onOpenChange, setRefresh }) => {
     const [adding, setAdding] = useState(false);
     const [disabled, setDisabled] = useState(false);
     const {user} = useAuth()
-    const {userGroups, setUserGroups} = useData()
-    const router = useRouter()
-
 
     const onAdd = async (values) => {
         setAdding(true);
@@ -53,13 +44,6 @@ export const AddGroup = ({ open, onOpenChange, setRefresh }) => {
             toast.success("Group created", ToastOptions);
             setAdding(false);
             setDisabled(false);
-            setUserGroups(prev=> [...prev, response])
-
-            // refetchs Teams since there's no realtime channel to get team updates
-            // setTimeout(()=>{
-            //     window.location.reload();
-            // }, 1500)
-
         } catch (error) {
             toast.error(`Unable to Add: ${error}`, ToastOptions);
             setAdding(false);

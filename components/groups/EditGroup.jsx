@@ -1,22 +1,15 @@
 "use client";
-import { db } from "@/components/appwrite/database";
 import FormLabel from "@/components/theme/FormLabel";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle} from "@/components/ui/sheet";
-import { Textarea } from "@/components/ui/textarea";
-import {cn, scrollToTop} from "@/lib/utils";
-import { useMyStore } from "@/store/store";
+import {cn} from "@/lib/utils";
 import { Form, Formik } from "formik";
-import { Loader2Icon, X } from "lucide-react";
 import { useState } from "react";
 import { useMediaQuery } from "react-responsive";
 import * as Yup from "yup";
 import {ToastOptions} from "@/lib/ToastOptions";
 import {toast} from "react-toastify";
 import {teams} from "@/components/appwrite/appwrite";
-import {ID} from "appwrite";
-import {useData} from "@/components/contexts/DataContext";
 import {UISheetFooter} from "@/components/theme/UISheetFooter";
 
 const EditGroupSchema = Yup.object().shape({

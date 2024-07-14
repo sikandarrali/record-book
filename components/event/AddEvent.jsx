@@ -7,8 +7,8 @@ import {Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle} from "@/
 import { Textarea } from "@/components/ui/textarea";
 import {cn, scrollToTop} from "@/lib/utils";
 import { Form, Formik } from "formik";
-import {Loader2Icon, Plus, X, XIcon} from "lucide-react";
-import {useLayoutEffect, useState} from "react";
+import {Plus, XIcon} from "lucide-react";
+import {useState} from "react";
 import { useMediaQuery } from "react-responsive";
 import * as Yup from "yup";
 import {toast} from "react-toastify";
@@ -21,7 +21,6 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select"
-import {listUserGroups} from "@/components/appwrite/appwrite";
 import {useAuth} from "@/components/contexts/AuthContext";
 import {Label} from "@/components/ui/label";
 import {useData} from "@/components/contexts/DataContext";
@@ -36,7 +35,6 @@ const AddEventSchema = Yup.object().shape({
 		.max(300, "max 300 characters")
 		.required("required"),
 	date: Yup.string().min(1).max(300, "max 300 characters"),
-	// .required("required"),
 	venue: Yup.string().min(1).max(300, "max 300 characters"),
 	details: Yup.string().min(1).max(300, "max 300 characters"),
 });

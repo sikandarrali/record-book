@@ -1,40 +1,20 @@
 import Text from "@/components/theme/Text";
 import { Button } from "@/components/ui/button";
-import {Info, Loader2Icon, Pen, Plus, ShieldCheck, Trash2, Users2, X, XIcon} from "lucide-react";
-import { useRouter } from "next/navigation";
+import {Pen, Plus, ShieldCheck, Trash2, Users2, X, XIcon} from "lucide-react";
 import {useEffect, useState} from "react";
-import { NumericFormat } from "react-number-format";
-import { Table, TableBody, TableCell, TableRow } from "../ui/table";
-import {useMyStore} from "@/store/store";
-import {db} from "@/components/appwrite/database";
 import {toast} from "react-toastify";
 import {ToastOptions} from "@/lib/ToastOptions";
-import {
-    Drawer,
-    DrawerContent,
-    DrawerDescription,
-    DrawerFooter,
-    DrawerHeader,
-    DrawerTitle,
-} from "@/components/ui/drawer"
-import {Query} from "appwrite";
 import {teams} from "@/components/appwrite/appwrite";
 import {MemberListItem} from "@/components/groups/MemberListItem";
-import {FixDrawerPointerEventsIssue} from "@/lib/hooks/FixDrawerPointerEventsIssue";
 import {Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger} from "@/components/ui/sheet";
 import {cn} from "@/lib/utils";
-import {Form, Formik} from "formik";
-import FormLabel from "@/components/theme/FormLabel";
-import {Input} from "@/components/ui/input";
 import {useMediaQuery} from "react-responsive";
-import * as Yup from "yup";
 import {AddGroupMember} from "@/components/groups/AddGroupMember";
 import {EditGroup} from "@/components/groups/EditGroup";
 import {DeleteGroup} from "@/components/groups/DeleteGroup";
 import {useAuth} from "@/components/contexts/AuthContext";
 import {ExitIcon} from "@radix-ui/react-icons";
 import {LeaveGroup} from "@/components/groups/LeaveGroup";
-import {useData} from "@/components/contexts/DataContext";
 
 const SingleGroup = ({ data, userGroups, setUserGroups }) => {
     const isDesktop = useMediaQuery({ query: "(min-width: 1024px)" })

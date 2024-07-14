@@ -1,7 +1,7 @@
 "use client";
 import Logo from "@/public/logo.png"
 import Image from "next/image";
-import {redirect, useSearchParams} from "next/navigation";
+import {useSearchParams} from "next/navigation";
 import {useLayoutEffect, useState} from "react";
 import {teams} from "@/components/appwrite/appwrite";
 import {Check, MoveLeft, XIcon} from "lucide-react";

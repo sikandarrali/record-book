@@ -4,23 +4,17 @@ import PageContainer from "@/components/providers/PageContainer";
 import Text from "@/components/theme/Text";
 import { FixStickyHeaderScrollError } from "@/lib/utils";
 import { motion } from "framer-motion";
-import {useEffect, useLayoutEffect, useRef, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {client} from "@/components/appwrite/appwrite";
 import {db} from "@/components/appwrite/database";
 import {Query} from "appwrite";
 import SingleEventModal from "@/components/event/SingleEventModal";
-import {useAuth} from "@/components/contexts/AuthContext";
-import {usePathname, useRouter, useSearchParams} from "next/navigation";
-
 
 export default function Home() {
 	const [openAddModal, setOpenAddModal] = useState(false);
 	const scrollRef = useRef(null);
-	const [currentEvent, setCurrentEvent] = useState(null);
 	const [refreshItems, setRefreshItems] = useState(false)
 	const [events, setEvents] = useState([])
-	const [isOpen, setIsOpen] = useState(false)
-	const searchParams = useSearchParams()
 
 	const getEvents = async () =>{
 		try {

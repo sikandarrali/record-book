@@ -1,15 +1,11 @@
 "use client";
 import {
 	AlertDialog,
-	AlertDialogAction,
-	AlertDialogCancel,
 	AlertDialogContent,
 	AlertDialogDescription,
-	AlertDialogFooter,
 	AlertDialogHeader,
 	AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import Text from "@/components/theme/Text";
 import {TriangleAlert} from "lucide-react";
 import {UIDialogFooter} from "@/components/theme/UIDialogFooter";
 
