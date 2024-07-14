@@ -185,10 +185,10 @@ export const AddEvent = ({ open, onOpenChange, refreshItems, setRefreshItems }) 
 									</div>
 
 									<div
-										className={'flex items-center justify-end gap-1 cursor-pointer'}
+										className={'flex items-center justify-end gap-1 cursor-pointer text-primary'}
 										onClick={()=> setAddEventDetails(!addEventDetails)}
 									>
-										{addEventDetails ? <XIcon className={'w-4 h-4 text-destructive'}/> : <Plus className={'w-4 h-4'}/>}
+										{addEventDetails ? <XIcon className={'w-4 h-4'}/> : <Plus className={'w-4 h-4'}/>}
 										<Text variant={'sm'} className={'font-medium'}>Add Date, Venue & Details etc.</Text>
 									</div>
 
