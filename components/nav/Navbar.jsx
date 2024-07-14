@@ -11,6 +11,7 @@ import {Badge} from "@/components/ui/badge";
 import {EditProfile} from "@/components/nav/EditProfile";
 import {cn} from "@/lib/utils";
 import {usePathname} from "next/navigation";
+import {useTranslations} from "next-intl";
 
 const Navbar = () => {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -43,6 +44,7 @@ const Sidebar = ({ open, onOpenChange }) => {
 	const { onLogout } = useAuth();
 	const {user} = useAuth()
 	const [openEditProfile, setOpenEditProfile] = useState(false)
+	const t = useTranslations('navbar')
 
 	return (
 		<Sheet open={open} onOpenChange={onOpenChange}>
@@ -85,7 +87,7 @@ const Sidebar = ({ open, onOpenChange }) => {
 
 					<div className="flex flex-col px-6 h-full mt-10 gap-0.5">
 						<MenuItem
-							label={"Events"}
+							label={t('linkEvents')}
 							href={"/events"}
 							icon={
 								<CalendarRange className="w-[18px] h-[18px]" />
@@ -93,7 +95,7 @@ const Sidebar = ({ open, onOpenChange }) => {
 						/>
 
 						<MenuItem
-							label={"Groups"}
+							label={t('linkGroups')}
 							href={"/groups"}
 							icon={
 								<Users className="w-[18px] h-[18px]" />
@@ -102,20 +104,20 @@ const Sidebar = ({ open, onOpenChange }) => {
 
 					</div>
 
-					<div className="mb-0 mx-2 px-4 space-y-2">
+					<div className="mb-0 mx-2 px-4 gap-0.5">
 						<div
 							className="flex text-background hover:bg-muted hover:text-foreground items-center gap-2 px-4 py-4 hover:rounded-md cursor-pointer"
 							onClick={()=> setOpenEditProfile(true)}
 						>
 							<Edit className="w-[18px] h-[18px]" />
-							<span className="text-base font-medium">Edit Profile</span>
+							<span className="text-base font-medium">{t('linkEditProfile')}</span>
 						</div>
 						<div
 							onClick={onLogout}
 							className="flex cursor-pointer text-background hover:bg-muted hover:text-foreground items-center gap-2 px-4 py-4 rounded-md"
 						>
 							<LogOut className="w-[18px] h-[18px]" />
-							<span className="text-base font-medium">Logout</span>
+							<span className="text-base font-medium">{t('linkLogout')}</span>
 						</div>
 					</div>
 

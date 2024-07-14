@@ -9,12 +9,14 @@ import {client} from "@/components/appwrite/appwrite";
 import {db} from "@/components/appwrite/database";
 import {Query} from "appwrite";
 import SingleEventModal from "@/components/event/SingleEventModal";
+import {useTranslations} from "next-intl";
 
 export default function Home() {
 	const [openAddModal, setOpenAddModal] = useState(false);
 	const scrollRef = useRef(null);
 	const [refreshItems, setRefreshItems] = useState(false)
 	const [events, setEvents] = useState([])
+	const t = useTranslations('events');
 
 	const getEvents = async () =>{
 		try {
@@ -24,7 +26,7 @@ export default function Home() {
 
 			setEvents(response.documents)
 		} catch (error) {
-			console.error("Error fetching event items:", error);
+			// console.error("Error fetching event items:", error);
 		}
 	}
 
@@ -65,11 +67,10 @@ export default function Home() {
 		}
 	}, []);
 
-
 	return (
 		<PageContainer hideTopbar>
 
-			<Text variant="h2">Events</Text>
+			<Text variant="h2">{t('title')}</Text>
 
 			<motion.div
 				initial={{ opacity: 0 }}
@@ -91,7 +92,7 @@ export default function Home() {
 					onClick={() => setOpenAddModal(!openAddModal)}
 					className="border-4 w-full border-dashed border-primary/30 hover:bg-muted cursor-pointer text-base font-medium text-center justify-center flex items-center px-6 py-8 rounded-md"
 				>
-					Add New Event
+					<Text>{t('addEvent')}</Text>
 				</motion.div>
 
 				{events.map((event, i) => (
@@ -117,6 +118,7 @@ export default function Home() {
 				refreshItems={refreshItems}
 				setRefreshItems={setRefreshItems}
 			/>
+
 		</PageContainer>
 	);
 }

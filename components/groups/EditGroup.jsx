@@ -11,6 +11,7 @@ import {ToastOptions} from "@/lib/ToastOptions";
 import {toast} from "react-toastify";
 import {teams} from "@/components/appwrite/appwrite";
 import {UISheetFooter} from "@/components/theme/UISheetFooter";
+import {useTranslations} from "next-intl";
 
 const EditGroupSchema = Yup.object().shape({
     name: Yup.string()
@@ -23,6 +24,7 @@ export const EditGroup = ({ open, onOpenChange, data, userGroups, setUserGroups}
     const isDesktop = useMediaQuery({
         query: "(min-width: 1024px)",
     });
+    const t = useTranslations('groups')
 
     const [adding, setAdding] = useState(false);
     const [disabled, setDisabled] = useState(false);
@@ -37,7 +39,7 @@ export const EditGroup = ({ open, onOpenChange, data, userGroups, setUserGroups}
             values.venue === data.venue &&
             values.details === data.details
         ) {
-            toast.info("Nothing to update", ToastOptions);
+            toast.info(t('alertNothingToUpdate'), ToastOptions);
             setAdding(false);
             setDisabled(false);
             return;
@@ -45,7 +47,7 @@ export const EditGroup = ({ open, onOpenChange, data, userGroups, setUserGroups}
 
         try {
             await teams.updateName(data.$id, values.name);
-            toast.success("Group Name Updated", ToastOptions);
+            toast.success(t('alertGroupUpdated'), ToastOptions);
 
             const tempGroups = userGroups.map((g)=>{
                 if(g.$id=== data.$id){
@@ -59,7 +61,7 @@ export const EditGroup = ({ open, onOpenChange, data, userGroups, setUserGroups}
             setAdding(false);
             setDisabled(false);
         } catch (error) {
-            toast.error(`Unable to Update: ${error}`, ToastOptions);
+            toast.error(t('alertException'), ToastOptions);
             setAdding(false);
             setDisabled(false);
         }
@@ -78,7 +80,7 @@ export const EditGroup = ({ open, onOpenChange, data, userGroups, setUserGroups}
                     {/* Date & Close */}
                     <div className="flex items-center space-x-2 justify-between mb-4">
                         <div className="flex items-center text-xl pt-2 space-x-2 font-semibold text-primary">
-                            Edit Group
+                            {t('editGroup')}
                         </div>
                     </div>
                     <div className="flex flex-col gap-5 w-full items-center justify-center py-6 lg:py-10">
@@ -97,13 +99,11 @@ export const EditGroup = ({ open, onOpenChange, data, userGroups, setUserGroups}
                                   values,
                                   handleChange,
                                   handleBlur,
-                                  handleSubmit,
-                                  setFieldValue,
                               }) => (
                                 <Form className="flex flex-col w-full space-y-6">
                                     <div className="flex flex-col">
                                         <FormLabel
-                                            title="Group Name"
+                                            title={t('labelGroupName')}
                                             errors={errors.name}
                                             touched={touched.name}
                                         />
@@ -120,7 +120,6 @@ export const EditGroup = ({ open, onOpenChange, data, userGroups, setUserGroups}
                                         adding={adding}
                                         disabled={disabled}
                                         onOpenChange={onOpenChange}
-                                        labelAction={'Save Changes'}
                                     />
                                 </Form>
                             )}

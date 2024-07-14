@@ -4,9 +4,11 @@ import PageContainer from "@/components/providers/PageContainer";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Logo from "../../public/logo.png"
+import {useTranslations} from "next-intl";
 
 export default function Home() {
 	const { onGoogleWithLogin } = useAuth();
+	const t = useTranslations('login')
 
 	return (
 		<PageContainer hideNavbar>
@@ -39,7 +41,7 @@ export default function Home() {
 							fill="currentColor"
 						/>
 					</svg>
-					<span className={'font-semibold text-base'}>Login with Google</span>
+					<span className={'font-semibold text-base'}>{t('withGoogle')}</span>
 				</Button>
 			</div>
 		</PageContainer>

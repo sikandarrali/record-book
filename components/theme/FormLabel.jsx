@@ -1,8 +1,10 @@
 import { cn } from "@/lib/utils";
 import { Asterisk } from "lucide-react";
 import { Label } from "../ui/label";
+import {useTranslations} from "next-intl";
 
 const FormLabel = ({ title, touched, errors, requiredClassName }) => {
+	const t = useTranslations('general.label')
 	return (
 		<Label
 			className={cn(
@@ -20,7 +22,7 @@ const FormLabel = ({ title, touched, errors, requiredClassName }) => {
 					)}
 				>
 					<Asterisk className="w-4 h-4 shrink-0 mr-1" />
-					<span>{errors}</span>
+					<span>{t(errors)}</span>
 				</span>
 			)}
 		</Label>

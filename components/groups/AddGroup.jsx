@@ -13,6 +13,7 @@ import {teams} from "@/components/appwrite/appwrite";
 import {ID} from "appwrite";
 import {useAuth} from "@/components/contexts/AuthContext";
 import {UISheetFooter} from "@/components/theme/UISheetFooter";
+import {useTranslations} from "next-intl";
 
 const AddGroupSchema = Yup.object().shape({
     name: Yup.string()
@@ -26,6 +27,7 @@ export const AddGroup = ({ open, onOpenChange, setRefresh }) => {
     const [adding, setAdding] = useState(false);
     const [disabled, setDisabled] = useState(false);
     const {user} = useAuth()
+    const t = useTranslations('groups')
 
     const onAdd = async (values) => {
         setAdding(true);
@@ -41,11 +43,11 @@ export const AddGroup = ({ open, onOpenChange, setRefresh }) => {
             );
             setRefresh(prev => !prev)
             onOpenChange(false);
-            toast.success("Group created", ToastOptions);
+            toast.success(t('alertGroupCreated'), ToastOptions);
             setAdding(false);
             setDisabled(false);
         } catch (error) {
-            toast.error(`Unable to Add: ${error}`, ToastOptions);
+            toast.error(t('alertException'), ToastOptions);
             setAdding(false);
             setDisabled(false);
         }
@@ -63,7 +65,7 @@ export const AddGroup = ({ open, onOpenChange, setRefresh }) => {
                     {/* Date & Close */}
                     <div className="flex items-center space-x-2 justify-between mb-4">
                         <div className="flex items-center text-xl pt-2 space-x-2 font-semibold text-primary">
-                            Create Group
+                            {t('createGroup')}
                         </div>
                     </div>
 
@@ -80,16 +82,13 @@ export const AddGroup = ({ open, onOpenChange, setRefresh }) => {
                             {({
                                   errors,
                                   touched,
-                                  values,
                                   handleChange,
                                   handleBlur,
-                                  handleSubmit,
-                                  setFieldValue,
                               }) => (
                                 <Form className="flex flex-col w-full space-y-6">
                                     <div className="flex flex-col gap-2">
                                         <FormLabel
-                                            title="Group Name"
+                                            title={t('labelGroupName')}
                                             errors={errors.name}
                                             touched={touched.name}
                                         />
@@ -105,7 +104,7 @@ export const AddGroup = ({ open, onOpenChange, setRefresh }) => {
                                         adding={adding}
                                         disabled={disabled}
                                         onOpenChange={onOpenChange}
-                                        labelAction={'Create Group'}
+                                        labelAction={t('createGroup')}
                                     />
                                 </Form>
                             )}

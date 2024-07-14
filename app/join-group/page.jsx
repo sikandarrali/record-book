@@ -9,6 +9,8 @@ import {Button} from "@/components/ui/button";
 import {useAuth} from "@/components/contexts/AuthContext";
 import Link from "next/link";
 import {ParseErrorCodes} from "@/lib/parseErrorCodes";
+import Text from "@/components/theme/Text";
+import {useTranslations} from "next-intl";
 
 const Page = () => {
 
@@ -18,6 +20,8 @@ const Page = () => {
 	const userId = searchParams.get('userId');
 	const secret = searchParams.get('secret');
 	const teamId = searchParams.get('teamId');
+
+	const t = useTranslations('joinGroup');
 
 	const {user} = useAuth()
 	const [error, setError] = useState({correct: true, text:''})
@@ -36,10 +40,10 @@ const Page = () => {
 					secret // secret
 				);
 				if(result){
-					setError({correct: true, text: 'Groups Joined!'})
+					setError({correct: true, text: t('alertGroupJoined')})
 				}
 			}catch (e) {
-				setError({correct: false, text: ParseErrorCodes(e.response.type)})
+				setError({correct: false, text: t(e.response.type)})
 
 				if(e.response.type === 'membership_already_confirmed'){
 					setAlreadyJoined(true)
@@ -79,33 +83,33 @@ const Page = () => {
 						<div className={'flex flex-col w-full'}>
 							<div className={'flex w-full gap-2 border-2 border-green-400 rounded-md p-3 px-4'}>
 								<Check className={'text-green-500 stroke-[3] mt-0.5'}/>
-								<div className={'flex flex-col gap-1'}>
-									<p className={'text-lg text-green-500 font-semibold'}>Group Joined</p>
-									<p>{`You've successfully joined this Group.`}</p>
-								</div>
+								<Text className={'flex flex-col gap-1'}>
+									<p className={'text-lg text-green-500 font-semibold'}>{t('titleJoined')}</p>
+									<p>{t('textJoined')}</p>
+								</Text>
 							</div>
 						</div>
 					:
 						<div className={'flex flex-col w-full'}>
 							<div className={'flex w-full gap-2 border-2 border-red-400 rounded-md p-3 px-4'}>
 								<XIcon className={'text-red-700 stroke-[3] mt-0.5'}/>
-								<div className={'flex flex-col gap-1'}>
-									<p className={'text-lg text-red-700 font-semibold'}>{alreadyJoined ? 'Already Joined' : 'Unable to Join'}</p>
+								<Text className={'flex flex-col gap-1'}>
+									<p className={'text-lg text-red-700 font-semibold'}>{alreadyJoined ? t('alreadyJoined') : t('unableToJoin')}</p>
 									<p>{error.text}</p>
-								</div>
+								</Text>
 							</div>
 						</div>
 					}
 
 						<div className={'flex flex-col gap-4 mt-16 '}>
-							{!user && <p className={'font-semibold'}>You can login and Check your groups:</p>}
+							{!user && <Text className={'font-semibold'}>{t('loginAndCheckGroups')}</Text>}
 
 							<Link href={user ? '/groups' : '/login'}>
 								<Button
 									variant={'outline'}
 									className={'gap-2'}
 								>
-									<MoveLeft className={'w-4 h-4'}/> {user ? 'Back to Groups' : 'Login Now'}
+									<MoveLeft className={'w-4 h-4'}/> {user ? t('btnBackToGroups') : t('btnLoginNow')}
 								</Button>
 							</Link>
 						</div>

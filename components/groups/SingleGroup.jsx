@@ -15,6 +15,7 @@ import {DeleteGroup} from "@/components/groups/DeleteGroup";
 import {useAuth} from "@/components/contexts/AuthContext";
 import {ExitIcon} from "@radix-ui/react-icons";
 import {LeaveGroup} from "@/components/groups/LeaveGroup";
+import {useTranslations} from "next-intl";
 
 const SingleGroup = ({ data, userGroups, setUserGroups }) => {
     const isDesktop = useMediaQuery({ query: "(min-width: 1024px)" })
@@ -24,6 +25,7 @@ const SingleGroup = ({ data, userGroups, setUserGroups }) => {
     const [openDelete, setOpenDelete] = useState(false);
     const {user} = useAuth()
     const [openLeaveGroup, setOpenLeaveGroup] = useState(false)
+    const t = useTranslations('groups')
 
     const isOwner = data?.prefs?.creatorEmail === user.email;
 
@@ -43,7 +45,7 @@ const SingleGroup = ({ data, userGroups, setUserGroups }) => {
         setUserGroups(prev=> prev.filter((item)=> item.$id !== groupID))
         setOpenDelete(false);
         setOpen(false);
-        toast.success("Deleted!", ToastOptions);
+        toast.success(t('alertGroupDeleted'), ToastOptions);
     }
 
     const onLeaveGroup = async(groupID) =>{
@@ -53,7 +55,7 @@ const SingleGroup = ({ data, userGroups, setUserGroups }) => {
         await teams.deleteMembership(data.$id, tempMembershipID.$id);
         setUserGroups(prev=> prev.filter((item)=> item.$id !== groupID))
         setOpen(false)
-        toast.success("You just left the Group.", ToastOptions);
+        toast.success(t('alertGroupLeft'), ToastOptions);
         setOpenLeaveGroup(false)
     }
 
@@ -63,7 +65,7 @@ const SingleGroup = ({ data, userGroups, setUserGroups }) => {
             <SheetTrigger className={'relative w-full text-left py-4 flex gap-4 items-center justify-between hover:bg-white/70 transition-all duration-300 px-5'}>
                 <span className={'flex flex-col gap-1'}>
                     <span className={'font-medium'}>{data.name}</span>
-                    <span className={'text-muted-foreground text-sm'}>{data.total-1} members</span>
+                    <span className={'text-muted-foreground text-sm lowercase'}>{data.total} {t('labelMembers')}</span>
                 </span>
                 {isOwner ? <ShieldCheck className={'w-5 h-5 text-primary'}/> : <Users2 className={'w-5 h-5 text-primary'}/>}
             </SheetTrigger>
@@ -87,13 +89,13 @@ const SingleGroup = ({ data, userGroups, setUserGroups }) => {
                         <div className={'flex flex-col gap-4'}>
                             <Text className={'font-semibold flex items-center gap-2 text-primary'}>
                                 <Users2 className={'w-5 h-5'}/>
-                                Members in Group
+                                {t('labelMembersInGroup')}
                             </Text>
 
                             <div className={'flex flex-col divide-y bg-background rounded-lg'}>
                                 {usersInGroup.length===0 &&
                                     <div className={'relative overflow-hidden flex items-center justify-between px-4 py-3'}>
-                                        No Members in Group.
+                                        {t('labelNoMembersInGroup')}
                                     </div>
                                 }
                                 {usersInGroup?.map((person)=>(
@@ -113,7 +115,7 @@ const SingleGroup = ({ data, userGroups, setUserGroups }) => {
                             <div className={'flex flex-col gap-4 bg-background -mx-6 px-6 py-6'}>
                                 <Text className={'font-semibold flex items-center gap-2 text-primary'}>
                                     <Plus className={'w-5 h-5'}/>
-                                    Add Members
+                                    {t('labelAddMembers')}
                                 </Text>
                                 <AddGroupMember groupID={data.$id} setUsersInGroup={setUsersInGroup} />
                             </div>
@@ -131,7 +133,7 @@ const SingleGroup = ({ data, userGroups, setUserGroups }) => {
                                 onClick={()=> setOpenLeaveGroup(true)}
                             >
                                 <ExitIcon className={'-scale-x-100 w-3.5 h-3.5'}/>
-                                <span>Leave Group</span>
+                                <span>{t('btnLeaveGroup')}</span>
                             </Button>
                         :
                             <div className={"flex flex-row justify-end gap-4"}>

@@ -13,6 +13,7 @@ import {ToastOptions} from "@/lib/ToastOptions";
 import {SheetDescription, SheetHeader, SheetTitle, SheetContent, Sheet} from "@/components/ui/sheet";
 import Text from "@/components/theme/Text";
 import {UISheetFooter} from "@/components/theme/UISheetFooter";
+import {useTranslations} from "next-intl";
 
 const AddEventItemSchema = Yup.object().shape({
 	name: Yup.string()
@@ -25,10 +26,11 @@ const AddEventItemSchema = Yup.object().shape({
 		.required("required"),
 	details: Yup.string().min(1).max(500, "max 500 characters"),
 });
-export const EditEventItem = ({ open, onOpenChange, item, setItemSheet }) => {
+export const EditEventItem = ({ open, onOpenChange, item }) => {
 	const isDesktop = useMediaQuery({
 		query: "(min-width: 1024px)",
 	});
+	const t = useTranslations('events')
 
 	const [adding, setAdding] = useState(false);
 	const [disabled, setDisabled] = useState(false);
@@ -45,7 +47,7 @@ export const EditEventItem = ({ open, onOpenChange, item, setItemSheet }) => {
 			values.details === item.details
 		) {
 			toast({
-				title: "No changes detected!",
+				title: t('alertNothingToUpdate'),
 				variant: "info",
 			});
 
@@ -63,12 +65,11 @@ export const EditEventItem = ({ open, onOpenChange, item, setItemSheet }) => {
 			};
 
 			await db.eventItems.update(eventItemData, item.$id);
-			toast.success("Updated!", ToastOptions);
+			toast.success(t('alertEventItemUpdated'), ToastOptions);
 			setAdding(false);
 			setDisabled(false);
-			setItemSheet(true)
 		} catch (error) {
-			toast.error(`Update failed: ${error}`, ToastOptions);
+			toast.error(t('alertException'), ToastOptions);
 			setAdding(false);
 			setDisabled(false);
 		}
@@ -86,7 +87,7 @@ export const EditEventItem = ({ open, onOpenChange, item, setItemSheet }) => {
 				<SheetHeader className={'hidden'}><SheetTitle/><SheetDescription /></SheetHeader>
 
 				<div className="flex flex-col gap-5 max-w-lg mx-auto items-center lg:py-10">
-					<Text className={'text-primary self-start py-6'} variant={'h2'}>Edit Record</Text>
+					<Text className={'text-primary self-start py-6'} variant={'h2'}>{t('editEventItem')}</Text>
 					<Formik
 						initialValues={{
 							name: item.name,
@@ -103,7 +104,7 @@ export const EditEventItem = ({ open, onOpenChange, item, setItemSheet }) => {
 							<Form className="flex flex-col w-full space-y-6">
 								<div className="flex flex-col">
 									<FormLabel
-										title="Name of Person"
+										title={t('labelItemName')}
 										errors={errors.name}
 										touched={touched.name}
 									/>
@@ -117,7 +118,7 @@ export const EditEventItem = ({ open, onOpenChange, item, setItemSheet }) => {
 								</div>
 								<div className="flex flex-col">
 									<FormLabel
-										title="Amount"
+										title={t('labelItemAmount')}
 										errors={errors.amount}
 										touched={touched.amount}
 									/>
@@ -138,7 +139,7 @@ export const EditEventItem = ({ open, onOpenChange, item, setItemSheet }) => {
 								</div>
 								<div className="flex flex-col">
 									<FormLabel
-										title="Detailes (if any)"
+										title={t('labelItemDetails')}
 										errors={errors.details}
 										touched={touched.details}
 									/>
@@ -155,7 +156,6 @@ export const EditEventItem = ({ open, onOpenChange, item, setItemSheet }) => {
 									adding={adding}
 									disabled={disabled}
 									onOpenChange={onOpenChange}
-									labelAction={'Save Changes'}
 								/>
 							</Form>
 						)}

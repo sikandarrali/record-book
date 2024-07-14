@@ -1,15 +1,23 @@
 import "@/styles/globals.css";
 import { Inter as FontSans } from "next/font/google";
+import {Noto_Nastaliq_Urdu} from "@next/font/google";
 
 import PagesProvider from "@/components/providers/PagesProvider";
 import Providers from "@/components/providers/Providers";
 import { cn } from "@/lib/utils";
 import {NetworkStatusIndicator} from "@/components/NetworkStatus/NetworkStatusIndicator";
 import HolyLoader from "holy-loader";
+import {NextIntlClientProvider} from 'next-intl';
+import {getLocale, getMessages} from 'next-intl/server';
 
 const fontSans = FontSans({
 	subsets: ["latin"],
 	variable: "--font-sans",
+});
+
+const fontUrdu = Noto_Nastaliq_Urdu({
+	subsets: ["latin"],
+	variable: "--font-urdu"
 });
 
 const APP_NAME = "Shadi Kharcha";
@@ -57,7 +65,13 @@ export const viewport = {
 	themeColor: "#FFFFFF",
 };
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+
+	const locale = await getLocale();
+
+	// Providing all messages to the client
+	// side is the easiest way to get started
+	const messages = await getMessages();
 
 	return (
 		<html lang="en" suppressHydrationWarning>
@@ -71,23 +85,25 @@ export default function RootLayout({ children }) {
 			<body
 				className={cn(
 					"min-h-screen bg-background font-sans antialiased",
-					fontSans.variable
+					fontSans.variable, fontUrdu.variable
 				)}
 			>
-				<NetworkStatusIndicator />
+				<NextIntlClientProvider messages={messages}>
+					<NetworkStatusIndicator />
 
-				{/* topbar loader */}
-				<HolyLoader
-					color="#E11D48"
-					height="4px"
-					speed={250}
-					easing="linear"
-					showSpinner
-				/>
+					{/* topbar loader */}
+					<HolyLoader
+						color="#E11D48"
+						height="4px"
+						speed={250}
+						easing="linear"
+						showSpinner
+					/>
 
-				<Providers>
-					<PagesProvider>{children}</PagesProvider>
-				</Providers>
+					<Providers>
+						<PagesProvider>{children}</PagesProvider>
+					</Providers>
+				</NextIntlClientProvider>
 			</body>
 		</html>
 	);

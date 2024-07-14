@@ -24,6 +24,7 @@ import {
 import {SearchItems} from "@/components/event-items/SearchItems";
 import {ReloadIcon} from "@radix-ui/react-icons";
 import {useAuth} from "@/components/contexts/AuthContext";
+import {useTranslations} from "next-intl";
 // import {toast} from "react-toastify";
 // import {ToastOptions} from "@/lib/ToastOptions";
 
@@ -31,6 +32,7 @@ const SingleEventModal = ({ eventData }) => {
     const isDesktop = useMediaQuery({ query: "(min-width: 1024px)" })
     const [isOpen, setIsOpen] = useState(false)
     const headerRef = useRef(null);
+    const t = useTranslations('events');
 
     const [openAddModal, setOpenAddModal] = useState(false);
     const [totalSum, setTotalSum] = useState(0);
@@ -243,7 +245,7 @@ const SingleEventModal = ({ eventData }) => {
                             />
 
                             <Text variant={'sm'} className={'py-1.5 font-medium bg-muted -mx-6 flex items-center justify-center px-6 gap-2 text-muted-foreground'}>
-                                Total Entries: <span className={'text-primary font-semibold text-base'}>{items.length}</span>
+                                {t('totalEntries')} <span className={'text-primary font-semibold text-base'}>{items.length}</span>
                             </Text>
 
                             <div className="flex flex-col -mx-6 overflow-y-auto">
@@ -256,7 +258,7 @@ const SingleEventModal = ({ eventData }) => {
 
                                 {items.length > 0 &&
                                     <div className={'flex flex-col w-full justify-center items-center mt-8 !border-t-0'}>
-                                        {!hasMoreItems && <div className="mt-4 font-medium italic text-muted-foreground text-center">No more items</div>}
+                                        {!hasMoreItems && <div className="mt-4 font-medium italic text-muted-foreground text-center">{t('allItemsShown')}</div>}
 
                                         {loadingItems ? (
                                             <Button
@@ -267,7 +269,7 @@ const SingleEventModal = ({ eventData }) => {
                                                 className={'w-40'}
                                             >
                                                 <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
-                                                Loading...
+                                                {t('btnLoading')}
                                             </Button>
                                         ) :
                                             hasMoreItems && items.length > itemsPerPage &&
@@ -277,7 +279,7 @@ const SingleEventModal = ({ eventData }) => {
                                                     size={'lg'}
                                                     className={'w-40'}
                                                 >
-                                                    Load more
+                                                    {t('btnLoadMore')}
                                                 </Button>
                                         }
                                     </div>

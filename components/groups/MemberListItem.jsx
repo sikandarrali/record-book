@@ -12,12 +12,14 @@ import {
     TooltipTrigger,
 } from "@/components/ui/tooltip"
 import {Button} from "@/components/ui/button";
+import {useTranslations} from "next-intl";
 
 
 export const MemberListItem = ({data, teamID, setUsersInGroup, groupName, isGroupOwner}) =>{
 
     const isOwner =  data.roles.includes('owner');
     const isMember = !isOwner
+    const t = useTranslations('groups')
 
     const [openDelete, setOpenDelete] = useState(false)
     const {user} = useAuth()
@@ -28,7 +30,7 @@ export const MemberListItem = ({data, teamID, setUsersInGroup, groupName, isGrou
             data.$id // membershipId
         );
         if(result){
-            toast.success("User removed from Group", ToastOptions);
+            toast.success(t('alertGroupMemberRemoved'), ToastOptions);
             setUsersInGroup(prev=> prev.filter((item)=> item.$id !== data.$id))
         }
     }
@@ -41,15 +43,15 @@ export const MemberListItem = ({data, teamID, setUsersInGroup, groupName, isGrou
 
                 {data.confirm ?
                     <div className={'flex gap-2 items-center text-xs'}>
-                        {isOwner  && <Badge variant={'secondary'}>Admin</Badge>}
-                        {isMember && <Badge variant={'outline'} className={'text-green-500 border-green-500'}>Member</Badge>}
-                        {user.email === data.userEmail && <Badge>You</Badge>}
+                        {isOwner  && <Badge variant={'secondary'}>{t('badgeAdmin')}</Badge>}
+                        {isMember && <Badge variant={'outline'} className={'text-green-500 border-green-500'}>{t('badgeMember')}</Badge>}
+                        {user.email === data.userEmail && <Badge>{t('badgeYou')}</Badge>}
                     </div>
                     :
                     <Tooltip>
                         <TooltipTrigger><Badge variant={'outline'} className={'text-xs bg-white border-destructive text-destructive'}>pending</Badge></TooltipTrigger>
                         <TooltipContent className={'bg-foreground'}>
-                            <p className={'font-semibold'}>User has not accepted invitation.</p>
+                            <p className={'font-semibold'}>{t('tooltipPendingUser')}</p>
                         </TooltipContent>
                     </Tooltip>
                 }

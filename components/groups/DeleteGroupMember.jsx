@@ -8,8 +8,10 @@ import {
 } from "@/components/ui/alert-dialog";
 import {UIDialogFooter} from "@/components/theme/UIDialogFooter";
 import {TriangleAlert} from "lucide-react";
+import {useTranslations} from "next-intl";
 
 export const DeleteGroupMember = ({ open, onOpenChange, userEmail, onDelete, groupName }) => {
+	const t = useTranslations('groups')
 	return (
 		<AlertDialog open={open} onOpenChange={onOpenChange}>
 
@@ -18,17 +20,17 @@ export const DeleteGroupMember = ({ open, onOpenChange, userEmail, onDelete, gro
 					<AlertDialogHeader className={'!text-left'}>
 						<AlertDialogTitle className={'text-primary flex items-center justify-center gap-2'}>
 							<TriangleAlert className={'w-5 h-5'}/>
-							<span>Remove User</span>
+							<span>{t('deleteGroupMember')}</span>
 						</AlertDialogTitle>
 						<AlertDialogDescription className={"flex flex-col text-base text-center items-center gap-1 !my-5"}>
-							<span>Do you really want to remove</span>
+							<span>{t('deleteGroupMemberText1')}</span>
 							<span className={'font-semibold text-primary'}>{userEmail}</span>
-							<span>from <span className={'font-semibold'}>{groupName}</span> Group.</span>
-							<span className={'mt-4 font-semibold'}>They will not be able to access Events Data anymore.</span>
+							<span>{t('deleteGroupMemberText2')} <span className={'font-semibold'}>{groupName}</span></span>
+							<span className={'mt-4 font-semibold'}>{t('deleteGroupMemberText3')}</span>
 						</AlertDialogDescription>
 					</AlertDialogHeader>
 
-					<UIDialogFooter onDelete={onDelete} onOpenChange={onOpenChange}/>
+					<UIDialogFooter onDelete={onDelete} onOpenChange={onOpenChange} actionLabel={t('btnYesRemove')}/>
 				</AlertDialogContent>
 			</AlertDialog>
 

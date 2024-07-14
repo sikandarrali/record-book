@@ -26,6 +26,7 @@ import {useData} from "@/components/contexts/DataContext";
 import Text from "@/components/theme/Text";
 import {SheetStylesFlexibleHeight} from "@/lib/reusableStyles";
 import {UISheetFooter} from "@/components/theme/UISheetFooter";
+import {useTranslations} from "next-intl";
 
 
 const AddEventSchema = Yup.object().shape({
@@ -46,6 +47,7 @@ export const AddEvent = ({ open, onOpenChange }) => {
 	const {user} = useAuth()
 	const {userOwnedGroups} = useData()
 	const [addEventDetails, setAddEventDetails] = useState(false)
+	const t = useTranslations('events')
 
 	const onAdd = async (values) => {
 		setAdding(true);
@@ -73,12 +75,12 @@ export const AddEvent = ({ open, onOpenChange }) => {
 			}
 
 			onOpenChange(false);
-			toast.success("Event created", ToastOptions);
+			toast.success(t("alertEventCreated"), ToastOptions);
 			setAdding(false);
 			setDisabled(false);
 			scrollToTop()
 		} catch (error) {
-			toast.error(`Unable to Add: ${error}`, ToastOptions);
+			toast.error(t('alertException'), ToastOptions);
 			setAdding(false);
 			setDisabled(false);
 		}
@@ -97,7 +99,7 @@ export const AddEvent = ({ open, onOpenChange }) => {
 					{/* Date & Close */}
 					<div className="flex items-center space-x-2 justify-between mb-4">
 						<div className="flex items-center text-xl pt-2 space-x-2 font-semibold text-primary">
-							Add New Event
+							{t('addEvent')}
 						</div>
 					</div>
 
@@ -120,19 +122,19 @@ export const AddEvent = ({ open, onOpenChange }) => {
 
 									<div className="flex flex-col">
 										<Label className={"relative text-sm flex items-center justify-between gap-4"}>
-											<span className="shrink-0">Share with Group</span>
+											<span className="shrink-0">{t('labelShareWithGroup')}</span>
 										</Label>
 										<div className={'flex gap-4 items-center relative'}>
 											<Select onValueChange={(selected)=> setSelectedGroup(selected)} key={selectedGroup}>
 												<SelectTrigger className="w-full h-12 flex between">
-													{selectedGroup ? userOwnedGroups.find((group)=> group.$id=== selectedGroup)?.name : 'Select Group'}
+													{selectedGroup ? userOwnedGroups.find((group)=> group.$id=== selectedGroup)?.name : t('selectGroupPlaceholder')}
 												</SelectTrigger>
 												<SelectContent>
 													{userOwnedGroups.length===0 &&
 														<SelectItem
 															value={null}
 														>
-															No Groups found, add first
+															{t('groupNotFound')}
 														</SelectItem>
 													}
 													{userOwnedGroups?.map((u)=>(
@@ -161,7 +163,7 @@ export const AddEvent = ({ open, onOpenChange }) => {
 
 									<div className="flex flex-col">
 										<FormLabel
-											title="Event Name"
+											title={t('labelName')}
 											errors={errors.name}
 											touched={touched.name}
 										/>
@@ -178,14 +180,14 @@ export const AddEvent = ({ open, onOpenChange }) => {
 										onClick={()=> setAddEventDetails(!addEventDetails)}
 									>
 										{addEventDetails ? <XIcon className={'w-4 h-4'}/> : <Plus className={'w-4 h-4'}/>}
-										<Text variant={'sm'} className={'font-medium'}>Add Date, Venue & Details etc.</Text>
+										<Text variant={'sm'} className={'font-medium'}>{t('addMoreDetailsText')}</Text>
 									</div>
 
 									{addEventDetails &&
 										<>
 											<div className="flex flex-col">
 												<FormLabel
-													title="Event Date"
+													title={t('labelDate')}
 													errors={errors.date}
 													touched={touched.date}
 												/>
@@ -198,7 +200,7 @@ export const AddEvent = ({ open, onOpenChange }) => {
 											</div>
 											<div className="flex flex-col">
 												<FormLabel
-													title="Venue"
+													title={t('labelVenue')}
 													errors={errors.venue}
 													touched={touched.venue}
 												/>
@@ -211,7 +213,7 @@ export const AddEvent = ({ open, onOpenChange }) => {
 											</div>
 											<div className="flex flex-col">
 												<FormLabel
-													title="Detailes (if any)"
+													title={t('labelDetails')}
 													errors={errors.details}
 													touched={touched.details}
 												/>
@@ -229,7 +231,8 @@ export const AddEvent = ({ open, onOpenChange }) => {
 										adding={adding}
 										disabled={disabled}
 										onOpenChange={onOpenChange}
-										labelAction={'Save Entry'}
+										labelAction={t('btnSaveEntry')}
+										labelCancel={t('btnCancel')}
 									/>
 								</Form>
 							)}
