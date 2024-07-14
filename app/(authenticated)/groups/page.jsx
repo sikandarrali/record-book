@@ -50,12 +50,9 @@ export default function Page() {
 
             <div className={'flex flex-col bg-muted rounded-lg relative shadow'}>
 
-                {userGroups.length === 0 ?
-                    <div className={'px-5 py-6 italic'}>{`You don't have any groups`}</div>
-                    : userGroups.map((data)=>(
-                        <SingleGroup data={data} key={data.$id} />
-                    ))
-                }
+                {userGroups.map((data)=>(
+                    <SingleGroup data={data} key={data.$id} />
+                ))}
 
             </div>
 
