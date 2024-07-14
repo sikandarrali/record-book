@@ -16,6 +16,8 @@ import {ToastOptions} from "@/lib/ToastOptions";
 import {teams} from "@/components/appwrite/appwrite";
 import {ID} from "appwrite";
 import {useAuth} from "@/components/contexts/AuthContext";
+import {useData} from "@/components/contexts/DataContext";
+import {useRouter} from "next/navigation";
 
 const AddGroupSchema = Yup.object().shape({
     name: Yup.string()
@@ -24,11 +26,14 @@ const AddGroupSchema = Yup.object().shape({
         .required("required"),
 });
 
-export const AddGroup = ({ open, onOpenChange, refresh, setGroups }) => {
+export const AddGroup = ({ open, onOpenChange }) => {
     const isDesktop = useMediaQuery({ query: "(min-width: 1024px)" });
     const [adding, setAdding] = useState(false);
     const [disabled, setDisabled] = useState(false);
     const {user} = useAuth()
+    const {userGroups, setUserGroups} = useData()
+    const router = useRouter()
+
 
     const onAdd = async (values) => {
         setAdding(true);
@@ -46,8 +51,13 @@ export const AddGroup = ({ open, onOpenChange, refresh, setGroups }) => {
             toast.success("Group created", ToastOptions);
             setAdding(false);
             setDisabled(false);
-            setGroups(prev=> [...prev, response])
-            scrollToTop()
+            setUserGroups(prev=> [...prev, response])
+
+            // refetchs Teams since there's no realtime channel to get team updates
+            setTimeout(()=>{
+                window.location.reload();
+            }, 1500)
+
         } catch (error) {
             toast.error(`Unable to Add: ${error}`, ToastOptions);
             setAdding(false);

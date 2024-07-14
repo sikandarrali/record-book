@@ -16,6 +16,7 @@ import {ToastOptions} from "@/lib/ToastOptions";
 import {toast} from "react-toastify";
 import {teams} from "@/components/appwrite/appwrite";
 import {ID} from "appwrite";
+import {useData} from "@/components/contexts/DataContext";
 
 const EditGroupSchema = Yup.object().shape({
     name: Yup.string()
@@ -24,13 +25,15 @@ const EditGroupSchema = Yup.object().shape({
         .required("required"),
 });
 
-export const EditGroup = ({ open, onOpenChange, data, groups, setGroups}) => {
+export const EditGroup = ({ open, onOpenChange, data}) => {
     const isDesktop = useMediaQuery({
         query: "(min-width: 1024px)",
     });
 
     const [adding, setAdding] = useState(false);
     const [disabled, setDisabled] = useState(false);
+
+    const {userGroups, setUserGroups} = useData()
 
     const onUpdate = async (values) => {
         setAdding(true);
@@ -52,14 +55,14 @@ export const EditGroup = ({ open, onOpenChange, data, groups, setGroups}) => {
             await teams.updateName(data.$id, values.name);
             toast.success("Group Name Updated", ToastOptions);
 
-            const tempGroups = groups.map((g)=>{
+            const tempGroups = userGroups.map((g)=>{
                 if(g.$id=== data.$id){
                     return{...g, name:values.name}
                 }else{
                     return {...g}
                 }
             })
-            setGroups(tempGroups);
+            setUserGroups(tempGroups);
 
             setAdding(false);
             setDisabled(false);
