@@ -15,7 +15,7 @@ import {
 import {Button} from "@/components/ui/button";
 
 
-export const MemberListItem = ({data, teamID, setRefetchMembers, groupName, isGroupOwner}) =>{
+export const MemberListItem = ({data, teamID, setUsersInGroup, setRefetchMembers, groupName, isGroupOwner}) =>{
 
     const isOwner =  data.roles.includes('owner');
     const isMember = !isOwner
@@ -30,7 +30,7 @@ export const MemberListItem = ({data, teamID, setRefetchMembers, groupName, isGr
         );
         if(result){
             toast.success("User removed from Group", ToastOptions);
-            setRefetchMembers(prev=>!prev)
+            setUsersInGroup(prev=> prev.filter((item)=> item.$id !== data.$id))
         }
     }
 

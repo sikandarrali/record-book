@@ -143,6 +143,13 @@ export const AddEvent = ({ open, onOpenChange, refreshItems, setRefreshItems }) 
 													{selectedGroup ? userOwnedGroups.find((group)=> group.$id=== selectedGroup)?.name : 'Select Group'}
 												</SelectTrigger>
 												<SelectContent>
+													{userOwnedGroups.length===0 &&
+														<SelectItem
+															value={null}
+														>
+															No Groups found, add first
+														</SelectItem>
+													}
 													{userOwnedGroups?.map((u)=>(
 														<SelectItem
 															key={u.$id}

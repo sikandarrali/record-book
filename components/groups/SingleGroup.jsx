@@ -36,7 +36,7 @@ import {ExitIcon} from "@radix-ui/react-icons";
 import {LeaveGroup} from "@/components/groups/LeaveGroup";
 import {useData} from "@/components/contexts/DataContext";
 
-const SingleGroup = ({ data, setGroups, groups, userGroups, setUserGroups }) => {
+const SingleGroup = ({ data, userGroups, setUserGroups }) => {
     const isDesktop = useMediaQuery({ query: "(min-width: 1024px)" })
     const [open, setOpen] = useState(false)
     const [usersInGroup, setUsersInGroup] = useState([])
@@ -52,7 +52,6 @@ const SingleGroup = ({ data, setGroups, groups, userGroups, setUserGroups }) => 
         if(open){
             const result = userGroups.some((item)=> item.$id === data.$id && item.prefs.creatorEmail === user.email)
             setIsOwner(result)
-            console.log(userGroups)
         }
     }, [open, userGroups]);
 
@@ -79,12 +78,12 @@ const SingleGroup = ({ data, setGroups, groups, userGroups, setUserGroups }) => 
     return (
 
         <Sheet open={open} onOpenChange={setOpen} defaultOpen={false}>
-            <SheetTrigger className={'relative text-left py-5 flex gap-4 justify-between border-b last-of-type:border-b-0 hover:bg-white/70 transition-all duration-300 px-5'}>
+            <SheetTrigger className={'relative w-full text-left py-5 flex gap-4 justify-between border-b last-of-type:border-b-0 hover:bg-white/70 transition-all duration-300 px-5'}>
                 <span>{data.name}</span>
                 {isOwner ? <ShieldCheck className={'w-5 h-5 text-primary'}/> : <Users2 className={'w-5 h-5 text-primary'}/>}
             </SheetTrigger>
             <SheetContent
-                className={cn("pb-8 lg:pb-14 overflow-auto max-h-[85vh] lg:max-h-screen bg-muted overflow-hidden")}
+                className={cn("pb-8 lg:pb-14 overflow-auto max-h-[85vh] lg:max-h-screen bg-muted")}
                 side={isDesktop ? "right" : "bottom"}
                 onOpenAutoFocus={(e) => e.preventDefault()}
             >
@@ -117,9 +116,9 @@ const SingleGroup = ({ data, setGroups, groups, userGroups, setUserGroups }) => 
                                         data={person}
                                         key={person.$id}
                                         teamID={data.$id}
-                                        setRefetchMembers={setRefetchMembers}
                                         groupName={data.name}
                                         isGroupOwner={isOwner}
+                                        setUsersInGroup={setUsersInGroup}
                                     />
                                 ))}
                             </div>
@@ -188,8 +187,8 @@ const SingleGroup = ({ data, setGroups, groups, userGroups, setUserGroups }) => 
                 data={data}
                 open={openEdit}
                 onOpenChange={setOpenEdit}
-                groups={groups}
-                setGroups={setGroups}
+                userGroups={userGroups}
+                setUserGroups={setUserGroups}
             />
             <DeleteGroup
                 groupName={data.name}
