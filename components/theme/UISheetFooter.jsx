@@ -1,7 +1,9 @@
 import {Button} from "@/components/ui/button";
 import {Loader2Icon} from "lucide-react";
+import {useTranslations} from "next-intl";
 
 export const UISheetFooter = ({disabled, adding, onOpenChange, labelAction, labelCancel }) =>{
+    const t = useTranslations('general.btn')
     return(
         <div className={'flex flex-col w-full gap-2.5'}>
             <Button
@@ -15,7 +17,7 @@ export const UISheetFooter = ({disabled, adding, onOpenChange, labelAction, labe
                     <>
                         <Loader2Icon className="animate animate-spin w-5 h-5 stroke-[3]" />
                     </>
-                ) : labelAction
+                ) : labelAction || t('saveChanges')
                 }
             </Button>
             <Button
@@ -27,7 +29,7 @@ export const UISheetFooter = ({disabled, adding, onOpenChange, labelAction, labe
                 type={'button'}
                 onClick={()=> onOpenChange(false)}
             >
-                {labelCancel || "Cancel"}
+                {labelCancel || t('cancel')}
             </Button>
         </div>
     )

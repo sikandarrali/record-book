@@ -20,6 +20,7 @@ import {scrollToTop} from "@/lib/utils";
 import {Permission, Role} from "appwrite";
 import {useAuth} from "@/components/contexts/AuthContext";
 import {UISheetFooter} from "@/components/theme/UISheetFooter";
+import {useTranslations} from "next-intl";
 
 const AddEventItemSchema = Yup.object().shape({
 	name: Yup.string()
@@ -41,6 +42,7 @@ export const AddEventItem = ({open, onOpenChange, eventData}) => {
 	});
 	const {user} = useAuth()
 	const eventID = eventData.$id
+	const t = useTranslations('events')
 
 	useScrollToView()
 
@@ -72,19 +74,17 @@ export const AddEventItem = ({open, onOpenChange, eventData}) => {
 				await db.eventItems.create(eventItemData);
 			}
 			onOpenChange(false);
-			toast.success("New Item Added", ToastOptions);
+			toast.success(t('alertEventItemCreated'), ToastOptions);
 			setAdding(false);
 			setDisabled(false);
 			scrollToTop()
 		} catch (error) {
-			toast.error(`Unable to Add: ${error}`, ToastOptions);
+			toast.error(t('alertException'), ToastOptions);
 			setAdding(false);
 			setDisabled(false);
 		}
 
 	};
-
-	// console.log(eventData.teamId)
 
 	return (
 		<Sheet open={open} onOpenChange={onOpenChange}>
@@ -96,7 +96,7 @@ export const AddEventItem = ({open, onOpenChange, eventData}) => {
 				<SheetHeader className={'hidden'}><SheetTitle/><SheetDescription /></SheetHeader>
 
 				<div className="flex flex-col gap-5 max-w-lg mx-auto items-center lg:py-10">
-					<Text className={'text-primary self-start py-6'} variant={'h2'}>Add New Record</Text>
+					<Text className={'text-primary self-start py-6'} variant={'h2'}>{t('addEventItem')}</Text>
 
 					<Formik
 						initialValues={{
@@ -119,7 +119,7 @@ export const AddEventItem = ({open, onOpenChange, eventData}) => {
 							<Form className="flex flex-col w-full space-y-6">
 								<div className="flex flex-col">
 									<FormLabel
-										title="Name of Person"
+										title={t('labelItemName')}
 										errors={errors.name}
 										touched={touched.name}
 									/>
@@ -132,7 +132,7 @@ export const AddEventItem = ({open, onOpenChange, eventData}) => {
 								</div>
 								<div className="flex flex-col">
 									<FormLabel
-										title="Amount"
+										title={t('labelItemAmount')}
 										errors={errors.amount}
 										touched={touched.amount}
 									/>
@@ -152,7 +152,7 @@ export const AddEventItem = ({open, onOpenChange, eventData}) => {
 								</div>
 								<div className="flex flex-col">
 									<FormLabel
-										title="Detailes (if any)"
+										title={t('labelItemDetails')}
 										errors={errors.details}
 										touched={touched.details}
 									/>
@@ -168,7 +168,6 @@ export const AddEventItem = ({open, onOpenChange, eventData}) => {
 									adding={adding}
 									disabled={disabled}
 									onOpenChange={onOpenChange}
-									labelAction={'Save Entry'}
 								/>
 							</Form>
 						)}

@@ -8,6 +8,7 @@ import {ChevronDown, ChevronUp, Info, ShieldCheck, Users2} from "lucide-react";
 import {AddGroup} from "@/components/groups/AddGroup";
 import SingleGroup from "@/components/groups/SingleGroup";
 import {teams} from "@/components/appwrite/appwrite";
+import {useTranslations} from "next-intl";
 
 export default function Page() {
 
@@ -15,6 +16,7 @@ export default function Page() {
     const [userGroups, setUserGroups] = useState([])
     const [refresh, setRefresh] = useState([])
     const [showInformation, setShowInformation] = useState(false)
+    const t = useTranslations('groups')
 
     const getUserGroups = async () =>{
         const tempGroups = await teams.list()
@@ -26,27 +28,29 @@ export default function Page() {
 
     return (
         <PageContainer hideTopbar>
-            <Text variant="h2" className={'mb-2'}>Groups</Text>
-            <Text className={'text-base'}>Groups are a way of sharing your Events Data with others. When a new user is added they will receive an invitation email to join the group.</Text>
+            <Text variant="h2" className={'mb-2'}>{t('title')}</Text>
+            <Text className={'text-base'}>{t('text')}</Text>
 
         <div className={'bg-muted py-4 px-6 rounded-lg mt-2 cursor-pointer'} onClick={()=> setShowInformation(!showInformation)} >
                 <Text className={'flex items-center justify-between gap-2 font-medium text-primary'}>
-                    <span className={'flex items-center gap-2'}><Info className={'w-4 h-4'}/> Important Information</span>
+                    <span className={'flex items-center gap-2'}><Info className={'w-4 h-4'}/> {t('information')}</span>
                     {showInformation ? <ChevronUp className={'w-5 h-5 mt-1 stroke-[3]'} /> : <ChevronDown  className={'w-5 h-5 mt-1 stroke-[3]'} />}
                 </Text>
                 {showInformation &&
                     <ul className={'list-disc pl-4 gap-2 mt-2 flex flex-col'}>
-                        <li><Text variant={'sm'}>Added user will be able to <span className={'font-semibold'}>Add</span>, <span className={'font-semibold'}>Update</span>, <span className={'font-semibold'}>Delete</span> and <span className={'font-semibold'}>View</span> Events and all its Data</Text></li>
-                        <li><Text variant={'sm'}>User need to accept invitation sent to them via email before they can manage shared data</Text></li>
-                        <li><Text variant={'sm'} className={'flex flex-col gap-1'}>
-                            <span className={'flex gap-1 items-center'}><ShieldCheck className={'w-4 h-4 text-primary'}/> {`indicates Groups you've created`}</span>
-                            <span className={'flex gap-1 items-center'}><Users2 className={'w-4 h-4 text-primary'}/> {`indicates Groups you've joined`}</span>
-                        </Text></li>
+                        <li><Text variant={'sm'}>{t('informationP1')}</Text></li>
+                        <li><Text variant={'sm'}>{t('informationP2')}</Text></li>
+                        <li><Text variant={'sm'}>{t('informationP3')}</Text></li>
+
+                        {/*<li><Text variant={'sm'} className={'flex flex-col gap-1'}>*/}
+                        {/*    <span className={'flex gap-1 items-center'}><ShieldCheck className={'w-4 h-4 text-primary'}/> {`indicates Groups you've created`}</span>*/}
+                        {/*    <span className={'flex gap-1 items-center'}><Users2 className={'w-4 h-4 text-primary'}/> {`indicates Groups you've joined`}</span>*/}
+                        {/*</Text></li>*/}
                     </ul>
                 }
             </div>
 
-            <Text className={'py-2 mt-4 font-semibold text-primary'}>Your Groups</Text>
+            <Text className={'py-2 mt-4 font-semibold text-primary'}>{t('labelYourGroups')}</Text>
 
             <motion.div
                 initial={{opacity: 0, y: 10}}
@@ -56,7 +60,7 @@ export default function Page() {
                 className={'flex flex-col bg-muted rounded-lg relative shadow'}
             >
                 {userGroups.length === 0 ?
-                    <div className={'p-4 text-center italic'}>No Groups Found, Create New first </div>
+                    <Text className={'p-4 text-center italic'}>{t('noGroups')}</Text>
                     : userGroups.map((data, i)=>(
                         <motion.div
                             key={data.$id}
@@ -85,7 +89,7 @@ export default function Page() {
                     type={'submit'}
                     className={'mt-5'} onClick={()=> setOpenAddGroup(true)}
                 >
-                    Create new Group
+                    {t('btnCreateNewGroup')}
                 </Button>
             </motion.div>
 

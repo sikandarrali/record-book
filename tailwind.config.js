@@ -21,6 +21,7 @@ module.exports = {
 		extend: {
 			fontFamily: {
 				sans: ["var(--font-sans)", ...defaultTheme.fontFamily.sans],
+				urdu: ["var(--font-urdu)"],
 			},
 			colors: {
 				border: "hsl(var(--border))",

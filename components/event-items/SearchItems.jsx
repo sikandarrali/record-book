@@ -1,10 +1,12 @@
 import {useState} from "react";
 import {Input} from "@/components/ui/input";
 import {XIcon} from "lucide-react";
+import {useTranslations} from "next-intl";
 
 export const SearchItems = ({setVisibleItems, itemsPerPage, itemsDefault}) =>{
     const [searchValue, setSearchValue] = useState("");
     const [searchResultsMessage, setSearchResultsMessage] = useState('')
+    const t = useTranslations('events');
 
     const onSearch = (userValue) => {
         setSearchValue(userValue);
@@ -13,7 +15,7 @@ export const SearchItems = ({setVisibleItems, itemsPerPage, itemsDefault}) =>{
                 item.name.toLowerCase().includes(userValue.toLowerCase())
             );
             if(temp.length === 0){
-                setSearchResultsMessage('No Items Matching your Search')
+                setSearchResultsMessage('searchNoItems')
             }else{
                 setSearchResultsMessage('')
             }
@@ -31,8 +33,8 @@ export const SearchItems = ({setVisibleItems, itemsPerPage, itemsDefault}) =>{
     return(
         <div className="relative h-14 mb-4">
             <Input
-                className="text-[16px] h-full"
-                placeholder="Type to search..."
+                className="text-[16px] h-full normal-case"
+                placeholder={t('searchPlaceholder')}
                 value={searchValue}
                 onChange={(e) => onSearch(e.target.value)}
             />
@@ -47,7 +49,7 @@ export const SearchItems = ({setVisibleItems, itemsPerPage, itemsDefault}) =>{
             {searchValue !== '' && searchResultsMessage !== '' && (
                 <div className="flex flex-col justify-center items-center gap-10 px-6 mt-20">
                     <p className="text-center text-lg font-medium">
-                        {searchResultsMessage}
+                        {t(searchResultsMessage)}
                     </p>
                 </div>
             )}

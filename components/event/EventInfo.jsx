@@ -21,6 +21,7 @@ import {Query} from "appwrite";
 import {cn} from "@/lib/utils";
 import {useMediaQuery} from "react-responsive";
 import {getGroup} from "@/components/appwrite/appwrite";
+import {useTranslations} from "next-intl";
 
 const EventInfo = ({ eventData, sum }) => {
 	const isDesktop = useMediaQuery({ query: "(min-width: 1024px)" })
@@ -29,13 +30,14 @@ const EventInfo = ({ eventData, sum }) => {
 	const [openDelete, setOpenDelete] = useState(false);
 	const router = useRouter();
 	const [group, setGroup] = useState(null)
+	const t = useTranslations('events')
 
 	const onDelete = async () => {
 		await db.events.delete(eventData?.$id);
 		await DeleteAllItemsInThisEvent()
 		setOpenDelete(false);
 		setOpenDetails(false);
-		toast.success("Deleted!", ToastOptions);
+		toast.success(t('alertEventDeleted'), ToastOptions);
 		router.replace("/events");
 	};
 
@@ -104,21 +106,27 @@ const EventInfo = ({ eventData, sum }) => {
 						<Table className={'lg:mt-16'}>
 							<TableBody className="font-medium text-base">
 								<TableRow className={'border-b-muted'}>
-									<TableCell>Group</TableCell>
+									<TableCell>{t('labelGroup')}</TableCell>
 									<TableCell className="text-right">
 										{group?.name || <p className={'italic text-muted-foreground text-sm'}>Not Shared<br className={'flex md:hidden'}/>with any Group</p>}
 									</TableCell>
 								</TableRow>
 								<TableRow className={'border-b-muted'}>
-									<TableCell>Date</TableCell>
+									<TableCell>{t('labelDate')}</TableCell>
 									<TableCell className="text-right">
 										{eventData?.date || '-'}
 									</TableCell>
 								</TableRow>
 								<TableRow className={'border-b-muted'}>
-									<TableCell>Venue</TableCell>
+									<TableCell>{t('labelVenue')}</TableCell>
 									<TableCell className="text-right">
 										{eventData?.venue || '-'}
+									</TableCell>
+								</TableRow>
+								<TableRow className={'border-b-muted'}>
+									<TableCell>{t('labelDetails')}</TableCell>
+									<TableCell className="text-right">
+										{eventData?.details || '-'}
 									</TableCell>
 								</TableRow>
 							</TableBody>
@@ -127,7 +135,7 @@ const EventInfo = ({ eventData, sum }) => {
 						<div className={'mt-auto py-14 lg:py-0 flex flex-row items-center justify-between px-2'}>
 							<div className={"flex flex-row justify-end gap-4"}>
 								<Button
-									type="submit"
+									type="button"
 									variant="outline"
 									size="icon"
 									onClick={() => setOpenDelete(true)}
@@ -136,7 +144,7 @@ const EventInfo = ({ eventData, sum }) => {
 								</Button>
 
 								<Button
-									type="submit"
+									type="button"
 									variant="outline"
 									size="icon"
 									onClick={() => setOpenEdit(true)}
@@ -146,7 +154,7 @@ const EventInfo = ({ eventData, sum }) => {
 							</div>
 
 							<Button
-								type="submit"
+								type="button"
 								variant="outline"
 								size="icon"
 								// stretched

@@ -18,6 +18,8 @@ import {useAuth} from "@/components/contexts/AuthContext";
 import {Permission, Query, Role} from "appwrite";
 import {useData} from "@/components/contexts/DataContext";
 import {UISheetFooter} from "@/components/theme/UISheetFooter";
+import {useTranslations} from "next-intl";
+import {Label} from "@/components/ui/label";
 
 const EditEventSchema = Yup.object().shape({
 	name: Yup.string()
@@ -33,6 +35,7 @@ export const EditEvent = ({ open, onOpenChange, eventData, setGroup }) => {
 	const isDesktop = useMediaQuery({
 		query: "(min-width: 1024px)",
 	});
+	const t = useTranslations('events')
 	const [adding, setAdding] = useState(false);
 	const [disabled, setDisabled] = useState(false);
 	const [selectedGroup, setSelectedGroup] = useState(null)
@@ -89,7 +92,7 @@ export const EditEvent = ({ open, onOpenChange, eventData, setGroup }) => {
 			values.details === eventData.details &&
 			values.teamId === eventData.teamId
 		) {
-			toast.info("Nothing to update", ToastOptions);
+			toast.info(t('alertNothingToUpdate'), ToastOptions);
 			setAdding(false);
 			setDisabled(false);
 			return;
@@ -113,12 +116,12 @@ export const EditEvent = ({ open, onOpenChange, eventData, setGroup }) => {
 			}
 
 			setGroup(userOwnedGroups.filter((item)=> item.$id === selectedGroup)[0])
-			toast.success("Updated!", ToastOptions);
+			toast.success(t('alertEventUpdated'), ToastOptions);
 			setAdding(false);
 			setDisabled(false);
 			onOpenChange(false)
 		} catch (error) {
-			toast.error(`"Update failed: ${error}`, ToastOptions);
+			toast.error(t('alertException'), ToastOptions);
 			setAdding(false);
 			setDisabled(false);
 		}
@@ -136,7 +139,7 @@ export const EditEvent = ({ open, onOpenChange, eventData, setGroup }) => {
 					{/* Date & Close */}
 					<div className="flex items-center space-x-2 justify-between mb-4">
 						<div className="flex items-center text-xl pt-2 space-x-2 font-semibold text-primary">
-							Edit Event
+							{t('editEvent')}
 						</div>
 					</div>
 
@@ -159,41 +162,51 @@ export const EditEvent = ({ open, onOpenChange, eventData, setGroup }) => {
 								values,
 								handleChange,
 								handleBlur,
-								handleSubmit,
-								setFieldValue,
 							}) => (
 								<Form className="flex flex-col w-full space-y-6">
-									<div className={'flex gap-4 items-center relative'}>
-										<Select onValueChange={(selected)=> setSelectedGroup(selected)} key={selectedGroup}>
-											<SelectTrigger className="w-full h-12 flex between">
-												{selectedGroup ? userOwnedGroups.find((group)=> group.$id=== selectedGroup)?.name : 'Select Group'}
-											</SelectTrigger>
-											<SelectContent>
-												{userOwnedGroups?.map((u)=>(
-													<SelectItem
-														key={u.$id}
-														value={u.$id}
-													>
-														{u.name}
-													</SelectItem>
-												))}
-											</SelectContent>
-										</Select>
-										{selectedGroup &&
-											<Button
-												variant={'ghost'}
-												type={'button'}
-												size={'icon'}
-												onClick={()=> setSelectedGroup(null)}
-												className={'flex items-center justify-center text-primary hover:text-primary absolute right-1 bg-white'}
-											>
-												<XIcon className={'w-4 h-4'} />
-											</Button>
-										}
+									<div className="flex flex-col">
+										<Label className={"relative text-sm flex items-center justify-between gap-4"}>
+											<span className="shrink-0">{t('labelShareWithGroup')}</span>
+										</Label>
+										<div className={'flex gap-4 items-center relative'}>
+											<Select onValueChange={(selected)=> setSelectedGroup(selected)} key={selectedGroup}>
+												<SelectTrigger className="w-full h-12 flex between">
+													{selectedGroup ? userOwnedGroups.find((group)=> group.$id=== selectedGroup)?.name : t('selectGroupPlaceholder')}
+												</SelectTrigger>
+												<SelectContent>
+													{userOwnedGroups.length===0 &&
+														<SelectItem
+															value={null}
+														>
+															{t('groupNotFound')}
+														</SelectItem>
+													}
+													{userOwnedGroups?.map((u)=>(
+														<SelectItem
+															key={u.$id}
+															value={u.$id}
+														>
+															{u.name}
+														</SelectItem>
+													))}
+												</SelectContent>
+											</Select>
+											{selectedGroup &&
+												<Button
+													variant={'ghost'}
+													type={'button'}
+													size={'icon'}
+													onClick={()=> setSelectedGroup(null)}
+													className={'flex items-center justify-center text-primary hover:text-primary absolute right-1 bg-white'}
+												>
+													<XIcon className={'w-4 h-4'} />
+												</Button>
+											}
+										</div>
 									</div>
 									<div className="flex flex-col">
 										<FormLabel
-											title="Event Name"
+											title={t('labelName')}
 											errors={errors.name}
 											touched={touched.name}
 										/>
@@ -207,7 +220,7 @@ export const EditEvent = ({ open, onOpenChange, eventData, setGroup }) => {
 									</div>
 									<div className="flex flex-col">
 										<FormLabel
-											title="Event Date"
+											title={t('labelDate')}
 											errors={errors.date}
 											touched={touched.date}
 										/>
@@ -221,7 +234,7 @@ export const EditEvent = ({ open, onOpenChange, eventData, setGroup }) => {
 									</div>
 									<div className="flex flex-col">
 										<FormLabel
-											title="Venue"
+											title={t('labelVenue')}
 											errors={errors.venue}
 											touched={touched.venue}
 										/>
@@ -235,7 +248,7 @@ export const EditEvent = ({ open, onOpenChange, eventData, setGroup }) => {
 									</div>
 									<div className="flex flex-col">
 										<FormLabel
-											title="Detailes (if any)"
+											title={t('labelDetails')}
 											errors={errors.details}
 											touched={touched.details}
 										/>
@@ -252,7 +265,6 @@ export const EditEvent = ({ open, onOpenChange, eventData, setGroup }) => {
 										adding={adding}
 										disabled={disabled}
 										onOpenChange={onOpenChange}
-										labelAction={'Save Changes'}
 									/>
 								</Form>
 							)}

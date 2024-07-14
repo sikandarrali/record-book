@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils";
 
 const Text = ({ children, className, variant, urdu, ...props }) => {
 	return (
-		<p
+		<div
 			className={cn(
 				"text-base",
 				variant === "xs" && "text-xs",
@@ -16,7 +16,7 @@ const Text = ({ children, className, variant, urdu, ...props }) => {
 			)}
 		>
 			{children}
-		</p>
+		</div>
 	);
 };
 

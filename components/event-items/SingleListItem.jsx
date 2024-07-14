@@ -18,18 +18,20 @@ import {
 } from "@/components/ui/sheet";
 import {useMediaQuery} from "react-responsive";
 import {cn} from "@/lib/utils";
+import {useTranslations} from "next-intl";
 
 export const SingleListItem = ({ item }) => {
 	const isDesktop = useMediaQuery({ query: "(min-width: 1024px)" })
 	const [isOpen, setIsOpen] = useState(false);
 	const [openEdit, setOpenEdit] = useState(false);
 	const [openDelete, setOpenDelete] = useState(false);
+	const t = useTranslations('events')
 
 	const onDelete = async () => {
 		setOpenDelete(false);
 		setIsOpen(false);
 		await db.eventItems.delete(item.$id);
-		toast.success("Deleted!", ToastOptions);
+		toast.success(t('alertEventItemDeleted'), ToastOptions);
 	};
 
 	return (
@@ -95,7 +97,7 @@ export const SingleListItem = ({ item }) => {
 
 						{item.details &&
 							<Text className={'mt-20 self-start flex flex-col px-2'}>
-								<span className={'font-semibold text-sm mb-1'}>Details</span>
+								<span className={'font-semibold text-sm mb-1'}>{t('labelItemDetails')}</span>
 								<span>{item.details}</span>
 							</Text>
 						}
@@ -122,7 +124,6 @@ export const SingleListItem = ({ item }) => {
 								variant="outline"
 								size="icon"
 								onClick={() => {
-									setIsOpen(false)
 									setOpenEdit(true)
 								}}
 							>
@@ -146,8 +147,6 @@ export const SingleListItem = ({ item }) => {
 					item={item}
 					open={openEdit}
 					onOpenChange={setOpenEdit}
-					itemSheet={isOpen}
-					setItemSheet={setIsOpen}
 				/>
 				<DeleteEventItem
 					personName={item.name}

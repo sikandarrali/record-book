@@ -10,6 +10,7 @@ import {toast} from "react-toastify";
 import {ToastOptions} from "@/lib/ToastOptions";
 import {scrollToTop} from "@/lib/utils";
 import {ParseErrorCodes} from "@/lib/parseErrorCodes";
+import {useTranslations} from "next-intl";
 
 
 const AddMemberSchema = Yup.object().shape({
@@ -22,6 +23,7 @@ const AddMemberSchema = Yup.object().shape({
 export const AddGroupMember = ({groupID, setUsersInGroup}) =>{
     const [adding, setAdding] = useState(false);
     const [disabled, setDisabled] = useState(false);
+    const t = useTranslations('groups')
 
     const onAdd = async (values) => {
         setAdding(true);
@@ -38,14 +40,14 @@ export const AddGroupMember = ({groupID, setUsersInGroup}) =>{
                 undefined // name - optional
             );
             if(promise){
-                toast.success("User Added to Group", ToastOptions);
+                toast.success(t('alertGroupMemberAdded'), ToastOptions);
                 setAdding(false);
                 setDisabled(false);
                 setUsersInGroup(prev => [...prev, promise])
                 scrollToTop()
             }
         } catch (error) {
-            toast.error(ParseErrorCodes(error.response.type), ToastOptions);
+            toast.error(ParseErrorCodes(t(error.response.type)), ToastOptions);
             setAdding(false);
             setDisabled(false);
         }
@@ -78,7 +80,7 @@ export const AddGroupMember = ({groupID, setUsersInGroup}) =>{
                             onBlur={handleBlur}
                             name="email"
                             disabled={disabled}
-                            placeholder={'User Email'}
+                            placeholder={t('userEmailPlaceholder')}
                             value={values.email}
                             className={'normal-case'}
                         />
@@ -101,7 +103,7 @@ export const AddGroupMember = ({groupID, setUsersInGroup}) =>{
                                 <Loader2Icon className="animate animate-spin w-5 h-5 stroke-[3]" />
                             </>
                         ) : (
-                            "Add"
+                            t('btnAdd')
                         )}
                     </Button>
                 </Form>
