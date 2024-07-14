@@ -36,15 +36,11 @@ export default function Page() {
     const [refresh, setRefresh] = useState([])
 
     const getUserGroups = async () =>{
-        if(user){
-            const tempGroups = await listUserGroups()
-            setUserGroups(tempGroups.teams)
-        }else{
-            setUserGroups([])
-        }
+        const tempGroups = await teams.list()
+        setUserGroups(tempGroups.teams)
     }
     useEffect(() => {
-        return ()=> getUserGroups()
+        getUserGroups()
     }, [refresh]);
 
     return (
