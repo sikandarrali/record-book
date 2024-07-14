@@ -17,6 +17,7 @@ import {toast} from "react-toastify";
 import {teams} from "@/components/appwrite/appwrite";
 import {ID} from "appwrite";
 import {useData} from "@/components/contexts/DataContext";
+import {UISheetFooter} from "@/components/theme/UISheetFooter";
 
 const EditGroupSchema = Yup.object().shape({
     name: Yup.string()
@@ -77,6 +78,7 @@ export const EditGroup = ({ open, onOpenChange, data, userGroups, setUserGroups}
             <SheetContent
                 className={cn("pb-8 lg:pb-14 overflow-auto max-h-fit")}
                 side={isDesktop ? "right" : "bottom"}
+                onOpenAutoFocus={(e) => e.preventDefault()}
             >
                 <div className={'hidden'}><SheetHeader><SheetTitle/><SheetDescription/></SheetHeader></div>
                 <div className="flex flex-col w-full min-h-full pt-4 justify-start">
@@ -85,14 +87,6 @@ export const EditGroup = ({ open, onOpenChange, data, userGroups, setUserGroups}
                         <div className="flex items-center text-xl pt-2 space-x-2 font-semibold text-primary">
                             Edit Group
                         </div>
-
-                        <Button
-                            variant="outline"
-                            size="icon"
-                            onClick={() => onOpenChange(false)}
-                        >
-                            <X className="h-4 w-4" />
-                        </Button>
                     </div>
                     <div className="flex flex-col gap-5 w-full items-center justify-center py-6 lg:py-10">
                         <Formik
@@ -129,20 +123,12 @@ export const EditGroup = ({ open, onOpenChange, data, userGroups, setUserGroups}
                                         />
                                     </div>
 
-                                    <Button
-                                        className="w-full"
-                                        size="2xl"
-                                        stretched
+                                    <UISheetFooter
+                                        adding={adding}
                                         disabled={disabled}
-                                    >
-                                        {adding ? (
-                                            <>
-                                                <Loader2Icon className="animate animate-spin w-5 h-5 stroke-[3]" />
-                                            </>
-                                        ) : (
-                                            "Save changes"
-                                        )}
-                                    </Button>
+                                        onOpenChange={onOpenChange}
+                                        labelAction={'Save Changes'}
+                                    />
                                 </Form>
                             )}
                         </Formik>

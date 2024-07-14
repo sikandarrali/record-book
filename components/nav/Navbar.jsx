@@ -16,6 +16,8 @@ import LanguageSwitcher from "@/components/nav/LangugeSwitcher";
 import {EditProfile} from "@/components/nav/EditProfile";
 import {Progress} from "@/components/ui/progress";
 import {useData} from "@/components/contexts/DataContext";
+import {cn} from "@/lib/utils";
+import {useParams, usePathname} from "next/navigation";
 
 const Navbar = () => {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -139,10 +141,13 @@ const Sidebar = ({ open, onOpenChange }) => {
 };
 
 const MenuItem = ({ label, href, icon }) => {
+	const pathname = usePathname()
+	
 	return (
 		<Link
 			href={href}
-			className="flex text-background hover:bg-muted hover:text-foreground items-center gap-2 px-4 py-4 rounded-md"
+			className={cn("flex text-background items-center gap-2 px-4 py-4 rounded-md hover:bg-muted hover:text-foreground",
+				pathname.toString() === href.toString() && "bg-muted text-foreground")}
 		>
 			{icon}
 			<span className="text-base font-medium">{label}</span>

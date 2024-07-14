@@ -27,6 +27,7 @@ import {Label} from "@/components/ui/label";
 import {useData} from "@/components/contexts/DataContext";
 import Text from "@/components/theme/Text";
 import {SheetStylesFlexibleHeight} from "@/lib/reusableStyles";
+import {UISheetFooter} from "@/components/theme/UISheetFooter";
 
 
 const AddEventSchema = Yup.object().shape({
@@ -101,14 +102,6 @@ export const AddEvent = ({ open, onOpenChange, refreshItems, setRefreshItems }) 
 						<div className="flex items-center text-xl pt-2 space-x-2 font-semibold text-primary">
 							Add New Event
 						</div>
-
-						<Button
-							variant="outline"
-							size="icon"
-							onClick={() => onOpenChange(false)}
-						>
-							<X className="h-4 w-4" />
-						</Button>
 					</div>
 
 					<div className="flex flex-col gap-5 w-full items-center justify-center py-6 lg:py-10">
@@ -243,20 +236,12 @@ export const AddEvent = ({ open, onOpenChange, refreshItems, setRefreshItems }) 
 										</>
 									}
 
-									<Button
-										className="w-full"
-										size="2xl"
-										stretched
+									<UISheetFooter
+										adding={adding}
 										disabled={disabled}
-									>
-										{adding ? (
-											<>
-												<Loader2Icon className="animate animate-spin w-5 h-5 stroke-[3]" />
-											</>
-										) : (
-											"Save Entry"
-										)}
-									</Button>
+										onOpenChange={onOpenChange}
+										labelAction={'Save Entry'}
+									/>
 								</Form>
 							)}
 						</Formik>

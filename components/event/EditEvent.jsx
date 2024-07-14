@@ -18,6 +18,7 @@ import {listUserOwnedGroups} from "@/components/appwrite/appwrite";
 import {useAuth} from "@/components/contexts/AuthContext";
 import {Permission, Query, Role} from "appwrite";
 import {useData} from "@/components/contexts/DataContext";
+import {UISheetFooter} from "@/components/theme/UISheetFooter";
 
 const EditEventSchema = Yup.object().shape({
 	name: Yup.string()
@@ -129,6 +130,7 @@ export const EditEvent = ({ open, onOpenChange, eventData, setGroup }) => {
 			<SheetContent
 				className={cn("pb-8 lg:pb-14 overflow-auto max-h-fit")}
 				side={isDesktop ? "right" : "bottom"}
+				onOpenAutoFocus={(e) => e.preventDefault()}
 			>
 				<div className={'hidden'}><SheetHeader><SheetTitle/><SheetDescription/></SheetHeader></div>
 				<div className="flex flex-col w-full min-h-full pt-4 justify-start">
@@ -137,14 +139,6 @@ export const EditEvent = ({ open, onOpenChange, eventData, setGroup }) => {
 						<div className="flex items-center text-xl pt-2 space-x-2 font-semibold text-primary">
 							Edit Event
 						</div>
-
-						<Button
-							variant="outline"
-							size="icon"
-							onClick={() => onOpenChange(false)}
-						>
-							<X className="h-4 w-4" />
-						</Button>
 					</div>
 
 					<div className="flex flex-col gap-5 w-full items-center justify-center py-6 lg:py-10">
@@ -255,21 +249,12 @@ export const EditEvent = ({ open, onOpenChange, eventData, setGroup }) => {
 										/>
 									</div>
 
-									<Button
-										className="w-full"
-										size="2xl"
-										stretched
+									<UISheetFooter
+										adding={adding}
 										disabled={disabled}
-										type={'submit'}
-									>
-										{adding ? (
-											<>
-												<Loader2Icon className="animate animate-spin w-5 h-5 stroke-[3]" />
-											</>
-										) : (
-											"Save Entry"
-										)}
-									</Button>
+										onOpenChange={onOpenChange}
+										labelAction={'Save Changes'}
+									/>
 								</Form>
 							)}
 						</Formik>
