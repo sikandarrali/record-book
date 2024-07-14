@@ -10,7 +10,7 @@ import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
 import {toast} from "react-toastify";
 import {ToastOptions} from "@/lib/ToastOptions";
-import {Info, Trash, Trash2} from "lucide-react";
+import {ChevronDown, ChevronUp, Info, ShieldCheck, Trash, Trash2, Users2} from "lucide-react";
 import {Label} from "@/components/ui/label";
 import {DeleteGroupMember} from "@/components/groups/DeleteGroupMember";
 import {useAuth} from "@/components/contexts/AuthContext";
@@ -34,6 +34,7 @@ export default function Page() {
     // const {userGroups, setUserGroups} = useData()
     const [userGroups, setUserGroups] = useState([])
     const [refresh, setRefresh] = useState([])
+    const [showInformation, setShowInformation] = useState(false)
 
     const getUserGroups = async () =>{
         const tempGroups = await teams.list()
@@ -48,25 +49,58 @@ export default function Page() {
             <Text variant="h2">Groups</Text>
             <Text className={'text-base'}>Groups are a way of sharing your Events Data with others. When a new user is added they will receive an invitation email to join the group.</Text>
 
-            <Text className={'flex items-center gap-2 mt-4 font-medium text-primary'} variant={'sm'}>
-                <Info className={'w-4 h-4'}/> Important Information
-            </Text>
-            <ul className={'list-disc pl-12'}>
-                <li><Text variant={'sm'}>Added user will be able to <span className={'font-semibold'}>Add</span>, <span className={'font-semibold'}>Update</span>, <span className={'font-semibold'}>Delete</span> and <span className={'font-semibold'}>View</span> Events and all its Data</Text></li>
-                <li><Text variant={'sm'}>User need to accept invitation sent to them via email before they can manage shared data</Text></li>
-            </ul>
-
-            <Text className={'py-2 mt-8 font-semibold text-primary'}>Your Groups</Text>
-
-            <div className={'flex flex-col bg-muted rounded-lg relative shadow'}>
-
-                {userGroups.map((data)=>(
-                    <SingleGroup data={data} key={data.$id} userGroups={userGroups} setUserGroups={setUserGroups} />
-                ))}
-
+            <div onClick={()=> setShowInformation(!showInformation)} className={'cursor-pointer'}>
+                <Text className={'flex items-center gap-4 mt-4 font-medium text-primary'}>
+                    <span className={'flex items-center gap-2'}><Info className={'w-4 h-4'}/> Important Information</span>
+                    {showInformation ? <ChevronUp className={'w-5 h-5 stroke-[3]'} /> : <ChevronDown  className={'w-5 h-5 stroke-[3]'} />}
+                </Text>
             </div>
+            {showInformation &&
+                <ul className={'list-disc pl-9 gap-2 mt-2 flex flex-col'}>
+                    <li><Text variant={'sm'}>Added user will be able to <span className={'font-semibold'}>Add</span>, <span className={'font-semibold'}>Update</span>, <span className={'font-semibold'}>Delete</span> and <span className={'font-semibold'}>View</span> Events and all its Data</Text></li>
+                    <li><Text variant={'sm'}>User need to accept invitation sent to them via email before they can manage shared data</Text></li>
+                    <li><Text variant={'sm'} className={'flex flex-col gap-1'}>
+                        <span className={'flex gap-1 items-center'}><ShieldCheck className={'w-4 h-4 text-primary'}/> indicated Groups you created</span>
+                        <span className={'flex gap-1 items-center'}><Users2 className={'w-4 h-4 text-primary'}/> {`indicated Groups you've joined`}</span>
+                    </Text></li>
+                </ul>
+            }
 
-            <Button stretched size={'lg'} className={'mt-5'} onClick={()=> setOpenAddGroup(true)}>Create new Group</Button>
+            <Text className={'py-2 mt-4 font-semibold text-primary'}>Your Groups</Text>
+
+            <motion.div
+                initial={{opacity: 0, y: 10}}
+                animate={{opacity: 1, y: 0,
+                    transition: { delay: 0.2 }
+                }}
+                className={'flex flex-col bg-muted rounded-lg relative shadow'}
+            >
+                {userGroups.length === 0 ?
+                    <div className={'p-4 text-center italic'}>No Groups Found, Create New first </div>
+                    : userGroups.map((data, i)=>(
+                        <motion.div
+                            key={data.$id}
+                            initial={{opacity: 0, y: 10}}
+                            animate={{opacity: 1, y: 0,
+                                transition: { delay: 0.3 + i / 10 }
+                            }}
+                            className={'w-full'}
+                        >
+                            <SingleGroup data={data} userGroups={userGroups} setUserGroups={setUserGroups} />
+                        </motion.div>
+                    ))
+                }
+
+            </motion.div>
+
+            <motion.div
+                initial={{opacity: 0, y: 10}}
+                animate={{opacity: 1, y: 0,
+                    transition: { delay: 0.2 }
+                }}
+            >
+                <Button stretched size={'lg'} className={'mt-5'} onClick={()=> setOpenAddGroup(true)}>Create new Group</Button>
+            </motion.div>
 
             <AddGroup open={openAddGroup} setRefresh={setRefresh} onOpenChange={setOpenAddGroup} setUserGroups={setUserGroups}/>
         </PageContainer>

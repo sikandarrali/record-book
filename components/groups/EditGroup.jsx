@@ -25,15 +25,13 @@ const EditGroupSchema = Yup.object().shape({
         .required("required"),
 });
 
-export const EditGroup = ({ open, onOpenChange, data}) => {
+export const EditGroup = ({ open, onOpenChange, data, userGroups, setUserGroups}) => {
     const isDesktop = useMediaQuery({
         query: "(min-width: 1024px)",
     });
 
     const [adding, setAdding] = useState(false);
     const [disabled, setDisabled] = useState(false);
-
-    const {userGroups, setUserGroups} = useData()
 
     const onUpdate = async (values) => {
         setAdding(true);
