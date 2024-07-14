@@ -26,7 +26,7 @@ const AddGroupSchema = Yup.object().shape({
         .required("required"),
 });
 
-export const AddGroup = ({ open, onOpenChange }) => {
+export const AddGroup = ({ open, onOpenChange, setRefresh }) => {
     const isDesktop = useMediaQuery({ query: "(min-width: 1024px)" });
     const [adding, setAdding] = useState(false);
     const [disabled, setDisabled] = useState(false);
@@ -47,6 +47,7 @@ export const AddGroup = ({ open, onOpenChange }) => {
                     creatorEmail: user.email
                 }
             );
+            setRefresh(prev => !prev)
             onOpenChange(false);
             toast.success("Group created", ToastOptions);
             setAdding(false);
@@ -54,9 +55,9 @@ export const AddGroup = ({ open, onOpenChange }) => {
             setUserGroups(prev=> [...prev, response])
 
             // refetchs Teams since there's no realtime channel to get team updates
-            setTimeout(()=>{
-                window.location.reload();
-            }, 1500)
+            // setTimeout(()=>{
+            //     window.location.reload();
+            // }, 1500)
 
         } catch (error) {
             toast.error(`Unable to Add: ${error}`, ToastOptions);
