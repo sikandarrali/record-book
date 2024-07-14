@@ -7,14 +7,13 @@ import {Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle} from "@/
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { Form, Formik } from "formik";
-import {Loader2Icon, X, XIcon} from "lucide-react";
+import {XIcon} from "lucide-react";
 import {useLayoutEffect, useState} from "react";
 import { useMediaQuery } from "react-responsive";
 import * as Yup from "yup";
 import {ToastOptions} from "@/lib/ToastOptions";
 import {toast} from "react-toastify";
 import {Select, SelectContent, SelectItem, SelectTrigger} from "@/components/ui/select";
-import {listUserOwnedGroups} from "@/components/appwrite/appwrite";
 import {useAuth} from "@/components/contexts/AuthContext";
 import {Permission, Query, Role} from "appwrite";
 import {useData} from "@/components/contexts/DataContext";

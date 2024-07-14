@@ -9,13 +9,12 @@ import {Badge} from "@/components/ui/badge";
 import {
     Tooltip,
     TooltipContent,
-    TooltipProvider,
     TooltipTrigger,
 } from "@/components/ui/tooltip"
 import {Button} from "@/components/ui/button";
 
 
-export const MemberListItem = ({data, teamID, setUsersInGroup, setRefetchMembers, groupName, isGroupOwner}) =>{
+export const MemberListItem = ({data, teamID, setUsersInGroup, groupName, isGroupOwner}) =>{
 
     const isOwner =  data.roles.includes('owner');
     const isMember = !isOwner

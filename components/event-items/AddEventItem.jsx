@@ -1,23 +1,14 @@
 "use client";
 import { db } from "@/components/appwrite/database";
 import FormLabel from "@/components/theme/FormLabel";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Form, Formik } from "formik";
-import { Loader2Icon, X } from "lucide-react";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import { NumericFormat } from "react-number-format";
 import * as Yup from "yup";
 import {toast} from "react-toastify";
 import {ToastOptions} from "@/lib/ToastOptions";
-import {
-	Drawer,
-	DrawerContent,
-	DrawerDescription,
-	DrawerHeader,
-	DrawerTitle
-} from "@/components/ui/drawer";
 import {
 	Sheet,
 	SheetContent, SheetDescription, SheetHeader, SheetTitle
@@ -28,8 +19,6 @@ import Text from "@/components/theme/Text";
 import {scrollToTop} from "@/lib/utils";
 import {Permission, Role} from "appwrite";
 import {useAuth} from "@/components/contexts/AuthContext";
-import {useParams} from "next/navigation";
-import {useMyStore} from "@/store/store";
 import {UISheetFooter} from "@/components/theme/UISheetFooter";
 
 const AddEventItemSchema = Yup.object().shape({
@@ -51,8 +40,6 @@ export const AddEventItem = ({open, onOpenChange, eventData}) => {
 		query: "(min-width: 1024px)",
 	});
 	const {user} = useAuth()
-	const eventsStore = useMyStore((state) => state.events);
-
 	const eventID = eventData.$id
 
 	useScrollToView()

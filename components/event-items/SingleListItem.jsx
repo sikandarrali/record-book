@@ -2,9 +2,8 @@
 import { db } from "@/components/appwrite/database";
 import Text from "@/components/theme/Text";
 import { Button } from "@/components/ui/button";
-import { useMyStore } from "@/store/store";
 import { Pen, Trash2, XIcon } from "lucide-react";
-import {useCallback, useEffect, useState} from "react";
+import {useState} from "react";
 import { NumericFormat } from "react-number-format";
 import { DeleteEventItem } from "./DeleteEventItem";
 import { EditEventItem } from "./EditEventItem";
@@ -20,7 +19,7 @@ import {
 import {useMediaQuery} from "react-responsive";
 import {cn} from "@/lib/utils";
 
-export const SingleListItem = ({ item, eventID }) => {
+export const SingleListItem = ({ item }) => {
 	const isDesktop = useMediaQuery({ query: "(min-width: 1024px)" })
 	const [isOpen, setIsOpen] = useState(false);
 	const [openEdit, setOpenEdit] = useState(false);
