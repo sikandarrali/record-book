@@ -11,6 +11,7 @@ import {toast} from "react-toastify";
 import {ToastOptions} from "@/lib/ToastOptions";
 import {scrollToTop} from "@/lib/utils";
 import {useAuth} from "@/components/contexts/AuthContext";
+import {ParseErrorCodes} from "@/lib/parseErrorCodes";
 
 
 const AddMemberSchema = Yup.object().shape({
@@ -35,7 +36,7 @@ export const AddGroupMember = ({groupID, setUsersInGroup}) =>{
                 values.email, // email
                 undefined, // userId - optional
                 undefined, // phone - optional
-                "http://localhost:3000/join-group",
+                process.env.NEXT_PUBLIC_CALLBACK_ADD_USER_TO_GROUP,
                 undefined // name - optional
             );
             if(promise){
@@ -46,7 +47,7 @@ export const AddGroupMember = ({groupID, setUsersInGroup}) =>{
                 scrollToTop()
             }
         } catch (error) {
-            toast.error(`Unable to Add: ${error}`, ToastOptions);
+            toast.error(ParseErrorCodes(error.response.type), ToastOptions);
             setAdding(false);
             setDisabled(false);
         }
@@ -81,6 +82,7 @@ export const AddGroupMember = ({groupID, setUsersInGroup}) =>{
                             disabled={disabled}
                             placeholder={'User Email'}
                             value={values.email}
+                            className={'normal-case'}
                         />
                         <span className={'mt-2 self-end'}>
                             <FormLabel

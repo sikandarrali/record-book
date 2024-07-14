@@ -38,7 +38,7 @@ export const MemberListItem = ({data, teamID, setUsersInGroup, setRefetchMembers
         <div className={'relative overflow-hidden flex items-center justify-between gap-4 px-4 py-3'}>
 
             <div className={'flex flex-col items-start w-full gap-2 line-clamp-1'}>
-                <span className={'font-medium'}>{data?.userEmail}</span>
+                <span className={'font-medium select-auto'}>{data?.userEmail}</span>
 
                 {data.confirm ?
                     <div className={'flex gap-2 items-center text-xs'}>

@@ -42,18 +42,20 @@ const SingleGroup = ({ data, userGroups, setUserGroups }) => {
     const [usersInGroup, setUsersInGroup] = useState([])
     const [openEdit, setOpenEdit] = useState(false);
     const [openDelete, setOpenDelete] = useState(false);
-    const [refetchMembers, setRefetchMembers] = useState(false)
-    const [isOwner, setIsOwner] = useState(false)
     const {user} = useAuth()
     const [openLeaveGroup, setOpenLeaveGroup] = useState(false)
 
+    const isOwner = data?.prefs?.creatorEmail === user.email;
 
     useEffect(() => {
-        if(open){
-            const result = userGroups.some((item)=> item.$id === data.$id && item.prefs.creatorEmail === user.email)
-            setIsOwner(result)
+        const getUsersInGroup = async () => {
+            if(open){
+                const result = await teams.listMemberships(data.$id);
+                setUsersInGroup(result.memberships)
+            }
         }
-    }, [open, userGroups]);
+        getUsersInGroup()
+    }, [open]);
 
     const onDeleteGroup = async() =>{
         const groupID = data.$id;
@@ -78,8 +80,11 @@ const SingleGroup = ({ data, userGroups, setUserGroups }) => {
     return (
 
         <Sheet open={open} onOpenChange={setOpen} defaultOpen={false}>
-            <SheetTrigger className={'relative w-full text-left py-5 flex gap-4 justify-between border-b last-of-type:border-b-0 hover:bg-white/70 transition-all duration-300 px-5'}>
-                <span>{data.name}</span>
+            <SheetTrigger className={'relative w-full text-left py-4 flex gap-4 items-center justify-between hover:bg-white/70 transition-all duration-300 px-5'}>
+                <span className={'flex flex-col gap-1'}>
+                    <span className={'font-medium'}>{data.name}</span>
+                    <span className={'text-muted-foreground text-sm'}>{data.total-1} members</span>
+                </span>
                 {isOwner ? <ShieldCheck className={'w-5 h-5 text-primary'}/> : <Users2 className={'w-5 h-5 text-primary'}/>}
             </SheetTrigger>
             <SheetContent

@@ -14,25 +14,30 @@ import {Badge} from "@/components/ui/badge";
 import {Switch} from "@/components/ui/switch";
 import LanguageSwitcher from "@/components/nav/LangugeSwitcher";
 import {EditProfile} from "@/components/nav/EditProfile";
+import {Progress} from "@/components/ui/progress";
+import {useData} from "@/components/contexts/DataContext";
 
 const Navbar = () => {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 
 	return (
-		<div className="flex items-center justify-between sticky top-0 mb-4 bg-white shadow-sm -mx-6 py-4 px-6">
-			<Link href={'/events'} className={'cursor-pointer'}>
-				<Image src={"/logo.png"} width={120} height={47} alt="Logo" priority />
-			</Link>
+		<div>
+			{/*<Progress value={33} className={'-mx-6 rounded-none w-screen h-1'} />*/}
+			<div className="flex items-center justify-between sticky top-0 mb-4 bg-white shadow-sm -mx-6 py-4 px-6">
+				<Link href={'/events'} className={'cursor-pointer'}>
+					<Image src={"/logo.png"} width={120} height={47} alt="Logo" priority />
+				</Link>
 
-			<Button
-				variant="outline"
-				size="icon"
-				onClick={() => setIsMenuOpen(!isMenuOpen)}
-			>
-				<MenuIcon />
-			</Button>
+				<Button
+					variant="outline"
+					size="icon"
+					onClick={() => setIsMenuOpen(!isMenuOpen)}
+				>
+					<MenuIcon />
+				</Button>
 
-			<Sidebar open={isMenuOpen} onOpenChange={setIsMenuOpen} />
+				<Sidebar open={isMenuOpen} onOpenChange={setIsMenuOpen} />
+			</div>
 		</div>
 	);
 };
@@ -46,7 +51,7 @@ const Sidebar = ({ open, onOpenChange }) => {
 
 	return (
 		<Sheet open={open} onOpenChange={onOpenChange}>
-			<SheetContent className="bg-primary border-l-0 px-0 outline-0 stroke-none">
+			<SheetContent className="bg-primary border-l-0 px-0 outline-0 stroke-none h-screen max-h-screen">
 				<div className={'hidden'}><SheetHeader><SheetTitle/><SheetDescription/></SheetHeader></div>
 				<div className="h-full flex flex-col">
 					<div className="flex items-center -ml-4 mt-14 mb-10">

@@ -7,7 +7,7 @@ import {Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle} from "@/
 import { Textarea } from "@/components/ui/textarea";
 import {cn, scrollToTop} from "@/lib/utils";
 import { Form, Formik } from "formik";
-import {Loader2Icon, X, XIcon} from "lucide-react";
+import {Loader2Icon, Plus, X, XIcon} from "lucide-react";
 import {useLayoutEffect, useState} from "react";
 import { useMediaQuery } from "react-responsive";
 import * as Yup from "yup";
@@ -25,6 +25,8 @@ import {listUserGroups} from "@/components/appwrite/appwrite";
 import {useAuth} from "@/components/contexts/AuthContext";
 import {Label} from "@/components/ui/label";
 import {useData} from "@/components/contexts/DataContext";
+import Text from "@/components/theme/Text";
+import {SheetStylesFlexibleHeight} from "@/lib/reusableStyles";
 
 
 const AddEventSchema = Yup.object().shape({
@@ -45,6 +47,7 @@ export const AddEvent = ({ open, onOpenChange, refreshItems, setRefreshItems }) 
 	const [selectedGroup, setSelectedGroup] = useState(null)
 	const {user} = useAuth()
 	const {userOwnedGroups} = useData()
+	const [addEventDetails, setAddEventDetails] = useState(false)
 
 	const onAdd = async (values) => {
 		setAdding(true);
@@ -87,7 +90,7 @@ export const AddEvent = ({ open, onOpenChange, refreshItems, setRefreshItems }) 
 	return (
 		<Sheet open={open} onOpenChange={onOpenChange} defaultOpen={false}>
 			<SheetContent
-				className={cn("pb-8 lg:pb-14 overflow-auto max-h-fit")}
+				className={cn("pb-8 lg:pb-14", SheetStylesFlexibleHeight)}
 				side={isDesktop ? "right" : "bottom"}
 				onOpenAutoFocus={(e) => e.preventDefault()}
 			>
@@ -187,45 +190,58 @@ export const AddEvent = ({ open, onOpenChange, refreshItems, setRefreshItems }) 
 											disabled={disabled}
 										/>
 									</div>
-									<div className="flex flex-col">
-										<FormLabel
-											title="Event Date"
-											errors={errors.date}
-											touched={touched.date}
-										/>
-										<Input
-											onChange={handleChange}
-											onBlur={handleBlur}
-											name="date"
-											disabled={disabled}
-										/>
+
+									<div
+										className={'flex items-center justify-end gap-1 cursor-pointer'}
+										onClick={()=> setAddEventDetails(!addEventDetails)}
+									>
+										{addEventDetails ? <XIcon className={'w-4 h-4 text-destructive'}/> : <Plus className={'w-4 h-4'}/>}
+										<Text variant={'sm'} className={'font-medium'}>Add Date, Venue & Details etc.</Text>
 									</div>
-									<div className="flex flex-col">
-										<FormLabel
-											title="Venue"
-											errors={errors.venue}
-											touched={touched.venue}
-										/>
-										<Input
-											onChange={handleChange}
-											onBlur={handleBlur}
-											name="venue"
-											disabled={disabled}
-										/>
-									</div>
-									<div className="flex flex-col">
-										<FormLabel
-											title="Detailes (if any)"
-											errors={errors.details}
-											touched={touched.details}
-										/>
-										<Textarea
-											onChange={handleChange}
-											onBlur={handleBlur}
-											name="details"
-											disabled={disabled}
-										/>
-									</div>
+
+									{addEventDetails &&
+										<>
+											<div className="flex flex-col">
+												<FormLabel
+													title="Event Date"
+													errors={errors.date}
+													touched={touched.date}
+												/>
+												<Input
+													onChange={handleChange}
+													onBlur={handleBlur}
+													name="date"
+													disabled={disabled}
+												/>
+											</div>
+											<div className="flex flex-col">
+												<FormLabel
+													title="Venue"
+													errors={errors.venue}
+													touched={touched.venue}
+												/>
+												<Input
+													onChange={handleChange}
+													onBlur={handleBlur}
+													name="venue"
+													disabled={disabled}
+												/>
+											</div>
+											<div className="flex flex-col">
+												<FormLabel
+													title="Detailes (if any)"
+													errors={errors.details}
+													touched={touched.details}
+												/>
+												<Textarea
+													onChange={handleChange}
+													onBlur={handleBlur}
+													name="details"
+													disabled={disabled}
+												/>
+											</div>
+										</>
+									}
 
 									<Button
 										className="w-full"

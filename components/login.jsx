@@ -21,7 +21,7 @@ const Login = (second) => {
 	const { login, user, logout, setLoading } = useAuth();
 
 	const onLogin = async (values) => {
-		console.log(values);
+		// console.log(values);
 
 		await login(values.email, values.password);
 	};

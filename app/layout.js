@@ -5,7 +5,7 @@ import PagesProvider from "@/components/providers/PagesProvider";
 import Providers from "@/components/providers/Providers";
 import { cn } from "@/lib/utils";
 import {NetworkStatusIndicator} from "@/components/NetworkStatus/NetworkStatusIndicator";
-import {ToastContainer} from "react-toastify";
+import HolyLoader from "holy-loader";
 
 const fontSans = FontSans({
 	subsets: ["latin"],
@@ -75,6 +75,16 @@ export default function RootLayout({ children }) {
 				)}
 			>
 				<NetworkStatusIndicator />
+
+				{/* topbar loader */}
+				<HolyLoader
+					color="#E11D48"
+					height="4px"
+					speed={250}
+					easing="linear"
+					showSpinner
+				/>
+
 				<Providers>
 					<PagesProvider>{children}</PagesProvider>
 				</Providers>
