@@ -60,20 +60,20 @@ const SingleEventModal = ({ eventData }) => {
     const pathname = usePathname()
     const searchParams = useSearchParams()
 
-    useEffect(() => {
-       if(isOpen){
-           const newParams = new URLSearchParams(searchParams);
-           newParams.set('id', eventData.$id);
-           router.push(`?${newParams.toString()}`, { shallow: true });
-       }
-    }, [isOpen]);
-
-    const onClose = () =>{
-        setIsOpen(false)
-        const newParams = new URLSearchParams(searchParams);
-        newParams.delete('id');
-        router.push(`?${newParams.toString()}`, { shallow: true });
-    }
+    // useEffect(() => {
+    //    if(isOpen){
+    //        const newParams = new URLSearchParams(searchParams);
+    //        newParams.set('id', eventData.$id);
+    //        router.push(`?${newParams.toString()}`, { shallow: true });
+    //    }
+    // }, [isOpen]);
+    //
+    // const onClose = () =>{
+    //     setIsOpen(false)
+    //     const newParams = new URLSearchParams(searchParams);
+    //     newParams.delete('id');
+    //     router.push(`?${newParams.toString()}`, { shallow: true });
+    // }
 
     // get items
     useEffect(() => {
@@ -180,15 +180,15 @@ const SingleEventModal = ({ eventData }) => {
     }, [itemsDefault]);
 
 
-    useEffect(() => {
-
-        let id = searchParams.get('id')
-
-        if (id === eventData.$id) {
-            setIsOpen(true);
-        }
-
-    }, [searchParams]);
+    // useEffect(() => {
+    //
+    //     let id = searchParams.get('id')
+    //
+    //     if (id === eventData.$id) {
+    //         setIsOpen(true);
+    //     }
+    //
+    // }, [searchParams]);
     // if (isOpen) return null;
 
     const copyToClipboard = async () => {
@@ -211,7 +211,7 @@ const SingleEventModal = ({ eventData }) => {
                 {eventData.teamId && <Users2 className={'absolute right-2 top-2 w-5 h-5'}/>}
             </SheetTrigger>
             <SheetContent
-                className={cn("!pt-0 flex flex-col justify-start", SheetStylesFixedHeight)}
+                className={cn("!pt-0 flex flex-col justify-start !h-[100dvh]")}
                 side={isDesktop ? "right" : "bottom"}
                 onOpenAutoFocus={(e) => e.preventDefault()}
             >
