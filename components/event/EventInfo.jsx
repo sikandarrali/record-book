@@ -66,7 +66,7 @@ const EventInfo = ({ eventData, sum }) => {
 				setGroup(response)
 			}
 		}
-		return ()=> unsub()
+		unsub()
 	}, []);
 
 

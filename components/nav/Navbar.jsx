@@ -51,7 +51,7 @@ const Sidebar = ({ open, onOpenChange }) => {
 
 	return (
 		<Sheet open={open} onOpenChange={onOpenChange}>
-			<SheetContent className="bg-primary border-l-0 px-0 outline-0 stroke-none h-screen max-h-screen">
+			<SheetContent className="bg-primary border-l-0 px-0 outline-0 stroke-none">
 				<div className={'hidden'}><SheetHeader><SheetTitle/><SheetDescription/></SheetHeader></div>
 				<div className="h-full flex flex-col">
 					<div className="flex items-center -ml-4 mt-14 mb-10">
