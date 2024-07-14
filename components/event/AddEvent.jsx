@@ -24,6 +24,7 @@ import {
 import {listUserGroups} from "@/components/appwrite/appwrite";
 import {useAuth} from "@/components/contexts/AuthContext";
 import {Label} from "@/components/ui/label";
+import {useData} from "@/components/contexts/DataContext";
 
 
 const AddEventSchema = Yup.object().shape({
@@ -42,7 +43,8 @@ export const AddEvent = ({ open, onOpenChange, refreshItems, setRefreshItems }) 
 	const [adding, setAdding] = useState(false);
 	const [disabled, setDisabled] = useState(false);
 	const [selectedGroup, setSelectedGroup] = useState(null)
-	const {user, userOwnedGroups} = useAuth()
+	const {user} = useAuth()
+	const {userOwnedGroups} = useData()
 
 	const onAdd = async (values) => {
 		setAdding(true);

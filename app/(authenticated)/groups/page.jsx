@@ -5,7 +5,7 @@ import Text from "@/components/theme/Text";
 import { FixStickyHeaderScrollError } from "@/lib/utils";
 import { useMyStore } from "@/store/store";
 import { motion } from "framer-motion";
-import {useEffect, useLayoutEffect, useRef, useState} from "react";
+import {Suspense, useEffect, useLayoutEffect, useRef, useState} from "react";
 import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
 import {toast} from "react-toastify";
@@ -19,7 +19,10 @@ import {AddGroup} from "@/components/groups/AddGroup";
 import SingleGroup from "@/components/groups/SingleGroup";
 import Loader from "@/components/loaders/loader";
 import {Teams, Client} from "appwrite";
-import {teams} from "@/components/appwrite/appwrite";
+import {listUserGroups, teams} from "@/components/appwrite/appwrite";
+import ItemsSkeleton from "@/components/loaders/ItemsSkeleton";
+import GroupSkeleton from "@/components/loaders/GroupSkeleton";
+import {useData} from "@/components/contexts/DataContext";
 
 
 export default function Page() {
@@ -27,23 +30,8 @@ export default function Page() {
     const {user} = useAuth()
     const [openAddGroup, setOpenAddGroup] = useState(false)
     const [groups, setGroups] = useState([])
-    const [loading, setLoading] = useState(true)
-
-    const getGroups = async () =>{
-        if(user){
-            try {
-                const groupsList = await teams.list()
-                setGroups(groupsList.teams)
-            }catch (e) {
-                // console.log(e)
-            }
-        }
-        setLoading(false)
-    }
-
-    useLayoutEffect(() => {
-        getGroups()
-    }, []);
+    const [showSkeleton, setShowSkeleton] = useState(true)
+    const {userGroups, setUserGroups} = useData()
 
     return (
         <PageContainer hideTopbar>
@@ -62,18 +50,18 @@ export default function Page() {
 
             <div className={'flex flex-col bg-muted rounded-lg relative shadow'}>
 
-                {loading ?
-                    <div className={'absolute inset-0 -mt-4 z-10'}><Loader hideText/></div>
-                :
-                    groups.map((data)=>(
-                        <SingleGroup data={data} key={data.$id} groups={groups} setGroups={setGroups}/>
+                {userGroups.length === 0 ?
+                    <div className={'px-5 py-6 italic'}>{`You don't have any groups`}</div>
+                    : userGroups.map((data)=>(
+                        <SingleGroup data={data} key={data.$id} />
                     ))
                 }
+
             </div>
 
             <Button stretched size={'lg'} className={'mt-5'} onClick={()=> setOpenAddGroup(true)}>Create new Group</Button>
 
-            <AddGroup open={openAddGroup} onOpenChange={setOpenAddGroup} setGroups={setGroups}/>
+            <AddGroup open={openAddGroup} onOpenChange={setOpenAddGroup} setUserGroups={setUserGroups}/>
         </PageContainer>
     );
 }

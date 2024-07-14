@@ -20,7 +20,7 @@ const AddMemberSchema = Yup.object().shape({
 });
 
 
-export const AddGroupMember = ({groupID, setRefetchMembers}) =>{
+export const AddGroupMember = ({groupID, setUsersInGroup}) =>{
     const [adding, setAdding] = useState(false);
     const [disabled, setDisabled] = useState(false);
 
@@ -42,7 +42,7 @@ export const AddGroupMember = ({groupID, setRefetchMembers}) =>{
                 toast.success("User Added to Group", ToastOptions);
                 setAdding(false);
                 setDisabled(false);
-                setRefetchMembers(prev=> !prev)
+                setUsersInGroup(prev => [...prev, promise])
                 scrollToTop()
             }
         } catch (error) {

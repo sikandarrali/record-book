@@ -27,7 +27,6 @@ export const AuthProvider = ({ children }) => {
 	const [loading, setLoading] = useState(true);
 	const router = useRouter();
 	const pathname = usePathname()
-	const [userOwnedGroups, setUserOwnedGroups] = useState([])
 
 	useLayoutEffect(() => {
 		getLoggedInGoogleUser().then(r => setLoading(false));
@@ -88,22 +87,6 @@ export const AuthProvider = ({ children }) => {
 		setLoading(false)
 	};
 
-	// get User Owned Groups where User's role is Owner
-	const getUserOwnedGroups = async () =>{
-		if(user){
-			const response = await listUserOwnedGroups(user.email)
-			setUserOwnedGroups(response)
-		}else{
-			setUserOwnedGroups([])
-		}
-	}
-	useEffect(() => {
-		getUserOwnedGroups()
-	}, [user]);
-
-
-
-
 	const memoedValues = useMemo(
 		() => ({
 			user,
@@ -116,8 +99,7 @@ export const AuthProvider = ({ children }) => {
 		onLogout,
 		loading,
 		setLoading,
-		onGoogleWithLogin,
-		userOwnedGroups
+		onGoogleWithLogin
 	};
 
 	const values = { ...memoedValues, ...otherValues };

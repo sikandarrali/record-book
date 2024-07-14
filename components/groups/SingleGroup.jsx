@@ -34,6 +34,7 @@ import {DeleteGroup} from "@/components/groups/DeleteGroup";
 import {useAuth} from "@/components/contexts/AuthContext";
 import {ExitIcon} from "@radix-ui/react-icons";
 import {LeaveGroup} from "@/components/groups/LeaveGroup";
+import {useData} from "@/components/contexts/DataContext";
 
 const SingleGroup = ({ data, setGroups, groups }) => {
     const isDesktop = useMediaQuery({ query: "(min-width: 1024px)" })
@@ -46,28 +47,20 @@ const SingleGroup = ({ data, setGroups, groups }) => {
     const {user} = useAuth()
     const [openLeaveGroup, setOpenLeaveGroup] = useState(false)
 
-    useEffect(() => {
-        const getGroupMembers = async () => {
-            if(user){
-                try {
-                    const getMemberships = await teams.listMemberships(data.$id);
-                    setUsersInGroup(getMemberships.memberships)
-                    let tempOwner = getMemberships.memberships.some((item)=>(item.userEmail===user.email && item.roles.includes('owner')))
-                    setIsOwner(tempOwner)
-                } catch (error) {
-                    setUsersInGroup([])
-                    setIsOwner(false)
-                }
-            }
-        };
+    const {userGroups, setUserGroups} = useData()
 
-        return ()=> getGroupMembers()
-    }, [refetchMembers]);
+    useEffect(() => {
+        if(open){
+            const result = userGroups.some((item)=> item.$id === data.$id && item.prefs.creatorEmail === user.email)
+            setIsOwner(result)
+            console.log(userGroups)
+        }
+    }, [open, userGroups]);
 
     const onDeleteGroup = async() =>{
         const groupID = data.$id;
         await teams.delete(groupID);
-        setGroups(prev=> prev.filter((item)=> item.$id !== groupID))
+        setUserGroups(prev=> prev.filter((item)=> item.$id !== groupID))
         setOpenDelete(false);
         setOpen(false);
         toast.success("Deleted!", ToastOptions);
@@ -78,7 +71,7 @@ const SingleGroup = ({ data, setGroups, groups }) => {
         let tempMembershipID = usersInGroup.find((u) => u.userEmail === user.email);
 
         await teams.deleteMembership(data.$id, tempMembershipID.$id);
-        setGroups(prev=> prev.filter((item)=> item.$id !== groupID))
+        setUserGroups(prev=> prev.filter((item)=> item.$id !== groupID))
         setOpen(false)
         toast.success("You just left the Group.", ToastOptions);
         setOpenLeaveGroup(false)

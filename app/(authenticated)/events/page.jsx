@@ -5,7 +5,7 @@ import Text from "@/components/theme/Text";
 import { FixStickyHeaderScrollError } from "@/lib/utils";
 import { motion } from "framer-motion";
 import {useEffect, useLayoutEffect, useRef, useState} from "react";
-import {client, listUserOwnedGroups} from "@/components/appwrite/appwrite";
+import {client} from "@/components/appwrite/appwrite";
 import {db} from "@/components/appwrite/database";
 import {Query} from "appwrite";
 import SingleEventModal from "@/components/event/SingleEventModal";
@@ -19,7 +19,6 @@ export default function Home() {
 	const [currentEvent, setCurrentEvent] = useState(null);
 	const [refreshItems, setRefreshItems] = useState(false)
 	const [events, setEvents] = useState([])
-	const [userOwnedGroups, setUserOwnedGroups] = useState([])
 	const [isOpen, setIsOpen] = useState(false)
 	const searchParams = useSearchParams()
 

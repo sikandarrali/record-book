@@ -210,7 +210,7 @@ const SingleEventModal = ({ eventData }) => {
                 {eventData.teamId && <Users2 className={'absolute right-2 top-2 w-5 h-5'}/>}
             </SheetTrigger>
             <SheetContent
-                className={cn("!pt-0 overflow-auto h-screen max-h-screen border-t-0 border-r-0 flex flex-col justify-start")}
+                className={cn("!pt-0 overflow-auto h-screen max-h-[90vh] lg:max-h-screen border-t-0 border-r-0 flex flex-col justify-start")}
                 side={isDesktop ? "right" : "bottom"}
                 onOpenAutoFocus={(e) => e.preventDefault()}
             >

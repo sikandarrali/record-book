@@ -2,6 +2,7 @@
 import { AuthProvider } from "../contexts/AuthContext";
 import PagesProvider from "./PagesProvider";
 import {TooltipProvider} from "@/components/ui/tooltip";
+import {DataProvider} from "@/components/contexts/DataContext";
 // import PullToRefresh from "pulltorefreshjs";
 
 const Providers = ({ children }) => {
@@ -17,13 +18,13 @@ const Providers = ({ children }) => {
 	// 	}
 	// }
 
-
-
 	return (
 		<AuthProvider>
-			<TooltipProvider>
-				<PagesProvider>{children}</PagesProvider>
-			</TooltipProvider>
+			<DataProvider>
+				<TooltipProvider>
+					<PagesProvider>{children}</PagesProvider>
+				</TooltipProvider>
+			</DataProvider>
 		</AuthProvider>
 	);
 };

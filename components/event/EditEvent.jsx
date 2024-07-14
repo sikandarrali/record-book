@@ -17,6 +17,7 @@ import {Select, SelectContent, SelectItem, SelectTrigger} from "@/components/ui/
 import {listUserOwnedGroups} from "@/components/appwrite/appwrite";
 import {useAuth} from "@/components/contexts/AuthContext";
 import {Permission, Query, Role} from "appwrite";
+import {useData} from "@/components/contexts/DataContext";
 
 const EditEventSchema = Yup.object().shape({
 	name: Yup.string()
@@ -35,7 +36,8 @@ export const EditEvent = ({ open, onOpenChange, eventData, setGroup }) => {
 	const [adding, setAdding] = useState(false);
 	const [disabled, setDisabled] = useState(false);
 	const [selectedGroup, setSelectedGroup] = useState(null)
-	const {user, userOwnedGroups} = useAuth()
+	const {user} = useAuth()
+	const {userOwnedGroups} = useData()
 
 	useLayoutEffect(() => {
 		if(eventData.teamId) {
@@ -76,9 +78,6 @@ export const EditEvent = ({ open, onOpenChange, eventData, setGroup }) => {
 		}
 	};
 
-	const randomIntegerInRange = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
-
-
 	const onUpdate = async (values) => {
 		setAdding(true);
 		setDisabled(true);
@@ -100,7 +99,7 @@ export const EditEvent = ({ open, onOpenChange, eventData, setGroup }) => {
 			const eventDataValues = {
 				name: values.name,
 				date: values.date,
-				venue: randomIntegerInRange(100, 99999).toString(),
+				venue: values.venue,
 				details: values.details,
 				teamId: selectedGroup,
 			};
