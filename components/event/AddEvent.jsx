@@ -19,7 +19,6 @@ import {
 	SelectContent,
 	SelectItem,
 	SelectTrigger,
-	SelectValue,
 } from "@/components/ui/select"
 import {useAuth} from "@/components/contexts/AuthContext";
 import {Label} from "@/components/ui/label";
@@ -39,7 +38,7 @@ const AddEventSchema = Yup.object().shape({
 	details: Yup.string().min(1).max(300, "max 300 characters"),
 });
 
-export const AddEvent = ({ open, onOpenChange, refreshItems, setRefreshItems }) => {
+export const AddEvent = ({ open, onOpenChange }) => {
 	const isDesktop = useMediaQuery({ query: "(min-width: 1024px)" });
 	const [adding, setAdding] = useState(false);
 	const [disabled, setDisabled] = useState(false);
@@ -116,15 +115,7 @@ export const AddEvent = ({ open, onOpenChange, refreshItems, setRefreshItems }) 
 								onAdd(values);
 							}}
 						>
-							{({
-								errors,
-								touched,
-								values,
-								handleChange,
-								handleBlur,
-								handleSubmit,
-								setFieldValue,
-							}) => (
+							{({errors, touched, handleChange, handleBlur}) => (
 								<Form className="flex flex-col w-full space-y-6">
 
 									<div className="flex flex-col">

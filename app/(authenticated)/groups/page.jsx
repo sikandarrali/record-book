@@ -5,7 +5,6 @@ import { motion } from "framer-motion";
 import {useEffect, useState} from "react";
 import {Button} from "@/components/ui/button";
 import {ChevronDown, ChevronUp, Info, ShieldCheck, Users2} from "lucide-react";
-import {useAuth} from "@/components/contexts/AuthContext";
 import {AddGroup} from "@/components/groups/AddGroup";
 import SingleGroup from "@/components/groups/SingleGroup";
 import {teams} from "@/components/appwrite/appwrite";
