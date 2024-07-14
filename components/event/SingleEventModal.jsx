@@ -33,6 +33,7 @@ import {ReloadIcon} from "@radix-ui/react-icons";
 import {useAuth} from "@/components/contexts/AuthContext";
 import {toast} from "react-toastify";
 import {ToastOptions} from "@/lib/ToastOptions";
+import {SheetStylesFixedHeight} from "@/lib/reusableStyles";
 
 const perPageList = [10, 20, 30, 50, 100, 200];
 
@@ -210,7 +211,7 @@ const SingleEventModal = ({ eventData }) => {
                 {eventData.teamId && <Users2 className={'absolute right-2 top-2 w-5 h-5'}/>}
             </SheetTrigger>
             <SheetContent
-                className={cn("!pt-0 overflow-auto h-screen max-h-[90vh] lg:max-h-screen border-t-0 border-r-0 flex flex-col justify-start")}
+                className={cn("!pt-0 flex flex-col justify-start", SheetStylesFixedHeight)}
                 side={isDesktop ? "right" : "bottom"}
                 onOpenAutoFocus={(e) => e.preventDefault()}
             >

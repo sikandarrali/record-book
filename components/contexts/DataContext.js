@@ -27,23 +27,25 @@ export const DataProvider = ({ children }) => {
     const {user} = useAuth()
     const [userOwnedGroups, setUserOwnedGroups] = useState([])
     const [userGroups, setUserGroups] = useState([])
+    const router = useRouter()
 
     // get User groups
-    const getUserGroups = async () =>{
-        if(user){
-            const tempGroups = await listUserGroups()
-            setUserGroups(tempGroups.teams)
-
-            const tempOwnedGroups = tempGroups.teams.filter((item) => item.prefs.creatorEmail === user.email);
-            setUserOwnedGroups(tempOwnedGroups)
-        }else{
-            setUserOwnedGroups([])
-            setUserGroups([])
-        }
-    }
     useEffect(() => {
-        return ()=> getUserGroups()
-    }, [user]);
+        const getUserGroups = async () =>{
+            if(user){
+                const tempGroups = await listUserGroups()
+                setUserGroups(tempGroups.teams)
+
+                const tempOwnedGroups = tempGroups.teams.filter((item) => item.prefs.creatorEmail === user.email);
+                setUserOwnedGroups(tempOwnedGroups)
+            }else{
+                setUserOwnedGroups([])
+                setUserGroups([])
+            }
+        }
+
+        getUserGroups()
+    }, [router]);
 
 
     const values = {

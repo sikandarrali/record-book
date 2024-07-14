@@ -8,28 +8,25 @@ import {
 	AlertDialogHeader,
 	AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import {TriangleAlert} from "lucide-react";
+import {UIDialogFooter} from "@/components/theme/UIDialogFooter";
 
 export const DeleteEvent = ({ open, onOpenChange, onDelete, eventName }) => {
 	return (
-		<AlertDialog open={open} onOpenChange={onOpenChange} modal={false}>
-			<AlertDialogContent className={"w-[90%]"}>
-				<AlertDialogHeader>
-					<AlertDialogTitle>Delete <span className={'font-semibold text-primary text-xl'}>{eventName}</span> Event?</AlertDialogTitle>
-					<AlertDialogDescription className={"mt-2"}>
-						This will permanently delete{" "}
-						<span className={'font-semibold'}>{eventName}</span>
-						{" "}and remove all its records.<br/>
-						<span className={'font-semibold text-muted-foreground'}>This action is permanent cannot be undone.</span>
+		<AlertDialog open={open} onOpenChange={onOpenChange}>
+			<AlertDialogContent className={"w-[90%] rounded-xl overflow-auto"}>
+				<AlertDialogHeader className={'!text-left'}>
+					<AlertDialogTitle className={'text-primary flex items-center justify-center gap-2'}>
+						<TriangleAlert className={'w-5 h-5'}/>
+						<span>Delete Event</span>
+					</AlertDialogTitle>
+					<AlertDialogDescription className={"flex flex-col text-base items-center gap-1 !my-5"}>
+						<span>This will permanently delete</span>
+						<span className={'font-semibold text-primary'}>{eventName}</span>
 					</AlertDialogDescription>
 				</AlertDialogHeader>
-				<AlertDialogFooter className={'!flex-row items-center justify-center gap-4'}>
-					<AlertDialogAction onClick={() => onOpenChange(false)}>
-						Cancel
-					</AlertDialogAction>
-					<AlertDialogCancel className={'mt-0'} onClick={() => onDelete()}>
-						Yes, Delete
-					</AlertDialogCancel>
-				</AlertDialogFooter>
+
+				<UIDialogFooter onDelete={onDelete} onOpenChange={onOpenChange}/>
 			</AlertDialogContent>
 		</AlertDialog>
 	);

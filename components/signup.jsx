@@ -41,7 +41,6 @@ const Signup = () => {
 	const onSignup = async (values) => {
 		// e.preventDefault();
 		await signup(values.email, values.password, values.name);
-		console.log(values);
 	};
 
 	return (

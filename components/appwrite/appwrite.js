@@ -50,7 +50,7 @@ const listUserOwnedGroups = async(userEmail) =>{
 		return allUserGroups.teams.filter((item) => item.prefs.creatorEmail === userEmail);
 	}
 	catch (e){
-		console.log(e);
+		// console.log(e);
 	}
 }
 

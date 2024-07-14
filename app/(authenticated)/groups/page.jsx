@@ -10,7 +10,7 @@ import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
 import {toast} from "react-toastify";
 import {ToastOptions} from "@/lib/ToastOptions";
-import {ChevronDown, ChevronUp, Info, ShieldCheck, Trash, Trash2, Users2} from "lucide-react";
+import {ChevronDown, ChevronUp, Info, Loader2Icon, ShieldCheck, Trash, Trash2, Users2} from "lucide-react";
 import {Label} from "@/components/ui/label";
 import {DeleteGroupMember} from "@/components/groups/DeleteGroupMember";
 import {useAuth} from "@/components/contexts/AuthContext";
@@ -46,25 +46,25 @@ export default function Page() {
 
     return (
         <PageContainer hideTopbar>
-            <Text variant="h2">Groups</Text>
+            <Text variant="h2" className={'mb-2'}>Groups</Text>
             <Text className={'text-base'}>Groups are a way of sharing your Events Data with others. When a new user is added they will receive an invitation email to join the group.</Text>
 
-            <div onClick={()=> setShowInformation(!showInformation)} className={'cursor-pointer'}>
-                <Text className={'flex items-center gap-4 mt-4 font-medium text-primary'}>
+        <div className={'bg-muted py-4 px-6 rounded-lg mt-2 cursor-pointer'} onClick={()=> setShowInformation(!showInformation)} >
+                <Text className={'flex items-center justify-between gap-2 font-medium text-primary'}>
                     <span className={'flex items-center gap-2'}><Info className={'w-4 h-4'}/> Important Information</span>
-                    {showInformation ? <ChevronUp className={'w-5 h-5 stroke-[3]'} /> : <ChevronDown  className={'w-5 h-5 stroke-[3]'} />}
+                    {showInformation ? <ChevronUp className={'w-5 h-5 mt-1 stroke-[3]'} /> : <ChevronDown  className={'w-5 h-5 mt-1 stroke-[3]'} />}
                 </Text>
+                {showInformation &&
+                    <ul className={'list-disc pl-4 gap-2 mt-2 flex flex-col'}>
+                        <li><Text variant={'sm'}>Added user will be able to <span className={'font-semibold'}>Add</span>, <span className={'font-semibold'}>Update</span>, <span className={'font-semibold'}>Delete</span> and <span className={'font-semibold'}>View</span> Events and all its Data</Text></li>
+                        <li><Text variant={'sm'}>User need to accept invitation sent to them via email before they can manage shared data</Text></li>
+                        <li><Text variant={'sm'} className={'flex flex-col gap-1'}>
+                            <span className={'flex gap-1 items-center'}><ShieldCheck className={'w-4 h-4 text-primary'}/> {`indicates Groups you've created`}</span>
+                            <span className={'flex gap-1 items-center'}><Users2 className={'w-4 h-4 text-primary'}/> {`indicates Groups you've joined`}</span>
+                        </Text></li>
+                    </ul>
+                }
             </div>
-            {showInformation &&
-                <ul className={'list-disc pl-9 gap-2 mt-2 flex flex-col'}>
-                    <li><Text variant={'sm'}>Added user will be able to <span className={'font-semibold'}>Add</span>, <span className={'font-semibold'}>Update</span>, <span className={'font-semibold'}>Delete</span> and <span className={'font-semibold'}>View</span> Events and all its Data</Text></li>
-                    <li><Text variant={'sm'}>User need to accept invitation sent to them via email before they can manage shared data</Text></li>
-                    <li><Text variant={'sm'} className={'flex flex-col gap-1'}>
-                        <span className={'flex gap-1 items-center'}><ShieldCheck className={'w-4 h-4 text-primary'}/> indicated Groups you created</span>
-                        <span className={'flex gap-1 items-center'}><Users2 className={'w-4 h-4 text-primary'}/> {`indicated Groups you've joined`}</span>
-                    </Text></li>
-                </ul>
-            }
 
             <Text className={'py-2 mt-4 font-semibold text-primary'}>Your Groups</Text>
 
@@ -84,7 +84,7 @@ export default function Page() {
                             animate={{opacity: 1, y: 0,
                                 transition: { delay: 0.3 + i / 10 }
                             }}
-                            className={'w-full'}
+                            className={'w-full border-b last-of-type:border-b-0'}
                         >
                             <SingleGroup data={data} userGroups={userGroups} setUserGroups={setUserGroups} />
                         </motion.div>
@@ -99,7 +99,14 @@ export default function Page() {
                     transition: { delay: 0.2 }
                 }}
             >
-                <Button stretched size={'lg'} className={'mt-5'} onClick={()=> setOpenAddGroup(true)}>Create new Group</Button>
+                <Button
+                    stretched
+                    size="2xl"
+                    type={'submit'}
+                    className={'mt-5'} onClick={()=> setOpenAddGroup(true)}
+                >
+                    Create new Group
+                </Button>
             </motion.div>
 
             <AddGroup open={openAddGroup} setRefresh={setRefresh} onOpenChange={setOpenAddGroup} setUserGroups={setUserGroups}/>
