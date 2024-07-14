@@ -30,6 +30,7 @@ import {Permission, Role} from "appwrite";
 import {useAuth} from "@/components/contexts/AuthContext";
 import {useParams} from "next/navigation";
 import {useMyStore} from "@/store/store";
+import {UISheetFooter} from "@/components/theme/UISheetFooter";
 
 const AddEventItemSchema = Yup.object().shape({
 	name: Yup.string()
@@ -176,34 +177,15 @@ export const AddEventItem = ({open, onOpenChange, eventData}) => {
 									/>
 								</div>
 
-								<Button
-									className="w-full"
-									size="2xl"
-									stretched
+								<UISheetFooter
+									adding={adding}
 									disabled={disabled}
-									type="submit"
-								>
-									{adding ? (
-										<>
-											<Loader2Icon className="animate animate-spin w-5 h-5 stroke-[3]" />
-										</>
-									) : (
-										"Save Entry"
-									)}
-								</Button>
+									onOpenChange={onOpenChange}
+									labelAction={'Save Entry'}
+								/>
 							</Form>
 						)}
 					</Formik>
-					<Button
-						className="w-full"
-						size="2xl"
-						stretched
-						disabled={disabled}
-						variant={'outline'}
-						onClick={()=> onOpenChange(false)}
-					>
-						Cancel
-					</Button>
 				</div>
 
 			</SheetContent>

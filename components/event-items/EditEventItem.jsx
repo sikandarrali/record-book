@@ -15,6 +15,7 @@ import {toast} from "react-toastify";
 import {ToastOptions} from "@/lib/ToastOptions";
 import {SheetDescription, SheetHeader, SheetTitle, SheetContent, Sheet} from "@/components/ui/sheet";
 import Text from "@/components/theme/Text";
+import {UISheetFooter} from "@/components/theme/UISheetFooter";
 
 const AddEventItemSchema = Yup.object().shape({
 	name: Yup.string()
@@ -159,35 +160,16 @@ export const EditEventItem = ({ open, onOpenChange, item, setItemSheet }) => {
 										defaultValue={item.details}
 									/>
 								</div>
-
-
-								<Button
-									className="w-full"
-									size="2xl"
-									stretched
+								
+								<UISheetFooter
+									adding={adding}
 									disabled={disabled}
-								>
-									{adding ? (
-										<>
-											<Loader2Icon className="animate animate-spin w-5 h-5 stroke-[3]" />
-										</>
-									) : (
-										"Save Changes"
-									)}
-								</Button>
+									onOpenChange={onOpenChange}
+									labelAction={'Save Changes'}
+								/>
 							</Form>
 						)}
 					</Formik>
-					<Button
-						className="w-full"
-						size="2xl"
-						stretched
-						disabled={disabled}
-						variant={'outline'}
-						onClick={()=> onOpenChange(false)}
-					>
-						Cancel
-					</Button>
 				</div>
 			</SheetContent>
 		</Sheet>

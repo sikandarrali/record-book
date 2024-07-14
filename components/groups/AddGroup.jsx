@@ -18,6 +18,7 @@ import {ID} from "appwrite";
 import {useAuth} from "@/components/contexts/AuthContext";
 import {useData} from "@/components/contexts/DataContext";
 import {useRouter} from "next/navigation";
+import {UISheetFooter} from "@/components/theme/UISheetFooter";
 
 const AddGroupSchema = Yup.object().shape({
     name: Yup.string()
@@ -80,14 +81,6 @@ export const AddGroup = ({ open, onOpenChange, setRefresh }) => {
                         <div className="flex items-center text-xl pt-2 space-x-2 font-semibold text-primary">
                             Create Group
                         </div>
-
-                        <Button
-                            variant="outline"
-                            size="icon"
-                            onClick={() => onOpenChange(false)}
-                        >
-                            <X className="h-4 w-4" />
-                        </Button>
                     </div>
 
                     <div className="flex flex-col gap-5 w-full items-center justify-center py-6 lg:py-10">
@@ -124,20 +117,12 @@ export const AddGroup = ({ open, onOpenChange, setRefresh }) => {
                                         />
                                     </div>
 
-                                    <Button
-                                        className="w-full"
-                                        size="2xl"
-                                        stretched
+                                    <UISheetFooter
+                                        adding={adding}
                                         disabled={disabled}
-                                    >
-                                        {adding ? (
-                                            <>
-                                                <Loader2Icon className="animate animate-spin w-5 h-5 stroke-[3]" />
-                                            </>
-                                        ) : (
-                                            "Create Group"
-                                        )}
-                                    </Button>
+                                        onOpenChange={onOpenChange}
+                                        labelAction={'Create Group'}
+                                    />
                                 </Form>
                             )}
                         </Formik>
