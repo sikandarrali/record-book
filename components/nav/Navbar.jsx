@@ -146,6 +146,7 @@ const MenuItem = ({ label, href, icon }) => {
 	return (
 		<Link
 			href={href}
+			replace
 			className={cn("flex text-background items-center gap-2 px-4 py-4 rounded-md hover:bg-muted hover:text-foreground",
 				pathname.toString() === href.toString() && "bg-muted text-foreground")}
 		>
