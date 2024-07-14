@@ -7,7 +7,6 @@ import Text from "@/components/theme/Text";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import {Plus, Users2, XIcon} from "lucide-react";
-import {usePathname, useRouter, useSearchParams} from "next/navigation";
 import {Suspense, useCallback, useEffect, useRef, useState} from "react";
 import { NumericFormat } from "react-number-format";
 import {db} from "@/components/appwrite/database";
@@ -25,8 +24,8 @@ import {
 import {SearchItems} from "@/components/event-items/SearchItems";
 import {ReloadIcon} from "@radix-ui/react-icons";
 import {useAuth} from "@/components/contexts/AuthContext";
-import {toast} from "react-toastify";
-import {ToastOptions} from "@/lib/ToastOptions";
+// import {toast} from "react-toastify";
+// import {ToastOptions} from "@/lib/ToastOptions";
 
 const SingleEventModal = ({ eventData }) => {
     const isDesktop = useMediaQuery({ query: "(min-width: 1024px)" })
@@ -87,9 +86,6 @@ const SingleEventModal = ({ eventData }) => {
                 if(response.payload.eventID === eventData.$id){
                     setItems(prev=> [response.payload, ...prev])
                     setItemsDefault(prev=> [response.payload, ...prev])
-                    if(items.length > 0){
-                        setNoItems(false)
-                    }
                 }
             }
             if(response.events.includes("databases.*.collections.*.documents.*.delete")){
@@ -171,14 +167,14 @@ const SingleEventModal = ({ eventData }) => {
     // }, [searchParams]);
     // if (isOpen) return null;
 
-    const copyToClipboard = async () => {
-        try {
-            await navigator.clipboard.writeText(window.location.href);
-            toast.info("Link copied", ToastOptions);
-        } catch (err) {
-            toast.error("Link not copied", ToastOptions);
-        }
-    };
+    // const copyToClipboard = async () => {
+    //     try {
+    //         await navigator.clipboard.writeText(window.location.href);
+    //         toast.info("Link copied", ToastOptions);
+    //     } catch (err) {
+    //         toast.error("Link not copied", ToastOptions);
+    //     }
+    // };
 
     return (
         <Sheet

@@ -1,6 +1,6 @@
 import axios from "axios";
 import { usePathname, useRouter } from "next/navigation";
-import {createContext, useContext, useEffect, useLayoutEffect, useMemo, useState} from "react";
+import {createContext, useContext, useLayoutEffect, useMemo, useState} from "react";
 import {account} from "../appwrite/appwrite";
 import LoadingFallback from "../loaders/LoadingFallback";
 import {HOMEPAGE_ROUTE, LOGIN_ROUTE, PROTECTED_ROUTES} from "@/lib/routes";
@@ -14,7 +14,7 @@ export const AuthProvider = ({ children }) => {
 	const pathname = usePathname()
 
 	useLayoutEffect(() => {
-		getLoggedInGoogleUser().then(r => setLoading(false));
+		getLoggedInGoogleUser().then(() => setLoading(false));
 	}, []);
 
 	const getLoggedInGoogleUser = async () => {
