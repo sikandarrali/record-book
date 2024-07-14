@@ -142,7 +142,7 @@ const Sidebar = ({ open, onOpenChange }) => {
 
 const MenuItem = ({ label, href, icon }) => {
 	const pathname = usePathname()
-	
+
 	return (
 		<Link
 			href={href}

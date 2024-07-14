@@ -48,7 +48,7 @@ const SheetContent = React.forwardRef(
 			<SheetOverlay />
 			<SheetPrimitive.Content
 				ref={ref}
-				className={cn(sheetVariants({ side }), className)}
+				className={cn(sheetVariants({ side }), 'focus-visible:outline-0 outline-0', className)}
 				data-iddd={'hey'}
 				{...props}
 			>
