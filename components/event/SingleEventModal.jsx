@@ -68,12 +68,12 @@ const SingleEventModal = ({ eventData }) => {
     //    }
     // }, [isOpen]);
     //
-    // const onClose = () =>{
-    //     setIsOpen(false)
-    //     const newParams = new URLSearchParams(searchParams);
-    //     newParams.delete('id');
-    //     router.push(`?${newParams.toString()}`, { shallow: true });
-    // }
+    const onClose = () =>{
+        setIsOpen(false)
+        // const newParams = new URLSearchParams(searchParams);
+        // newParams.delete('id');
+        // router.push(`?${newParams.toString()}`, { shallow: true });
+    }
 
     // get items
     useEffect(() => {
@@ -211,7 +211,7 @@ const SingleEventModal = ({ eventData }) => {
                 {eventData.teamId && <Users2 className={'absolute right-2 top-2 w-5 h-5'}/>}
             </SheetTrigger>
             <SheetContent
-                className={cn("!pt-0 flex flex-col justify-start !h-[100dvh]")}
+                className={cn("!pt-0 flex flex-col justify-start !h-[100dvh] border-0")}
                 side={isDesktop ? "right" : "bottom"}
                 onOpenAutoFocus={(e) => e.preventDefault()}
             >
