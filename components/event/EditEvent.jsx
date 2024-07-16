@@ -252,7 +252,7 @@ export const EditEvent = ({ open, onOpenChange, eventData, setGroup }) => {
 											errors={errors.details}
 											touched={touched.details}
 										/>
-										<UITextarea
+										<Textarea
 											onChange={handleChange}
 											onBlur={handleBlur}
 											name="details"

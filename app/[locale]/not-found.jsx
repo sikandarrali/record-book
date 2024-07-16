@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import PageContainer from "@/components/providers/PageContainer";
-import Text from "@/components/theme/UIText"
+import UIText from "@/components/theme/UIText"
 import {Button} from "@/components/ui/button";
 import {HomeIcon} from "lucide-react";
 import {useScopedI18n} from "@/locales/client";
