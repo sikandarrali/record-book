@@ -1,4 +1,4 @@
-{
+const Translation = {
   "general" : {
     "btn" : {
       "saveEntry" : "Save Entry",
@@ -39,6 +39,8 @@
     "totalEntries" : "Total Entries: ",
     "allItemsShown" : "All items shown",
     "btnLoading" : "Loading...",
+    "btnSaveEntry" : "Save Entry",
+    "btnCancel" : "Cancel",
     "btnLoadMore" : "Load more",
     "searchPlaceholder" : "Type to Search...",
     "searchNoItems" : "No items matching your search",
@@ -53,7 +55,7 @@
   },
   "groups": {
     "title": "Groups",
-    "text": "Groups are a way of sharing your Events Data with others. ",
+    "text": "Groups are a way of sharing your Events Data with others.",
     "information" : "Important Information",
     "informationP1" : "When a new user is added they will receive an invitation email to join the group.",
     "informationP2" : "User need to accept invitation before they can access shared data.",
@@ -132,6 +134,11 @@
     "team_invalid_secret" : "Invalid Invitation Link.",
     "team_invite_mismatch" : "Invalid Invitation Link.",
     "team_invite_already_exists" : "User is already part of the Group."
+  },
+  "languageSwitcher": {
+    "ur": "Urdu",
+    "en": "English"
   }
 }
 
+export default Translation

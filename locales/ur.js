@@ -1,0 +1,146 @@
+const Translation = {
+  "events": {
+    "addEvent": "نیا ایونٹ شامل کریں",
+    "addEventItem": "نیا ریکارڈ شامل کریں",
+    "addMoreDetailsText": "تاریخ، مقام اور تفصیلات وغیرہ شامل کریں۔",
+    "alertEventCreated": "ایونٹ بنایا گیا",
+    "alertEventDeleted": "ایونٹ حذف",
+    "alertEventItemCreated": "ریکارڈ بنایا گیا",
+    "alertEventItemDeleted": "ریکارڈ حذف",
+    "alertEventItemUpdated": "ریکارڈ اپ ڈیٹ",
+    "alertEventUpdated": "ایونٹ اپ ڈیٹ",
+    "alertException": "آپ کی درخواست پر کارروائی کرنے سے قاصر",
+    "alertNothingToUpdate": "اپ ڈیٹ کرنے کے لئے کچھ بھی نہیں",
+    "allItemsShown": "دکھائی گئی تمام اشیا",
+    "btnCancel": "منسوخ کریں۔",
+    "btnLoadMore": "مزید لوڈ کریں",
+    "btnLoading": "لوڈ ہو رہا ہے...",
+    "btnSaveEntry": "اندراج محفوظ کریں",
+    "deleteEvent": "ایونٹ حذف کریں",
+    "deleteEventItem": "ریکارڈ حذف کریں",
+    "deleteEventItemText": "یہ مستقل طور پر حذف ہوجائے گا",
+    "deleteEventText": "یہ مستقل طور پر حذف ہوجائے گا",
+    "editEvent": "پروگرام میں ترمیم کریں",
+    "editEventItem": "ریکارڈ میں ترمیم",
+    "groupNotFound": "کوئی گروپ نہیں ملا، پہلے شامل کریں",
+    "labelDate": "تاریخ",
+    "labelDetails": "تفصیلات",
+    "labelGroup": "گروپ",
+    "labelItemAmount": "رقم",
+    "labelItemDetails": "تفصیلات",
+    "labelItemName": "شخص کا نام",
+    "labelName": "ایونٹ کا نام",
+    "labelShareWithGroup": "گروپ کے ساتھ اشتراک کریں",
+    "labelVenue": "مقام",
+    "notSharedWithGroup": "کسی گروپ کے ساتھ اشتراک نہیں کیا",
+    "searchNoItems": "آپ کی تلاش سے مماثل کوئی چیز نہیں",
+    "searchPlaceholder": "تلاش کرنے کے لئے ٹائپ کریں...",
+    "selectGroupPlaceholder": "گروپ منتخب کریں",
+    "title": "واقعات",
+    "totalEntries": "کل اندراجات: "
+  },
+  "general": {
+    "btn": {
+      "add": "شامل کریں",
+      "cancel": "منسوخ کریں۔",
+      "loadMore": "مزید لوڈ کریں",
+      "loading": "لوڈ ہو رہا ہے...",
+      "saveChanges": "تبدیلیاں محفوظ کریں",
+      "saveEntry": "اندراج محفوظ کریں",
+      "yesDelete": "ہاں، حذف کریں"
+    },
+    "label": {
+      "required": "لازمی"
+    }
+  },
+  "groups": {
+    "addMembers": "ممبران شامل کریں",
+    "alertException": "آپ کی درخواست پر کارروائی کرنے سے قاصر",
+    "alertGroupCreated": "گروپ بنایا گیا",
+    "alertGroupDeleted": "گروپ حذف",
+    "alertGroupLeft": "آپ نے ابھی گروپ چھوڑ دیا۔",
+    "alertGroupMemberAdded": "گروپ ممبر شامل",
+    "alertGroupMemberRemoved": "رکن کو گروپ سے ہٹا دیا گیا",
+    "alertGroupUpdated": "گروپ کا نام اپ ڈیٹ",
+    "alertNothingToUpdate": "اپ ڈیٹ کرنے کے لئے کچھ بھی نہیں",
+    "badgeAdmin": "ایڈمن",
+    "badgeMember": "ممبر",
+    "badgeYou": "آپ",
+    "btnAdd": "شامل کریں",
+    "btnCreateNewGroup": "نیا گروپ بنائیں",
+    "btnLeaveGroup": "گروپ چھوڑیں",
+    "btnYesLeave": "ہاں، چھوڑ دیں",
+    "btnYesRemove": "ہاں، ہٹا دیں",
+    "createGroup": "گروپ بنائیں",
+    "deleteGroup": "گروپ حذف کریں",
+    "deleteGroupMember": "صارف کو گروپ سے ہٹا دیں",
+    "deleteGroupMemberText1": "کیا آپ واقعی ہٹانا چاہتے ہیں",
+    "deleteGroupMemberText2": "سے",
+    "deleteGroupMemberText3": "وہ اب ایونٹس ڈیٹا تک رسائی حاصل نہیں کرسکیں گے۔",
+    "deleteGroupText": "یہ مستقل طور پر حذف ہوجائے گا",
+    "editGroup": "گروپ میں ترمیم کریں",
+    "information": "اہم معلومات",
+    "informationP1": "جب کوئی نیا صارف شامل کیا جاتا ہے تو انہیں گروپ میں شامل ہونے کے لئے دعوت نامہ ای میل موصول ہوگا۔",
+    "informationP2": "صارفین کو مشترکہ ڈیٹا تک رسائی حاصل کرنے سے پہلے دعوت نامہ قبول کرنے",
+    "informationP3": "شامل کردہ صارف واقعات اور اس کے تمام ڈیٹا کو شامل کرنے، اپ ڈیٹ کرنے، حذف کرنے اور دیکھنے کے قابل ہوگا۔",
+    "labelAddMembers": "ممبران شامل کریں",
+    "labelGroupName": "گروپ کا نام",
+    "labelMembers": "اراکین",
+    "labelMembersInGroup": "گروپ میں اراکین",
+    "labelNoMembersInGroup": "گروپ میں کوئی ممبر نہیں ہے",
+    "labelYourGroups": "آپ کے گروپس",
+    "leaveGroupText1": "آپ جانے والے ہیں:",
+    "leaveGroupText2": "اب آپ اس گروپ کے ساتھ شیئر کردہ واقعات اور دیگر ڈیٹا تک رسائی حاصل نہیں کرسکیں گے۔",
+    "membership_already_confirmed": "آپ اس گروپ کے رکن ہیں۔",
+    "membership_not_found": "غلط دعوت نامہ لنک۔",
+    "noGroups": "کوئی گروپ نہیں ملا، پہلے گروپ بنائیں",
+    "team_invalid_secret": "غلط دعوت نامہ لنک۔",
+    "team_invite_already_exists": "صارف پہلے ہی گروپ کا حصہ ہے۔",
+    "team_invite_mismatch": "غلط دعوت نامہ لنک۔",
+    "team_not_found": "کوئی مماثل گروپ نہیں ملا.",
+    "text": "گروپس آپ کے ایونٹس ڈیٹا کو دوسروں کے ساتھ شیئر کرنے کا ایک طریقہ ہیں۔ ",
+    "title": "گروپس",
+    "tooltipPendingUser": "صارف نے دعوت قبول نہیں کی ہے۔",
+    "userEmailPlaceholder": "صارف ای میل درج کریں"
+  },
+  "joinGroup": {
+    "alertGroupJoined": "گروپس شامل ہوئے!",
+    "alreadyJoined": "پہلے ہی شامل ہوگئے ہیں۔",
+    "btnBackToGroups": "گروپس پر واپس جائیں",
+    "btnLoginNow": "ابھی لاگ ان کریں",
+    "loginAndCheckGroups": "آپ لاگ ان کر سکتے ہیں اور اپنے گروپس چیک کر سکتے ہیں:",
+    "membership_already_confirmed": "آپ اس گروپ کے رکن ہیں۔",
+    "membership_not_found": "غلط دعوت نامہ لنک۔",
+    "team_invalid_secret": "غلط دعوت نامہ لنک۔",
+    "team_invite_already_exists": "صارف پہلے ہی گروپ کا حصہ ہے۔",
+    "team_invite_mismatch": "غلط دعوت نامہ لنک۔",
+    "team_not_found": "کوئی مماثل گروپ نہیں ملا.",
+    "textJoined": "آپ کامیابی کے ساتھ اس گروپ میں شامل ہوگئے ہیں۔",
+    "titleJoined": "گروپ میں شامل ہوا",
+    "unableToJoin": "شامل ہونے سے قاصر"
+  },
+  "languageSwitcher": {
+    "en": "انگریزی",
+    "ur": "اردو"
+  },
+  "login": {
+    "withGoogle": "گوگل کے ساتھ لاگ ان کریں"
+  },
+  "logout": {
+    "btnLogout": "لاگ آؤٹ",
+    "text": "اگر آپ خود بخود لاگ آؤٹ نہیں ہوتے ہیں تو یہاں کلک کریں"
+  },
+  "navbar": {
+    "linkEditProfile": "پروفائل میں ترمیم",
+    "linkEvents": "واقعات",
+    "linkGroups": "گروپس",
+    "linkLogout": "لاگ آؤٹ"
+  },
+  "pageNotFound": {
+    "text": "صفحہ نہیں ملا"
+  }
+}
+
+export default Translation
+
+

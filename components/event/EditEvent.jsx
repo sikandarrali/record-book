@@ -18,7 +18,7 @@ import {useAuth} from "@/components/contexts/AuthContext";
 import {Permission, Query, Role} from "appwrite";
 import {useData} from "@/components/contexts/DataContext";
 import {UISheetFooter} from "@/components/theme/UISheetFooter";
-import {useTranslations} from "next-intl";
+import {useScopedI18n} from "@/locales/client";
 import {Label} from "@/components/ui/label";
 
 const EditEventSchema = Yup.object().shape({
@@ -35,7 +35,7 @@ export const EditEvent = ({ open, onOpenChange, eventData, setGroup }) => {
 	const isDesktop = useMediaQuery({
 		query: "(min-width: 1024px)",
 	});
-	const t = useTranslations('events')
+	const t = useScopedI18n('events')
 	const [adding, setAdding] = useState(false);
 	const [disabled, setDisabled] = useState(false);
 	const [selectedGroup, setSelectedGroup] = useState(null)
@@ -252,7 +252,7 @@ export const EditEvent = ({ open, onOpenChange, eventData, setGroup }) => {
 											errors={errors.details}
 											touched={touched.details}
 										/>
-										<Textarea
+										<UITextarea
 											onChange={handleChange}
 											onBlur={handleBlur}
 											name="details"

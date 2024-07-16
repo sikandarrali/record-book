@@ -10,7 +10,7 @@ import {toast} from "react-toastify";
 import {ToastOptions} from "@/lib/ToastOptions";
 import {scrollToTop} from "@/lib/utils";
 import {ParseErrorCodes} from "@/lib/parseErrorCodes";
-import {useTranslations} from "next-intl";
+import {useScopedI18n} from "@/locales/client";
 
 
 const AddMemberSchema = Yup.object().shape({
@@ -23,7 +23,7 @@ const AddMemberSchema = Yup.object().shape({
 export const AddGroupMember = ({groupID, setUsersInGroup}) =>{
     const [adding, setAdding] = useState(false);
     const [disabled, setDisabled] = useState(false);
-    const t = useTranslations('groups')
+    const t = useScopedI18n('groups')
 
     const onAdd = async (values) => {
         setAdding(true);
@@ -82,7 +82,7 @@ export const AddGroupMember = ({groupID, setUsersInGroup}) =>{
                             disabled={disabled}
                             placeholder={t('userEmailPlaceholder')}
                             value={values.email}
-                            className={'normal-case'}
+                            className={'normal-case rtl:text-left'}
                         />
                         <span className={'mt-2 self-end'}>
                             <FormLabel

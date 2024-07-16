@@ -15,12 +15,12 @@ import {
 } from "@/components/ui/sheet";
 import useScrollToView from "@/lib/hooks/useScrollToView";
 import {useMediaQuery} from "react-responsive";
-import Text from "@/components/theme/Text";
+import UIText from "@/components/theme/UIText";
 import {scrollToTop} from "@/lib/utils";
 import {Permission, Role} from "appwrite";
 import {useAuth} from "@/components/contexts/AuthContext";
 import {UISheetFooter} from "@/components/theme/UISheetFooter";
-import {useTranslations} from "next-intl";
+import {useScopedI18n} from "@/locales/client";
 
 const AddEventItemSchema = Yup.object().shape({
 	name: Yup.string()
@@ -42,7 +42,7 @@ export const AddEventItem = ({open, onOpenChange, eventData}) => {
 	});
 	const {user} = useAuth()
 	const eventID = eventData.$id
-	const t = useTranslations('events')
+	const t = useScopedI18n('events')
 
 	useScrollToView()
 
@@ -96,7 +96,7 @@ export const AddEventItem = ({open, onOpenChange, eventData}) => {
 				<SheetHeader className={'hidden'}><SheetTitle/><SheetDescription /></SheetHeader>
 
 				<div className="flex flex-col gap-5 max-w-lg mx-auto items-center lg:py-10">
-					<Text className={'text-primary self-start py-6'} variant={'h2'}>{t('addEventItem')}</Text>
+					<UIText className={'text-primary self-start py-6'} variant={'h2'}>{t('addEventItem')}</UIText>
 
 					<Formik
 						initialValues={{
@@ -156,7 +156,7 @@ export const AddEventItem = ({open, onOpenChange, eventData}) => {
 										errors={errors.details}
 										touched={touched.details}
 									/>
-									<Textarea
+									<UITextarea
 										onChange={handleChange}
 										onBlur={handleBlur}
 										name="details"

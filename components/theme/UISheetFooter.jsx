@@ -1,13 +1,13 @@
 import {Button} from "@/components/ui/button";
 import {Loader2Icon} from "lucide-react";
-import {useTranslations} from "next-intl";
+import {useScopedI18n} from "@/locales/client";
+import UIText from "@/components/theme/UIText";
 
 export const UISheetFooter = ({disabled, adding, onOpenChange, labelAction, labelCancel }) =>{
-    const t = useTranslations('general.btn')
+    const t = useScopedI18n('general')
     return(
         <div className={'flex flex-col w-full gap-2.5'}>
             <Button
-                className="w-full"
                 size="2xl"
                 stretched
                 disabled={disabled}
@@ -17,11 +17,10 @@ export const UISheetFooter = ({disabled, adding, onOpenChange, labelAction, labe
                     <>
                         <Loader2Icon className="animate animate-spin w-5 h-5 stroke-[3]" />
                     </>
-                ) : labelAction || t('saveChanges')
+                ) : <UIText>{labelAction || t('btn.saveChanges')}</UIText>
                 }
             </Button>
             <Button
-                className="w-full"
                 size="2xl"
                 stretched
                 disabled={disabled}
@@ -29,7 +28,7 @@ export const UISheetFooter = ({disabled, adding, onOpenChange, labelAction, labe
                 type={'button'}
                 onClick={()=> onOpenChange(false)}
             >
-                {labelCancel || t('cancel')}
+               <UIText>{labelCancel || t('btn.cancel')}</UIText>
             </Button>
         </div>
     )

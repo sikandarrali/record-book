@@ -12,14 +12,15 @@ import {
     TooltipTrigger,
 } from "@/components/ui/tooltip"
 import {Button} from "@/components/ui/button";
-import {useTranslations} from "next-intl";
+import {useScopedI18n} from "@/locales/client";
+import UIText from "@/components/theme/UIText";
 
 
 export const MemberListItem = ({data, teamID, setUsersInGroup, groupName, isGroupOwner}) =>{
 
     const isOwner =  data.roles.includes('owner');
     const isMember = !isOwner
-    const t = useTranslations('groups')
+    const t = useScopedI18n('groups')
 
     const [openDelete, setOpenDelete] = useState(false)
     const {user} = useAuth()
@@ -43,7 +44,7 @@ export const MemberListItem = ({data, teamID, setUsersInGroup, groupName, isGrou
 
                 {data.confirm ?
                     <div className={'flex gap-2 items-center text-xs'}>
-                        {isOwner  && <Badge variant={'secondary'}>{t('badgeAdmin')}</Badge>}
+                        {isOwner  && <Badge variant={'secondary'}><UIText variant={'sm'} noSpacing>{t('badgeAdmin')}</UIText></Badge>}
                         {isMember && <Badge variant={'outline'} className={'text-green-500 border-green-500'}>{t('badgeMember')}</Badge>}
                         {user.email === data.userEmail && <Badge>{t('badgeYou')}</Badge>}
                     </div>

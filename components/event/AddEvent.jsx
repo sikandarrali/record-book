@@ -23,10 +23,10 @@ import {
 import {useAuth} from "@/components/contexts/AuthContext";
 import {Label} from "@/components/ui/label";
 import {useData} from "@/components/contexts/DataContext";
-import Text from "@/components/theme/Text";
+import UIText from "@/components/theme/UIText";
 import {SheetStylesFlexibleHeight} from "@/lib/reusableStyles";
 import {UISheetFooter} from "@/components/theme/UISheetFooter";
-import {useTranslations} from "next-intl";
+import {useScopedI18n} from "@/locales/client";
 
 
 const AddEventSchema = Yup.object().shape({
@@ -47,7 +47,7 @@ export const AddEvent = ({ open, onOpenChange }) => {
 	const {user} = useAuth()
 	const {userOwnedGroups} = useData()
 	const [addEventDetails, setAddEventDetails] = useState(false)
-	const t = useTranslations('events')
+	const t = useScopedI18n('events')
 
 	const onAdd = async (values) => {
 		setAdding(true);
@@ -98,8 +98,8 @@ export const AddEvent = ({ open, onOpenChange }) => {
 				<div className="flex flex-col w-full min-h-full pt-4 justify-start">
 					{/* Date & Close */}
 					<div className="flex items-center space-x-2 justify-between mb-4">
-						<div className="flex items-center text-xl pt-2 space-x-2 font-semibold text-primary">
-							{t('addEvent')}
+						<div className="flex items-center text-xl pt-2 space-x-2 text-primary">
+							<UIText>{t('addEvent')}</UIText>
 						</div>
 					</div>
 
@@ -122,7 +122,7 @@ export const AddEvent = ({ open, onOpenChange }) => {
 
 									<div className="flex flex-col">
 										<Label className={"relative text-sm flex items-center justify-between gap-4"}>
-											<span className="shrink-0">{t('labelShareWithGroup')}</span>
+											<UIText className="shrink-0">{t('labelShareWithGroup')}</UIText>
 										</Label>
 										<div className={'flex gap-4 items-center relative'}>
 											<Select onValueChange={(selected)=> setSelectedGroup(selected)} key={selectedGroup}>
@@ -176,11 +176,11 @@ export const AddEvent = ({ open, onOpenChange }) => {
 									</div>
 
 									<div
-										className={'flex items-center justify-end gap-1 cursor-pointer text-primary'}
+										className={'flex items-center justify-center gap-1 cursor-pointer text-primary'}
 										onClick={()=> setAddEventDetails(!addEventDetails)}
 									>
 										{addEventDetails ? <XIcon className={'w-4 h-4'}/> : <Plus className={'w-4 h-4'}/>}
-										<Text variant={'sm'} className={'font-medium'}>{t('addMoreDetailsText')}</Text>
+										<UIText variant={'sm'} className={'font-medium'}>{t('addMoreDetailsText')}</UIText>
 									</div>
 
 									{addEventDetails &&
@@ -217,7 +217,7 @@ export const AddEvent = ({ open, onOpenChange }) => {
 													errors={errors.details}
 													touched={touched.details}
 												/>
-												<Textarea
+												<UITextarea
 													onChange={handleChange}
 													onBlur={handleBlur}
 													name="details"

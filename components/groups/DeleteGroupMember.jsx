@@ -8,10 +8,10 @@ import {
 } from "@/components/ui/alert-dialog";
 import {UIDialogFooter} from "@/components/theme/UIDialogFooter";
 import {TriangleAlert} from "lucide-react";
-import {useTranslations} from "next-intl";
+import {useScopedI18n} from "@/locales/client";
 
 export const DeleteGroupMember = ({ open, onOpenChange, userEmail, onDelete, groupName }) => {
-	const t = useTranslations('groups')
+	const t = useScopedI18n('groups')
 	return (
 		<AlertDialog open={open} onOpenChange={onOpenChange}>
 

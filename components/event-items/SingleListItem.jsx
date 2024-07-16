@@ -1,6 +1,6 @@
 "use client";
 import { db } from "@/components/appwrite/database";
-import Text from "@/components/theme/Text";
+import UIText from "@/components/theme/UIText";
 import { Button } from "@/components/ui/button";
 import { Pen, Trash2, XIcon } from "lucide-react";
 import {useState} from "react";
@@ -18,14 +18,15 @@ import {
 } from "@/components/ui/sheet";
 import {useMediaQuery} from "react-responsive";
 import {cn} from "@/lib/utils";
-import {useTranslations} from "next-intl";
+import {useScopedI18n} from "@/locales/client";
+import {UISheetInfoFooter} from "@/components/theme/UISheetInfoFooter";
 
 export const SingleListItem = ({ item }) => {
 	const isDesktop = useMediaQuery({ query: "(min-width: 1024px)" })
 	const [isOpen, setIsOpen] = useState(false);
 	const [openEdit, setOpenEdit] = useState(false);
 	const [openDelete, setOpenDelete] = useState(false);
-	const t = useTranslations('events')
+	const t = useScopedI18n('events')
 
 	const onDelete = async () => {
 		setOpenDelete(false);
@@ -77,9 +78,9 @@ export const SingleListItem = ({ item }) => {
 				<div className="flex flex-col w-full min-h-full pt-4 justify-start">
 
 					<div className="flex flex-col justify-center items-center my-10 lg:mt-32">
-						<Text variant={"h2"}>
+						<UIText variant={"h2"}>
 							{item.name}
-						</Text>
+						</UIText>
 
 						<div className="flex text-foreground gap-2 mt-8 justify-center items-center relative select-none pointer-events-none">
 							<span className="text-lg font-medium">Rs</span>
@@ -96,51 +97,18 @@ export const SingleListItem = ({ item }) => {
 						</div>
 
 						{item.details &&
-							<Text className={'mt-20 self-start flex flex-col px-2'}>
+							<UIText className={'mt-20 self-start flex flex-col px-2'}>
 								<span className={'font-semibold text-sm mb-1'}>{t('labelItemDetails')}</span>
 								<span>{item.details}</span>
-							</Text>
+							</UIText>
 						}
 					</div>
 
-					<div className={'mt-auto py-14 lg:py-0 flex flex-row items-center justify-between px-2'}>
-						<div
-							className={
-								"flex flex-row justify-end gap-4"
-							}
-						>
-							{/*{hasDeletePermission &&*/}
-								<Button
-									type="submit"
-									variant="outline"
-									size="icon"
-									onClick={() => setOpenDelete(true)}
-								>
-									<Trash2 className="h-5 w-5 text-primary" />
-								</Button>
-							{/*}*/}
-							<Button
-								type="submit"
-								variant="outline"
-								size="icon"
-								onClick={() => {
-									setOpenEdit(true)
-								}}
-							>
-								<Pen className="h-4 w-4" />
-							</Button>
-						</div>
-						<Button
-							type="submit"
-							variant="outline"
-							size="icon"
-							// stretched
-							className="w-14 h-14 rounded-full self-center"
-							onClick={() => setIsOpen(false)}
-						>
-							<XIcon className="text-primary" />
-						</Button>
-					</div>
+					<UISheetInfoFooter
+						setOpen={setIsOpen}
+						setOpenDelete={setOpenDelete}
+						setOpenEdit={setOpenEdit}
+					/>
 				</div>
 
 				<EditEventItem

@@ -11,26 +11,31 @@ import {Badge} from "@/components/ui/badge";
 import {EditProfile} from "@/components/nav/EditProfile";
 import {cn} from "@/lib/utils";
 import {usePathname} from "next/navigation";
-import {useTranslations} from "next-intl";
+import LanguageSwitcher from "@/components/nav/LangugeSwitcher";
+import {useScopedI18n} from "@/locales/client";
+import UIText from "@/components/theme/UIText";
 
 const Navbar = () => {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 
 	return (
-		<div>
-			{/*<Progress value={33} className={'-mx-6 rounded-none w-screen h-1'} />*/}
+		<div dir={'ltr'}>
 			<div className="flex items-center justify-between sticky top-0 mb-4 bg-white shadow-sm -mx-6 py-4 px-6">
 				<Link href={'/events'} className={'cursor-pointer'}>
 					<Image src={"/logo.png"} width={120} height={47} alt="Logo" priority />
 				</Link>
 
-				<Button
-					variant="outline"
-					size="icon"
-					onClick={() => setIsMenuOpen(!isMenuOpen)}
-				>
-					<MenuIcon />
-				</Button>
+				<div className={'flex items-center gap-5'}>
+					<LanguageSwitcher />
+
+					<Button
+						variant="outline"
+						size="icon"
+						onClick={() => setIsMenuOpen(!isMenuOpen)}
+					>
+						<MenuIcon />
+					</Button>
+				</div>
 
 				<Sidebar open={isMenuOpen} onOpenChange={setIsMenuOpen} />
 			</div>
@@ -44,14 +49,14 @@ const Sidebar = ({ open, onOpenChange }) => {
 	const { onLogout } = useAuth();
 	const {user} = useAuth()
 	const [openEditProfile, setOpenEditProfile] = useState(false)
-	const t = useTranslations('navbar')
+	const t = useScopedI18n('navbar')
 
 	return (
 		<Sheet open={open} onOpenChange={onOpenChange}>
 			<SheetContent className="bg-primary border-l-0 px-0 outline-0 stroke-none">
 				<div className={'hidden'}><SheetHeader><SheetTitle/><SheetDescription/></SheetHeader></div>
 				<div className="h-full flex flex-col">
-					<div className="flex items-center -ml-4 mt-14 mb-10">
+					<div className="flex items-center -ml-4 mt-14 mb-10" dir={'ltr'}>
 						{user?.prefs?.picture ?
 							<div className="p-3 rounded-full self-start bg-primary shrink-0">
 								<Image
@@ -79,12 +84,6 @@ const Sidebar = ({ open, onOpenChange }) => {
 						</div>
 					</div>
 
-
-					{/*<div className={'flex items-center justify-between flex-1 px-10'}>*/}
-					{/*	<p className={'text-muted font-medium'}>Language</p>*/}
-					{/*	<LanguageSwitcher />*/}
-					{/*</div>*/}
-
 					<div className="flex flex-col px-6 h-full mt-10 gap-0.5">
 						<MenuItem
 							label={t('linkEvents')}
@@ -97,6 +96,14 @@ const Sidebar = ({ open, onOpenChange }) => {
 						<MenuItem
 							label={t('linkGroups')}
 							href={"/groups"}
+							icon={
+								<Users className="w-[18px] h-[18px]" />
+							}
+						/>
+
+						<MenuItem
+							label={"Test"}
+							href={"/test"}
 							icon={
 								<Users className="w-[18px] h-[18px]" />
 							}
@@ -121,7 +128,7 @@ const Sidebar = ({ open, onOpenChange }) => {
 						</div>
 					</div>
 
-					<div className={'mx-6 !mt-4 px-4 pt-6 text-muted flex items-center gap-1'}>
+					<div className={'mx-6 !mt-4 px-4 pt-6 text-muted flex justify-center items-center gap-1'} dir={'ltr'}>
 						<Copyright className={'w-3 h-3 stroke-[1.5]'}/>
 						<span className={'font-medium text-xs'}>Sikandar Ali Chishty</span>
 					</div>
@@ -145,7 +152,7 @@ const MenuItem = ({ label, href, icon }) => {
 				pathname.toString() === href.toString() && "bg-muted text-foreground")}
 		>
 			{icon}
-			<span className="text-base font-medium">{label}</span>
+			<UIText className="ltr:text-base ltr:font-medium">{label}</UIText>
 		</Link>
 	);
 };
