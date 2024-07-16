@@ -119,7 +119,7 @@ const SwitchLanguage = ({ styles }) => {
                         onClick={() => setDropDown(!dropDown)}
                     >
                         <Globe className={'w-3.5 h-3.5'}/>
-                        <UIText>{t(params.locale)}</UIText>
+                        <UIText className={'ltr:text-sm'}>{t(params.locale)}</UIText>
                         <ChevronDown className={'w-3.5 h-3.5'}/>
                     </div>
                 </DropdownMenuTrigger>
@@ -131,7 +131,7 @@ const SwitchLanguage = ({ styles }) => {
                             onClick={() => OnChangeLanguage(lang.locale)}
                             className={cn("border-b px-4 py-2 flex items-center justify-between rtl:flex-row-reverse rounded-none last-of-type:border-0", params.locale === lang.locale && 'text-primary')}
                         >
-                            <UIText>{t(lang.locale)}</UIText>
+                            <UIText className={'ltr:text-sm'}>{t(lang.locale)}</UIText>
                             {params.locale === lang.locale && (
                                 <span>
                                     <svg
