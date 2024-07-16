@@ -97,10 +97,10 @@ export default async function RootLayout({ children, params }) {
 		<html lang={params.locale} suppressHydrationWarning>
 			<head>
 				<title>Shadi Kharcha Record</title>
-				<link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png"/>
-				<link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png"/>
-				<link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png"/>
-				<link rel="mask-icon" href="/icons/safari-pinned-tab.svg" color="#5bbad5"/>
+				<link rel="apple-touch-icon" sizes="180x180" href="../../public/icons/apple-touch-icon.png"/>
+				<link rel="icon" type="image/png" sizes="32x32" href="../../public/icons/favicon-32x32.png"/>
+				<link rel="icon" type="image/png" sizes="16x16" href="../../public/icons/favicon-16x16.png"/>
+				<link rel="mask-icon" href="../../public/icons/safari-pinned-tab.svg" color="#5bbad5"/>
 			</head>
 			<body
 				dir={params.locale === 'ur' ? 'rtl' : 'ltr'}
