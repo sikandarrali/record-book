@@ -104,7 +104,7 @@ export const AddGroupMember = ({groupID, setUsersInGroup}) =>{
                     >
                         {adding ? (
                             <Loader2Icon className="animate animate-spin w-5 h-5 stroke-[3]" />
-                        ) : t('btnAddMember')
+                        ) : <UIText variant={'button    '}>{t('btnAddMember')}</UIText>
                         }
                     </Button>
                 </Form>
