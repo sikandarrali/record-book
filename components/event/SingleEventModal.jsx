@@ -308,7 +308,7 @@ const SingleEventModal = ({ eventData }) => {
                             </div>
 
                             <div
-                                className="flex items-center justify-center w-12 h-12 lg:hidden rounded-full absolute shadow-lg bg-muted-foreground right-0 mr-6 md:right-16 top-1/2 -translate-y-1/2"
+                                className="flex items-center cursor-pointer justify-center w-12 h-12 lg:hidden rounded-full absolute shadow-lg bg-muted-foreground right-0 mr-6 md:right-16 top-1/2 -translate-y-1/2"
                                 onClick={()=> onClose()}
                             >
                                 <XIcon className="text-muted" />

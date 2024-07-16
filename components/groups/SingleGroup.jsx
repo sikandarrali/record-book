@@ -123,7 +123,7 @@ const SingleGroup = ({ data, userGroups, setUserGroups }) => {
 
                         {isOwner &&
                             <div className={'flex flex-col gap-4 bg-background -mx-6 px-6 py-6'}>
-                                <UIText className={'flex items-center gap-2 text-primary'}>
+                                <UIText weight={'semibold'} className={'flex items-center gap-2 text-primary'}>
                                     <Plus className={'w-5 h-5'}/>
                                     {t('labelAddMembers')}
                                 </UIText>
@@ -170,7 +170,7 @@ const SingleGroup = ({ data, userGroups, setUserGroups }) => {
                             variant="outline"
                             size="icon"
                             // stretched
-                            className="w-14 h-14 rounded-full self-center"
+                            className="w-14 h-14 rounded-full self-center cursor-pointer"
                             onClick={() => setOpen(false)}
                         >
                             <XIcon className="text-primary" />

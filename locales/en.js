@@ -88,7 +88,7 @@ const Translation = {
     "addMembers" : "Add Members",
     "tooltipPendingUser" : "User has not accepted invitation.",
     "userEmailPlaceholder" : "Enter User Email",
-    "btnAdd" : "Add",
+    "btnAddMember" : "Add",
     "alertGroupCreated" : "Group Created",
     "alertGroupUpdated" : "Group Name Updated",
     "alertGroupDeleted" : "Group Deleted",

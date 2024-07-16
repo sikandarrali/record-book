@@ -75,6 +75,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import useCloseOnClickedOutside from "@/lib/hooks/useCloseOnClickedOutside";
 import UIText from "@/components/theme/UIText";
+import {useAuth} from "@/components/contexts/AuthContext";
 
 
 
@@ -98,6 +99,7 @@ const SwitchLanguage = ({ styles }) => {
     });
     const locale = useCurrentLocale();
     const ChangeLocale = useChangeLocale();
+    const {setLoading} = useAuth()
 
     const params = useParams();
 
@@ -105,9 +107,12 @@ const SwitchLanguage = ({ styles }) => {
 
     const [dropDown, setDropDown] = useState(false);
 
+
     const OnChangeLanguage = (switchTo) => {
-        if (locale === switchTo) return;
-        else ChangeLocale(switchTo);
+        if (locale !== switchTo) {
+            setLoading(true)
+            ChangeLocale(switchTo)
+        }
     };
 
     return (
@@ -129,7 +134,7 @@ const SwitchLanguage = ({ styles }) => {
                         <DropdownMenuItem
                             key={lang.locale}
                             onClick={() => OnChangeLanguage(lang.locale)}
-                            className={cn("border-b px-4 py-2 flex items-center justify-between rtl:flex-row-reverse rounded-none last-of-type:border-0", params.locale === lang.locale && 'text-primary')}
+                            className={cn("cursor-pointer border-b px-4 py-2 flex items-center justify-between rtl:flex-row-reverse rounded-none last-of-type:border-0", params.locale === lang.locale && 'text-primary')}
                         >
                             <UIText className={'ltr:text-sm'}>{t(lang.locale)}</UIText>
                             {params.locale === lang.locale && (
