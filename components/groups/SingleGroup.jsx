@@ -17,6 +17,7 @@ import {ExitIcon} from "@radix-ui/react-icons";
 import {LeaveGroup} from "@/components/groups/LeaveGroup";
 import {useScopedI18n} from "@/locales/client";
 import {isStringUrdu} from "@/lib/isStringUrdu";
+import {UISheetInfoFooter} from "@/components/theme/UISheetInfoFooter";
 
 const SingleGroup = ({ data, userGroups, setUserGroups }) => {
     const isDesktop = useMediaQuery({ query: "(min-width: 1024px)" })
@@ -133,9 +134,14 @@ const SingleGroup = ({ data, userGroups, setUserGroups }) => {
                     </div>
 
 
-                    <div className={'mt-auto py-14 lg:py-0 flex flex-row items-center justify-between px-2'} dir={'ltr'}>
-
-                        {!isOwner ?
+                    {isOwner ?
+                        <UISheetInfoFooter
+                            setOpen={setOpen}
+                            setOpenEdit={setOpenEdit}
+                            setOpenDelete={setOpenDelete}
+                        />
+                        :
+                        <div className={'mt-auto py-14 lg:py-0 flex flex-row items-center justify-between px-2'} dir={'ltr'}>
                             <Button
                                 variant={'outline'}
                                 className={'flex items-center gap-2 text-primary'}
@@ -144,38 +150,19 @@ const SingleGroup = ({ data, userGroups, setUserGroups }) => {
                                 <ExitIcon className={'-scale-x-100 w-3.5 h-3.5'}/>
                                 <UIText variant={'sm'}>{t('btnLeaveGroup')}</UIText>
                             </Button>
-                        :
-                            <div className={"flex flex-row justify-end gap-4"}>
-                                <Button
-                                    type="submit"
-                                    variant="outline"
-                                    size="icon"
-                                    onClick={() => setOpenDelete(true)}
-                                >
-                                    <Trash2 className="h-5 w-5 text-primary" />
-                                </Button>
-                                <Button
-                                    type="submit"
-                                    variant="outline"
-                                    size="icon"
-                                    onClick={() => setOpenEdit(true)}
-                                >
-                                    <Pen className="h-4 w-4" />
-                                </Button>
-                            </div>
-                        }
 
-                        <Button
-                            type="submit"
-                            variant="outline"
-                            size="icon"
-                            // stretched
-                            className="w-14 h-14 rounded-full self-center cursor-pointer"
-                            onClick={() => setOpen(false)}
-                        >
-                            <XIcon className="text-primary" />
-                        </Button>
-                    </div>
+                            <Button
+                                type="button"
+                                variant="outline"
+                                className="w-16 h-16 rounded-full self-center"
+                                onClick={() => setOpen(false)}
+                            >
+                                <XIcon className="text-primary w-12 h-12" />
+                            </Button>
+                        </div>
+                    }
+
+
                 </div>
             </SheetContent>
 

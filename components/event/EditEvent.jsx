@@ -23,6 +23,7 @@ import {Label} from "@/components/ui/label";
 import UIText from "@/components/theme/UIText";
 import {isStringUrdu} from "@/lib/isStringUrdu";
 import {SheetStylesFlexibleHeight, SheetStylesMAxHeight90} from "@/lib/reusableStyles";
+import {teams} from "@/components/appwrite/appwrite";
 
 const EditEventSchema = Yup.object().shape({
 	name: Yup.string()
@@ -34,22 +35,30 @@ const EditEventSchema = Yup.object().shape({
 	details: Yup.string().min(1).max(300, "max 300 characters"),
 });
 
-export const EditEvent = ({ open, onOpenChange, eventData, setGroup }) => {
+export const EditEvent = ({ open, onOpenChange, eventData, setGroup, userOwnedGroups }) => {
 	const isDesktop = useMediaQuery({
 		query: "(min-width: 1024px)",
 	});
 	const t = useScopedI18n('events')
 	const [adding, setAdding] = useState(false);
 	const [disabled, setDisabled] = useState(false);
-	const [selectedGroup, setSelectedGroup] = useState(null)
+	const [selectedGroup, setSelectedGroup] = useState()
+	const [userJoinedGroups, setUserJoinedGroups] = useState([])
 	const {user} = useAuth()
-	const {userOwnedGroups} = useData()
+
+	const isOwner = userOwnedGroups.some((grp)=> grp.$id === eventData.teamId)
+
+	const getUserGroups = async () =>{
+		const response = await teams.list()
+		setUserJoinedGroups(response.teams)
+	}
 
 	useLayoutEffect(() => {
 		if(eventData.teamId) {
 			setSelectedGroup(eventData.teamId)
+			getUserGroups()
 		}
-	}, []);
+	}, [open]);
 
 	let teamPermissions = [
 		Permission.read(Role.team(selectedGroup, "member")),
@@ -171,41 +180,47 @@ export const EditEvent = ({ open, onOpenChange, eventData, setGroup }) => {
 										<Label className={"relative text-sm flex items-center justify-between gap-4"}>
 											<UIText variant={'label'} className="shrink-0">{t('labelShareWithGroup')}</UIText>
 										</Label>
-										<div className={'flex gap-4 items-center relative'}>
-											<Select onValueChange={(selected)=> setSelectedGroup(selected)} key={selectedGroup}>
-												<SelectTrigger className="w-full h-12 flex between">
-													<UIText variant={'label'}>{selectedGroup ? userOwnedGroups.find((group)=> group.$id=== selectedGroup)?.name : <span className={'text-muted-foreground'}>{t('selectGroupPlaceholder')}</span>}</UIText>
-												</SelectTrigger>
-												<SelectContent>
-													{userOwnedGroups.length===0 &&
-														<SelectItem
-															value={null}
-														>
-															<UIText className={'text-muted-foreground'} variant={'sm'}>{t('groupNotFound')}</UIText>
-														</SelectItem>
-													}
-													{userOwnedGroups?.map((u)=>(
-														<SelectItem
-															key={u.$id}
-															value={u.$id}
-														>
-															<UIText variant={'sm'}>{u.name}</UIText>
-														</SelectItem>
-													))}
-												</SelectContent>
-											</Select>
-											{selectedGroup &&
-												<Button
-													variant={'ghost'}
-													type={'button'}
-													size={'icon'}
-													onClick={()=> setSelectedGroup(null)}
-													className={'flex items-center justify-center text-primary hover:text-primary absolute right-1 bg-white'}
-												>
-													<XIcon className={'w-4 h-4'} />
-												</Button>
-											}
-										</div>
+										{isOwner ?
+											<div className={'flex gap-4 items-center relative'}>
+												<Select onValueChange={(selected)=> setSelectedGroup(selected)} key={selectedGroup}>
+													<SelectTrigger className="w-full h-12 flex between">
+														<UIText variant={'label'}>{selectedGroup ? userOwnedGroups.find((group)=> group.$id=== selectedGroup)?.name : <span className={'text-muted-foreground'}>{t('selectGroupPlaceholder')}</span>}</UIText>
+													</SelectTrigger>
+													<SelectContent>
+														{userOwnedGroups.length===0 &&
+															<SelectItem
+																value={null}
+															>
+																<UIText className={'text-muted-foreground'} variant={'sm'}>{t('groupNotFound')}</UIText>
+															</SelectItem>
+														}
+														{userOwnedGroups?.map((u)=>(
+															<SelectItem
+																key={u.$id}
+																value={u.$id}
+															>
+																<UIText variant={'sm'}>{u.name}</UIText>
+															</SelectItem>
+														))}
+													</SelectContent>
+												</Select>
+												{selectedGroup &&
+													<Button
+														variant={'ghost'}
+														type={'button'}
+														size={'icon'}
+														onClick={()=> setSelectedGroup(null)}
+														className={'flex items-center justify-center text-primary hover:text-primary absolute right-1 bg-white'}
+													>
+														<XIcon className={'w-4 h-4'} />
+													</Button>
+												}
+											</div>
+											:
+											<div className={'p-3 border rounded-lg'}>
+												{userJoinedGroups.filter((filter)=> filter.$id===eventData.teamId)[0].name}
+											</div>
+										}
 									</div>
 									<div className="flex flex-col">
 										<FormLabel
