@@ -294,7 +294,7 @@ const SingleEventModal = ({ eventData }) => {
                             </div>
                         </div>
 
-                        <div className={'fixed bottom-14 inset-x-0 z-10 flex justify-center lg:justify-end lg:pr-14'}>
+                        <div className={'fixed lg:absolute bottom-14 inset-x-0 z-10 flex justify-center'}>
                             <div
                                 className="w-[4.5rem] h-[4.5rem] shadow-lg flex items-center justify-center rounded-full bg-primary cursor-pointer"
                                 onClick={() => {

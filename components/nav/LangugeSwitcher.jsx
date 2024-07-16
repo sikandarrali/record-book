@@ -74,6 +74,7 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import useCloseOnClickedOutside from "@/lib/hooks/useCloseOnClickedOutside";
+import UIText from "@/components/theme/UIText";
 
 
 
@@ -110,36 +111,30 @@ const SwitchLanguage = ({ styles }) => {
     };
 
     return (
-        <div
-            className={cn(
-                "p-1 border flex relative rounded-full select-none rtl:font-urdu hover:bg-muted",
-                dropDown && "bg-muted"
-            )}
-            ref={langSwitcherRef}
-        >
-            <div
-                className="text-xs flex items-center gap-1 cursor-pointer rounded-full"
-                onClick={() => setDropDown(!dropDown)}
-            >
-               <Globe className={'w-3.5 h-3.5'}/>
-                <div>{t(params.locale)}</div>
-                <ChevronDown className={'w-3.5 h-3.5'}/>
-            </div>
-            {dropDown && (
-                <div className={"border bg-muted overflow-hidden shadow-lg rounded-lg mt-1 flex flex-col absolute z-[51] top-full left-full -translate-x-full text-sm rtl:font-semibold"}>
+        <>
+            <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                    <div
+                        className="text-xs flex items-center gap-2 cursor-pointer rounded-full border p-1"
+                        onClick={() => setDropDown(!dropDown)}
+                    >
+                        <Globe className={'w-3.5 h-3.5'}/>
+                        <UIText>{t(params.locale)}</UIText>
+                        <ChevronDown className={'w-3.5 h-3.5'}/>
+                    </div>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className={'p-0'}>
                     {SupportedLangs.map((lang) => (
-                        <div
+
+                        <DropdownMenuItem
                             key={lang.locale}
                             onClick={() => OnChangeLanguage(lang.locale)}
-                            className={cn(
-                                "flex items-center justify-between gap-4 px-4 rtl:pr-5 py-2 border-b cursor-pointer rtl:flex-row-reverse hover:bg-primary-foreground",
-                                params.locale === lang.locale && 'text-primary'
-                            )}
+                            className={cn("border-b px-4 py-2 flex items-center justify-between rtl:flex-row-reverse rounded-none last-of-type:border-0", params.locale === lang.locale && 'text-primary')}
                         >
-                            <span>{t(lang.locale)}</span>
+                            <UIText>{t(lang.locale)}</UIText>
                             {params.locale === lang.locale && (
                                 <span>
-									<svg
+                                    <svg
                                         xmlns="http://www.w3.org/2000/svg"
                                         fill="none"
                                         viewBox="0 0 24 24"
@@ -147,19 +142,21 @@ const SwitchLanguage = ({ styles }) => {
                                         stroke="currentColor"
                                         className="w-4 h-4"
                                     >
-										<path
+                                        <path
                                             strokeLinecap="round"
                                             strokeLinejoin="round"
                                             d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                                         />
-									</svg>
-								</span>
+                                    </svg>
+                                </span>
                             )}
-                        </div>
+                        </DropdownMenuItem>
                     ))}
-                </div>
-            )}
-        </div>
+                </DropdownMenuContent>
+            </DropdownMenu>
+
+
+        </>
     );
 };
 

@@ -48,7 +48,7 @@ export const SingleListItem = ({ item }) => {
 					className="flex flex-col w-full px-6 hover:bg-muted select-none py-4 cursor-pointer border-b"
 				>
 					<div className="flex w-full justify-between gap-5 text-left">
-						<UIText isUrdu={isStringUrdu(item.name)}>{item.name}</UIText>
+						<UIText isUrdu={isStringUrdu(item.name)} className={'rtl:text-right'}>{item.name}</UIText>
 						<div className="flex gap-2 justify-end rtl:flex-row-reverse items-center relative flex-shrink-0 select-none">
 							<span className="text-sm select-none">Rs</span>
 							<span className="font-semibold text-xl select-none text-primary">
@@ -84,7 +84,7 @@ export const SingleListItem = ({ item }) => {
 				<div className="flex flex-col w-full min-h-full pt-4 justify-start">
 
 					<div className="flex flex-col justify-center items-center my-10 lg:mt-32">
-						<UIText variant={"heading"} isUrdu={isStringUrdu(item.name)}>
+						<UIText variant={"heading"} className={'text-center'} isUrdu={isStringUrdu(item.name)}>
 							{item.name}
 						</UIText>
 

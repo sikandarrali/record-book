@@ -28,8 +28,6 @@ export default function Home() {
 					/>
 				{/*</div>*/}
 
-				<UISheetInfoFooter/>
-
 				<Button
 					onClick={() => onGoogleWithLogin()}
 					className="mx-4 mt-20 ltr:py-4 flex items-center gap-2"
