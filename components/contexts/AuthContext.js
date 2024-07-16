@@ -33,7 +33,7 @@ export const AuthProvider = ({ children }) => {
 				// console.log(error)
 			});
 
-			if(pathname === LOGIN_ROUTE) router.replace(HOMEPAGE_ROUTE);
+			if(pathname === LOGIN_ROUTE) router.replace(`/${currentUser.prefs.lang}/${HOMEPAGE_ROUTE}`);
 		}
 		catch (e){
 			setUser(null)

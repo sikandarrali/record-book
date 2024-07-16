@@ -1,11 +1,18 @@
 "use client";
 import { AuthProvider } from "../contexts/AuthContext";
-import PagesProvider from "./PagesProvider";
 import {TooltipProvider} from "@/components/ui/tooltip";
 import {DataProvider} from "@/components/contexts/DataContext";
+import LoadingFallback from "@/components/loaders/LoadingFallback";
+import {useParams} from "next/navigation";
+import {ToastContainer} from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+import {I18nProviderClient} from "@/locales/client";
 // import PullToRefresh from "pulltorefreshjs";
 
 const Providers = ({ children }) => {
+
+	const params = useParams()
+
 
 	// if (typeof window !== 'undefined') {
 	// 	const standalone = window.matchMedia("(display-mode: standalone)").matches
@@ -20,13 +27,29 @@ const Providers = ({ children }) => {
 
 
 	return (
-		<AuthProvider>
-			<DataProvider>
-				<TooltipProvider>
-					<PagesProvider>{children}</PagesProvider>
-				</TooltipProvider>
-			</DataProvider>
-		</AuthProvider>
+		<I18nProviderClient
+			locale={params.locale}
+			fallbackLocale="ur"
+			fallback={<LoadingFallback />}
+		>
+			<AuthProvider>
+				<DataProvider>
+					<TooltipProvider>
+						<ToastContainer
+							limit={1}
+							autoClose={1500}
+							position="top-center"
+							pauseOnFocusLoss
+							draggable={'touch'}
+							theme="light"
+						/>
+						<div className="relative max-w-screen-lg lg:max-w-[600px] mx-auto">
+							{children}
+						</div>
+					</TooltipProvider>
+				</DataProvider>
+			</AuthProvider>
+		</I18nProviderClient>
 	);
 };
 

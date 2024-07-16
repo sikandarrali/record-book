@@ -11,7 +11,7 @@ import {ToastOptions} from "@/lib/ToastOptions";
 import {toast} from "react-toastify";
 import {teams} from "@/components/appwrite/appwrite";
 import {UISheetFooter} from "@/components/theme/UISheetFooter";
-import {useTranslations} from "next-intl";
+import {useScopedI18n} from "@/locales/client";
 
 const EditGroupSchema = Yup.object().shape({
     name: Yup.string()
@@ -24,7 +24,7 @@ export const EditGroup = ({ open, onOpenChange, data, userGroups, setUserGroups}
     const isDesktop = useMediaQuery({
         query: "(min-width: 1024px)",
     });
-    const t = useTranslations('groups')
+    const t = useScopedI18n('groups')
 
     const [adding, setAdding] = useState(false);
     const [disabled, setDisabled] = useState(false);

@@ -1,12 +1,12 @@
 import {useState} from "react";
 import {Input} from "@/components/ui/input";
 import {XIcon} from "lucide-react";
-import {useTranslations} from "next-intl";
+import {useScopedI18n} from "@/locales/client";
 
 export const SearchItems = ({setVisibleItems, itemsPerPage, itemsDefault}) =>{
     const [searchValue, setSearchValue] = useState("");
     const [searchResultsMessage, setSearchResultsMessage] = useState('')
-    const t = useTranslations('events');
+    const t = useScopedI18n('events');
 
     const onSearch = (userValue) => {
         setSearchValue(userValue);

@@ -3,7 +3,7 @@ import { AddEventItem } from "@/components/event-items/AddEventItem";
 import { SingleListItem } from "@/components/event-items/SingleListItem";
 import EventInfo from "@/components/event/EventInfo";
 import LoadingFallback from "@/components/loaders/LoadingFallback";
-import Text from "@/components/theme/Text";
+import UIText from "@/components/theme/UIText";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import {Plus, Users2, XIcon} from "lucide-react";
@@ -24,7 +24,7 @@ import {
 import {SearchItems} from "@/components/event-items/SearchItems";
 import {ReloadIcon} from "@radix-ui/react-icons";
 import {useAuth} from "@/components/contexts/AuthContext";
-import {useTranslations} from "next-intl";
+import {useScopedI18n} from "@/locales/client";
 // import {toast} from "react-toastify";
 // import {ToastOptions} from "@/lib/ToastOptions";
 
@@ -32,7 +32,7 @@ const SingleEventModal = ({ eventData }) => {
     const isDesktop = useMediaQuery({ query: "(min-width: 1024px)" })
     const [isOpen, setIsOpen] = useState(false)
     const headerRef = useRef(null);
-    const t = useTranslations('events');
+    const t = useScopedI18n('events');
 
     const [openAddModal, setOpenAddModal] = useState(false);
     const [totalSum, setTotalSum] = useState(0);
@@ -231,9 +231,9 @@ const SingleEventModal = ({ eventData }) => {
                                 </div>
                             </div>
 
-                            <Text variant={"h1"} className="text-background px-6 text-center pb-4 pt-1 flex flex-col justify-center items-center gap-4 select-none">
+                            <UIText variant={"h1"} className="text-background px-6 text-center pb-4 pt-1 flex flex-col justify-center items-center gap-4 select-none">
                                 {eventData?.name}
-                            </Text>
+                            </UIText>
                         </div>
 
                         <div className="flex flex-col pb-36 mt-5">
@@ -244,9 +244,9 @@ const SingleEventModal = ({ eventData }) => {
                                 itemsPerPage={itemsPerPage}
                             />
 
-                            <Text variant={'sm'} className={'py-1.5 font-medium bg-muted -mx-6 flex items-center justify-center px-6 gap-2 text-muted-foreground'}>
+                            <UIText variant={'sm'} className={'py-1.5 font-medium bg-muted -mx-6 flex items-center justify-center px-6 gap-2 text-muted-foreground'}>
                                 {t('totalEntries')} <span className={'text-primary font-semibold text-base'}>{items.length}</span>
-                            </Text>
+                            </UIText>
 
                             <div className="flex flex-col -mx-6 overflow-y-auto">
 

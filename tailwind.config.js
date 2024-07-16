@@ -23,6 +23,12 @@ module.exports = {
 				sans: ["var(--font-sans)", ...defaultTheme.fontFamily.sans],
 				urdu: ["var(--font-urdu)"],
 			},
+			fontSize: {
+				"urdu-body": '1.563rem',
+			},
+			lineHeight:{
+				"urdu-body": '2.5rem'
+			},
 			colors: {
 				border: "hsl(var(--border))",
 				input: "hsl(var(--input))",

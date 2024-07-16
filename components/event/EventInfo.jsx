@@ -1,4 +1,4 @@
-import Text from "@/components/theme/Text";
+import UIText from "@/components/theme/UIText";
 import { Button } from "@/components/ui/button";
 import { Info, Pen, Trash2, XIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -21,7 +21,8 @@ import {Query} from "appwrite";
 import {cn} from "@/lib/utils";
 import {useMediaQuery} from "react-responsive";
 import {getGroup} from "@/components/appwrite/appwrite";
-import {useTranslations} from "next-intl";
+import {useScopedI18n} from "@/locales/client";
+import {UISheetInfoFooter} from "@/components/theme/UISheetInfoFooter";
 
 const EventInfo = ({ eventData, sum }) => {
 	const isDesktop = useMediaQuery({ query: "(min-width: 1024px)" })
@@ -30,7 +31,7 @@ const EventInfo = ({ eventData, sum }) => {
 	const [openDelete, setOpenDelete] = useState(false);
 	const router = useRouter();
 	const [group, setGroup] = useState(null)
-	const t = useTranslations('events')
+	const t = useScopedI18n('events')
 
 	const onDelete = async () => {
 		await db.events.delete(eventData?.$id);
@@ -85,12 +86,12 @@ const EventInfo = ({ eventData, sum }) => {
 					<div className="flex flex-col w-full min-h-full pt-4 justify-start">
 
 						<div className="flex flex-col justify-center items-center gap-5 my-10 lg:mt-32">
-							<Text
+							<UIText
 								variant={"h1"}
 								className="text-primary text-center self-center"
 							>
 								{eventData?.name}
-							</Text>
+							</UIText>
 							<p className="font-semibold text-3xl">
 								<NumericFormat
 									allowNegative={false}
@@ -132,38 +133,12 @@ const EventInfo = ({ eventData, sum }) => {
 							</TableBody>
 						</Table>
 
-						<div className={'mt-auto py-14 lg:py-0 flex flex-row items-center justify-between px-2'}>
-							<div className={"flex flex-row justify-end gap-4"}>
-								<Button
-									type="button"
-									variant="outline"
-									size="icon"
-									onClick={() => setOpenDelete(true)}
-								>
-									<Trash2 className="h-5 w-5 text-primary" />
-								</Button>
+						<UISheetInfoFooter
+							setOpen={setOpenDetails}
+							setOpenDelete={setOpenDelete}
+							setOpenEdit={setOpenEdit}
+						/>
 
-								<Button
-									type="button"
-									variant="outline"
-									size="icon"
-									onClick={() => setOpenEdit(true)}
-								>
-									<Pen className="h-4 w-4" />
-								</Button>
-							</div>
-
-							<Button
-								type="button"
-								variant="outline"
-								size="icon"
-								// stretched
-								className="w-14 h-14 rounded-full self-center"
-								onClick={() => setOpenDetails(false)}
-							>
-								<XIcon className="text-primary" />
-							</Button>
-						</div>
 					</div>
 				</SheetContent>
 			</Sheet>

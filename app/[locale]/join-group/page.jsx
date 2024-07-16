@@ -9,8 +9,8 @@ import {Button} from "@/components/ui/button";
 import {useAuth} from "@/components/contexts/AuthContext";
 import Link from "next/link";
 import {ParseErrorCodes} from "@/lib/parseErrorCodes";
-import Text from "@/components/theme/Text";
-import {useTranslations} from "next-intl";
+import UIText from "@/components/theme/UIText";
+import {useScopedI18n} from "@/locales/client";
 
 const Page = () => {
 
@@ -21,7 +21,7 @@ const Page = () => {
 	const secret = searchParams.get('secret');
 	const teamId = searchParams.get('teamId');
 
-	const t = useTranslations('joinGroup');
+	const t = useScopedI18n('joinGroup');
 
 	const {user} = useAuth()
 	const [error, setError] = useState({correct: true, text:''})
@@ -83,26 +83,26 @@ const Page = () => {
 						<div className={'flex flex-col w-full'}>
 							<div className={'flex w-full gap-2 border-2 border-green-400 rounded-md p-3 px-4'}>
 								<Check className={'text-green-500 stroke-[3] mt-0.5'}/>
-								<Text className={'flex flex-col gap-1'}>
+								<UIText className={'flex flex-col gap-1'}>
 									<p className={'text-lg text-green-500 font-semibold'}>{t('titleJoined')}</p>
 									<p>{t('textJoined')}</p>
-								</Text>
+								</UIText>
 							</div>
 						</div>
 					:
 						<div className={'flex flex-col w-full'}>
 							<div className={'flex w-full gap-2 border-2 border-red-400 rounded-md p-3 px-4'}>
 								<XIcon className={'text-red-700 stroke-[3] mt-0.5'}/>
-								<Text className={'flex flex-col gap-1'}>
+								<UIText className={'flex flex-col gap-1'}>
 									<p className={'text-lg text-red-700 font-semibold'}>{alreadyJoined ? t('alreadyJoined') : t('unableToJoin')}</p>
 									<p>{error.text}</p>
-								</Text>
+								</UIText>
 							</div>
 						</div>
 					}
 
 						<div className={'flex flex-col gap-4 mt-16 '}>
-							{!user && <Text className={'font-semibold'}>{t('loginAndCheckGroups')}</Text>}
+							{!user && <UIText className={'font-semibold'}>{t('loginAndCheckGroups')}</UIText>}
 
 							<Link href={user ? '/groups' : '/login'}>
 								<Button

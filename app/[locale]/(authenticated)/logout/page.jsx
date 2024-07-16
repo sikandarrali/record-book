@@ -2,12 +2,12 @@
 import { useEffect } from "react";
 import {useAuth} from "@/components/contexts/AuthContext";
 import {Button} from "@/components/ui/button";
-import Text from "@/components/theme/Text"
-import {useTranslations} from "next-intl";
+import Text from "@/components/theme/UIText"
+import {useScopedI18n} from "@/locales/client";
 
 const Page = () => {
 	const {onLogout} = useAuth()
-	const t = useTranslations('logout')
+	const t = useScopedI18n('logout')
 
 	useEffect(() => {
 		init();
@@ -17,7 +17,7 @@ const Page = () => {
 		onLogout()
 	};
 
-	return <Text>{t('text')} <Button onClick={()=> onLogout()}>{t('btnLogout')}</Button></Text>;
+	return <UIText>{t('text')} <Button onClick={()=> onLogout()}>{t('btnLogout')}</Button></UIText>;
 };
 
 export default Page;

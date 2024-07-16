@@ -1,6 +1,6 @@
 "use client";
 import PageContainer from "@/components/providers/PageContainer";
-import Text from "@/components/theme/Text";
+import UIText from "@/components/theme/UIText";
 import { motion } from "framer-motion";
 import {useEffect, useState} from "react";
 import {Button} from "@/components/ui/button";
@@ -8,7 +8,7 @@ import {ChevronDown, ChevronUp, Info, ShieldCheck, Users2} from "lucide-react";
 import {AddGroup} from "@/components/groups/AddGroup";
 import SingleGroup from "@/components/groups/SingleGroup";
 import {teams} from "@/components/appwrite/appwrite";
-import {useTranslations} from "next-intl";
+import {useScopedI18n} from "@/locales/client";
 
 export default function Page() {
 
@@ -16,7 +16,7 @@ export default function Page() {
     const [userGroups, setUserGroups] = useState([])
     const [refresh, setRefresh] = useState([])
     const [showInformation, setShowInformation] = useState(false)
-    const t = useTranslations('groups')
+    const t = useScopedI18n('groups')
 
     const getUserGroups = async () =>{
         const tempGroups = await teams.list()
@@ -28,29 +28,29 @@ export default function Page() {
 
     return (
         <PageContainer hideTopbar>
-            <Text variant="h2" className={'mb-2'}>{t('title')}</Text>
-            <Text className={'text-base'}>{t('text')}</Text>
+            <UIText variant="h2" className={'mb-2 text-primary'}>{t('title')}</UIText>
+            <UIText>{t('text')}</UIText>
 
-        <div className={'bg-muted py-4 px-6 rounded-lg mt-2 cursor-pointer'} onClick={()=> setShowInformation(!showInformation)} >
-                <Text className={'flex items-center justify-between gap-2 font-medium text-primary'}>
-                    <span className={'flex items-center gap-2'}><Info className={'w-4 h-4'}/> {t('information')}</span>
-                    {showInformation ? <ChevronUp className={'w-5 h-5 mt-1 stroke-[3]'} /> : <ChevronDown  className={'w-5 h-5 mt-1 stroke-[3]'} />}
-                </Text>
+            <div className={'bg-muted py-4 rtl:pt-0 rtl:pb-1.5 px-6 rounded-lg mt-2 cursor-pointer'} onClick={()=> setShowInformation(!showInformation)} >
+                <UIText className={'flex items-center justify-between gap-2 font-medium text-primary'}>
+                    <span className={'flex items-center gap-2'}><Info className={'w-4 h-4 rtl:-mt-2'}/> {t('information')}</span>
+                    {showInformation ? <ChevronUp className={'w-5 h-5 ltr:mt-1 stroke-[3]'} /> : <ChevronDown  className={'w-5 h-5 ltr:mt-1 stroke-[3]'} />}
+                </UIText>
                 {showInformation &&
-                    <ul className={'list-disc pl-4 gap-2 mt-2 flex flex-col'}>
-                        <li><Text variant={'sm'}>{t('informationP1')}</Text></li>
-                        <li><Text variant={'sm'}>{t('informationP2')}</Text></li>
-                        <li><Text variant={'sm'}>{t('informationP3')}</Text></li>
+                    <ul className={'list-disc pl-4 gap-2 mt-2 flex flex-col rtl:text-right'}>
+                        <li><UIText variant={'sm'}>{t('informationP1')}</UIText></li>
+                        <li><UIText variant={'sm'}>{t('informationP2')}</UIText></li>
+                        <li><UIText variant={'sm'}>{t('informationP3')}</UIText></li>
 
-                        {/*<li><Text variant={'sm'} className={'flex flex-col gap-1'}>*/}
+                        {/*<li><UIText variant={'sm'} className={'flex flex-col gap-1'}>*/}
                         {/*    <span className={'flex gap-1 items-center'}><ShieldCheck className={'w-4 h-4 text-primary'}/> {`indicates Groups you've created`}</span>*/}
                         {/*    <span className={'flex gap-1 items-center'}><Users2 className={'w-4 h-4 text-primary'}/> {`indicates Groups you've joined`}</span>*/}
-                        {/*</Text></li>*/}
+                        {/*</UIText></li>*/}
                     </ul>
                 }
             </div>
 
-            <Text className={'py-2 mt-4 font-semibold text-primary'}>{t('labelYourGroups')}</Text>
+            <UIText className={'py-2 rtl:pb-0 mt-4 text-primary'}>{t('labelYourGroups')}</UIText>
 
             <motion.div
                 initial={{opacity: 0, y: 10}}
@@ -60,7 +60,7 @@ export default function Page() {
                 className={'flex flex-col bg-muted rounded-lg relative shadow'}
             >
                 {userGroups.length === 0 ?
-                    <Text className={'p-4 text-center italic'}>{t('noGroups')}</Text>
+                    <UIText className={'p-4 rtl:pb-1.5 text-center ltr:italic rtl:text-base'}>{t('noGroups')}</UIText>
                     : userGroups.map((data, i)=>(
                         <motion.div
                             key={data.$id}
@@ -89,7 +89,7 @@ export default function Page() {
                     type={'submit'}
                     className={'mt-5'} onClick={()=> setOpenAddGroup(true)}
                 >
-                    {t('btnCreateNewGroup')}
+                    <UIText className={'rtl:mt-2.5'}>{t('btnCreateNewGroup')}</UIText>
                 </Button>
             </motion.div>
 

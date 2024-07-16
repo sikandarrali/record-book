@@ -1,4 +1,4 @@
-import Text from "@/components/theme/Text";
+import UIText from "@/components/theme/UIText";
 import { Button } from "@/components/ui/button";
 import {Pen, Plus, ShieldCheck, Trash2, Users2, X, XIcon} from "lucide-react";
 import {useEffect, useState} from "react";
@@ -15,7 +15,7 @@ import {DeleteGroup} from "@/components/groups/DeleteGroup";
 import {useAuth} from "@/components/contexts/AuthContext";
 import {ExitIcon} from "@radix-ui/react-icons";
 import {LeaveGroup} from "@/components/groups/LeaveGroup";
-import {useTranslations} from "next-intl";
+import {useScopedI18n} from "@/locales/client";
 
 const SingleGroup = ({ data, userGroups, setUserGroups }) => {
     const isDesktop = useMediaQuery({ query: "(min-width: 1024px)" })
@@ -25,7 +25,7 @@ const SingleGroup = ({ data, userGroups, setUserGroups }) => {
     const [openDelete, setOpenDelete] = useState(false);
     const {user} = useAuth()
     const [openLeaveGroup, setOpenLeaveGroup] = useState(false)
-    const t = useTranslations('groups')
+    const t = useScopedI18n('groups')
 
     const isOwner = data?.prefs?.creatorEmail === user.email;
 
@@ -62,11 +62,11 @@ const SingleGroup = ({ data, userGroups, setUserGroups }) => {
     return (
 
         <Sheet open={open} onOpenChange={setOpen} defaultOpen={false}>
-            <SheetTrigger className={'relative w-full text-left py-4 flex gap-4 items-center justify-between hover:bg-white/70 transition-all duration-300 px-5'}>
-                <span className={'flex flex-col gap-1'}>
-                    <span className={'font-medium'}>{data.name}</span>
-                    <span className={'text-muted-foreground text-sm lowercase'}>{data.total} {t('labelMembers')}</span>
-                </span>
+            <SheetTrigger className={'relative w-full text-left py-4 rtl:pb-1 rtl:pt-3 flex gap-4 items-center justify-between hover:bg-white/70 transition-all duration-300 px-5'}>
+                <UIText className={'flex flex-col ltr:gap-1'} noSpacing>
+                    <UIText className={'font-medium'}>{data.name}</UIText>
+                    <UIText className={'text-muted-foreground text-sm rtl:text-sm rtl:mt-0 lowercase'}>{data.total-1} {t('labelMembers')}</UIText>
+                </UIText>
                 {isOwner ? <ShieldCheck className={'w-5 h-5 text-primary'}/> : <Users2 className={'w-5 h-5 text-primary'}/>}
             </SheetTrigger>
             <SheetContent
@@ -78,27 +78,27 @@ const SingleGroup = ({ data, userGroups, setUserGroups }) => {
                 <div className="flex flex-col w-full min-h-full pt-4 justify-start">
 
                     <div className="flex flex-col gap-10 w-full">
-                        <Text
+                        <UIText
                             variant={"h1"}
-                            className="text-left flex items-center flex-wrap gap-2 border-b pb-4 justify-between"
+                            className="text-left flex items-center flex-wrap gap-2 border-b pb-4 justify-between text-primary"
                         >
-                            <span className={'text-primary'}>{data.name}</span>
-                        </Text>
+                            {data.name}
+                        </UIText>
 
                         {/* Users in Group */}
                         <div className={'flex flex-col gap-4'}>
-                            <Text className={'font-semibold flex items-center gap-2 text-primary'}>
+                            <UIText className={'ltr:font-semibold flex items-center gap-2 text-primary'}>
                                 <Users2 className={'w-5 h-5'}/>
                                 {t('labelMembersInGroup')}
-                            </Text>
+                            </UIText>
 
                             <div className={'flex flex-col divide-y bg-background rounded-lg'}>
-                                {usersInGroup.length===0 &&
-                                    <div className={'relative overflow-hidden flex items-center justify-between px-4 py-3'}>
+                                {usersInGroup.length-1 === 0 ?
+                                    <UIText className={'relative overflow-hidden flex items-center justify-between px-4 py-3'}>
                                         {t('labelNoMembersInGroup')}
-                                    </div>
-                                }
-                                {usersInGroup?.map((person)=>(
+                                    </UIText>
+                                :
+                                usersInGroup?.map((person)=>(
                                     <MemberListItem
                                         data={person}
                                         key={person.$id}
@@ -113,17 +113,17 @@ const SingleGroup = ({ data, userGroups, setUserGroups }) => {
 
                         {isOwner &&
                             <div className={'flex flex-col gap-4 bg-background -mx-6 px-6 py-6'}>
-                                <Text className={'font-semibold flex items-center gap-2 text-primary'}>
+                                <UIText className={'font-semibold flex items-center gap-2 text-primary'}>
                                     <Plus className={'w-5 h-5'}/>
                                     {t('labelAddMembers')}
-                                </Text>
+                                </UIText>
                                 <AddGroupMember groupID={data.$id} setUsersInGroup={setUsersInGroup} />
                             </div>
                         }
                     </div>
 
 
-                    <div className={'mt-auto py-14 lg:py-0 flex flex-row items-center justify-between px-2'}>
+                    <div className={'mt-auto py-14 lg:py-0 flex flex-row items-center justify-between px-2'} dir={'ltr'}>
 
                         {!isOwner ?
                             <Button

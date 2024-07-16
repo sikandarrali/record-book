@@ -8,10 +8,10 @@ import {
 } from "@/components/ui/alert-dialog";
 import {TriangleAlert} from "lucide-react";
 import {UIDialogFooter} from "@/components/theme/UIDialogFooter";
-import {useTranslations} from "next-intl";
+import {useScopedI18n} from "@/locales/client";
 
 export const DeleteEventItem = ({ open, onOpenChange, personName, onDelete }) => {
-	const t = useTranslations('events')
+	const t = useScopedI18n('events')
 	return (
 		<AlertDialog open={open} onOpenChange={onOpenChange}>
 			<AlertDialogContent className={"w-[90%] rounded-xl overflow-auto"}>

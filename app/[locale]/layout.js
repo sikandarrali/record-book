@@ -1,24 +1,50 @@
 import "@/styles/globals.css";
-import { Inter as FontSans } from "next/font/google";
-import {Noto_Nastaliq_Urdu} from "@next/font/google";
-
-import PagesProvider from "@/components/providers/PagesProvider";
-import Providers from "@/components/providers/Providers";
-import { cn } from "@/lib/utils";
+import {Inter as FontSans} from "next/font/google";
+import {Noto_Nastaliq_Urdu, Noto_Sans_Arabic, Gulzar} from "next/font/google";
+import localFont from "next/font/local"
 import {NetworkStatusIndicator} from "@/components/NetworkStatus/NetworkStatusIndicator";
 import HolyLoader from "holy-loader";
-import {NextIntlClientProvider} from 'next-intl';
-import {getLocale, getMessages} from 'next-intl/server';
+import Providers from "@/components/providers/Providers";
+import {cn} from "@/lib/utils";
 
 const fontSans = FontSans({
 	subsets: ["latin"],
 	variable: "--font-sans",
 });
 
-const fontUrdu = Noto_Nastaliq_Urdu({
-	subsets: ["latin"],
-	variable: "--font-urdu"
+// const fontUrdu = Noto_Nastaliq_Urdu({
+// 	subsets: ["latin"],
+// 	weight: ['400', '500', '600', '700'],
+// 	variable: "--font-urdu"
+// });
+
+// const fontUrdu = Noto_Sans_Arabic({
+// 	subsets: ["arabic"],
+// 	display: "swap",
+// 	variable: "--font-urdu",
+// });
+
+const fontUrdu = localFont({
+	display: "swap",
+	// src: "../../fonts/XB-Roya-Bold.woff",
+	// src: "../../fonts/JameelNooriNastaleeq.woff",
+	src: "../../fonts/NafeesWeb.woff",
+	// src: "../../fonts/Nafees-Nastaleeq.woff",
+	variable: "--font-urdu",
 });
+
+// const fontUrdu = localFont({
+// 	display: "swap",
+// 	src: "../../fonts/AlviLahoriNastaleeq.woff",
+// 	variable: "--font-urdu",
+// });
+
+// const fontUrdu = Gulzar({
+// 	subsets: ["arabic"],
+// 	weight: ['400'],
+// 	display: "swap",
+// 	variable: "--font-urdu",
+// });
 
 const APP_NAME = "Shadi Kharcha";
 const APP_DEFAULT_TITLE = "Shadi Kharcha";
@@ -65,16 +91,10 @@ export const viewport = {
 	themeColor: "#FFFFFF",
 };
 
-export default async function RootLayout({ children }) {
-
-	const locale = await getLocale();
-
-	// Providing all messages to the client
-	// side is the easiest way to get started
-	const messages = await getMessages();
+export default async function RootLayout({ children, params }) {
 
 	return (
-		<html lang="en" suppressHydrationWarning>
+		<html lang={params.locale} suppressHydrationWarning>
 			<head>
 				<title>Shadi Kharcha Record</title>
 				<link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png"/>
@@ -83,27 +103,27 @@ export default async function RootLayout({ children }) {
 				<link rel="mask-icon" href="/icons/safari-pinned-tab.svg" color="#5bbad5"/>
 			</head>
 			<body
+				dir={params.locale === 'ur' ? 'rtl' : 'ltr'}
 				className={cn(
 					"min-h-screen bg-background font-sans antialiased",
 					fontSans.variable, fontUrdu.variable
 				)}
 			>
-				<NextIntlClientProvider messages={messages}>
-					<NetworkStatusIndicator />
 
-					{/* topbar loader */}
-					<HolyLoader
-						color="#E11D48"
-						height="4px"
-						speed={250}
-						easing="linear"
-						showSpinner
-					/>
+				{/*<NetworkStatusIndicator />*/}
 
-					<Providers>
-						<PagesProvider>{children}</PagesProvider>
-					</Providers>
-				</NextIntlClientProvider>
+				{/* topbar loader */}
+				<HolyLoader
+					color="#E11D48"
+					height="4px"
+					speed={250}
+					easing="linear"
+					showSpinner
+				/>
+
+				<Providers>
+					{children}
+				</Providers>
 			</body>
 		</html>
 	);

@@ -3,12 +3,13 @@ import { useAuth } from "@/components/contexts/AuthContext";
 import PageContainer from "@/components/providers/PageContainer";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import Logo from "../../public/logo.png"
-import {useTranslations} from "next-intl";
+import Logo from "../../../public/logo.png"
+import {useScopedI18n} from "@/locales/client";
+import UIText from "@/components/theme/UIText";
 
 export default function Home() {
 	const { onGoogleWithLogin } = useAuth();
-	const t = useTranslations('login')
+	const t = useScopedI18n('login')
 
 	return (
 		<PageContainer hideNavbar>
@@ -27,7 +28,7 @@ export default function Home() {
 
 				<Button
 					onClick={() => onGoogleWithLogin()}
-					className="mx-4 mt-20 py-6 flex items-center gap-2"
+					className="mx-4 mt-20 ltr:py-4 flex items-center gap-2"
 				>
 					<svg
 						width="24"
@@ -41,7 +42,7 @@ export default function Home() {
 							fill="currentColor"
 						/>
 					</svg>
-					<span className={'font-semibold text-base'}>{t('withGoogle')}</span>
+					<UIText className={'ltr:font-semibold'}>{t('withGoogle')}</UIText>
 				</Button>
 			</div>
 		</PageContainer>

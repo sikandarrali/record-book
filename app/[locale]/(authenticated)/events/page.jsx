@@ -1,7 +1,7 @@
 "use client";
 import { AddEvent } from "@/components/event/AddEvent";
 import PageContainer from "@/components/providers/PageContainer";
-import Text from "@/components/theme/Text";
+import UIText from "@/components/theme/UIText";
 import { FixStickyHeaderScrollError } from "@/lib/utils";
 import { motion } from "framer-motion";
 import {useEffect, useRef, useState} from "react";
@@ -9,14 +9,14 @@ import {client} from "@/components/appwrite/appwrite";
 import {db} from "@/components/appwrite/database";
 import {Query} from "appwrite";
 import SingleEventModal from "@/components/event/SingleEventModal";
-import {useTranslations} from "next-intl";
+import {useScopedI18n} from "@/locales/client";
 
 export default function Home() {
 	const [openAddModal, setOpenAddModal] = useState(false);
 	const scrollRef = useRef(null);
 	const [refreshItems, setRefreshItems] = useState(false)
 	const [events, setEvents] = useState([])
-	const t = useTranslations('events');
+	const t = useScopedI18n('events');
 
 	const getEvents = async () =>{
 		try {
@@ -70,7 +70,7 @@ export default function Home() {
 	return (
 		<PageContainer hideTopbar>
 
-			<Text variant="h2">{t('title')}</Text>
+			<UIText variant="h2">{t('title')}</UIText>
 
 			<motion.div
 				initial={{ opacity: 0 }}
@@ -92,7 +92,7 @@ export default function Home() {
 					onClick={() => setOpenAddModal(!openAddModal)}
 					className="border-4 w-full border-dashed border-primary/30 hover:bg-muted cursor-pointer text-base font-medium text-center justify-center flex items-center px-6 py-8 rounded-md"
 				>
-					<Text>{t('addEvent')}</Text>
+					<UIText>{t('addEvent')}</UIText>
 				</motion.div>
 
 				{events.map((event, i) => (

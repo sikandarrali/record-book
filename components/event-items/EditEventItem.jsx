@@ -11,9 +11,9 @@ import * as Yup from "yup";
 import {toast} from "react-toastify";
 import {ToastOptions} from "@/lib/ToastOptions";
 import {SheetDescription, SheetHeader, SheetTitle, SheetContent, Sheet} from "@/components/ui/sheet";
-import Text from "@/components/theme/Text";
+import UIText from "@/components/theme/UIText";
 import {UISheetFooter} from "@/components/theme/UISheetFooter";
-import {useTranslations} from "next-intl";
+import {useScopedI18n} from "@/locales/client";
 
 const AddEventItemSchema = Yup.object().shape({
 	name: Yup.string()
@@ -30,7 +30,7 @@ export const EditEventItem = ({ open, onOpenChange, item }) => {
 	const isDesktop = useMediaQuery({
 		query: "(min-width: 1024px)",
 	});
-	const t = useTranslations('events')
+	const t = useScopedI18n('events')
 
 	const [adding, setAdding] = useState(false);
 	const [disabled, setDisabled] = useState(false);
@@ -87,7 +87,7 @@ export const EditEventItem = ({ open, onOpenChange, item }) => {
 				<SheetHeader className={'hidden'}><SheetTitle/><SheetDescription /></SheetHeader>
 
 				<div className="flex flex-col gap-5 max-w-lg mx-auto items-center lg:py-10">
-					<Text className={'text-primary self-start py-6'} variant={'h2'}>{t('editEventItem')}</Text>
+					<UIText className={'text-primary self-start py-6'} variant={'h2'}>{t('editEventItem')}</UIText>
 					<Formik
 						initialValues={{
 							name: item.name,
@@ -143,7 +143,7 @@ export const EditEventItem = ({ open, onOpenChange, item }) => {
 										errors={errors.details}
 										touched={touched.details}
 									/>
-									<Textarea
+									<UITextarea
 										onChange={handleChange}
 										onBlur={handleBlur}
 										name="details"

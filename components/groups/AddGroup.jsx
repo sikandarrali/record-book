@@ -13,7 +13,8 @@ import {teams} from "@/components/appwrite/appwrite";
 import {ID} from "appwrite";
 import {useAuth} from "@/components/contexts/AuthContext";
 import {UISheetFooter} from "@/components/theme/UISheetFooter";
-import {useTranslations} from "next-intl";
+import {useScopedI18n} from "@/locales/client";
+import UIText from "@/components/theme/UIText";
 
 const AddGroupSchema = Yup.object().shape({
     name: Yup.string()
@@ -27,7 +28,7 @@ export const AddGroup = ({ open, onOpenChange, setRefresh }) => {
     const [adding, setAdding] = useState(false);
     const [disabled, setDisabled] = useState(false);
     const {user} = useAuth()
-    const t = useTranslations('groups')
+    const t = useScopedI18n('groups')
 
     const onAdd = async (values) => {
         setAdding(true);
@@ -65,7 +66,7 @@ export const AddGroup = ({ open, onOpenChange, setRefresh }) => {
                     {/* Date & Close */}
                     <div className="flex items-center space-x-2 justify-between mb-4">
                         <div className="flex items-center text-xl pt-2 space-x-2 font-semibold text-primary">
-                            {t('createGroup')}
+                            <UIText>{t('createGroup')}</UIText>
                         </div>
                     </div>
 
