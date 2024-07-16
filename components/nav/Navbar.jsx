@@ -110,14 +110,14 @@ const Sidebar = ({ open, onOpenChange }) => {
 							onClick={()=> setOpenEditProfile(true)}
 						>
 							<Edit className="w-[18px] h-[18px]" />
-							<UIText>{t('linkEditProfile')}</UIText>
+							<UIText weight={'semibold'}>{t('linkEditProfile')}</UIText>
 						</div>
 						<div
 							onClick={onLogout}
 							className="flex cursor-pointer text-background hover:bg-muted hover:text-foreground items-center gap-2 px-4 py-4 rounded-md"
 						>
 							<LogOut className="w-[18px] h-[18px]" />
-							<UIText>{t('linkLogout')}</UIText>
+							<UIText weight={'semibold'}>{t('linkLogout')}</UIText>
 						</div>
 					</div>
 
@@ -145,7 +145,7 @@ const MenuItem = ({ label, href, icon }) => {
 				pathname.toString() === href.toString() && "bg-muted text-foreground")}
 		>
 			{icon}
-			<UIText>{label}</UIText>
+			<UIText weight={'semibold'}>{label}</UIText>
 		</Link>
 	);
 };

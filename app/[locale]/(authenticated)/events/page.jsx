@@ -102,7 +102,7 @@ export default function Home() {
 						transition: { delay: 0.3 },
 					}}
 					onClick={() => setOpenAddModal(!openAddModal)}
-					className="border-4 w-full border-dashed border-primary/30 hover:bg-muted cursor-pointer text-base font-medium text-center justify-center flex items-center px-6 py-8 rounded-md"
+					className="border-4 w-full border-dashed border-primary/30 hover:bg-muted cursor-pointer text-center justify-center flex items-center px-6 py-8 rounded-md"
 				>
 					<UIText variant={'heading'}>{t('addEvent')}</UIText>
 				</motion.div>

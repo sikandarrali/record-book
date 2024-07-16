@@ -1,16 +1,19 @@
 import { cn } from "@/lib/utils";
 
-const UIText = ({ className, variant, isUrdu, ...props }) => {
+const UIText = ({ className, variant, weight, isUrdu, ...props }) => {
 	return (
 		<span
 			className={cn(
-				"text-xl rtl:font-urdu relative",
+				"ltr:text-lg rtl:text-xl rtl:font-urdu relative",
 				variant === "xs" && "text-base",
 				variant === "sm" && "text-lg",
-				variant === "heading" && "text-2xl",
+				variant === "heading" && "ltr:font-semibold ltr:text-xl rtl:text-2xl",
 				variant === "button" && "rtl:text-xl",
-				variant === "label" && "rtl:text-xl",
+				variant === "label" && "ltr:text-lg ltr:font-medium rtl:text-xl",
 				isUrdu ? 'font-urdu' : 'font-sans',
+				weight === 'medium' && 'font-medium',
+				weight === 'semibold' && 'font-semibold',
+				weight === 'bold' && 'font-bold',
 				className
 			)}
 			{...props}
