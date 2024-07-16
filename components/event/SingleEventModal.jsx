@@ -25,6 +25,7 @@ import {SearchItems} from "@/components/event-items/SearchItems";
 import {ReloadIcon} from "@radix-ui/react-icons";
 import {useAuth} from "@/components/contexts/AuthContext";
 import {useScopedI18n} from "@/locales/client";
+import {isStringUrdu} from "@/lib/isStringUrdu";
 // import {toast} from "react-toastify";
 // import {ToastOptions} from "@/lib/ToastOptions";
 
@@ -184,9 +185,16 @@ const SingleEventModal = ({ eventData }) => {
             onOpenChange={setIsOpen}
             defaultOpen={false}
         >
-            <SheetTrigger className={'flex flex-1 justify-center items-center px-6 md:px-8 pt-8 pb-7 relative'}>
-                {eventData?.name}
-                {eventData.teamId && <Users2 className={'absolute right-2 top-2 w-5 h-5'}/>}
+            <SheetTrigger asChild>
+                <UIText
+                    variant={'heading'}
+                    className={cn(
+                        'flex flex-1 justify-center items-center px-6 md:px-8 pt-8 pb-7 relative',
+                        isStringUrdu(eventData.name) && 'font-urdu')}
+                >
+                    {eventData?.name}
+                    {eventData.teamId && <Users2 className={'absolute right-2 top-2 w-5 h-5'}/>}
+                </UIText>
             </SheetTrigger>
             <SheetContent
                 className={cn("!pt-0 flex flex-col justify-start !h-[100dvh] border-0")}
@@ -205,18 +213,9 @@ const SingleEventModal = ({ eventData }) => {
                                         eventData={eventData}
                                         sum={totalSum}
                                     />
-
-                                    {/*<div*/}
-                                    {/*    className={'w-8 h-8 cursor-pointer flex items-center justify-center'}*/}
-                                    {/*    onClick={()=> copyToClipboard()}*/}
-                                    {/*>*/}
-                                    {/*    <Link2 className={'w-7 h-7'} />*/}
-                                    {/*</div>*/}
-
                                 </div>
 
-
-                                <div className="flex items-center gap-2 relative select-none pointer-events-none">
+                                <div className="flex items-center gap-2 rtl:flex-row-reverse relative select-none pointer-events-none">
                                     <span className="text-sm">Rs</span>
                                     <span className="font-bold text-xl">
                                     <NumericFormat
@@ -231,7 +230,13 @@ const SingleEventModal = ({ eventData }) => {
                                 </div>
                             </div>
 
-                            <UIText variant={"h1"} className="text-background px-6 text-center pb-4 pt-1 flex flex-col justify-center items-center gap-4 select-none">
+                            <UIText
+                                variant={"heading"}
+                                className={cn(
+                                    isStringUrdu(eventData.name) && 'font-urdu',
+                                    "text-background px-6 text-center pb-4 pt-1 flex flex-col justify-center items-center gap-4 select-none"
+                                )}
+                            >
                                 {eventData?.name}
                             </UIText>
                         </div>
@@ -242,6 +247,7 @@ const SingleEventModal = ({ eventData }) => {
                                 setVisibleItems={setVisibleItems}
                                 itemsDefault={itemsDefault}
                                 itemsPerPage={itemsPerPage}
+                                openAddModal={openAddModal}
                             />
 
                             <UIText variant={'sm'} className={'py-1.5 font-medium bg-muted -mx-6 flex items-center justify-center px-6 gap-2 text-muted-foreground'}>

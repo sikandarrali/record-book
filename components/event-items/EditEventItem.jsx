@@ -14,6 +14,7 @@ import {SheetDescription, SheetHeader, SheetTitle, SheetContent, Sheet} from "@/
 import UIText from "@/components/theme/UIText";
 import {UISheetFooter} from "@/components/theme/UISheetFooter";
 import {useScopedI18n} from "@/locales/client";
+import {isStringUrdu} from "@/lib/isStringUrdu";
 
 const AddEventItemSchema = Yup.object().shape({
 	name: Yup.string()
@@ -100,7 +101,13 @@ export const EditEventItem = ({ open, onOpenChange, item }) => {
 							onEdit(values);
 						}}
 					>
-						{({errors, touched, handleChange, handleBlur,}) => (
+						{({
+							  errors,
+							  touched,
+							  handleChange,
+							  handleBlur,
+							  values
+						  }) => (
 							<Form className="flex flex-col w-full space-y-6">
 								<div className="flex flex-col">
 									<FormLabel
@@ -108,13 +115,15 @@ export const EditEventItem = ({ open, onOpenChange, item }) => {
 										errors={errors.name}
 										touched={touched.name}
 									/>
-									<Input
-										onChange={handleChange}
-										onBlur={handleBlur}
-										name="name"
-										disabled={disabled}
-										defaultValue={item.name}
-									/>
+									<UIText isUrdu={isStringUrdu(values.name)}>
+										<Input
+											onChange={handleChange}
+											onBlur={handleBlur}
+											name="name"
+											disabled={disabled}
+											defaultValue={item.name}
+										/>
+									</UIText>
 								</div>
 								<div className="flex flex-col">
 									<FormLabel
@@ -143,13 +152,15 @@ export const EditEventItem = ({ open, onOpenChange, item }) => {
 										errors={errors.details}
 										touched={touched.details}
 									/>
-									<Textarea
-										onChange={handleChange}
-										onBlur={handleBlur}
-										name="details"
-										disabled={disabled}
-										defaultValue={item.details}
-									/>
+									<UIText isUrdu={isStringUrdu(values.details)}>
+										<Textarea
+											onChange={handleChange}
+											onBlur={handleBlur}
+											name="details"
+											disabled={disabled}
+											defaultValue={item.details}
+										/>
+									</UIText>
 								</div>
 								
 								<UISheetFooter

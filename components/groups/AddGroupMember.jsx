@@ -2,20 +2,22 @@ import {Form, Formik} from "formik";
 import FormLabel from "@/components/theme/FormLabel";
 import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
-import {Loader2Icon} from "lucide-react";
+import {Asterisk, Loader2Icon, Plus} from "lucide-react";
 import * as Yup from "yup";
-import {useState} from "react";
+import {useId, useState} from "react";
 import {teams} from "@/components/appwrite/appwrite";
 import {toast} from "react-toastify";
 import {ToastOptions} from "@/lib/ToastOptions";
-import {scrollToTop} from "@/lib/utils";
+import {cn, scrollToTop} from "@/lib/utils";
 import {ParseErrorCodes} from "@/lib/parseErrorCodes";
-import {useScopedI18n} from "@/locales/client";
+import {useI18n, useScopedI18n} from "@/locales/client";
+import UIText from "@/components/theme/UIText";
+import {isStringUrdu} from "@/lib/isStringUrdu";
 
 
 const AddMemberSchema = Yup.object().shape({
     email: Yup.string()
-        .email('Invalid Email')
+        .email('invalid')
         .required("required")
 });
 
@@ -24,6 +26,7 @@ export const AddGroupMember = ({groupID, setUsersInGroup}) =>{
     const [adding, setAdding] = useState(false);
     const [disabled, setDisabled] = useState(false);
     const t = useScopedI18n('groups')
+    const tLabel = useScopedI18n('general.label')
 
     const onAdd = async (values) => {
         setAdding(true);
@@ -73,8 +76,17 @@ export const AddGroupMember = ({groupID, setUsersInGroup}) =>{
                   handleSubmit,
                   setFieldValue,
               }) => (
-                <Form className="flex gap-4 items-stretch">
-                    <div className="flex flex-col w-full">
+                <Form className="flex gap-4 w-full items-stretch justify-between" dir={'ltr'}>
+                    <UIText isUrdu={isStringUrdu(values.email)} className={'flex-1 flex w-full'}>
+                        {errors.email && touched.email &&
+                            <span className={cn("absolute left-0 -top-7 flex items-center text-red-500 gap-1")}>
+                                <Asterisk className="w-4 h-4 shrink-0" />
+                                <span className={'text-base'}>
+                                    {errors.email === 'invalid' && tLabel('invalid')}
+                                    {errors.email === 'required' && tLabel('required')}
+                                </span>
+                            </span>
+                        }
                         <Input
                             onChange={handleChange}
                             onBlur={handleBlur}
@@ -82,29 +94,18 @@ export const AddGroupMember = ({groupID, setUsersInGroup}) =>{
                             disabled={disabled}
                             placeholder={t('userEmailPlaceholder')}
                             value={values.email}
-                            className={'normal-case rtl:text-left'}
+                            className={cn('normal-case rtl:text-left')}
                         />
-                        <span className={'mt-2 self-end'}>
-                            <FormLabel
-                                title=""
-                                errors={errors.email}
-                                touched={touched.email}
-                            />
-                        </span>
-                    </div>
+                    </UIText>
 
                     <Button
-                        size="2xl"
                         disabled={disabled}
                         type={'submit'}
                     >
                         {adding ? (
-                            <>
-                                <Loader2Icon className="animate animate-spin w-5 h-5 stroke-[3]" />
-                            </>
-                        ) : (
-                            t('btnAdd')
-                        )}
+                            <Loader2Icon className="animate animate-spin w-5 h-5 stroke-[3]" />
+                        ) : t('btnAddMember')
+                        }
                     </Button>
                 </Form>
             )}

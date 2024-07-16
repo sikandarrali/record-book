@@ -9,6 +9,7 @@ import {
 import {TriangleAlert} from "lucide-react";
 import {UIDialogFooter} from "@/components/theme/UIDialogFooter";
 import {useScopedI18n} from "@/locales/client";
+import UIText from "@/components/theme/UIText";
 
 export const DeleteEventItem = ({ open, onOpenChange, personName, onDelete }) => {
 	const t = useScopedI18n('events')
@@ -18,11 +19,11 @@ export const DeleteEventItem = ({ open, onOpenChange, personName, onDelete }) =>
 				<AlertDialogHeader className={''}>
 					<AlertDialogTitle className={'text-primary flex items-center justify-center gap-2'}>
 						<TriangleAlert className={'w-5 h-5'}/>
-						<span>{t('deleteEventItem')}</span>
+						<UIText variant={'heading'}>{t('deleteEventItem')}</UIText>
 					</AlertDialogTitle>
 					<AlertDialogDescription className={"flex flex-col text-base items-center gap-1 !my-5"}>
-						<span>{t('deleteEventItemText')}</span>
-						<span className={'font-semibold text-primary'}>{personName}</span>
+						<UIText>{t('deleteEventItemText')}</UIText>
+						<UIText className={'text-primary'}>{personName}</UIText>
 					</AlertDialogDescription>
 				</AlertDialogHeader>
 

@@ -16,6 +16,7 @@ import {useAuth} from "@/components/contexts/AuthContext";
 import {ExitIcon} from "@radix-ui/react-icons";
 import {LeaveGroup} from "@/components/groups/LeaveGroup";
 import {useScopedI18n} from "@/locales/client";
+import {isStringUrdu} from "@/lib/isStringUrdu";
 
 const SingleGroup = ({ data, userGroups, setUserGroups }) => {
     const isDesktop = useMediaQuery({ query: "(min-width: 1024px)" })
@@ -62,10 +63,16 @@ const SingleGroup = ({ data, userGroups, setUserGroups }) => {
     return (
 
         <Sheet open={open} onOpenChange={setOpen} defaultOpen={false}>
-            <SheetTrigger className={'relative w-full text-left py-4 rtl:pb-1 rtl:pt-3 flex gap-4 items-center justify-between hover:bg-white/70 transition-all duration-300 px-5'}>
-                <UIText className={'flex flex-col ltr:gap-1'} noSpacing>
-                    <UIText className={'font-medium'}>{data.name}</UIText>
-                    <UIText className={'text-muted-foreground text-sm rtl:text-sm rtl:mt-0 lowercase'}>{data.total-1} {t('labelMembers')}</UIText>
+            <SheetTrigger className={'relative w-full text-left py-4 flex gap-4 items-center justify-between hover:bg-white/70 transition-all duration-300 px-5'}>
+                <UIText className={'flex flex-col ltr:gap-1'}>
+                    <UIText className={cn(
+                        'font-medium',
+                        isStringUrdu(data.name) && 'font-urdu'
+                    )}>{data.name}</UIText>
+                    <UIText className={'text-muted-foreground text-sm rtl:text-sm rtl:mt-0 lowercase rtl:text-right flex gap-2 flex'}>
+                        <span>{data.total-1}</span>
+                        <span>{t('labelMembers')}</span>
+                    </UIText>
                 </UIText>
                 {isOwner ? <ShieldCheck className={'w-5 h-5 text-primary'}/> : <Users2 className={'w-5 h-5 text-primary'}/>}
             </SheetTrigger>
@@ -79,8 +86,11 @@ const SingleGroup = ({ data, userGroups, setUserGroups }) => {
 
                     <div className="flex flex-col gap-10 w-full">
                         <UIText
-                            variant={"h1"}
-                            className="text-left flex items-center flex-wrap gap-2 border-b pb-4 justify-between text-primary"
+                            variant={"heading"}
+                            className={cn(
+                                "text-left flex items-center flex-wrap gap-2 border-b pb-4 justify-between text-primary",
+                                isStringUrdu(data.name) && 'font-urdu'
+                            )}
                         >
                             {data.name}
                         </UIText>
@@ -113,7 +123,7 @@ const SingleGroup = ({ data, userGroups, setUserGroups }) => {
 
                         {isOwner &&
                             <div className={'flex flex-col gap-4 bg-background -mx-6 px-6 py-6'}>
-                                <UIText className={'font-semibold flex items-center gap-2 text-primary'}>
+                                <UIText className={'flex items-center gap-2 text-primary'}>
                                     <Plus className={'w-5 h-5'}/>
                                     {t('labelAddMembers')}
                                 </UIText>
@@ -127,13 +137,12 @@ const SingleGroup = ({ data, userGroups, setUserGroups }) => {
 
                         {!isOwner ?
                             <Button
-                                size={'sm'}
                                 variant={'outline'}
                                 className={'flex items-center gap-2 text-primary'}
                                 onClick={()=> setOpenLeaveGroup(true)}
                             >
                                 <ExitIcon className={'-scale-x-100 w-3.5 h-3.5'}/>
-                                <span>{t('btnLeaveGroup')}</span>
+                                <UIText variant={'sm'}>{t('btnLeaveGroup')}</UIText>
                             </Button>
                         :
                             <div className={"flex flex-row justify-end gap-4"}>

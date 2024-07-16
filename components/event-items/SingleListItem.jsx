@@ -20,6 +20,7 @@ import {useMediaQuery} from "react-responsive";
 import {cn} from "@/lib/utils";
 import {useScopedI18n} from "@/locales/client";
 import {UISheetInfoFooter} from "@/components/theme/UISheetInfoFooter";
+import {isStringUrdu} from "@/lib/isStringUrdu";
 
 export const SingleListItem = ({ item }) => {
 	const isDesktop = useMediaQuery({ query: "(min-width: 1024px)" })
@@ -47,8 +48,8 @@ export const SingleListItem = ({ item }) => {
 					className="flex flex-col w-full px-6 hover:bg-muted select-none py-4 cursor-pointer border-b"
 				>
 					<div className="flex w-full justify-between gap-5 text-left">
-						<span className="font-medium text-[18px]">{item.name}</span>
-						<div className="flex gap-2 justify-end items-center relative flex-shrink-0 select-none">
+						<UIText isUrdu={isStringUrdu(item.name)}>{item.name}</UIText>
+						<div className="flex gap-2 justify-end rtl:flex-row-reverse items-center relative flex-shrink-0 select-none">
 							<span className="text-sm select-none">Rs</span>
 							<span className="font-semibold text-xl select-none text-primary">
 								<NumericFormat
@@ -64,7 +65,12 @@ export const SingleListItem = ({ item }) => {
 					</div>
 
 					{item.details &&
-						<div className={'overflow-hidden line-clamp-1 mt-1 w-3/4 text-muted-foreground text'}>{item.details}</div>
+						<UIText
+							isUrdu={isStringUrdu(item.details)}
+							className={'overflow-hidden line-clamp-1 mt-1 w-3/4 text-muted-foreground text'}
+						>
+							{item.details}
+						</UIText>
 					}
 				</div>
 			</SheetTrigger>
@@ -78,7 +84,7 @@ export const SingleListItem = ({ item }) => {
 				<div className="flex flex-col w-full min-h-full pt-4 justify-start">
 
 					<div className="flex flex-col justify-center items-center my-10 lg:mt-32">
-						<UIText variant={"h2"}>
+						<UIText variant={"heading"} isUrdu={isStringUrdu(item.name)}>
 							{item.name}
 						</UIText>
 
@@ -97,7 +103,7 @@ export const SingleListItem = ({ item }) => {
 						</div>
 
 						{item.details &&
-							<UIText className={'mt-20 self-start flex flex-col px-2'}>
+							<UIText className={'mt-20 self-start flex flex-col px-2'} isUrdu={isStringUrdu(item.details)}>
 								<span className={'font-semibold text-sm mb-1'}>{t('labelItemDetails')}</span>
 								<span>{item.details}</span>
 							</UIText>

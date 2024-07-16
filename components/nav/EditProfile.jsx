@@ -12,6 +12,8 @@ import {toast} from "react-toastify";
 import {account} from "@/components/appwrite/appwrite";
 import {useAuth} from "@/components/contexts/AuthContext";
 import {UISheetFooter} from "@/components/theme/UISheetFooter";
+import {isStringUrdu} from "@/lib/isStringUrdu";
+import UIText from "@/components/theme/UIText";
 
 const EditGroupSchema = Yup.object().shape({
     name: Yup.string()
@@ -85,9 +87,7 @@ export const EditProfile = ({ open, onOpenChange }) => {
                                   touched,
                                   values,
                                   handleChange,
-                                  handleBlur,
-                                  handleSubmit,
-                                  setFieldValue,
+                                  handleBlur
                               }) => (
                                 <Form className="flex flex-col w-full space-y-6">
                                     <div className="flex flex-col">
@@ -96,13 +96,15 @@ export const EditProfile = ({ open, onOpenChange }) => {
                                             errors={errors.name}
                                             touched={touched.name}
                                         />
-                                        <Input
-                                            onChange={handleChange}
-                                            onBlur={handleBlur}
-                                            name="name"
-                                            disabled={disabled}
-                                            value={values.name}
-                                        />
+                                        <UIText isUrdu={isStringUrdu(values.name)}>
+                                            <Input
+                                                onChange={handleChange}
+                                                onBlur={handleBlur}
+                                                name="name"
+                                                disabled={disabled}
+                                                value={values.name}
+                                            />
+                                        </UIText>
                                     </div>
 
                                     <UISheetFooter

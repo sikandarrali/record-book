@@ -10,7 +10,8 @@ const Translation = {
       "yesDelete" : "Yes, Delete"
     },
     "label" : {
-      "required" : "required"
+      "required" : "required",
+      "invalid": "invalid email",
     }
   },
   "events": {
@@ -113,7 +114,8 @@ const Translation = {
     "withGoogle": "Login with Google"
   },
   "pageNotFound" : {
-    "text": "Page Not Found"
+    "text": "Page Not Found",
+    "btnGoBack": "Back Home"
   },
   "logout" : {
     "text": "If you're not logged out automatically, click here",

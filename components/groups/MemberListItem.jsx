@@ -41,12 +41,23 @@ export const MemberListItem = ({data, teamID, setUsersInGroup, groupName, isGrou
 
             <div className={'flex flex-col items-start w-full gap-2 line-clamp-1'}>
                 <span className={'font-medium select-auto'}>{data?.userEmail}</span>
-
                 {data.confirm ?
-                    <div className={'flex gap-2 items-center text-xs'}>
-                        {isOwner  && <Badge variant={'secondary'}><UIText variant={'sm'} noSpacing>{t('badgeAdmin')}</UIText></Badge>}
-                        {isMember && <Badge variant={'outline'} className={'text-green-500 border-green-500'}>{t('badgeMember')}</Badge>}
-                        {user.email === data.userEmail && <Badge>{t('badgeYou')}</Badge>}
+                    <div className={'flex gap-2 items-stretch text-xs'}>
+                        {isOwner  &&
+                            <Badge variant={'secondary'}>
+                                <UIText variant={'xs'}>{t('badgeAdmin')}</UIText>
+                            </Badge>
+                        }
+                        {isMember &&
+                            <Badge variant={'outline'} className={'text-green-500 border-green-500'}>
+                                <UIText variant={'xs'}>{t('badgeMember')}</UIText>
+                            </Badge>
+                        }
+                        {user.email === data.userEmail &&
+                            <Badge variant={'outline'} className={'text-green-500 border-green-500'}>
+                                <UIText variant={'xs'}>{t('badgeYou')}</UIText>
+                            </Badge>
+                        }
                     </div>
                     :
                     <Tooltip>

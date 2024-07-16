@@ -17,7 +17,7 @@ export const UISheetFooter = ({disabled, adding, onOpenChange, labelAction, labe
                     <>
                         <Loader2Icon className="animate animate-spin w-5 h-5 stroke-[3]" />
                     </>
-                ) : <UIText>{labelAction || t('btn.saveChanges')}</UIText>
+                ) : <UIText variant={'button'}>{labelAction || t('btn.saveChanges')}</UIText>
                 }
             </Button>
             <Button
@@ -28,7 +28,7 @@ export const UISheetFooter = ({disabled, adding, onOpenChange, labelAction, labe
                 type={'button'}
                 onClick={()=> onOpenChange(false)}
             >
-               <UIText>{labelCancel || t('btn.cancel')}</UIText>
+               <UIText variant={'button'}>{labelCancel || t('btn.cancel')}</UIText>
             </Button>
         </div>
     )

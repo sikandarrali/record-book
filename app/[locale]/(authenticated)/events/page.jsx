@@ -5,18 +5,23 @@ import UIText from "@/components/theme/UIText";
 import { FixStickyHeaderScrollError } from "@/lib/utils";
 import { motion } from "framer-motion";
 import {useEffect, useRef, useState} from "react";
-import {client} from "@/components/appwrite/appwrite";
+import {client, listUserGroups, teams} from "@/components/appwrite/appwrite";
 import {db} from "@/components/appwrite/database";
 import {Query} from "appwrite";
 import SingleEventModal from "@/components/event/SingleEventModal";
 import {useScopedI18n} from "@/locales/client";
+import {useRouter} from "next/navigation";
+import {useAuth} from "@/components/contexts/AuthContext";
 
 export default function Home() {
 	const [openAddModal, setOpenAddModal] = useState(false);
 	const scrollRef = useRef(null);
 	const [refreshItems, setRefreshItems] = useState(false)
 	const [events, setEvents] = useState([])
+	const [userOwnedGroups, setUserOwnedGroups] = useState([])
 	const t = useScopedI18n('events');
+	const router = useRouter()
+	const {user} = useAuth()
 
 	const getEvents = async () =>{
 		try {
@@ -30,9 +35,16 @@ export default function Home() {
 		}
 	}
 
+	const getUserGroups = async () =>{
+		const tempGroups = await listUserGroups()
+		const tempOwnedGroups = tempGroups.teams.filter((item) => item.prefs.creatorEmail === user.email);
+		setUserOwnedGroups(tempOwnedGroups)
+	}
+
 	useEffect(() => {
 		getEvents();
-	}, []);
+		getUserGroups();
+	}, [router]);
 
 	// re-populate events when created, fixes missing $id issue
 	useEffect(() => {
@@ -70,7 +82,7 @@ export default function Home() {
 	return (
 		<PageContainer hideTopbar>
 
-			<UIText variant="h2">{t('title')}</UIText>
+			<UIText variant="heading" className={'text-primary'}>{t('title')}</UIText>
 
 			<motion.div
 				initial={{ opacity: 0 }}
@@ -92,7 +104,7 @@ export default function Home() {
 					onClick={() => setOpenAddModal(!openAddModal)}
 					className="border-4 w-full border-dashed border-primary/30 hover:bg-muted cursor-pointer text-base font-medium text-center justify-center flex items-center px-6 py-8 rounded-md"
 				>
-					<UIText>{t('addEvent')}</UIText>
+					<UIText variant={'heading'}>{t('addEvent')}</UIText>
 				</motion.div>
 
 				{events.map((event, i) => (
@@ -117,6 +129,7 @@ export default function Home() {
 				onOpenChange={setOpenAddModal}
 				refreshItems={refreshItems}
 				setRefreshItems={setRefreshItems}
+				userOwnedGroups={userOwnedGroups}
 			/>
 
 		</PageContainer>

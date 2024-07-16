@@ -28,16 +28,16 @@ export default function Page() {
 
     return (
         <PageContainer hideTopbar>
-            <UIText variant="h2" className={'mb-2 text-primary'}>{t('title')}</UIText>
+            <UIText variant="heading" className={'mb-2 text-primary'}>{t('title')}</UIText>
             <UIText>{t('text')}</UIText>
 
-            <div className={'bg-muted py-4 rtl:pt-0 rtl:pb-1.5 px-6 rounded-lg mt-2 cursor-pointer'} onClick={()=> setShowInformation(!showInformation)} >
+            <div className={'bg-muted py-4 px-6 rounded-lg mt-2 cursor-pointer'} onClick={()=> setShowInformation(!showInformation)} >
                 <UIText className={'flex items-center justify-between gap-2 font-medium text-primary'}>
-                    <span className={'flex items-center gap-2'}><Info className={'w-4 h-4 rtl:-mt-2'}/> {t('information')}</span>
+                    <span className={'flex items-center gap-2'}><Info className={'w-4 h-4'}/> {t('information')}</span>
                     {showInformation ? <ChevronUp className={'w-5 h-5 ltr:mt-1 stroke-[3]'} /> : <ChevronDown  className={'w-5 h-5 ltr:mt-1 stroke-[3]'} />}
                 </UIText>
                 {showInformation &&
-                    <ul className={'list-disc pl-4 gap-2 mt-2 flex flex-col rtl:text-right'}>
+                    <ul className={'list-disc px-5 gap-2 mt-2 flex flex-col rtl:text-right'}>
                         <li><UIText variant={'sm'}>{t('informationP1')}</UIText></li>
                         <li><UIText variant={'sm'}>{t('informationP2')}</UIText></li>
                         <li><UIText variant={'sm'}>{t('informationP3')}</UIText></li>
@@ -50,7 +50,7 @@ export default function Page() {
                 }
             </div>
 
-            <UIText className={'py-2 rtl:pb-0 mt-4 text-primary'}>{t('labelYourGroups')}</UIText>
+            <UIText className={'py-2 mt-4 text-primary'}>{t('labelYourGroups')}</UIText>
 
             <motion.div
                 initial={{opacity: 0, y: 10}}
@@ -89,7 +89,7 @@ export default function Page() {
                     type={'submit'}
                     className={'mt-5'} onClick={()=> setOpenAddGroup(true)}
                 >
-                    <UIText className={'rtl:mt-2.5'}>{t('btnCreateNewGroup')}</UIText>
+                    <UIText variant={'button'}>{t('btnCreateNewGroup')}</UIText>
                 </Button>
             </motion.div>
 

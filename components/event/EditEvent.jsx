@@ -20,6 +20,9 @@ import {useData} from "@/components/contexts/DataContext";
 import {UISheetFooter} from "@/components/theme/UISheetFooter";
 import {useScopedI18n} from "@/locales/client";
 import {Label} from "@/components/ui/label";
+import UIText from "@/components/theme/UIText";
+import {isStringUrdu} from "@/lib/isStringUrdu";
+import {SheetStylesFlexibleHeight, SheetStylesMAxHeight90} from "@/lib/reusableStyles";
 
 const EditEventSchema = Yup.object().shape({
 	name: Yup.string()
@@ -130,7 +133,7 @@ export const EditEvent = ({ open, onOpenChange, eventData, setGroup }) => {
 	return (
 		<Sheet open={open} onOpenChange={onOpenChange} defaultOpen={false}>
 			<SheetContent
-				className={cn("pb-8 lg:pb-14 overflow-auto max-h-fit")}
+				className={cn("pb-8 lg:pb-14", SheetStylesMAxHeight90)}
 				side={isDesktop ? "right" : "bottom"}
 				onOpenAutoFocus={(e) => e.preventDefault()}
 			>
@@ -138,9 +141,9 @@ export const EditEvent = ({ open, onOpenChange, eventData, setGroup }) => {
 				<div className="flex flex-col w-full min-h-full pt-4 justify-start">
 					{/* Date & Close */}
 					<div className="flex items-center space-x-2 justify-between mb-4">
-						<div className="flex items-center text-xl pt-2 space-x-2 font-semibold text-primary">
+						<UIText variant={'heading'} className="text-primary">
 							{t('editEvent')}
-						</div>
+						</UIText>
 					</div>
 
 					<div className="flex flex-col gap-5 w-full items-center justify-center py-6 lg:py-10">
@@ -166,19 +169,19 @@ export const EditEvent = ({ open, onOpenChange, eventData, setGroup }) => {
 								<Form className="flex flex-col w-full space-y-6">
 									<div className="flex flex-col">
 										<Label className={"relative text-sm flex items-center justify-between gap-4"}>
-											<span className="shrink-0">{t('labelShareWithGroup')}</span>
+											<UIText variant={'label'} className="shrink-0">{t('labelShareWithGroup')}</UIText>
 										</Label>
 										<div className={'flex gap-4 items-center relative'}>
 											<Select onValueChange={(selected)=> setSelectedGroup(selected)} key={selectedGroup}>
 												<SelectTrigger className="w-full h-12 flex between">
-													{selectedGroup ? userOwnedGroups.find((group)=> group.$id=== selectedGroup)?.name : t('selectGroupPlaceholder')}
+													<UIText variant={'label'}>{selectedGroup ? userOwnedGroups.find((group)=> group.$id=== selectedGroup)?.name : <span className={'text-muted-foreground'}>{t('selectGroupPlaceholder')}</span>}</UIText>
 												</SelectTrigger>
 												<SelectContent>
 													{userOwnedGroups.length===0 &&
 														<SelectItem
 															value={null}
 														>
-															{t('groupNotFound')}
+															<UIText className={'text-muted-foreground'} variant={'sm'}>{t('groupNotFound')}</UIText>
 														</SelectItem>
 													}
 													{userOwnedGroups?.map((u)=>(
@@ -186,7 +189,7 @@ export const EditEvent = ({ open, onOpenChange, eventData, setGroup }) => {
 															key={u.$id}
 															value={u.$id}
 														>
-															{u.name}
+															<UIText variant={'sm'}>{u.name}</UIText>
 														</SelectItem>
 													))}
 												</SelectContent>
@@ -210,13 +213,15 @@ export const EditEvent = ({ open, onOpenChange, eventData, setGroup }) => {
 											errors={errors.name}
 											touched={touched.name}
 										/>
-										<Input
-											onChange={handleChange}
-											onBlur={handleBlur}
-											name="name"
-											disabled={disabled}
-											value={values.name}
-										/>
+										<UIText isUrdu={isStringUrdu(values.name)}>
+											<Input
+												onChange={handleChange}
+												onBlur={handleBlur}
+												name="name"
+												disabled={disabled}
+												value={values.name}
+											/>
+										</UIText>
 									</div>
 									<div className="flex flex-col">
 										<FormLabel
@@ -238,13 +243,15 @@ export const EditEvent = ({ open, onOpenChange, eventData, setGroup }) => {
 											errors={errors.venue}
 											touched={touched.venue}
 										/>
-										<Input
-											onChange={handleChange}
-											onBlur={handleBlur}
-											name="venue"
-											disabled={disabled}
-											value={values.venue}
-										/>
+										<UIText isUrdu={isStringUrdu(values.venue)}>
+											<Input
+												onChange={handleChange}
+												onBlur={handleBlur}
+												name="venue"
+												disabled={disabled}
+												value={values.venue}
+											/>
+										</UIText>
 									</div>
 									<div className="flex flex-col">
 										<FormLabel
@@ -252,13 +259,15 @@ export const EditEvent = ({ open, onOpenChange, eventData, setGroup }) => {
 											errors={errors.details}
 											touched={touched.details}
 										/>
-										<Textarea
-											onChange={handleChange}
-											onBlur={handleBlur}
-											name="details"
-											disabled={disabled}
-											value={values.details}
-										/>
+										<UIText isUrdu={isStringUrdu(values.details)}>
+											<Textarea
+												onChange={handleChange}
+												onBlur={handleBlur}
+												name="details"
+												disabled={disabled}
+												value={values.details}
+											/>
+										</UIText>
 									</div>
 
 									<UISheetFooter
