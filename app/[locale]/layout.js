@@ -1,5 +1,5 @@
 import "@/styles/globals.css";
-import {Inter as FontSans} from "next/font/google";
+import {Inter} from "next/font/google";
 import {Noto_Nastaliq_Urdu, Noto_Sans_Arabic, Gulzar} from "next/font/google";
 import localFont from "next/font/local"
 import {NetworkStatusIndicator} from "@/components/NetworkStatus/NetworkStatusIndicator";
@@ -7,7 +7,7 @@ import HolyLoader from "holy-loader";
 import Providers from "@/components/providers/Providers";
 import {cn} from "@/lib/utils";
 
-const fontSans = FontSans({
+const fontSans = Inter({
 	subsets: ["latin"],
 	variable: "--font-sans",
 });
@@ -114,7 +114,8 @@ export default async function RootLayout({ children, params }) {
 
 				{/* topbar loader */}
 				<HolyLoader
-					color="#E11D48"
+					// color="#E11D48"
+					color="#000"
 					height="4px"
 					speed={250}
 					easing="linear"

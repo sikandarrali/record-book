@@ -9,6 +9,7 @@ import {
 import {TriangleAlert} from "lucide-react";
 import {UIDialogFooter} from "@/components/theme/UIDialogFooter";
 import {useScopedI18n} from "@/locales/client";
+import UIText from "@/components/theme/UIText";
 
 export const DeleteGroup = ({ open, onOpenChange, groupName, onDelete }) => {
 	const t = useScopedI18n('groups')
@@ -18,11 +19,11 @@ export const DeleteGroup = ({ open, onOpenChange, groupName, onDelete }) => {
 				<AlertDialogHeader className={'!text-left'}>
 					<AlertDialogTitle className={'text-primary flex items-center justify-center gap-2'}>
 						<TriangleAlert className={'w-5 h-5'}/>
-						<span>{t('deleteGroup')}</span>
+						<UIText variant={'heading'}>{t('deleteGroup')}</UIText>
 					</AlertDialogTitle>
 					<AlertDialogDescription className={"flex flex-col text-base items-center gap-1 !my-5"}>
-						<span>{t('deleteGroupText')}</span>
-						<span className={'font-semibold text-primary'}>{groupName}</span>
+						<UIText>{t('deleteGroupText')}</UIText>
+						<UIText className={'font-semibold text-primary'}>{groupName}</UIText>
 					</AlertDialogDescription>
 				</AlertDialogHeader>
 

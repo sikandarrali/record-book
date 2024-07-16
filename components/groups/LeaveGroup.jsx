@@ -19,12 +19,12 @@ export const LeaveGroup = ({ open, onOpenChange, group, onLeave }) => {
                 <AlertDialogHeader className={'!text-left'}>
                     <AlertDialogTitle className={'text-primary flex items-center justify-center gap-2'}>
                         <TriangleAlert className={'w-5 h-5'}/>
-                        <span>{t('btnLeaveGroup')}</span>
+                        <UIText variant={'heading'}>{t('btnLeaveGroup')}</UIText>
                     </AlertDialogTitle>
                     <AlertDialogDescription className={"flex flex-col text-center text-base items-center gap-1 !my-5"}>
-                        <span>{t('leaveGroupText1')}</span>
-                        <span className={'font-semibold text-primary'}>{group.name}</span>
-                        <span>{t('leaveGroupText2')}</span>
+                        <UIText>{t('leaveGroupText1')}</UIText>
+                        <UIText className={'font-semibold text-primary'}>{group.name}</UIText>
+                        <UIText>{t('leaveGroupText2')}</UIText>
                     </AlertDialogDescription>
                 </AlertDialogHeader>
 

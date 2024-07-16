@@ -50,7 +50,8 @@ const Translation = {
       "yesDelete": "ہاں، حذف کریں"
     },
     "label": {
-      "required": "لازمی"
+      "required": "لازمی",
+      "invalid": "ای میل غلط ہے",
     }
   },
   "groups": {
@@ -66,7 +67,7 @@ const Translation = {
     "badgeAdmin": "ایڈمن",
     "badgeMember": "ممبر",
     "badgeYou": "آپ",
-    "btnAdd": "شامل کریں",
+    "btnAddMember": "شامل کریں",
     "btnCreateNewGroup": "نیا گروپ بنائیں",
     "btnLeaveGroup": "گروپ چھوڑیں",
     "btnYesLeave": "ہاں، چھوڑ دیں",
@@ -101,7 +102,7 @@ const Translation = {
     "text": "گروپس آپ کے ایونٹس ڈیٹا کو دوسروں کے ساتھ شیئر کرنے کا ایک طریقہ ہیں۔ ",
     "title": "گروپس",
     "tooltipPendingUser": "صارف نے دعوت قبول نہیں کی ہے۔",
-    "userEmailPlaceholder": "صارف ای میل درج کریں"
+    "userEmailPlaceholder": "ای میل درج کریں"
   },
   "joinGroup": {
     "alertGroupJoined": "گروپس شامل ہوئے!",
@@ -117,7 +118,8 @@ const Translation = {
     "team_not_found": "کوئی مماثل گروپ نہیں ملا.",
     "textJoined": "آپ کامیابی کے ساتھ اس گروپ میں شامل ہوگئے ہیں۔",
     "titleJoined": "گروپ میں شامل ہوا",
-    "unableToJoin": "شامل ہونے سے قاصر"
+    "unableToJoin": "شامل ہونے سے قاصر",
+    "general_argument_invalid": "شامل ہونے سے قاصر",
   },
   "languageSwitcher": {
     "en": "انگریزی",
@@ -137,7 +139,8 @@ const Translation = {
     "linkLogout": "لاگ آؤٹ"
   },
   "pageNotFound": {
-    "text": "صفحہ نہیں ملا"
+    "text": "صفحہ نہیں ملا",
+    "btnGoBack": "واپس جائیں"
   }
 }
 

@@ -23,6 +23,7 @@ import {useMediaQuery} from "react-responsive";
 import {getGroup} from "@/components/appwrite/appwrite";
 import {useScopedI18n} from "@/locales/client";
 import {UISheetInfoFooter} from "@/components/theme/UISheetInfoFooter";
+import {isStringUrdu} from "@/lib/isStringUrdu";
 
 const EventInfo = ({ eventData, sum }) => {
 	const isDesktop = useMediaQuery({ query: "(min-width: 1024px)" })
@@ -87,8 +88,11 @@ const EventInfo = ({ eventData, sum }) => {
 
 						<div className="flex flex-col justify-center items-center gap-5 my-10 lg:mt-32">
 							<UIText
-								variant={"h1"}
-								className="text-primary text-center self-center"
+								variant={"heading"}
+								className={cn(
+									"text-primary text-center self-center",
+									isStringUrdu(eventData.name) && 'font-urdu'
+								)}
 							>
 								{eventData?.name}
 							</UIText>
@@ -107,27 +111,29 @@ const EventInfo = ({ eventData, sum }) => {
 						<Table className={'lg:mt-16'}>
 							<TableBody className="font-medium text-base">
 								<TableRow className={'border-b-muted'}>
-									<TableCell>{t('labelGroup')}</TableCell>
+									<TableCell><UIText>{t('labelGroup')}</UIText></TableCell>
 									<TableCell className="text-right">
-										{group?.name || <p className={'italic text-muted-foreground text-sm'}>Not Shared<br className={'flex md:hidden'}/>with any Group</p>}
+										<UIText isUrdu={isStringUrdu(group?.name)}>
+											{group?.name || <p className={'italic text-muted-foreground text-sm'}>Not Shared<br className={'flex md:hidden'}/>with any Group</p>}
+										</UIText>
 									</TableCell>
 								</TableRow>
 								<TableRow className={'border-b-muted'}>
-									<TableCell>{t('labelDate')}</TableCell>
+									<TableCell><UIText>{t('labelDate')}</UIText></TableCell>
 									<TableCell className="text-right">
-										{eventData?.date || '-'}
+										<UIText>{eventData?.date || '-'}</UIText>
 									</TableCell>
 								</TableRow>
 								<TableRow className={'border-b-muted'}>
-									<TableCell>{t('labelVenue')}</TableCell>
+									<TableCell><UIText>{t('labelVenue')}</UIText></TableCell>
 									<TableCell className="text-right">
-										{eventData?.venue || '-'}
+										<UIText isUrdu={isStringUrdu(group?.venue)}>{eventData?.venue || '-'}</UIText>
 									</TableCell>
 								</TableRow>
 								<TableRow className={'border-b-muted'}>
-									<TableCell>{t('labelDetails')}</TableCell>
+									<TableCell><UIText>{t('labelDetails')}</UIText></TableCell>
 									<TableCell className="text-right">
-										{eventData?.details || '-'}
+										<UIText isUrdu={isStringUrdu(group?.details)}>{eventData?.details || '-'}</UIText>
 									</TableCell>
 								</TableRow>
 							</TableBody>

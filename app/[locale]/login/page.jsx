@@ -4,12 +4,14 @@ import PageContainer from "@/components/providers/PageContainer";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Logo from "../../../public/logo.png"
-import {useScopedI18n} from "@/locales/client";
+import {useI18n, useScopedI18n} from "@/locales/client";
 import UIText from "@/components/theme/UIText";
+import {UISheetInfoFooter} from "@/components/theme/UISheetInfoFooter";
 
 export default function Home() {
 	const { onGoogleWithLogin } = useAuth();
 	const t = useScopedI18n('login')
+	const t2 = useI18n()
 
 	return (
 		<PageContainer hideNavbar>
@@ -25,6 +27,8 @@ export default function Home() {
 						height={79}
 					/>
 				{/*</div>*/}
+
+				<UISheetInfoFooter/>
 
 				<Button
 					onClick={() => onGoogleWithLogin()}
@@ -44,6 +48,7 @@ export default function Home() {
 					</svg>
 					<UIText className={'ltr:font-semibold'}>{t('withGoogle')}</UIText>
 				</Button>
+
 			</div>
 		</PageContainer>
 	);

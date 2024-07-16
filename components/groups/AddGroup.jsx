@@ -15,6 +15,7 @@ import {useAuth} from "@/components/contexts/AuthContext";
 import {UISheetFooter} from "@/components/theme/UISheetFooter";
 import {useScopedI18n} from "@/locales/client";
 import UIText from "@/components/theme/UIText";
+import {isStringUrdu} from "@/lib/isStringUrdu";
 
 const AddGroupSchema = Yup.object().shape({
     name: Yup.string()
@@ -85,6 +86,7 @@ export const AddGroup = ({ open, onOpenChange, setRefresh }) => {
                                   touched,
                                   handleChange,
                                   handleBlur,
+                                  values
                               }) => (
                                 <Form className="flex flex-col w-full space-y-6">
                                     <div className="flex flex-col gap-2">
@@ -93,12 +95,14 @@ export const AddGroup = ({ open, onOpenChange, setRefresh }) => {
                                             errors={errors.name}
                                             touched={touched.name}
                                         />
-                                        <Input
-                                            onChange={handleChange}
-                                            onBlur={handleBlur}
-                                            name="name"
-                                            disabled={disabled}
-                                        />
+                                        <UIText isUrdu={isStringUrdu(values.name)}>
+                                            <Input
+                                                onChange={handleChange}
+                                                onBlur={handleBlur}
+                                                name="name"
+                                                disabled={disabled}
+                                            />
+                                        </UIText>
                                     </div>
 
                                     <UISheetFooter

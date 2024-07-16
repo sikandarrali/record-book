@@ -24,9 +24,10 @@ import {useAuth} from "@/components/contexts/AuthContext";
 import {Label} from "@/components/ui/label";
 import {useData} from "@/components/contexts/DataContext";
 import UIText from "@/components/theme/UIText";
-import {SheetStylesFlexibleHeight} from "@/lib/reusableStyles";
+import {SheetStylesFlexibleHeight, SheetStylesMAxHeight90} from "@/lib/reusableStyles";
 import {UISheetFooter} from "@/components/theme/UISheetFooter";
 import {useScopedI18n} from "@/locales/client";
+import {isStringUrdu} from "@/lib/isStringUrdu";
 
 
 const AddEventSchema = Yup.object().shape({
@@ -39,13 +40,12 @@ const AddEventSchema = Yup.object().shape({
 	details: Yup.string().min(1).max(300, "max 300 characters"),
 });
 
-export const AddEvent = ({ open, onOpenChange }) => {
+export const AddEvent = ({ open, onOpenChange, userOwnedGroups }) => {
 	const isDesktop = useMediaQuery({ query: "(min-width: 1024px)" });
 	const [adding, setAdding] = useState(false);
 	const [disabled, setDisabled] = useState(false);
 	const [selectedGroup, setSelectedGroup] = useState(null)
 	const {user} = useAuth()
-	const {userOwnedGroups} = useData()
 	const [addEventDetails, setAddEventDetails] = useState(false)
 	const t = useScopedI18n('events')
 
@@ -90,7 +90,7 @@ export const AddEvent = ({ open, onOpenChange }) => {
 	return (
 		<Sheet open={open} onOpenChange={onOpenChange} defaultOpen={false}>
 			<SheetContent
-				className={cn("pb-8 lg:pb-14", SheetStylesFlexibleHeight)}
+				className={cn("pb-8 lg:pb-14", SheetStylesMAxHeight90)}
 				side={isDesktop ? "right" : "bottom"}
 				onOpenAutoFocus={(e) => e.preventDefault()}
 			>
@@ -99,7 +99,7 @@ export const AddEvent = ({ open, onOpenChange }) => {
 					{/* Date & Close */}
 					<div className="flex items-center space-x-2 justify-between mb-4">
 						<div className="flex items-center text-xl pt-2 space-x-2 text-primary">
-							<UIText>{t('addEvent')}</UIText>
+							<UIText variant={'heading'}>{t('addEvent')}</UIText>
 						</div>
 					</div>
 
@@ -117,24 +117,24 @@ export const AddEvent = ({ open, onOpenChange }) => {
 								onAdd(values);
 							}}
 						>
-							{({errors, touched, handleChange, handleBlur}) => (
+							{({values, errors, touched, handleChange, handleBlur}) => (
 								<Form className="flex flex-col w-full space-y-6">
 
 									<div className="flex flex-col">
 										<Label className={"relative text-sm flex items-center justify-between gap-4"}>
-											<UIText className="shrink-0">{t('labelShareWithGroup')}</UIText>
+											<UIText variant={'label'} className="shrink-0">{t('labelShareWithGroup')}</UIText>
 										</Label>
 										<div className={'flex gap-4 items-center relative'}>
 											<Select onValueChange={(selected)=> setSelectedGroup(selected)} key={selectedGroup}>
-												<SelectTrigger className="w-full h-12 flex between">
-													{selectedGroup ? userOwnedGroups.find((group)=> group.$id=== selectedGroup)?.name : t('selectGroupPlaceholder')}
+												<SelectTrigger className="w-full h-12 flex between rtl:flex-row-reverse">
+													<UIText variant={'label'}>{selectedGroup ? userOwnedGroups.find((group)=> group.$id=== selectedGroup)?.name : <span className={'text-muted-foreground'}>{t('selectGroupPlaceholder')}</span>}</UIText>
 												</SelectTrigger>
 												<SelectContent>
 													{userOwnedGroups.length===0 &&
 														<SelectItem
 															value={null}
 														>
-															{t('groupNotFound')}
+															<UIText className={'text-muted-foreground'} variant={'sm'}>{t('groupNotFound')}</UIText>
 														</SelectItem>
 													}
 													{userOwnedGroups?.map((u)=>(
@@ -142,7 +142,7 @@ export const AddEvent = ({ open, onOpenChange }) => {
 															key={u.$id}
 															value={u.$id}
 														>
-															{u.name}
+															<UIText variant={'sm'}>{u.name}</UIText>
 														</SelectItem>
 													))}
 												</SelectContent>
@@ -153,7 +153,7 @@ export const AddEvent = ({ open, onOpenChange }) => {
 													type={'button'}
 													size={'icon'}
 													onClick={()=> setSelectedGroup(null)}
-													className={'flex items-center justify-center text-primary hover:text-primary absolute right-1 bg-white'}
+													className={'flex items-center justify-center text-primary hover:text-primary absolute ltr:right-1 rtl:left-1 bg-white'}
 												>
 													<XIcon className={'w-4 h-4'} />
 												</Button>
@@ -167,12 +167,14 @@ export const AddEvent = ({ open, onOpenChange }) => {
 											errors={errors.name}
 											touched={touched.name}
 										/>
-										<Input
-											onChange={handleChange}
-											onBlur={handleBlur}
-											name="name"
-											disabled={disabled}
-										/>
+										<UIText isUrdu={isStringUrdu(values.name)}>
+											<Input
+												onChange={handleChange}
+												onBlur={handleBlur}
+												name="name"
+												disabled={disabled}
+											/>
+										</UIText>
 									</div>
 
 									<div
@@ -204,12 +206,14 @@ export const AddEvent = ({ open, onOpenChange }) => {
 													errors={errors.venue}
 													touched={touched.venue}
 												/>
-												<Input
-													onChange={handleChange}
-													onBlur={handleBlur}
-													name="venue"
-													disabled={disabled}
-												/>
+												<UIText isUrdu={isStringUrdu(values.venue)}>
+													<Input
+														onChange={handleChange}
+														onBlur={handleBlur}
+														name="venue"
+														disabled={disabled}
+													/>
+												</UIText>
 											</div>
 											<div className="flex flex-col">
 												<FormLabel
@@ -217,12 +221,14 @@ export const AddEvent = ({ open, onOpenChange }) => {
 													errors={errors.details}
 													touched={touched.details}
 												/>
-												<Textarea
-													onChange={handleChange}
-													onBlur={handleBlur}
-													name="details"
-													disabled={disabled}
-												/>
+												<UIText isUrdu={isStringUrdu(values.details)}>
+													<Textarea
+														onChange={handleChange}
+														onBlur={handleBlur}
+														name="details"
+														disabled={disabled}
+													/>
+												</UIText>
 											</div>
 										</>
 									}

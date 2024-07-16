@@ -81,21 +81,21 @@ const Page = () => {
 					<>
 					{error.correct ?
 						<div className={'flex flex-col w-full'}>
-							<div className={'flex w-full gap-2 border-2 border-green-400 rounded-md p-3 px-4'}>
+							<div className={'flex w-full gap-2 border-2 border-green-400 rtl:flex-row-reverse rounded-md p-3 px-4'}>
 								<Check className={'text-green-500 stroke-[3] mt-0.5'}/>
 								<UIText className={'flex flex-col gap-1'}>
-									<p className={'text-lg text-green-500 font-semibold'}>{t('titleJoined')}</p>
-									<p>{t('textJoined')}</p>
+									<UIText className={'text-green-500'}>{t('titleJoined')}</UIText>
+									<UIText>{t('textJoined')}</UIText>
 								</UIText>
 							</div>
 						</div>
 					:
 						<div className={'flex flex-col w-full'}>
-							<div className={'flex w-full gap-2 border-2 border-red-400 rounded-md p-3 px-4'}>
+							<div className={'flex w-full gap-2 border-2 border-red-400 rtl:flex-row-reverse rounded-md p-3 px-4'}>
 								<XIcon className={'text-red-700 stroke-[3] mt-0.5'}/>
 								<UIText className={'flex flex-col gap-1'}>
-									<p className={'text-lg text-red-700 font-semibold'}>{alreadyJoined ? t('alreadyJoined') : t('unableToJoin')}</p>
-									<p>{error.text}</p>
+									<span className={'text-red-700 font-semibold'}>{alreadyJoined ? t('alreadyJoined') : t('unableToJoin')}</span>
+									<span>{error.text}</span>
 								</UIText>
 							</div>
 						</div>
@@ -107,9 +107,10 @@ const Page = () => {
 							<Link href={user ? '/groups' : '/login'}>
 								<Button
 									variant={'outline'}
-									className={'gap-2'}
+									className={'gap-2 rtl:flex-row-reverse'}
 								>
-									<MoveLeft className={'w-4 h-4'}/> {user ? t('btnBackToGroups') : t('btnLoginNow')}
+									<MoveLeft className={'w-4 h-4'}/>
+									<UIText variant={'button'}>{user ? t('btnBackToGroups') : t('btnLoginNow')}</UIText>
 								</Button>
 							</Link>
 						</div>

@@ -9,11 +9,11 @@ const FormLabel = ({ title, touched, errors, requiredClassName }) => {
 	return (
 		<Label
 			className={cn(
-				"relative text-sm flex items-center justify-between gap-4 rtl:flex-row",
+				"relative text-sm flex items-center mb-1 justify-between gap-4 rtl:flex-row",
 				errors && touched && "text-red-500"
 			)}
 		>
-			<UIText className="shrink-0">{title}</UIText>
+			<UIText variant={'label'}>{title}</UIText>
 
 			{errors && touched && (
 				<span
@@ -23,7 +23,7 @@ const FormLabel = ({ title, touched, errors, requiredClassName }) => {
 					)}
 				>
 					<Asterisk className="w-4 h-4 shrink-0 mr-1" />
-					<UIText>{t(`label.${errors}`)}</UIText>
+					<UIText variant={'xs'}>{t(`label.${errors}`)}</UIText>
 				</span>
 			)}
 		</Label>

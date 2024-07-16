@@ -21,6 +21,7 @@ import {Permission, Role} from "appwrite";
 import {useAuth} from "@/components/contexts/AuthContext";
 import {UISheetFooter} from "@/components/theme/UISheetFooter";
 import {useScopedI18n} from "@/locales/client";
+import {isStringUrdu} from "@/lib/isStringUrdu";
 
 const AddEventItemSchema = Yup.object().shape({
 	name: Yup.string()
@@ -115,6 +116,7 @@ export const AddEventItem = ({open, onOpenChange, eventData}) => {
 							  touched,
 							  handleChange,
 							  handleBlur,
+							  values
 						  }) => (
 							<Form className="flex flex-col w-full space-y-6">
 								<div className="flex flex-col">
@@ -123,12 +125,14 @@ export const AddEventItem = ({open, onOpenChange, eventData}) => {
 										errors={errors.name}
 										touched={touched.name}
 									/>
-									<Input
-										onChange={handleChange}
-										onBlur={handleBlur}
-										name="name"
-										disabled={disabled}
-									/>
+									<UIText isUrdu={isStringUrdu(values.name)}>
+										<Input
+											onChange={handleChange}
+											onBlur={handleBlur}
+											name="name"
+											disabled={disabled}
+										/>
+									</UIText>
 								</div>
 								<div className="flex flex-col">
 									<FormLabel
@@ -156,12 +160,14 @@ export const AddEventItem = ({open, onOpenChange, eventData}) => {
 										errors={errors.details}
 										touched={touched.details}
 									/>
-									<Textarea
-										onChange={handleChange}
-										onBlur={handleBlur}
-										name="details"
-										disabled={disabled}
-									/>
+									<UIText isUrdu={isStringUrdu(values.details)}>
+										<Textarea
+											onChange={handleChange}
+											onBlur={handleBlur}
+											name="details"
+											disabled={disabled}
+										/>
+									</UIText>
 								</div>
 
 								<UISheetFooter

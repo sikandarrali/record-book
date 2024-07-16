@@ -14,6 +14,7 @@ import {usePathname} from "next/navigation";
 import LanguageSwitcher from "@/components/nav/LangugeSwitcher";
 import {useScopedI18n} from "@/locales/client";
 import UIText from "@/components/theme/UIText";
+import Logo from "../../public/logo.png"
 
 const Navbar = () => {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -22,7 +23,7 @@ const Navbar = () => {
 		<div dir={'ltr'}>
 			<div className="flex items-center justify-between sticky top-0 mb-4 bg-white shadow-sm -mx-6 py-4 px-6">
 				<Link href={'/events'} className={'cursor-pointer'}>
-					<Image src={"/logo.png"} width={120} height={47} alt="Logo" priority />
+					<Image src={Logo} width={120} height={47} alt="Logo" priority />
 				</Link>
 
 				<div className={'flex items-center gap-5'}>
@@ -101,14 +102,6 @@ const Sidebar = ({ open, onOpenChange }) => {
 							}
 						/>
 
-						<MenuItem
-							label={"Test"}
-							href={"/test"}
-							icon={
-								<Users className="w-[18px] h-[18px]" />
-							}
-						/>
-
 					</div>
 
 					<div className="mb-0 mx-2 px-4 gap-0.5">
@@ -117,14 +110,14 @@ const Sidebar = ({ open, onOpenChange }) => {
 							onClick={()=> setOpenEditProfile(true)}
 						>
 							<Edit className="w-[18px] h-[18px]" />
-							<span className="text-base font-medium">{t('linkEditProfile')}</span>
+							<UIText>{t('linkEditProfile')}</UIText>
 						</div>
 						<div
 							onClick={onLogout}
 							className="flex cursor-pointer text-background hover:bg-muted hover:text-foreground items-center gap-2 px-4 py-4 rounded-md"
 						>
 							<LogOut className="w-[18px] h-[18px]" />
-							<span className="text-base font-medium">{t('linkLogout')}</span>
+							<UIText>{t('linkLogout')}</UIText>
 						</div>
 					</div>
 
@@ -152,7 +145,7 @@ const MenuItem = ({ label, href, icon }) => {
 				pathname.toString() === href.toString() && "bg-muted text-foreground")}
 		>
 			{icon}
-			<UIText className="ltr:text-base ltr:font-medium">{label}</UIText>
+			<UIText>{label}</UIText>
 		</Link>
 	);
 };
