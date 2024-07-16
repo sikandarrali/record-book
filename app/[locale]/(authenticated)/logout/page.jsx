@@ -2,7 +2,7 @@
 import { useEffect } from "react";
 import {useAuth} from "@/components/contexts/AuthContext";
 import {Button} from "@/components/ui/button";
-import Text from "@/components/theme/UIText"
+import UIText from "@/components/theme/UIText"
 import {useScopedI18n} from "@/locales/client";
 
 const Page = () => {
