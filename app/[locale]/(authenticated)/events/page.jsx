@@ -36,7 +36,7 @@ export default function Home() {
 	}
 
 	const getUserGroups = async () =>{
-		const tempGroups = await listUserGroups()
+		const tempGroups = await teams.list()
 		const tempOwnedGroups = tempGroups.teams.filter((item) => item.prefs.creatorEmail === user.email);
 		setUserOwnedGroups(tempOwnedGroups)
 	}
@@ -118,7 +118,7 @@ export default function Home() {
 						key={event.$id}
 						className={'bg-muted hover:bg-muted-foreground/10 border border-primary/20 cursor-pointer text-primary text-xl font-semibold flex items-center justify-center shadow-sm rounded-lg'}
 					>
-						<SingleEventModal eventData={event} />
+						<SingleEventModal eventData={event} userOwnedGroups={userOwnedGroups}/>
 					</motion.div>
 				))}
 			</motion.div>

@@ -31,6 +31,7 @@ export const SearchItems = ({openAddModal, setVisibleItems, itemsPerPage, itemsD
         if(openAddModal){
             setSearchValue('')
             setSearchResultsMessage('')
+            setVisibleItems(itemsDefault);
         }
     }, [openAddModal]);
 

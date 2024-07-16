@@ -104,8 +104,8 @@ export const SingleListItem = ({ item }) => {
 
 						{item.details &&
 							<UIText className={'mt-20 self-start flex flex-col px-2'} isUrdu={isStringUrdu(item.details)}>
-								<span className={'font-semibold text-sm mb-1'}>{t('labelItemDetails')}</span>
-								<span>{item.details}</span>
+								<UIText className={'font-semibold text-sm mb-1'}>{t('labelItemDetails')}</UIText>
+								<UIText>{item.details}</UIText>
 							</UIText>
 						}
 					</div>

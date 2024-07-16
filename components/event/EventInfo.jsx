@@ -25,7 +25,7 @@ import {useScopedI18n} from "@/locales/client";
 import {UISheetInfoFooter} from "@/components/theme/UISheetInfoFooter";
 import {isStringUrdu} from "@/lib/isStringUrdu";
 
-const EventInfo = ({ eventData, sum }) => {
+const EventInfo = ({ eventData, sum, userOwnedGroups }) => {
 	const isDesktop = useMediaQuery({ query: "(min-width: 1024px)" })
 	const [openDetails, setOpenDetails] = useState(false);
 	const [openEdit, setOpenEdit] = useState(false);
@@ -149,7 +149,7 @@ const EventInfo = ({ eventData, sum }) => {
 				</SheetContent>
 			</Sheet>
 
-			<EditEvent open={openEdit} onOpenChange={setOpenEdit} eventData={eventData} setGroup={setGroup} />
+			<EditEvent open={openEdit} onOpenChange={setOpenEdit} eventData={eventData} setGroup={setGroup} userOwnedGroups={userOwnedGroups} />
 			<DeleteEvent
 				open={openDelete}
 				onOpenChange={setOpenDelete}

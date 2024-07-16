@@ -50,7 +50,7 @@ export default function Page() {
                 }
             </div>
 
-            <UIText className={'py-2 mt-4 text-primary'}>{t('labelYourGroups')}</UIText>
+            <UIText className={'py-2 mt-4 text-primary'} weight={'medium'}>{t('labelYourGroups')}</UIText>
 
             <motion.div
                 initial={{opacity: 0, y: 10}}

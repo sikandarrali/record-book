@@ -29,7 +29,7 @@ import {isStringUrdu} from "@/lib/isStringUrdu";
 // import {toast} from "react-toastify";
 // import {ToastOptions} from "@/lib/ToastOptions";
 
-const SingleEventModal = ({ eventData }) => {
+const SingleEventModal = ({ eventData, userOwnedGroups }) => {
     const isDesktop = useMediaQuery({ query: "(min-width: 1024px)" })
     const [isOpen, setIsOpen] = useState(false)
     const headerRef = useRef(null);
@@ -212,6 +212,7 @@ const SingleEventModal = ({ eventData }) => {
                                     <EventInfo
                                         eventData={eventData}
                                         sum={totalSum}
+                                        userOwnedGroups={userOwnedGroups}
                                     />
                                 </div>
 

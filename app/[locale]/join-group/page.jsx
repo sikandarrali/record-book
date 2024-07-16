@@ -81,7 +81,7 @@ const Page = () => {
 					<>
 					{error.correct ?
 						<div className={'flex flex-col w-full'}>
-							<div className={'flex w-full gap-2 border-2 border-green-400 rtl:flex-row-reverse rounded-md p-3 px-4'}>
+							<div className={'flex w-full flex-1 gap-2 border-2 border-green-400 rtl:flex-row-reverse rounded-md p-3 px-4'}>
 								<Check className={'text-green-500 stroke-[3] mt-0.5'}/>
 								<UIText className={'flex flex-col gap-1'}>
 									<UIText className={'text-green-500'}>{t('titleJoined')}</UIText>
@@ -91,7 +91,7 @@ const Page = () => {
 						</div>
 					:
 						<div className={'flex flex-col w-full'}>
-							<div className={'flex w-full gap-2 border-2 border-red-400 rtl:flex-row-reverse rounded-md p-3 px-4'}>
+							<div className={'flex w-full flex-1 gap-2 border-2 border-red-400 rtl:flex-row-reverse rounded-md p-3 px-4'}>
 								<XIcon className={'text-red-700 stroke-[3] mt-0.5'}/>
 								<UIText className={'flex flex-col gap-1'}>
 									<span className={'text-red-700 font-semibold'}>{alreadyJoined ? t('alreadyJoined') : t('unableToJoin')}</span>
@@ -102,7 +102,7 @@ const Page = () => {
 					}
 
 						<div className={'flex flex-col gap-4 mt-16 '}>
-							{!user && <UIText className={'font-semibold'}>{t('loginAndCheckGroups')}</UIText>}
+							{!user && <UIText>{t('loginAndCheckGroups')}</UIText>}
 
 							<Link href={user ? '/groups' : '/login'}>
 								<Button
