@@ -43,6 +43,7 @@ const Translation = {
     btn: {
       add: "Add",
       cancel: "Cancel",
+      installApp: "Install App",
       loadMore: "Load more",
       loading: "Loading...",
       saveChanges: "Save Changes",
