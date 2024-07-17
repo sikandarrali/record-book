@@ -3,6 +3,10 @@
 Record all your Shadi Expense in one place.
 
 ## Changelog
+### 2.0
+- Multiple Languages support: Urdu, English
+- Adpat UI based on Language
+
 ### 1.0
 - Manage Events
 - Search Events
