@@ -1,81 +1,21 @@
-//
-// import {useLayoutEffect, useState} from "react";
-// import {
-//     Select,
-//     SelectContent,
-//     SelectItem,
-//     SelectTrigger,
-//     SelectValue,
-// } from "@/components/ui/select"
-// import {account} from "@/components/appwrite/appwrite";
-// import {toast} from "react-toastify";
-// import {ToastOptions} from "@/lib/ToastOptions";
-// import Cookies from "js-cookie";
-//
-// const languagesList = [
-//     {id: 1, value: 'en', label: 'English'},
-//     {id: 2, value: 'ur', label: 'Urdu'}
-// ]
-//
-// const LanguageSwitcher = () =>{
-//
-//     const [language, setLanguage] = useState(languagesList[0])
-//     const [preferences, setPreferences] = useState({})
-//
-//     useLayoutEffect(()=>{
-//         return ()=> getPrefs()
-//     },[])
-//
-//     const getPrefs = async () =>{
-//         const prefs = await account.getPrefs();
-//         if(prefs){
-//             setPreferences(prefs)
-//         }
-//     }
-//
-//     const onLanguageChange = async (selected) =>{
-//         let prefs = {...preferences, lang: selected}
-//         setLanguage(selected)
-//         const response = await account.updatePrefs(prefs)
-//         console.log(response)
-//         Cookies.set('skr-lang', response.prefs.lang)
-//         toast.success("Language Updated", ToastOptions);
-//     }
-//
-//     return(
-//         <Select onValueChange={(selected)=> onLanguageChange(selected)}>
-//             <SelectTrigger className="w-[100px] bg-muted font-semibold">
-//                 <SelectValue placeholder={language.label} />
-//             </SelectTrigger>
-//             <SelectContent>
-//                 {languagesList.map((lang)=>(
-//                     <SelectItem value={lang.value} key={lang.value}>{lang.label}</SelectItem>
-//                 ))}
-//             </SelectContent>
-//         </Select>
-//     )
-// }
-//
-// export default LanguageSwitcher
-
-
 import {cn} from "@/lib/utils";
 import {useChangeLocale, useCurrentLocale, useScopedI18n} from "@/locales/client";
-import {useRef, useState} from "react";
+import {useLayoutEffect, useRef, useState} from "react";
 import {useParams} from "next/navigation";
-import {CheckCircle, ChevronDown, CircleCheck, Globe} from "lucide-react";
+import {ChevronDown, Globe} from "lucide-react";
 
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import useCloseOnClickedOutside from "@/lib/hooks/useCloseOnClickedOutside";
 import UIText from "@/components/theme/UIText";
 import {useAuth} from "@/components/contexts/AuthContext";
+import {account} from "@/components/appwrite/appwrite";
+import {toast} from "react-toastify";
+import {ToastOptions} from "@/lib/ToastOptions";
 
 
 
@@ -106,14 +46,26 @@ const SwitchLanguage = ({ styles }) => {
     const t = useScopedI18n("languageSwitcher");
 
     const [dropDown, setDropDown] = useState(false);
+    const [preferences, setPreferences] = useState({})
 
-
-    const OnChangeLanguage = (switchTo) => {
-        if (locale !== switchTo) {
-            setLoading(true)
-            ChangeLocale(switchTo)
+    useLayoutEffect(()=>{
+        return ()=> getPrefs()
+    },[])
+    const getPrefs = async () =>{
+        const prefs = await account.getPrefs();
+        if(prefs){
+            setPreferences(prefs)
         }
-    };
+    }
+
+    const OnChangeLanguage = async (selected) =>{
+        if (locale !== selected) {
+            setLoading(true)
+            ChangeLocale(selected)
+            let prefs = {...preferences, lang: selected}
+            await account.updatePrefs(prefs)
+        }
+    }
 
     return (
         <>

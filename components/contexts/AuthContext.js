@@ -4,6 +4,7 @@ import {createContext, useContext, useLayoutEffect, useMemo, useState} from "rea
 import {account} from "../appwrite/appwrite";
 import LoadingFallback from "../loaders/LoadingFallback";
 import {HOMEPAGE_ROUTE, LOGIN_ROUTE, PROTECTED_ROUTES} from "@/lib/routes";
+import {useChangeLocale} from "@/locales/client";
 
 const AuthContext = createContext();
 
@@ -12,6 +13,7 @@ export const AuthProvider = ({ children }) => {
 	const [loading, setLoading] = useState(true);
 	const router = useRouter();
 	const pathname = usePathname()
+	const changeLocale = useChangeLocale()
 
 	useLayoutEffect(() => {
 		getLoggedInGoogleUser().then(() => setLoading(false));
@@ -47,7 +49,7 @@ export const AuthProvider = ({ children }) => {
 	const updateUserPrefs = async (picture) => {
 		await account.updatePrefs({
 			picture: picture,
-			lang: 'en',
+			lang: '',
 			theme: 'light'
 		})
 	}
@@ -64,7 +66,8 @@ export const AuthProvider = ({ children }) => {
 		setLoading(true);
 
 		try {
-			await account.deleteSession("current");
+			// await account.deleteSession("current");
+			await account.deleteSessions();
 			setUser(null);
 		}catch (e){}
 		finally {
