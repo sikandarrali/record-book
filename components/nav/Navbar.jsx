@@ -11,7 +11,7 @@ import {Badge} from "@/components/ui/badge";
 import {EditProfile} from "@/components/nav/EditProfile";
 import {cn} from "@/lib/utils";
 import {usePathname} from "next/navigation";
-import LanguageSwitcher from "@/components/nav/LangugeSwitcher";
+import LanguageSwitcher from "@/components/nav/LanguageSwitcher";
 import {useScopedI18n} from "@/locales/client";
 import UIText from "@/components/theme/UIText";
 import Logo from "../../public/logo.png"

@@ -73,7 +73,6 @@ export const AddEvent = ({ open, onOpenChange, userOwnedGroups }) => {
 			}else{
 				await db.events.create(eventData, );
 			}
-
 			onOpenChange(false);
 			toast.success(t("alertEventCreated"), ToastOptions);
 			setAdding(false);
