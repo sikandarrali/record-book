@@ -97,7 +97,7 @@ export const AddEventItem = ({open, onOpenChange, eventData}) => {
 				<SheetHeader className={'hidden'}><SheetTitle/><SheetDescription /></SheetHeader>
 
 				<div className="flex flex-col gap-5 max-w-lg mx-auto items-center lg:py-10">
-					<UIText className={'text-primary self-start py-6'} variant={'heading'}>{t('addEventItem')}</UIText>
+					<UIText className={'text-primary self-start py-6'} weight={'semibold'} variant={'heading'}>{t('addEventItem')}</UIText>
 
 					<Formik
 						initialValues={{

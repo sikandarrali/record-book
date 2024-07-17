@@ -42,13 +42,14 @@ export const SingleListItem = ({ item }) => {
 			onOpenChange={setIsOpen}
 			defaultOpen={false}
 		>
-			<SheetTrigger asChild>
+			<SheetTrigger className={'w-full'}>
 				<div
 					onClick={() => setIsOpen(true)}
 					className="flex flex-col w-full px-6 hover:bg-muted select-none py-4 cursor-pointer border-b"
 				>
 					<div className="flex w-full justify-between gap-5 text-left">
 						<UIText isUrdu={isStringUrdu(item.name)} className={'rtl:text-right'}>{item.name}</UIText>
+
 						<div className="flex gap-2 justify-end rtl:flex-row-reverse items-center relative flex-shrink-0 select-none">
 							<span className="text-sm select-none">Rs</span>
 							<span className="font-semibold text-xl select-none text-primary">
@@ -67,7 +68,7 @@ export const SingleListItem = ({ item }) => {
 					{item.details &&
 						<UIText
 							isUrdu={isStringUrdu(item.details)}
-							className={'overflow-hidden line-clamp-1 mt-1 w-3/4 text-muted-foreground text'}
+							className={'overflow-hidden line-clamp-1 mt-1 w-3/4 text-muted-foreground text text-left rtl:text-right'}
 						>
 							{item.details}
 						</UIText>

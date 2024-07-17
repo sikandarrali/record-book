@@ -118,7 +118,7 @@ const SwitchLanguage = ({ styles }) => {
     return (
         <>
             <DropdownMenu>
-                <DropdownMenuTrigger asChild>
+                <DropdownMenuTrigger className={'w-full'}>
                     <div
                         className="text-xs flex items-center gap-2 cursor-pointer rounded-full border p-1"
                         onClick={() => setDropDown(!dropDown)}

@@ -29,13 +29,12 @@ const Navbar = () => {
 				<div className={'flex items-center gap-5'}>
 					<LanguageSwitcher />
 
-					<Button
-						variant="outline"
-						size="icon"
+					<div
+						className={'border p-2 rounded-md hover:bg-muted cursor-pointer'}
 						onClick={() => setIsMenuOpen(!isMenuOpen)}
 					>
 						<MenuIcon />
-					</Button>
+					</div>
 				</div>
 
 				<Sidebar open={isMenuOpen} onOpenChange={setIsMenuOpen} />
