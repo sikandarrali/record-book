@@ -5,6 +5,8 @@ import {account} from "../appwrite/appwrite";
 import LoadingFallback from "../loaders/LoadingFallback";
 import {HOMEPAGE_ROUTE, LOGIN_ROUTE, PROTECTED_ROUTES} from "@/lib/routes";
 import {useChangeLocale} from "@/locales/client";
+import Cookies from 'js-cookie'
+
 
 const AuthContext = createContext();
 
@@ -47,11 +49,11 @@ export const AuthProvider = ({ children }) => {
 	};
 
 	const updateUserPrefs = async (picture) => {
-		await account.updatePrefs({
-			picture: picture,
-			lang: '',
-			theme: 'light'
-		})
+		const userPrefs = await account.getPrefs();
+		if(userPrefs.lang){
+			changeLocale(userPrefs.lang)
+		}
+		await account.updatePrefs({...userPrefs, picture: picture})
 	}
 
 	const onGoogleWithLogin = async () => {
@@ -64,10 +66,11 @@ export const AuthProvider = ({ children }) => {
 
 	const onLogout = async () => {
 		setLoading(true);
+		Cookies.remove('Next-Locale');
 
 		try {
-			// await account.deleteSession("current");
-			await account.deleteSessions();
+			await account.deleteSession("current");
+			// await account.deleteSessions();
 			setUser(null);
 		}catch (e){}
 		finally {

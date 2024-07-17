@@ -12,6 +12,7 @@ import SingleEventModal from "@/components/event/SingleEventModal";
 import {useScopedI18n} from "@/locales/client";
 import {useRouter} from "next/navigation";
 import {useAuth} from "@/components/contexts/AuthContext";
+import usePWAStatus from "@/lib/hooks/usePWAStatus";
 
 export default function Home() {
 	const [openAddModal, setOpenAddModal] = useState(false);
@@ -79,10 +80,19 @@ export default function Home() {
 		}
 	}, []);
 
+	const isPWAInstalled = usePWAStatus();
+
+
 	return (
 		<PageContainer hideTopbar>
 
 			<UIText variant="heading" className={'text-primary'}>{t('title')}</UIText>
+			
+			{isPWAInstalled ? (
+				<p>The PWA is installed on your device.</p>
+			) : (
+				<p>The PWA is not installed on your device.</p>
+			)}
 
 			<motion.div
 				initial={{ opacity: 0 }}

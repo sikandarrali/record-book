@@ -61,9 +61,12 @@ const SwitchLanguage = ({ styles }) => {
     const OnChangeLanguage = async (selected) =>{
         if (locale !== selected) {
             setLoading(true)
-            ChangeLocale(selected)
             let prefs = {...preferences, lang: selected}
-            await account.updatePrefs(prefs)
+            const response =  await account.updatePrefs(prefs)
+            if(response){
+                console.log('updated')
+            }
+            ChangeLocale(selected)
         }
     }
 
