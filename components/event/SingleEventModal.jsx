@@ -185,7 +185,7 @@ const SingleEventModal = ({ eventData, userOwnedGroups }) => {
             onOpenChange={setIsOpen}
             defaultOpen={false}
         >
-            <SheetTrigger asChild>
+            <SheetTrigger className={'w-full'}>
                 <UIText
                     variant={'heading'}
                     className={cn(
@@ -251,7 +251,7 @@ const SingleEventModal = ({ eventData, userOwnedGroups }) => {
                                 openAddModal={openAddModal}
                             />
 
-                            <UIText variant={'sm'} className={'py-1.5 font-medium bg-muted -mx-6 flex items-center justify-center px-6 gap-2 text-muted-foreground'}>
+                            <UIText variant={'sm'} className={'py-1.5 font-medium -mx-6 flex items-center justify-center px-6 gap-2 text-muted-foreground'}>
                                 {t('totalEntries')} <span className={'text-primary font-semibold text-base'}>{items.length}</span>
                             </UIText>
 
@@ -279,7 +279,7 @@ const SingleEventModal = ({ eventData, userOwnedGroups }) => {
                                                 {t('btnLoading')}
                                             </Button>
                                         ) :
-                                            hasMoreItems && items.length > itemsPerPage &&
+                                            hasMoreItems && items.length > itemsPerPage && (
                                                 <Button
                                                     onClick={loadMorePosts}
                                                     variant={'secondary'}
@@ -288,6 +288,7 @@ const SingleEventModal = ({ eventData, userOwnedGroups }) => {
                                                 >
                                                     {t('btnLoadMore')}
                                                 </Button>
+                                            )
                                         }
                                     </div>
                                 }

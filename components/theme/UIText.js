@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 
-const UIText = ({ className, variant, weight, isUrdu, ...props }) => {
+const UIText = ({ className, variant, weight, isUrdu, children, ...props }) => {
 	return (
 		<span
 			className={cn(
@@ -17,7 +17,9 @@ const UIText = ({ className, variant, weight, isUrdu, ...props }) => {
 				className
 			)}
 			{...props}
-		/>
+		>
+			{children}
+		</span>
 	);
 }
 

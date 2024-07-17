@@ -183,7 +183,7 @@ export const EditEvent = ({ open, onOpenChange, eventData, setGroup, userOwnedGr
 										{isOwner ?
 											<div className={'flex gap-4 items-center relative'}>
 												<Select onValueChange={(selected)=> setSelectedGroup(selected)} key={selectedGroup}>
-													<SelectTrigger className="w-full h-12 flex between">
+													<SelectTrigger className="w-full h-12 flex between" ref={null}>
 														<UIText variant={'label'}>{selectedGroup ? userOwnedGroups.find((group)=> group.$id=== selectedGroup)?.name : <span className={'text-muted-foreground'}>{t('selectGroupPlaceholder')}</span>}</UIText>
 													</SelectTrigger>
 													<SelectContent>
