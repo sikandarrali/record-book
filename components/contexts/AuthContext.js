@@ -22,15 +22,18 @@ export const AuthProvider = ({ children }) => {
 	}, []);
 
 	const getLoggedInGoogleUser = async () => {
+		let userPrefs = null
 		try {
 			const currentSession = await account.getSession('current');
 			const currentUser = await account.get();
 			setUser(currentUser)
+			userPrefs = currentUser.prefs
+			changeLocale(userPrefs.lang)
 
 			fetchGoogleUserData(currentSession.providerAccessToken)
 			.then((googleData) => {
 				if(googleData){
-					updateUserPrefs(googleData?.picture)
+					updateUserPrefs(userPrefs, googleData?.picture)
 				}
 			})
 			.catch((error) => {
@@ -48,12 +51,9 @@ export const AuthProvider = ({ children }) => {
 		setLoading(false)
 	};
 
-	const updateUserPrefs = async (picture) => {
-		const userPrefs = await account.getPrefs();
-		if(userPrefs.lang){
-			changeLocale(userPrefs.lang)
-		}
-		await account.updatePrefs({...userPrefs, picture: picture})
+	const updateUserPrefs = async (prefs, picture) => {
+		let tempPrefs = {...prefs, picture:picture}
+		await account.updatePrefs(tempPrefs)
 	}
 
 	const onGoogleWithLogin = async () => {

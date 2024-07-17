@@ -43,6 +43,7 @@ const Translation = {
     btn: {
       add: "شامل کریں",
       cancel: "منسوخ کریں",
+      installApp: "ایپ انسٹال",
       loadMore: "مزید لوڈ کریں",
       loading: "لوڈ ہو رہا ہے...",
       saveChanges: "تبدیلیاں محفوظ کریں",

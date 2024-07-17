@@ -32,7 +32,7 @@ const SupportedLangs = [
     },
 ];
 
-const SwitchLanguage = ({ styles }) => {
+const SwitchLanguage = ({ light, inSidebar }) => {
     const langSwitcherRef = useRef(null);
     useCloseOnClickedOutside(langSwitcherRef, () => {
         setDropDown(false);
@@ -73,14 +73,14 @@ const SwitchLanguage = ({ styles }) => {
     return (
         <>
             <DropdownMenu>
-                <DropdownMenuTrigger className={'w-full'}>
+                <DropdownMenuTrigger className={cn('w-full outline-none', inSidebar && 'flex items-center mx-auto w-auto')}>
                     <div
-                        className="text-xs flex items-center gap-2 cursor-pointer rounded-full border p-1"
+                        className={cn("text-xs flex items-center gap-2 cursor-pointer rounded-full border p-1", light && "border-muted")}
                         onClick={() => setDropDown(!dropDown)}
                     >
-                        <Globe className={'w-3.5 h-3.5'}/>
-                        <UIText className={'ltr:text-sm'} weight={'medium'}>{t(params.locale)}</UIText>
-                        <ChevronDown className={'w-3.5 h-3.5'}/>
+                        <Globe className={cn('w-3.5 h-3.5', light && "text-muted")}/>
+                        <UIText className={cn('ltr:text-sm', light && "text-muted")} weight={'medium'}>{t(params.locale)}</UIText>
+                        <ChevronDown className={cn('w-3.5 h-3.5', light && "text-muted")}/>
                     </div>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className={'p-0'}>

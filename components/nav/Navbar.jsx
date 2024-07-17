@@ -15,9 +15,13 @@ import LanguageSwitcher from "@/components/nav/LanguageSwitcher";
 import {useScopedI18n} from "@/locales/client";
 import UIText from "@/components/theme/UIText";
 import Logo from "../../public/logo.png"
+import usePWAStatus from "@/lib/hooks/usePWAStatus";
+import InstallApp from "@/components/InstallApp/InstallApp";
 
 const Navbar = () => {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+	const isPWAInstalled = usePWAStatus();
 
 	return (
 		<div dir={'ltr'}>
@@ -27,8 +31,12 @@ const Navbar = () => {
 				</Link>
 
 				<div className={'flex items-center gap-5'}>
-					<LanguageSwitcher />
 
+					{isPWAInstalled ?
+						<LanguageSwitcher />
+						:
+						<InstallApp/>
+					}
 					<div
 						className={'border p-2 rounded-md hover:bg-muted cursor-pointer'}
 						onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -37,7 +45,7 @@ const Navbar = () => {
 					</div>
 				</div>
 
-				<Sidebar open={isMenuOpen} onOpenChange={setIsMenuOpen} />
+				<Sidebar open={isMenuOpen} onOpenChange={setIsMenuOpen} isPWAInstalled={isPWAInstalled} />
 			</div>
 		</div>
 	);
@@ -45,7 +53,7 @@ const Navbar = () => {
 
 export default Navbar;
 
-const Sidebar = ({ open, onOpenChange }) => {
+const Sidebar = ({ open, onOpenChange, isPWAInstalled }) => {
 	const { onLogout } = useAuth();
 	const {user} = useAuth()
 	const [openEditProfile, setOpenEditProfile] = useState(false)
@@ -83,6 +91,10 @@ const Sidebar = ({ open, onOpenChange }) => {
 							</p>
 						</div>
 					</div>
+
+					{!isPWAInstalled &&
+						<LanguageSwitcher light inSidebar />
+					}
 
 					<div className="flex flex-col px-6 h-full mt-10 gap-0.5">
 						<MenuItem
