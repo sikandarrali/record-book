@@ -50,21 +50,21 @@ const SingleEventModal = ({ eventData, userOwnedGroups }) => {
     const [hasMoreItems, setHasMoreItems] = useState(true); // Flag to check if more items are available
     const [loadingItems, setLoadingItems] = useState(false); // To show loadingItems spinner
 
-    useEffect(() => {
-       if(isOpen){
-           const newParams = new URLSearchParams(searchParams);
-           newParams.set('id', eventData.$id);
-           router.push(`?${newParams.toString()}`, { shallow: true });
-       }else{
-           onClose()
-       }
-    }, [isOpen]);
+    // useEffect(() => {
+    //    if(isOpen){
+    //        const newParams = new URLSearchParams(searchParams);
+    //        newParams.set('id', eventData.$id);
+    //        router.push(`?${newParams.toString()}`, { shallow: true });
+    //    }else{
+    //        onClose()
+    //    }
+    // }, [isOpen]);
     //
     const onClose = () =>{
         setIsOpen(false)
-        const newParams = new URLSearchParams(searchParams);
-        newParams.delete('id');
-        router.push(`?${newParams.toString()}`, { shallow: true });
+        // const newParams = new URLSearchParams(searchParams);
+        // newParams.delete('id');
+        // router.push(`?${newParams.toString()}`, { shallow: true });
     }
 
     // get items
@@ -164,15 +164,15 @@ const SingleEventModal = ({ eventData, userOwnedGroups }) => {
     }, [itemsDefault]);
 
 
-    useEffect(() => {
-
-        let id = searchParams.get('id')
-
-        if (id === eventData.$id) {
-            setIsOpen(true);
-        }
-
-    }, [searchParams]);
+    // useEffect(() => {
+    //
+    //     let id = searchParams.get('id')
+    //
+    //     if (id === eventData.$id) {
+    //         setIsOpen(true);
+    //     }
+    //
+    // }, [searchParams]);
     // if (isOpen) return null;
 
     // const copyToClipboard = async () => {
@@ -184,6 +184,26 @@ const SingleEventModal = ({ eventData, userOwnedGroups }) => {
     //     }
     // };
 
+
+    useEffect(() => {
+        const handleRouteChange = (url) => {
+            if (url !== router.asPath) {
+                setIsOpen(false);
+            }
+        };
+
+        // Check if router.events is available
+        if (router.events) {
+            router.events.on('routeChangeStart', handleRouteChange);
+        }
+
+        return () => {
+            if (router.events) {
+                router.events.off('routeChangeStart', handleRouteChange);
+            }
+        };
+    }, [router]);
+    
     return (
         <Sheet
             open={isOpen}
