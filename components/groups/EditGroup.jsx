@@ -115,6 +115,7 @@ export const EditGroup = ({ open, onOpenChange, data, userGroups, setUserGroups}
                                                 name="name"
                                                 disabled={disabled}
                                                 value={values.name}
+                                                className={cn(isStringUrdu(values.name) ? 'font-urdu' : 'font-sans')}
                                             />
                                         </UIText>
                                     </div>

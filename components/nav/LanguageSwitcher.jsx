@@ -75,7 +75,7 @@ const SwitchLanguage = ({ light, inSidebar }) => {
             <DropdownMenu>
                 <DropdownMenuTrigger className={cn('w-full outline-none', inSidebar && 'flex items-center mx-auto w-auto')}>
                     <div
-                        className={cn("text-xs flex items-center gap-2 cursor-pointer rounded-full border p-1", light && "border-muted")}
+                        className={cn("text-xs flex items-center gap-2 cursor-pointer rounded-full border p-1", light && "border-muted", inSidebar && "border-2")}
                         onClick={() => setDropDown(!dropDown)}
                     >
                         <Globe className={cn('w-3.5 h-3.5', light && "text-muted")}/>

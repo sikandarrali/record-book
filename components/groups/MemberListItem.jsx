@@ -44,12 +44,12 @@ export const MemberListItem = ({data, teamID, setUsersInGroup, groupName, isGrou
                 {data.confirm ?
                     <div className={'flex gap-2 items-stretch text-xs'}>
                         {isOwner  &&
-                            <Badge variant={'secondary'}>
+                            <Badge className={'bg-muted-foreground'}>
                                 <UIText variant={'xs'}>{t('badgeAdmin')}</UIText>
                             </Badge>
                         }
                         {isMember &&
-                            <Badge variant={'outline'} className={'text-green-500 border-green-500'}>
+                            <Badge variant={'secondary'}>
                                 <UIText variant={'xs'}>{t('badgeMember')}</UIText>
                             </Badge>
                         }
@@ -61,9 +61,13 @@ export const MemberListItem = ({data, teamID, setUsersInGroup, groupName, isGrou
                     </div>
                     :
                     <Tooltip>
-                        <TooltipTrigger><Badge variant={'outline'} className={'text-xs bg-white border-destructive text-destructive'}>pending</Badge></TooltipTrigger>
+                        <TooltipTrigger>
+                            <Badge variant={'outline'} className={'text-xs bg-white border-destructive text-destructive'}>
+                                <UIText variant={'xs'}>{t('badgePending')}</UIText>
+                            </Badge>
+                        </TooltipTrigger>
                         <TooltipContent className={'bg-foreground'}>
-                            <p className={'font-semibold'}>{t('tooltipPendingUser')}</p>
+                            <UIText weight={'medium'}>{t('tooltipPendingUser')}</UIText>
                         </TooltipContent>
                     </Tooltip>
                 }

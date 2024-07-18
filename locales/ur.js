@@ -1,4 +1,13 @@
 const Translation = {
+  edit: {
+    alertUpdated: "نام اپ ڈیٹ کر دیا گیا"
+  },
+  editProfile: {
+    alertException: "اپ ڈیٹ کرنے سے قاصرہیں",
+    alertNothingToUpdate: "اپ ڈیٹ کرنے کے لئے کچھ بھی نہیں",
+    name: "نام",
+    title: "پروفائل میں ترمیم کریں"
+  },
   events: {
     addEvent: "نیا ایونٹ شامل کریں",
     addEventItem: "نیا ریکارڈ شامل کریں",
@@ -33,6 +42,7 @@ const Translation = {
     labelShareWithGroup: "گروپ کے ساتھ شئیر کریں۔",
     labelVenue: "مقام",
     notSharedWithGroup: "کسی گروپ کے ساتھ شیئر نہیں کیا گیا۔",
+    pickDate: "تاریخ کا انتخاب کریں",
     searchNoItems: "اس نام کا کوئی ریکارڈ موجود نہیں",
     searchPlaceholder: "تلاش کرنے کے لئے ٹائپ کریں...",
     selectGroupPlaceholder: "گروپ منتخب کریں",
@@ -67,6 +77,7 @@ const Translation = {
     alertNothingToUpdate: "اپ ڈیٹ کرنے کے لئے کچھ بھی نہیں",
     badgeAdmin: "ایڈمن",
     badgeMember: "ممبر",
+    badgePending: "ابھی جوائن نہیں کیا",
     badgeYou: "آپ",
     btnAddMember: "شامل کریں",
     btnCreateNewGroup: "نیا گروپ بنائیں",
@@ -132,6 +143,20 @@ const Translation = {
   logout: {
     btnLogout: "لاگ آؤٹ",
     text: "اگر آپ خود بخود لاگ آؤٹ نہیں ہوتے ہیں تو یہاں کلک کریں"
+  },
+  months: {
+    april: "اپریل",
+    august: "اگست",
+    december: "دسمبر",
+    february: "فروری",
+    january: "جنوری",
+    july: "جولائی",
+    june: "جون",
+    march: "مارچ",
+    may: "مئی",
+    november: "نومبر",
+    october: "اکتوبر",
+    september: "ستمبر"
   },
   navbar: {
     linkEditProfile: "پروفائل میں ترمیم کریں",

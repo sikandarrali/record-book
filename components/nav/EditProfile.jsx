@@ -14,6 +14,7 @@ import {useAuth} from "@/components/contexts/AuthContext";
 import {UISheetFooter} from "@/components/theme/UISheetFooter";
 import {isStringUrdu} from "@/lib/isStringUrdu";
 import UIText from "@/components/theme/UIText";
+import {useScopedI18n} from "@/locales/client";
 
 const EditGroupSchema = Yup.object().shape({
     name: Yup.string()
@@ -30,6 +31,8 @@ export const EditProfile = ({ open, onOpenChange }) => {
     const [adding, setAdding] = useState(false);
     const [disabled, setDisabled] = useState(false);
     const {user, setUser} = useAuth()
+    const t = useScopedI18n('editProfile');
+    const tBtn = useScopedI18n('general.btn');
 
     const onUpdate = async (values) => {
         setAdding(true);
@@ -68,9 +71,9 @@ export const EditProfile = ({ open, onOpenChange }) => {
                 <div className="flex flex-col w-full min-h-full pt-4 justify-start">
                     {/* Date & Close */}
                     <div className="flex items-center space-x-2 justify-between mb-4">
-                        <div className="flex items-center text-xl pt-2 space-x-2 font-semibold text-primary">
-                            Edit Profile
-                        </div>
+                        <UIText variant={'heading'} className="text-primary">
+                            {t('title')}
+                        </UIText>
                     </div>
                     <div className="flex flex-col gap-5 w-full items-center justify-center py-6 lg:py-10">
                         <Formik
@@ -92,7 +95,7 @@ export const EditProfile = ({ open, onOpenChange }) => {
                                 <Form className="flex flex-col w-full space-y-6">
                                     <div className="flex flex-col">
                                         <FormLabel
-                                            title="Name"
+                                            title={t('name')}
                                             errors={errors.name}
                                             touched={touched.name}
                                         />
@@ -103,6 +106,7 @@ export const EditProfile = ({ open, onOpenChange }) => {
                                                 name="name"
                                                 disabled={disabled}
                                                 value={values.name}
+                                                className={cn(isStringUrdu(values.name) ? 'font-urdu' : 'rtl:font-sans')}
                                             />
                                         </UIText>
                                     </div>
@@ -111,7 +115,6 @@ export const EditProfile = ({ open, onOpenChange }) => {
                                         adding={adding}
                                         disabled={disabled}
                                         onOpenChange={onOpenChange}
-                                        labelAction={'Save Changes'}
                                     />
                                 </Form>
                             )}

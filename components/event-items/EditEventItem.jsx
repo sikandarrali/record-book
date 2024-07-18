@@ -15,6 +15,7 @@ import UIText from "@/components/theme/UIText";
 import {UISheetFooter} from "@/components/theme/UISheetFooter";
 import {useScopedI18n} from "@/locales/client";
 import {isStringUrdu} from "@/lib/isStringUrdu";
+import {cn} from "@/lib/utils";
 
 const AddEventItemSchema = Yup.object().shape({
 	name: Yup.string()
@@ -122,6 +123,7 @@ export const EditEventItem = ({ open, onOpenChange, item }) => {
 											name="name"
 											disabled={disabled}
 											defaultValue={item.name}
+											className={cn(isStringUrdu(values.name) ? 'font-urdu' : 'font-sans')}
 										/>
 									</UIText>
 								</div>
@@ -159,6 +161,7 @@ export const EditEventItem = ({ open, onOpenChange, item }) => {
 											name="details"
 											disabled={disabled}
 											defaultValue={item.details}
+											className={cn(isStringUrdu(values.details) ? 'font-urdu' : 'font-sans')}
 										/>
 									</UIText>
 								</div>

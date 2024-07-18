@@ -10,7 +10,7 @@ import {Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle} from "..
 import {Badge} from "@/components/ui/badge";
 import {EditProfile} from "@/components/nav/EditProfile";
 import {cn} from "@/lib/utils";
-import {usePathname} from "next/navigation";
+import {usePathname, useRouter} from "next/navigation";
 import LanguageSwitcher from "@/components/nav/LanguageSwitcher";
 import {useScopedI18n} from "@/locales/client";
 import UIText from "@/components/theme/UIText";
@@ -20,15 +20,29 @@ import InstallApp from "@/components/InstallApp/InstallApp";
 
 const Navbar = () => {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
-
 	const isPWAInstalled = usePWAStatus();
+	const router = useRouter()
+	const pathname = usePathname()
+
+	const onLogoClick = () =>{
+		if(pathname !== "/events"){
+			router.push('/events')
+		}
+	}
 
 	return (
 		<div dir={'ltr'}>
 			<div className="flex items-center justify-between sticky top-0 mb-4 bg-white shadow-sm -mx-6 py-4 px-6">
-				<Link href={'/events'} className={'cursor-pointer'}>
-					<Image src={Logo} width={120} height={47} alt="Logo" priority />
-				</Link>
+
+				<Image
+					src={Logo}
+					width={120}
+					height={47}
+					alt="Logo"
+					priority
+					className={'cursor-pointer'}
+					onClick={()=> onLogoClick()}
+				/>
 
 				<div className={'flex items-center gap-5'}>
 

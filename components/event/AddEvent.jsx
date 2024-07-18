@@ -7,8 +7,8 @@ import {Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle} from "@/
 import { Textarea } from "@/components/ui/textarea";
 import {cn, scrollToTop} from "@/lib/utils";
 import { Form, Formik } from "formik";
-import {Plus, XIcon} from "lucide-react";
-import {useState} from "react";
+import {CalendarIcon, Plus, XIcon} from "lucide-react";
+import {useEffect, useState} from "react";
 import { useMediaQuery } from "react-responsive";
 import * as Yup from "yup";
 import {toast} from "react-toastify";
@@ -28,7 +28,9 @@ import {SheetStylesFlexibleHeight, SheetStylesMAxHeight90} from "@/lib/reusableS
 import {UISheetFooter} from "@/components/theme/UISheetFooter";
 import {useScopedI18n} from "@/locales/client";
 import {isStringUrdu} from "@/lib/isStringUrdu";
-
+import { Calendar } from "@/components/ui/calendar"
+import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
+import {FormattedDateForCalenderDatePick} from "@/lib/FormattedDateForCalendarPick";
 
 const AddEventSchema = Yup.object().shape({
 	name: Yup.string()
@@ -45,9 +47,13 @@ export const AddEvent = ({ open, onOpenChange, userOwnedGroups }) => {
 	const [adding, setAdding] = useState(false);
 	const [disabled, setDisabled] = useState(false);
 	const [selectedGroup, setSelectedGroup] = useState(null)
+	const [selectedGroupName, setSelectedGroupName] = useState('')
 	const {user} = useAuth()
 	const [addEventDetails, setAddEventDetails] = useState(false)
 	const t = useScopedI18n('events')
+	const [date, setDate] = useState(new Date())
+	const [calendarOpen, setCalendarOpen] = useState(false);
+
 
 	const onAdd = async (values) => {
 		setAdding(true);
@@ -89,7 +95,7 @@ export const AddEvent = ({ open, onOpenChange, userOwnedGroups }) => {
 	return (
 		<Sheet open={open} onOpenChange={onOpenChange} defaultOpen={false}>
 			<SheetContent
-				className={cn("pb-8 lg:pb-14", SheetStylesMAxHeight90)}
+				className={cn("pb-8 lg:pb-14 outline-0 overflow-auto h-[90%] lg:h-screen lg:max-h-screen border-t-0 border-l-0")}
 				side={isDesktop ? "right" : "bottom"}
 				onOpenAutoFocus={(e) => e.preventDefault()}
 			>
@@ -106,7 +112,7 @@ export const AddEvent = ({ open, onOpenChange, userOwnedGroups }) => {
 						<Formik
 							initialValues={{
 								name: "",
-								date: "",
+								date: new Date(),
 								venue: "",
 								details: "",
 								teamId:"",
@@ -116,7 +122,14 @@ export const AddEvent = ({ open, onOpenChange, userOwnedGroups }) => {
 								onAdd(values);
 							}}
 						>
-							{({values, errors, touched, handleChange, handleBlur}) => (
+							{({
+								  values,
+								  errors,
+								  touched,
+								  handleChange,
+								  handleBlur,
+								  setFieldValue
+							}) => (
 								<Form className="flex flex-col w-full space-y-6">
 
 									<div className="flex flex-col">
@@ -126,25 +139,15 @@ export const AddEvent = ({ open, onOpenChange, userOwnedGroups }) => {
 										<div className={'flex gap-4 items-center relative'}>
 											<Select onValueChange={(selected)=> setSelectedGroup(selected)} key={selectedGroup}>
 												<SelectTrigger ref={null} className="w-full h-12 flex between rtl:flex-row-reverse">
-													<UIText variant={'label'}>{selectedGroup ? userOwnedGroups.find((group)=> group.$id=== selectedGroup)?.name : <span className={'text-muted-foreground'}>{t('selectGroupPlaceholder')}</span>}</UIText>
+													<span>
+														{selectedGroup ?
+															<UIText variant={'label'} className={cn(isStringUrdu(selectedGroupName) ? 'font-urdu' : 'rtl:font-sans !text-base !font-normal' )}>{selectedGroupName}</UIText>
+															:
+															<UIText variant={'label'} className={"text-muted-foreground"}>{t('selectGroupPlaceholder')}</UIText>
+														}
+													</span>
 												</SelectTrigger>
-												<SelectContent>
-													{userOwnedGroups.length===0 &&
-														<SelectItem
-															value={null}
-														>
-															<UIText className={'text-muted-foreground'} variant={'sm'}>{t('groupNotFound')}</UIText>
-														</SelectItem>
-													}
-													{userOwnedGroups?.map((u)=>(
-														<SelectItem
-															key={u.$id}
-															value={u.$id}
-														>
-															<UIText variant={'sm'}>{u.name}</UIText>
-														</SelectItem>
-													))}
-												</SelectContent>
+
 											</Select>
 											{selectedGroup &&
 												<Button
@@ -172,12 +175,13 @@ export const AddEvent = ({ open, onOpenChange, userOwnedGroups }) => {
 												onBlur={handleBlur}
 												name="name"
 												disabled={disabled}
+												className={cn(isStringUrdu(values.name) ? 'font-urdu' : 'font-sans')}
 											/>
 										</UIText>
 									</div>
 
 									<div
-										className={'flex items-center justify-center gap-1 cursor-pointer text-primary'}
+										className={'flex items-center justify-center gap-1.5 rtl:gap-3 cursor-pointer text-primary'}
 										onClick={()=> setAddEventDetails(!addEventDetails)}
 									>
 										{addEventDetails ? <XIcon className={'w-4 h-4'}/> : <Plus className={'w-4 h-4'}/>}
@@ -192,12 +196,38 @@ export const AddEvent = ({ open, onOpenChange, userOwnedGroups }) => {
 													errors={errors.date}
 													touched={touched.date}
 												/>
-												<Input
-													onChange={handleChange}
-													onBlur={handleBlur}
-													name="date"
-													disabled={disabled}
-												/>
+												<Popover
+													open={calendarOpen}
+													onOpenChange={setCalendarOpen}
+												>
+													<PopoverTrigger asChild>
+														<Button
+															variant={"outline"}
+															className={cn(
+																"w-full p-4 h-12 gap-4 justify-start text-left font-normal",
+																!values.date &&
+																"text-muted-foreground"
+															)}
+														>
+															<CalendarIcon className=" h-4 w-4" />
+															{values.date ?
+																<UIText className={'rtl:font-sans'} variant={'xs'}>{values.date.toLocaleDateString()}</UIText>
+																:
+																<UIText>{t('pickDate')}</UIText>
+															}
+														</Button>
+													</PopoverTrigger>
+													<PopoverContent className="w-auto p-0">
+														<Calendar
+															mode="single"
+															selected={values.date}
+															onSelect={(selectedDate) => {
+																setFieldValue("date", selectedDate);
+																setCalendarOpen(false);
+															}}
+														/>
+													</PopoverContent>
+												</Popover>
 											</div>
 											<div className="flex flex-col">
 												<FormLabel
@@ -211,6 +241,7 @@ export const AddEvent = ({ open, onOpenChange, userOwnedGroups }) => {
 														onBlur={handleBlur}
 														name="venue"
 														disabled={disabled}
+														className={cn(isStringUrdu(values.venue) ? 'font-urdu' : 'font-sans')}
 													/>
 												</UIText>
 											</div>
@@ -226,6 +257,7 @@ export const AddEvent = ({ open, onOpenChange, userOwnedGroups }) => {
 														onBlur={handleBlur}
 														name="details"
 														disabled={disabled}
+														className={cn(isStringUrdu(values.details) ? 'font-urdu' : 'font-sans')}
 													/>
 												</UIText>
 											</div>
@@ -248,3 +280,5 @@ export const AddEvent = ({ open, onOpenChange, userOwnedGroups }) => {
 		</Sheet>
 	);
 };
+
+export default  AddEvent

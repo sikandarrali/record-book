@@ -24,6 +24,23 @@ import {getGroup} from "@/components/appwrite/appwrite";
 import {useScopedI18n} from "@/locales/client";
 import {UISheetInfoFooter} from "@/components/theme/UISheetInfoFooter";
 import {isStringUrdu} from "@/lib/isStringUrdu";
+import {FormattedDateForCalenderDatePick} from "@/lib/FormattedDateForCalendarPick";
+import {FormattedDate} from "@/lib/hooks/FormattedDate";
+
+const months = [
+	"January",
+	"February",
+	"March",
+	"April",
+	"May",
+	"June",
+	"July",
+	"August",
+	"September",
+	"October",
+	"November",
+	"December"
+];
 
 const EventInfo = ({ eventData, sum, userOwnedGroups }) => {
 	const isDesktop = useMediaQuery({ query: "(min-width: 1024px)" })
@@ -33,6 +50,7 @@ const EventInfo = ({ eventData, sum, userOwnedGroups }) => {
 	const router = useRouter();
 	const [group, setGroup] = useState(null)
 	const t = useScopedI18n('events')
+	const tMonths = useScopedI18n('months')
 
 	const onDelete = async () => {
 		await db.events.delete(eventData?.$id);
@@ -66,6 +84,14 @@ const EventInfo = ({ eventData, sum, userOwnedGroups }) => {
 	}, []);
 
 
+	// Parse the date string
+	const date = new Date(eventData?.date);
+	const year = date.getFullYear();
+	const day = date.getDate();
+	const monthIndex = date.getMonth(); // getMonth() returns a zero-based index (0 for January, 11 for December)
+	const month = months[monthIndex];
+
+
 	return (
 		<>
 			<Button variant="ghost" size="icon" onClick={() => setOpenDetails(true)}>
@@ -91,7 +117,7 @@ const EventInfo = ({ eventData, sum, userOwnedGroups }) => {
 								variant={"heading"}
 								className={cn(
 									"text-primary text-center self-center",
-									isStringUrdu(eventData.name) && 'font-urdu'
+									isStringUrdu(eventData?.name) ? 'font-urdu' : 'rtl:font-sans font-medium',
 								)}
 							>
 								{eventData?.name}
@@ -121,7 +147,18 @@ const EventInfo = ({ eventData, sum, userOwnedGroups }) => {
 								<TableRow className={'border-b-muted'}>
 									<TableCell><UIText>{t('labelDate')}</UIText></TableCell>
 									<TableCell className="text-right">
-										<UIText>{eventData?.date || '-'}</UIText>
+										<p className={'flex gap-0.5 rtl:gap-2 items-center rtl:justify-end flex-row-reverse'}>
+											{eventData.date ?
+												<>
+													<UIText className={'rtl:font-sans'}>{year}</UIText>
+													<span className={'w-2 h-0.5 bg-foreground rtl:hidden'}/>
+													<UIText>{tMonths(month.toLowerCase())}</UIText>
+													<span className={'w-2 h-0.5 bg-foreground rtl:hidden'}/>
+													<UIText className={'rtl:font-sans'}>{day}</UIText>
+												</>
+												: '-'
+											}
+										</p>
 									</TableCell>
 								</TableRow>
 								<TableRow className={'border-b-muted'}>
