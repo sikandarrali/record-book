@@ -3,15 +3,17 @@ import { AuthProvider } from "../contexts/AuthContext";
 import {TooltipProvider} from "@/components/ui/tooltip";
 import {DataProvider} from "@/components/contexts/DataContext";
 import LoadingFallback from "@/components/loaders/LoadingFallback";
-import {useParams} from "next/navigation";
+import {useParams, useRouter} from "next/navigation";
 import {ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import {I18nProviderClient} from "@/locales/client";
+import {useEffect} from "react";
 // import PullToRefresh from "pulltorefreshjs";
 
 const Providers = ({ children }) => {
 
 	const params = useParams()
+	const router = useRouter()
 
 
 	// if (typeof window !== 'undefined') {
@@ -24,7 +26,6 @@ const Providers = ({ children }) => {
 	// 		})
 	// 	}
 	// }
-
 
 	return (
 		<I18nProviderClient
