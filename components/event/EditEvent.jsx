@@ -24,6 +24,7 @@ import UIText from "@/components/theme/UIText";
 import {isStringUrdu} from "@/lib/isStringUrdu";
 import {SheetStylesFlexibleHeight, SheetStylesMAxHeight90} from "@/lib/reusableStyles";
 import {teams} from "@/components/appwrite/appwrite";
+import {useRouter} from "next/navigation";
 
 const EditEventSchema = Yup.object().shape({
 	name: Yup.string()
@@ -45,6 +46,7 @@ export const EditEvent = ({ open, onOpenChange, eventData, setGroup, userOwnedGr
 	const [selectedGroup, setSelectedGroup] = useState()
 	const [userJoinedGroups, setUserJoinedGroups] = useState([])
 	const {user} = useAuth()
+	const router = useRouter()
 
 	const isOwner = userOwnedGroups.some((grp)=> grp.$id === eventData.teamId)
 
@@ -54,11 +56,11 @@ export const EditEvent = ({ open, onOpenChange, eventData, setGroup, userOwnedGr
 	}
 
 	useLayoutEffect(() => {
+		getUserGroups()
 		if(eventData.teamId) {
 			setSelectedGroup(eventData.teamId)
-			getUserGroups()
 		}
-	}, [open]);
+	}, [open, router]);
 
 	let teamPermissions = [
 		Permission.read(Role.team(selectedGroup, "member")),
@@ -138,7 +140,7 @@ export const EditEvent = ({ open, onOpenChange, eventData, setGroup, userOwnedGr
 			setDisabled(false);
 		}
 	};
-
+	
 	return (
 		<Sheet open={open} onOpenChange={onOpenChange} defaultOpen={false}>
 			<SheetContent
@@ -180,7 +182,12 @@ export const EditEvent = ({ open, onOpenChange, eventData, setGroup, userOwnedGr
 										<Label className={"relative text-sm flex items-center justify-between gap-4"}>
 											<UIText variant={'label'} className="shrink-0">{t('labelShareWithGroup')}</UIText>
 										</Label>
-										{isOwner ?
+										{eventData.teamId && !isOwner ?
+											<div className={'p-3 border rounded-lg'}>
+												{userJoinedGroups.find((filter)=> filter.$id===eventData.teamId)?.name}
+												{/*{userJoinedGroups.length}*/}
+											</div>
+											:
 											<div className={'flex gap-4 items-center relative'}>
 												<Select onValueChange={(selected)=> setSelectedGroup(selected)} key={selectedGroup}>
 													<SelectTrigger className="w-full h-12 flex between" ref={null}>
@@ -215,10 +222,6 @@ export const EditEvent = ({ open, onOpenChange, eventData, setGroup, userOwnedGr
 														<XIcon className={'w-4 h-4'} />
 													</Button>
 												}
-											</div>
-											:
-											<div className={'p-3 border rounded-lg'}>
-												{userJoinedGroups.filter((filter)=> filter.$id===eventData.teamId)[0].name}
 											</div>
 										}
 									</div>
