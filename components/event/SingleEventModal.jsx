@@ -26,6 +26,7 @@ import {ReloadIcon} from "@radix-ui/react-icons";
 import {useAuth} from "@/components/contexts/AuthContext";
 import {useScopedI18n} from "@/locales/client";
 import {isStringUrdu} from "@/lib/isStringUrdu";
+import {useParams, useRouter, useSearchParams} from "next/navigation";
 // import {toast} from "react-toastify";
 // import {ToastOptions} from "@/lib/ToastOptions";
 
@@ -41,25 +42,29 @@ const SingleEventModal = ({ eventData, userOwnedGroups }) => {
     const [items, setItems] = useState([])
     const [itemsDefault, setItemsDefault] = useState([])
     const {user} = useAuth()
+    const searchParams = useSearchParams()
+    const router = useRouter()
 
     const itemsPerPage = 15;
     const [visibleItems, setVisibleItems] = useState([]); // Currently visible items
     const [hasMoreItems, setHasMoreItems] = useState(true); // Flag to check if more items are available
     const [loadingItems, setLoadingItems] = useState(false); // To show loadingItems spinner
 
-    // useEffect(() => {
-    //    if(isOpen){
-    //        const newParams = new URLSearchParams(searchParams);
-    //        newParams.set('id', eventData.$id);
-    //        router.push(`?${newParams.toString()}`, { shallow: true });
-    //    }
-    // }, [isOpen]);
+    useEffect(() => {
+       if(isOpen){
+           const newParams = new URLSearchParams(searchParams);
+           newParams.set('id', eventData.$id);
+           router.push(`?${newParams.toString()}`, { shallow: true });
+       }else{
+           onClose()
+       }
+    }, [isOpen]);
     //
     const onClose = () =>{
         setIsOpen(false)
-        // const newParams = new URLSearchParams(searchParams);
-        // newParams.delete('id');
-        // router.push(`?${newParams.toString()}`, { shallow: true });
+        const newParams = new URLSearchParams(searchParams);
+        newParams.delete('id');
+        router.push(`?${newParams.toString()}`, { shallow: true });
     }
 
     // get items
@@ -159,15 +164,15 @@ const SingleEventModal = ({ eventData, userOwnedGroups }) => {
     }, [itemsDefault]);
 
 
-    // useEffect(() => {
-    //
-    //     let id = searchParams.get('id')
-    //
-    //     if (id === eventData.$id) {
-    //         setIsOpen(true);
-    //     }
-    //
-    // }, [searchParams]);
+    useEffect(() => {
+
+        let id = searchParams.get('id')
+
+        if (id === eventData.$id) {
+            setIsOpen(true);
+        }
+
+    }, [searchParams]);
     // if (isOpen) return null;
 
     // const copyToClipboard = async () => {
