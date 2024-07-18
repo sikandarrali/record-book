@@ -7,7 +7,7 @@ import {Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle} from "@/
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { Form, Formik } from "formik";
-import {XIcon} from "lucide-react";
+import {CalendarIcon, LockKeyhole, XIcon} from "lucide-react";
 import {useLayoutEffect, useState} from "react";
 import { useMediaQuery } from "react-responsive";
 import * as Yup from "yup";
@@ -25,6 +25,10 @@ import {isStringUrdu} from "@/lib/isStringUrdu";
 import {SheetStylesFlexibleHeight, SheetStylesMAxHeight90} from "@/lib/reusableStyles";
 import {teams} from "@/components/appwrite/appwrite";
 import {useRouter} from "next/navigation";
+import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
+import {FormattedDateForCalenderDatePick} from "@/lib/FormattedDateForCalendarPick";
+import {FormattedDate} from "@/lib/hooks/FormattedDate";
+import { Calendar } from "@/components/ui/calendar"
 
 const EditEventSchema = Yup.object().shape({
 	name: Yup.string()
@@ -45,8 +49,12 @@ export const EditEvent = ({ open, onOpenChange, eventData, setGroup, userOwnedGr
 	const [disabled, setDisabled] = useState(false);
 	const [selectedGroup, setSelectedGroup] = useState()
 	const [userJoinedGroups, setUserJoinedGroups] = useState([])
+	const [userJoinedGroupName, setUserJoinedGroupName] = useState('')
 	const {user} = useAuth()
 	const router = useRouter()
+	const [calendarOpen, setCalendarOpen] = useState(false);
+
+	let originalDate = eventData?.date;
 
 	const isOwner = userOwnedGroups.some((grp)=> grp.$id === eventData.teamId)
 
@@ -56,6 +64,7 @@ export const EditEvent = ({ open, onOpenChange, eventData, setGroup, userOwnedGr
 	}
 
 	useLayoutEffect(() => {
+		setUserJoinedGroupName(userJoinedGroups?.find((filter)=> filter.$id===eventData.teamId)?.name)
 		getUserGroups()
 		if(eventData.teamId) {
 			setSelectedGroup(eventData.teamId)
@@ -90,6 +99,7 @@ export const EditEvent = ({ open, onOpenChange, eventData, setGroup, userOwnedGr
 				returned_amount: item?.returned_amount,
 				eventID: item?.eventID,
 				amount: item?.amount,
+				date: item?.date,
 			}
 			await db.eventItems.update(tempItem, item.$id, permissionsToUpdate);
 		}
@@ -104,8 +114,9 @@ export const EditEvent = ({ open, onOpenChange, eventData, setGroup, userOwnedGr
 			values.date === eventData.date &&
 			values.venue === eventData.venue &&
 			values.details === eventData.details &&
-			values.teamId === eventData.teamId
-		) {
+			values.teamId === eventData.teamId &&
+			values.date === eventData.date
+	) {
 			toast.info(t('alertNothingToUpdate'), ToastOptions);
 			setAdding(false);
 			setDisabled(false);
@@ -140,11 +151,11 @@ export const EditEvent = ({ open, onOpenChange, eventData, setGroup, userOwnedGr
 			setDisabled(false);
 		}
 	};
-	
+
 	return (
 		<Sheet open={open} onOpenChange={onOpenChange} defaultOpen={false}>
 			<SheetContent
-				className={cn("pb-8 lg:pb-14", SheetStylesMAxHeight90)}
+				className={cn("pb-8 lg:pb-14 outline-0 overflow-auto h-[90%] lg:h-screen lg:max-h-screen border-t-0 border-l-0")}
 				side={isDesktop ? "right" : "bottom"}
 				onOpenAutoFocus={(e) => e.preventDefault()}
 			>
@@ -176,6 +187,7 @@ export const EditEvent = ({ open, onOpenChange, eventData, setGroup, userOwnedGr
 								values,
 								handleChange,
 								handleBlur,
+								setFieldValue
 							}) => (
 								<Form className="flex flex-col w-full space-y-6">
 									<div className="flex flex-col">
@@ -183,10 +195,10 @@ export const EditEvent = ({ open, onOpenChange, eventData, setGroup, userOwnedGr
 											<UIText variant={'label'} className="shrink-0">{t('labelShareWithGroup')}</UIText>
 										</Label>
 										{eventData.teamId && !isOwner ?
-											<div className={'p-3 border rounded-lg'}>
-												{userJoinedGroups.find((filter)=> filter.$id===eventData.teamId)?.name}
-												{/*{userJoinedGroups.length}*/}
-											</div>
+											<UIText className={cn("p-3 border rounded-lg ltr:pr-6 rtl:pl-6 cursor-not-allowed", isStringUrdu(userJoinedGroupName) ? 'font-urdu' : 'font-sans')}>
+												{userJoinedGroupName}
+												<span className={'absolute rtl:left-4 ltr:right-4'}><LockKeyhole className={'text-destructive'}/> </span>
+											</UIText>
 											:
 											<div className={'flex gap-4 items-center relative'}>
 												<Select onValueChange={(selected)=> setSelectedGroup(selected)} key={selectedGroup}>
@@ -238,6 +250,7 @@ export const EditEvent = ({ open, onOpenChange, eventData, setGroup, userOwnedGr
 												name="name"
 												disabled={disabled}
 												value={values.name}
+												className={cn(isStringUrdu(values.name) ? 'font-urdu' : 'font-sans')}
 											/>
 										</UIText>
 									</div>
@@ -247,13 +260,38 @@ export const EditEvent = ({ open, onOpenChange, eventData, setGroup, userOwnedGr
 											errors={errors.date}
 											touched={touched.date}
 										/>
-										<Input
-											onChange={handleChange}
-											onBlur={handleBlur}
-											name="date"
-											disabled={disabled}
-											value={values.date}
-										/>
+										<Popover
+											open={calendarOpen}
+											onOpenChange={setCalendarOpen}
+										>
+											<PopoverTrigger asChild>
+												<Button
+													variant={"outline"}
+													className={cn(
+														"w-full p-4 h-12 gap-4 justify-start text-left font-normal",
+														!values.date &&
+														"text-muted-foreground"
+													)}
+												>
+													<CalendarIcon className=" h-4 w-4" />
+													{values.date ?
+														<UIText className={'rtl:font-sans'} variant={'xs'}>{new Date(values.date).toLocaleDateString()}</UIText>
+														:
+														<UIText className={'rtl:font-sans'} variant={'xs'}>{new Date(eventData.date).toLocaleDateString()}</UIText>
+													}
+												</Button>
+											</PopoverTrigger>
+											<PopoverContent className="w-auto p-0">
+												<Calendar
+													mode="single"
+													selected={values.date}
+													onSelect={(selectedDate) => {
+														setFieldValue("date", selectedDate);
+														setCalendarOpen(false);
+													}}
+												/>
+											</PopoverContent>
+										</Popover>
 									</div>
 									<div className="flex flex-col">
 										<FormLabel
@@ -268,6 +306,7 @@ export const EditEvent = ({ open, onOpenChange, eventData, setGroup, userOwnedGr
 												name="venue"
 												disabled={disabled}
 												value={values.venue}
+												className={cn(isStringUrdu(values.venue) ? 'font-urdu' : 'font-sans')}
 											/>
 										</UIText>
 									</div>
@@ -284,6 +323,7 @@ export const EditEvent = ({ open, onOpenChange, eventData, setGroup, userOwnedGr
 												name="details"
 												disabled={disabled}
 												value={values.details}
+												className={cn(isStringUrdu(values.details) ? 'font-urdu' : 'font-sans')}
 											/>
 										</UIText>
 									</div>

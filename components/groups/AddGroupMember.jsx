@@ -94,7 +94,7 @@ export const AddGroupMember = ({groupID, setUsersInGroup}) =>{
                             disabled={disabled}
                             placeholder={t('userEmailPlaceholder')}
                             value={values.email}
-                            className={cn('normal-case rtl:text-left')}
+                            className={cn('normal-case rtl:text-left rtl:font-urdu', isStringUrdu(values.email) ? 'font-urdu' : 'rtl:font-sans')}
                         />
                     </UIText>
 

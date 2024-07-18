@@ -64,13 +64,15 @@ const SingleGroup = ({ data, userGroups, setUserGroups }) => {
     return (
 
         <Sheet open={open} onOpenChange={setOpen} defaultOpen={false}>
-            <SheetTrigger className={'relative w-full text-left py-4 flex gap-4 items-center justify-between hover:bg-white/70 transition-all duration-300 px-5'}>
+            <SheetTrigger className={'outline-none relative w-full text-left py-4 flex gap-4 items-center justify-between hover:bg-white/70 transition-all duration-300 px-5'}>
                 <UIText className={'flex flex-col ltr:gap-1'}>
                     <UIText className={cn(
-                        'font-medium',
-                        isStringUrdu(data.name) && 'font-urdu'
-                    )}>{data.name}</UIText>
-                    <UIText className={'text-muted-foreground text-sm rtl:text-sm rtl:mt-0 lowercase rtl:text-right flex gap-2 flex'}>
+                        isStringUrdu(data.name) ? 'font-urdu' : 'rtl:font-sans rtl:!font-medium rtl:text-lg')}
+                            variant={'medium'}
+                    >
+                        {data.name}
+                    </UIText>
+                    <UIText className={'text-muted-foreground text-sm rtl:text-sm rtl:mt-0 lowercase rtl:text-right flex gap-2'}>
                         <span>{data.total-1}</span>
                         <span>{t('labelMembers')}</span>
                     </UIText>

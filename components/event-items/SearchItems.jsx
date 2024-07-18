@@ -4,6 +4,7 @@ import {XIcon} from "lucide-react";
 import {useScopedI18n} from "@/locales/client";
 import UIText from "@/components/theme/UIText";
 import {isStringUrdu} from "@/lib/isStringUrdu";
+import {cn} from "@/lib/utils";
 
 export const SearchItems = ({openAddModal, setVisibleItems, itemsPerPage, itemsDefault}) =>{
     const [searchValue, setSearchValue] = useState("");
@@ -42,14 +43,12 @@ export const SearchItems = ({openAddModal, setVisibleItems, itemsPerPage, itemsD
 
     return(
         <div className="relative h-14 mb-4">
-            <UIText isUrdu={isStringUrdu(searchValue)}>
-                <Input
-                    className="text-[16px] h-full normal-case"
-                    placeholder={t('searchPlaceholder')}
-                    value={searchValue}
-                    onChange={(e) => onSearch(e.target.value)}
-                />
-            </UIText>
+            <Input
+                placeholder={t('searchPlaceholder')}
+                value={searchValue}
+                onChange={(e) => onSearch(e.target.value)}
+                className={cn("h-full normal-case rtl:text-xl rtl:font-urdu", isStringUrdu(searchValue) ? 'font-urdu' : 'rtl:font-sans')}
+            />
 
             {searchValue !== "" && (
                 <XIcon
@@ -59,7 +58,7 @@ export const SearchItems = ({openAddModal, setVisibleItems, itemsPerPage, itemsD
             )}
 
             {searchValue !== '' && searchResultsMessage !== '' && (
-                <div className="flex flex-col justify-center items-center gap-10 px-6 mt-20">
+                <div className="flex flex-col justify-center items-center gap-10 px-6 mt-20 text-destructive">
                     <UIText className="text-center text-lg font-medium">
                         {t(searchResultsMessage)}
                     </UIText>

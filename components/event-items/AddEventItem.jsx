@@ -16,7 +16,7 @@ import {
 import useScrollToView from "@/lib/hooks/useScrollToView";
 import {useMediaQuery} from "react-responsive";
 import UIText from "@/components/theme/UIText";
-import {scrollToTop} from "@/lib/utils";
+import {cn, scrollToTop} from "@/lib/utils";
 import {Permission, Role} from "appwrite";
 import {useAuth} from "@/components/contexts/AuthContext";
 import {UISheetFooter} from "@/components/theme/UISheetFooter";
@@ -131,6 +131,7 @@ export const AddEventItem = ({open, onOpenChange, eventData}) => {
 											onBlur={handleBlur}
 											name="name"
 											disabled={disabled}
+											className={cn(isStringUrdu(values.name) ? 'font-urdu' : 'font-sans')}
 										/>
 									</UIText>
 								</div>
@@ -166,6 +167,7 @@ export const AddEventItem = ({open, onOpenChange, eventData}) => {
 											onBlur={handleBlur}
 											name="details"
 											disabled={disabled}
+											className={cn(isStringUrdu(values.details) ? 'font-urdu' : 'font-sans')}
 										/>
 									</UIText>
 								</div>

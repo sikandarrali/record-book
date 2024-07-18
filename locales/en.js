@@ -1,4 +1,13 @@
 const Translation = {
+  edit: {
+    alertUpdated: "Name Updated"
+  },
+  editProfile: {
+    alertException: "Unable to Update",
+    alertNothingToUpdate: "Nothing to Update",
+    name: "Name",
+    title: "Edit Profile"
+  },
   events: {
     addEvent: "Add New Event",
     addEventItem: "Add New Record",
@@ -33,6 +42,7 @@ const Translation = {
     labelShareWithGroup: "Share with Group",
     labelVenue: "Venue",
     notSharedWithGroup: "Not shared with any group",
+    pickDate: "Pick a date",
     searchNoItems: "No items matching your search",
     searchPlaceholder: "Type to Search...",
     selectGroupPlaceholder: "Select Group",
@@ -67,6 +77,7 @@ const Translation = {
     alertNothingToUpdate: "Nothing to update",
     badgeAdmin: "Admin",
     badgeMember: "Member",
+    badgePending: "pending",
     badgeYou: "You",
     btnAddMember: "Add",
     btnCreateNewGroup: "Create New Group",
@@ -132,6 +143,20 @@ const Translation = {
   logout: {
     btnLogout: "Logout",
     text: "If you're not logged out automatically, click here"
+  },
+  months: {
+    april: "April",
+    august: "August",
+    december: "December",
+    february: "February",
+    january: "January",
+    july: "July",
+    june: "June",
+    march: "March",
+    may: "May",
+    november: "November",
+    october: "October",
+    september: "September"
   },
   navbar: {
     linkEditProfile: "Edit Profile",

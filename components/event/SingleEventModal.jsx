@@ -26,7 +26,7 @@ import {ReloadIcon} from "@radix-ui/react-icons";
 import {useAuth} from "@/components/contexts/AuthContext";
 import {useScopedI18n} from "@/locales/client";
 import {isStringUrdu} from "@/lib/isStringUrdu";
-import {useParams, useRouter, useSearchParams} from "next/navigation";
+import {useParams, usePathname, useRouter, useSearchParams} from "next/navigation";
 // import {toast} from "react-toastify";
 // import {ToastOptions} from "@/lib/ToastOptions";
 
@@ -44,27 +44,28 @@ const SingleEventModal = ({ eventData, userOwnedGroups }) => {
     const {user} = useAuth()
     const searchParams = useSearchParams()
     const router = useRouter()
+    const pathname = usePathname()
 
     const itemsPerPage = 15;
     const [visibleItems, setVisibleItems] = useState([]); // Currently visible items
     const [hasMoreItems, setHasMoreItems] = useState(true); // Flag to check if more items are available
     const [loadingItems, setLoadingItems] = useState(false); // To show loadingItems spinner
 
-    // useEffect(() => {
-    //    if(isOpen){
-    //        const newParams = new URLSearchParams(searchParams);
-    //        newParams.set('id', eventData.$id);
-    //        router.push(`?${newParams.toString()}`, { shallow: true });
-    //    }else{
-    //        onClose()
-    //    }
-    // }, [isOpen]);
-    //
+    useEffect(() => {
+       if(isOpen){
+           const newParams = new URLSearchParams(searchParams);
+           newParams.set('event', eventData.$id);
+           router.push(`?${newParams.toString()}`, { shallow: true });
+       }else{
+           onClose()
+       }
+    }, [isOpen]);
+
     const onClose = () =>{
         setIsOpen(false)
-        // const newParams = new URLSearchParams(searchParams);
-        // newParams.delete('id');
-        // router.push(`?${newParams.toString()}`, { shallow: true });
+        const newParams = new URLSearchParams(searchParams);
+        newParams.delete('event');
+        router.push(`?${newParams.toString()}`, { shallow: true });
     }
 
     // get items
@@ -163,17 +164,14 @@ const SingleEventModal = ({ eventData, userOwnedGroups }) => {
         setLoadingItems(false)
     }, [itemsDefault]);
 
-
-    // useEffect(() => {
-    //
-    //     let id = searchParams.get('id')
-    //
-    //     if (id === eventData.$id) {
-    //         setIsOpen(true);
-    //     }
-    //
-    // }, [searchParams]);
-    // if (isOpen) return null;
+    useEffect(() => {
+        let isEventInURL = searchParams.get('event')
+        if (isEventInURL && isEventInURL === eventData.$id) {
+            setIsOpen(true)
+        }else{
+            setIsOpen(false)
+        }
+    }, [searchParams]);
 
     // const copyToClipboard = async () => {
     //     try {
@@ -185,37 +183,18 @@ const SingleEventModal = ({ eventData, userOwnedGroups }) => {
     // };
 
 
-    useEffect(() => {
-        const handleRouteChange = (url) => {
-            if (url !== router.asPath) {
-                setIsOpen(false);
-            }
-        };
-
-        // Check if router.events is available
-        if (router.events) {
-            router.events.on('routeChangeStart', handleRouteChange);
-        }
-
-        return () => {
-            if (router.events) {
-                router.events.off('routeChangeStart', handleRouteChange);
-            }
-        };
-    }, [router]);
-    
     return (
         <Sheet
             open={isOpen}
             onOpenChange={setIsOpen}
             defaultOpen={false}
         >
-            <SheetTrigger className={'w-full'}>
+            <SheetTrigger className={'w-full outline-none'}>
                 <UIText
                     variant={'heading'}
                     className={cn(
                         'flex flex-1 justify-center items-center px-6 md:px-8 pt-8 pb-7 relative',
-                        isStringUrdu(eventData.name) && 'font-urdu')}
+                        isStringUrdu(eventData.name) ? 'font-urdu' : 'rtl:font-sans rtl:!font-semibold')}
                 >
                     {eventData?.name}
                     {eventData.teamId && <Users2 className={'absolute right-2 top-2 w-5 h-5'}/>}
@@ -259,7 +238,7 @@ const SingleEventModal = ({ eventData, userOwnedGroups }) => {
                             <UIText
                                 variant={"heading"}
                                 className={cn(
-                                    isStringUrdu(eventData.name) && 'font-urdu',
+                                    isStringUrdu(eventData?.name) ? 'font-urdu' : 'rtl:font-sans rtl:font-medium',
                                     "text-background px-6 text-center pb-4 pt-1 flex flex-col justify-center items-center gap-4 select-none"
                                 )}
                             >
