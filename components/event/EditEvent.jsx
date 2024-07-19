@@ -40,7 +40,7 @@ const EditEventSchema = Yup.object().shape({
 	details: Yup.string().min(1).max(300, "max 300 characters"),
 });
 
-export const EditEvent = ({ open, onOpenChange, eventData, setGroup, userOwnedGroups }) => {
+export const EditEvent = ({ open, onOpenChange, eventData, setGroup }) => {
 	const isDesktop = useMediaQuery({
 		query: "(min-width: 1024px)",
 	});
@@ -53,10 +53,11 @@ export const EditEvent = ({ open, onOpenChange, eventData, setGroup, userOwnedGr
 	const {user} = useAuth()
 	const router = useRouter()
 	const [calendarOpen, setCalendarOpen] = useState(false);
+	const {userOwnedGroups} = useData()
 
 	let originalDate = eventData?.date;
 
-	const isOwner = userOwnedGroups.some((grp)=> grp.$id === eventData.teamId)
+	const isOwner = userOwnedGroups.some((grp)=> grp.$id === eventData?.teamId)
 
 	const getUserGroups = async () =>{
 		const response = await teams.list()
@@ -64,10 +65,10 @@ export const EditEvent = ({ open, onOpenChange, eventData, setGroup, userOwnedGr
 	}
 
 	useLayoutEffect(() => {
-		setUserJoinedGroupName(userJoinedGroups?.find((filter)=> filter.$id===eventData.teamId)?.name)
+		setUserJoinedGroupName(userJoinedGroups?.find((filter)=> filter.$id===eventData?.teamId)?.name)
 		getUserGroups()
-		if(eventData.teamId) {
-			setSelectedGroup(eventData.teamId)
+		if(eventData?.teamId) {
+			setSelectedGroup(eventData?.teamId)
 		}
 	}, [open, router]);
 
@@ -110,12 +111,12 @@ export const EditEvent = ({ open, onOpenChange, eventData, setGroup, userOwnedGr
 		setDisabled(true);
 
 		if (
-			values.name === eventData.name &&
-			values.date === eventData.date &&
-			values.venue === eventData.venue &&
-			values.details === eventData.details &&
-			values.teamId === eventData.teamId &&
-			values.date === eventData.date
+			values.name === eventData?.name &&
+			values.date === eventData?.date &&
+			values.venue === eventData?.venue &&
+			values.details === eventData?.details &&
+			values.teamId === eventData?.teamId &&
+			values.date === eventData?.date
 	) {
 			toast.info(t('alertNothingToUpdate'), ToastOptions);
 			setAdding(false);
@@ -133,10 +134,10 @@ export const EditEvent = ({ open, onOpenChange, eventData, setGroup, userOwnedGr
 			};
 
 			if(selectedGroup){
-				await db.events.update(eventDataValues, eventData.$id, teamPermissions);
+				await db.events.update(eventDataValues, eventData?.$id, teamPermissions);
 				await updateAllItemsInEvent(teamPermissions);
 			}else{
-				await db.events.update(eventDataValues, eventData.$id, userPermissions);
+				await db.events.update(eventDataValues, eventData?.$id, userPermissions);
 				await updateAllItemsInEvent(userPermissions);
 			}
 
@@ -171,10 +172,10 @@ export const EditEvent = ({ open, onOpenChange, eventData, setGroup, userOwnedGr
 					<div className="flex flex-col gap-5 w-full items-center justify-center py-6 lg:py-10">
 						<Formik
 							initialValues={{
-								name: eventData.name,
-								date: eventData.date,
-								venue: eventData.venue,
-								details: eventData.details,
+								name: eventData?.name,
+								date: eventData?.date,
+								venue: eventData?.venue,
+								details: eventData?.details,
 							}}
 							validationSchema={EditEventSchema}
 							onSubmit={(values) => {
@@ -194,7 +195,7 @@ export const EditEvent = ({ open, onOpenChange, eventData, setGroup, userOwnedGr
 										<Label className={"relative text-sm flex items-center justify-between gap-4"}>
 											<UIText variant={'label'} className="shrink-0">{t('labelShareWithGroup')}</UIText>
 										</Label>
-										{eventData.teamId && !isOwner ?
+										{eventData?.teamId && !isOwner ?
 											<UIText className={cn("p-3 border rounded-lg ltr:pr-6 rtl:pl-6 cursor-not-allowed", isStringUrdu(userJoinedGroupName) ? 'font-urdu' : 'font-sans')}>
 												{userJoinedGroupName}
 												<span className={'absolute rtl:left-4 ltr:right-4'}><LockKeyhole className={'text-destructive'}/> </span>
@@ -277,7 +278,7 @@ export const EditEvent = ({ open, onOpenChange, eventData, setGroup, userOwnedGr
 													{values.date ?
 														<UIText className={'rtl:font-sans'} variant={'xs'}>{new Date(values.date).toLocaleDateString()}</UIText>
 														:
-														<UIText className={'rtl:font-sans'} variant={'xs'}>{new Date(eventData.date).toLocaleDateString()}</UIText>
+														<UIText className={'rtl:font-sans'} variant={'xs'}>{new Date(eventData?.date).toLocaleDateString()}</UIText>
 													}
 												</Button>
 											</PopoverTrigger>

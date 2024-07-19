@@ -39,35 +39,35 @@ export const SingleListItem = ({ item }) => {
 		toast.success(t('alertEventItemDeleted'), ToastOptions);
 	};
 
-	useEffect(() => {
-		if(isOpen){
-			const newParams = new URLSearchParams(searchParams);
-			newParams.set('record', item.$id);
-			router.push(`?${newParams.toString()}`, { shallow: true });
-		}else{
-			onClose()
-		}
-	}, [isOpen]);
-
-	const onClose = () =>{
-		let event = searchParams.get('event')
-		if(event){
-			setIsOpen(false)
-			const newParams = new URLSearchParams(searchParams);
-			newParams.delete('record');
-			router.push(`?${newParams.toString()}`, { shallow: true });
-		}
-	}
-
-	useEffect(() => {
-		let isEventInURL = searchParams.get('event')
-		let isRecordInURL = searchParams.get('record')
-		if (isEventInURL && isRecordInURL && isRecordInURL===item.$id) {
-			setIsOpen(true)
-		}else{
-			setIsOpen(false)
-		}
-	}, [searchParams]);
+	// useEffect(() => {
+	// 	if(isOpen){
+	// 		const newParams = new URLSearchParams(searchParams);
+	// 		newParams.set('record', item.$id);
+	// 		router.push(`?${newParams.toString()}`, { shallow: true });
+	// 	}else{
+	// 		onClose()
+	// 	}
+	// }, [isOpen]);
+	//
+	// const onClose = () =>{
+	// 	let event = searchParams.get('event')
+	// 	if(event){
+	// 		setIsOpen(false)
+	// 		const newParams = new URLSearchParams(searchParams);
+	// 		newParams.delete('record');
+	// 		router.push(`?${newParams.toString()}`, { shallow: true });
+	// 	}
+	// }
+	//
+	// useEffect(() => {
+	// 	let isEventInURL = searchParams.get('event')
+	// 	let isRecordInURL = searchParams.get('record')
+	// 	if (isEventInURL && isRecordInURL && isRecordInURL===item.$id) {
+	// 		setIsOpen(true)
+	// 	}else{
+	// 		setIsOpen(false)
+	// 	}
+	// }, [searchParams]);
 
 	// const onClose = () =>{
 	// 	setIsOpen(false)

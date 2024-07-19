@@ -26,6 +26,7 @@ import {UISheetInfoFooter} from "@/components/theme/UISheetInfoFooter";
 import {isStringUrdu} from "@/lib/isStringUrdu";
 import {FormattedDateForCalenderDatePick} from "@/lib/FormattedDateForCalendarPick";
 import {FormattedDate} from "@/lib/hooks/FormattedDate";
+import {useData} from "@/components/contexts/DataContext";
 
 const months = [
 	"January",
@@ -42,7 +43,7 @@ const months = [
 	"December"
 ];
 
-const EventInfo = ({ eventData, sum, userOwnedGroups }) => {
+const EventInfo = ({ eventData, sum }) => {
 	const isDesktop = useMediaQuery({ query: "(min-width: 1024px)" })
 	const [openDetails, setOpenDetails] = useState(false);
 	const [openEdit, setOpenEdit] = useState(false);
@@ -51,6 +52,7 @@ const EventInfo = ({ eventData, sum, userOwnedGroups }) => {
 	const [group, setGroup] = useState(null)
 	const t = useScopedI18n('events')
 	const tMonths = useScopedI18n('months')
+	const {userOwnedGroups} = useData()
 
 	const onDelete = async () => {
 		await db.events.delete(eventData?.$id);
@@ -75,8 +77,8 @@ const EventInfo = ({ eventData, sum, userOwnedGroups }) => {
 	// set group
 	useLayoutEffect(() => {
 		const unsub = async () =>{
-			if(eventData.teamId){
-				const response = await getGroup(eventData.teamId)
+			if(eventData?.teamId === undefined || eventData?.teamId === null || eventData?.teamId===""){
+				const response = await getGroup(eventData?.teamId)
 				setGroup(response)
 			}
 		}
@@ -148,7 +150,7 @@ const EventInfo = ({ eventData, sum, userOwnedGroups }) => {
 									<TableCell><UIText>{t('labelDate')}</UIText></TableCell>
 									<TableCell className="text-right">
 										<p className={'flex gap-0.5 rtl:gap-2 items-center rtl:justify-end flex-row-reverse'}>
-											{eventData.date ?
+											{eventData?.date ?
 												<>
 													<UIText className={'rtl:font-sans'}>{year}</UIText>
 													<span className={'w-2 h-0.5 bg-foreground rtl:hidden'}/>

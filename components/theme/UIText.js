@@ -4,7 +4,7 @@ const UIText = ({ className, variant, weight, isUrdu, children, ...props }) => {
 	return (
 		<span
 			className={cn(
-				"ltr:text-lg rtl:text-xl rtl:font-urdu relative",
+				"ltr:text-lg rtl:text-2xl rtl:font-urdu relative",
 				variant === "xs" && "rtl:text-base ltr:text-sm ltr:font-medium",
 				variant === "sm" && "text-lg",
 				variant === "lg" && "ltr:text-lg rtl:text-xl",

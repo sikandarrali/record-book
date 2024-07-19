@@ -23,6 +23,7 @@ const Navbar = () => {
 	const isPWAInstalled = usePWAStatus();
 	const router = useRouter()
 	const pathname = usePathname()
+	const {user} = useAuth()
 
 	const onLogoClick = () =>{
 		if(pathname !== "/events"){
@@ -31,21 +32,20 @@ const Navbar = () => {
 	}
 
 	return (
-		<div dir={'ltr'}>
-			<div className="flex items-center justify-between sticky top-0 mb-4 bg-white shadow-sm -mx-6 py-4 px-6">
+		<div className="flex items-center justify-between sticky top-0 z-[1000] bg-white shadow-sm p-4" dir={'ltr'}>
 
-				<Image
-					src={Logo}
-					width={120}
-					height={47}
-					alt="Logo"
-					priority
-					className={'cursor-pointer'}
-					onClick={()=> onLogoClick()}
-				/>
+			<Image
+				src={Logo}
+				width={120}
+				height={47}
+				alt="Logo"
+				priority
+				className={'cursor-pointer'}
+				onClick={()=> onLogoClick()}
+			/>
 
+			{user &&
 				<div className={'flex items-center gap-5'}>
-
 					{isPWAInstalled ?
 						<LanguageSwitcher />
 						:
@@ -58,9 +58,9 @@ const Navbar = () => {
 						<MenuIcon />
 					</div>
 				</div>
+			}
 
-				<Sidebar open={isMenuOpen} onOpenChange={setIsMenuOpen} isPWAInstalled={isPWAInstalled} />
-			</div>
+			<Sidebar open={isMenuOpen} onOpenChange={setIsMenuOpen} isPWAInstalled={isPWAInstalled} />
 		</div>
 	);
 };
