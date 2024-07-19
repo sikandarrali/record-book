@@ -27,6 +27,8 @@ import {isStringUrdu} from "@/lib/isStringUrdu";
 import {notFound, useParams, usePathname, useRouter, useSearchParams} from "next/navigation";
 import PageContainer from "@/components/providers/PageContainer";
 import {Input} from "@/components/ui/input";
+import ScrollToTopButton from "@/components/event/ScrollToTopButton";
+import Link from "next/link";
 // import {toast} from "react-toastify";
 // import {ToastOptions} from "@/lib/ToastOptions";
 
@@ -84,7 +86,6 @@ const EventPage = ({ userOwnedGroups }) => {
 	// appwrite realtime functionality
 	useEffect(() => {
 		const unsubscribe = client.subscribe(`databases.${process.env.NEXT_PUBLIC_DATABASE_ID}.collections.${process.env.NEXT_PUBLIC_COLLECTION_ID_EVENT_ITEMS}.documents`, (response) => {
-			console.log(response.payload)
 			if(response.events.includes("databases.*.collections.*.documents.*.create")){
 				if(response.payload.eventID === params.id){
 					setItems(prev=> [response.payload, ...prev])
@@ -192,19 +193,21 @@ const EventPage = ({ userOwnedGroups }) => {
 					<Suspense fallback={<LoadingFallback />}>
 						<div className="flex flex-col z-10">
 							{/* header */}
-							<div className="flex gap-4 pb-2 pt-2.5 rtl:flex-row-reverse justify-between items-center w-full z-20 border-b border-primary-foreground/40 relative" ref={headerRef}>
+							<div className="flex gap-4 pb-2 px-2 pt-2.5 rtl:flex-row-reverse justify-between items-center w-full z-20 border-b border-primary-foreground/40 relative" ref={headerRef}>
 
-								<Button
-									variant="ghost"
-									className={'w-20'}
-									onClick={()=> router.push('/events')}
-								>
-									<MoveLeft/>
-								</Button>
+								<Link href={'/events'}>
+									<Button
+										variant="ghost"
+										className={'w-14'}
+										dir={'ltr'}
+									>
+										<MoveLeft/>
+									</Button>
+								</Link>
 
-								<div className="flex flex-1 justify-center col-span-4 items-center text-primary gap-2 relative select-none pointer-events-none">
-									<span className="text-sm">Rs</span>
-									<span className="font-bold text-xl">
+								<motion.div className="flex flex-1 justify-center col-span-4 items-center gap-2 relative select-none pointer-events-none" dir={'ltr'}>
+									<span className="text-sm font-semibold">Rs</span>
+									<span className="font-bold text-xl text-primary">
 										<NumericFormat
 											allowNegative={false}
 											value={totalSum}
@@ -214,12 +217,12 @@ const EventPage = ({ userOwnedGroups }) => {
 											decimalScale={2}
 										/>
 									</span>
-								</div>
+								</motion.div>
 
 								<EventInfo
 									eventData={eventData}
+									setEventData={setEventData}
 									sum={totalSum}
-									userOwnedGroups={userOwnedGroups}
 								/>
 
 							</div>
@@ -331,6 +334,8 @@ const EventPage = ({ userOwnedGroups }) => {
 						>
 							<Plus className="text-white w-10 h-10" />
 						</div>
+
+						<ScrollToTopButton/>
 
 						<AddEventItem
 							open={openAddModal}

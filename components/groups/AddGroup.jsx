@@ -16,6 +16,7 @@ import {UISheetFooter} from "@/components/theme/UISheetFooter";
 import {useScopedI18n} from "@/locales/client";
 import UIText from "@/components/theme/UIText";
 import {isStringUrdu} from "@/lib/isStringUrdu";
+import {useData} from "@/components/contexts/DataContext";
 
 const AddGroupSchema = Yup.object().shape({
     name: Yup.string()
@@ -24,12 +25,13 @@ const AddGroupSchema = Yup.object().shape({
         .required("required"),
 });
 
-export const AddGroup = ({ open, onOpenChange, setRefresh }) => {
+export const AddGroup = ({ open, onOpenChange }) => {
     const isDesktop = useMediaQuery({ query: "(min-width: 1024px)" });
     const [adding, setAdding] = useState(false);
     const [disabled, setDisabled] = useState(false);
     const {user} = useAuth()
     const t = useScopedI18n('groups')
+    const {setDataRefetch} = useData()
 
     const onAdd = async (values) => {
         setAdding(true);
@@ -43,7 +45,7 @@ export const AddGroup = ({ open, onOpenChange, setRefresh }) => {
                     creatorEmail: user.email
                 }
             );
-            setRefresh(prev => !prev)
+            setDataRefetch(prev => !prev)
             onOpenChange(false);
             toast.success(t('alertGroupCreated'), ToastOptions);
             setAdding(false);

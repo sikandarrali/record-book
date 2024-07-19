@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { Form, Formik } from "formik";
 import {CalendarIcon, LockKeyhole, XIcon} from "lucide-react";
-import {useLayoutEffect, useState} from "react";
+import {useEffect, useLayoutEffect, useState} from "react";
 import { useMediaQuery } from "react-responsive";
 import * as Yup from "yup";
 import {ToastOptions} from "@/lib/ToastOptions";
@@ -23,7 +23,7 @@ import {Label} from "@/components/ui/label";
 import UIText from "@/components/theme/UIText";
 import {isStringUrdu} from "@/lib/isStringUrdu";
 import {SheetStylesFlexibleHeight, SheetStylesMAxHeight90} from "@/lib/reusableStyles";
-import {teams} from "@/components/appwrite/appwrite";
+import {databases, teams} from "@/components/appwrite/appwrite";
 import {useRouter} from "next/navigation";
 import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
 import {FormattedDateForCalenderDatePick} from "@/lib/FormattedDateForCalendarPick";
@@ -40,7 +40,7 @@ const EditEventSchema = Yup.object().shape({
 	details: Yup.string().min(1).max(300, "max 300 characters"),
 });
 
-export const EditEvent = ({ open, onOpenChange, eventData, setGroup }) => {
+export const EditEvent = ({ open, onOpenChange, eventData, setEventData, setGroup }) => {
 	const isDesktop = useMediaQuery({
 		query: "(min-width: 1024px)",
 	});
@@ -48,6 +48,7 @@ export const EditEvent = ({ open, onOpenChange, eventData, setGroup }) => {
 	const [adding, setAdding] = useState(false);
 	const [disabled, setDisabled] = useState(false);
 	const [selectedGroup, setSelectedGroup] = useState()
+	const [selectedGroupName, setSelectedGroupName] = useState('')
 	const [userJoinedGroups, setUserJoinedGroups] = useState([])
 	const [userJoinedGroupName, setUserJoinedGroupName] = useState('')
 	const {user} = useAuth()
@@ -55,7 +56,7 @@ export const EditEvent = ({ open, onOpenChange, eventData, setGroup }) => {
 	const [calendarOpen, setCalendarOpen] = useState(false);
 	const {userOwnedGroups} = useData()
 
-	let originalDate = eventData?.date;
+	let defaultTeamId = eventData?.teamId;
 
 	const isOwner = userOwnedGroups.some((grp)=> grp.$id === eventData?.teamId)
 
@@ -107,6 +108,7 @@ export const EditEvent = ({ open, onOpenChange, eventData, setGroup }) => {
 	};
 
 	const onUpdate = async (values) => {
+
 		setAdding(true);
 		setDisabled(true);
 
@@ -134,14 +136,32 @@ export const EditEvent = ({ open, onOpenChange, eventData, setGroup }) => {
 			};
 
 			if(selectedGroup){
-				await db.events.update(eventDataValues, eventData?.$id, teamPermissions);
-				await updateAllItemsInEvent(teamPermissions);
+				const result = await databases.updateDocument(
+					process.env.NEXT_PUBLIC_DATABASE_ID,
+					process.env.NEXT_PUBLIC_COLLECTION_ID_EVENTS,
+					eventData?.$id,
+					eventDataValues,
+					teamPermissions// )
+				);
+				setEventData(result)
+				if(defaultTeamId !== selectedGroup){
+					await updateAllItemsInEvent(teamPermissions);
+				}
 			}else{
-				await db.events.update(eventDataValues, eventData?.$id, userPermissions);
-				await updateAllItemsInEvent(userPermissions);
+				const result = await databases.updateDocument(
+					process.env.NEXT_PUBLIC_DATABASE_ID,
+					process.env.NEXT_PUBLIC_COLLECTION_ID_EVENTS,
+					eventData?.$id,
+					eventDataValues,
+					userPermissions// )
+				);
+				setEventData(result)
+				if(defaultTeamId){
+					await updateAllItemsInEvent(userPermissions);
+				}
 			}
 
-			setGroup(userOwnedGroups.filter((item)=> item.$id === selectedGroup)[0])
+			setGroup(userOwnedGroups.find((item)=> item.$id === selectedGroup))
 			toast.success(t('alertEventUpdated'), ToastOptions);
 			setAdding(false);
 			setDisabled(false);
@@ -152,6 +172,13 @@ export const EditEvent = ({ open, onOpenChange, eventData, setGroup }) => {
 			setDisabled(false);
 		}
 	};
+
+	useEffect(() => {
+		if(selectedGroup){
+			const groupByID = userOwnedGroups.find((g)=> g.$id === selectedGroup);
+			setSelectedGroupName(groupByID?.name)
+		}
+	}, [selectedGroup]);
 
 	return (
 		<Sheet open={open} onOpenChange={onOpenChange} defaultOpen={false}>
@@ -203,8 +230,12 @@ export const EditEvent = ({ open, onOpenChange, eventData, setGroup }) => {
 											:
 											<div className={'flex gap-4 items-center relative'}>
 												<Select onValueChange={(selected)=> setSelectedGroup(selected)} key={selectedGroup}>
-													<SelectTrigger className="w-full h-12 flex between" ref={null}>
-														<UIText variant={'label'}>{selectedGroup ? userOwnedGroups.find((group)=> group.$id=== selectedGroup)?.name : <span className={'text-muted-foreground'}>{t('selectGroupPlaceholder')}</span>}</UIText>
+													<SelectTrigger ref={null} className="w-full h-12 flex between rtl:flex-row-reverse">
+														{selectedGroup ?
+															<UIText variant={'label'} className={cn(isStringUrdu(selectedGroupName) ? 'font-urdu' : 'rtl:font-sans !text-lg' )}>{selectedGroupName}</UIText>
+															:
+															<UIText variant={'label'} className={"text-muted-foreground"}>{t('selectGroupPlaceholder')}</UIText>
+														}
 													</SelectTrigger>
 													<SelectContent>
 														{userOwnedGroups.length===0 &&
@@ -230,7 +261,7 @@ export const EditEvent = ({ open, onOpenChange, eventData, setGroup }) => {
 														type={'button'}
 														size={'icon'}
 														onClick={()=> setSelectedGroup(null)}
-														className={'flex items-center justify-center text-primary hover:text-primary absolute right-1 bg-white'}
+														className={'flex items-center justify-center text-primary hover:text-primary absolute ltr:right-1 rtl:left-1 bg-white'}
 													>
 														<XIcon className={'w-4 h-4'} />
 													</Button>

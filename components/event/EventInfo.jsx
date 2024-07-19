@@ -1,6 +1,6 @@
 import UIText from "@/components/theme/UIText";
 import { Button } from "@/components/ui/button";
-import { Info, Pen, Trash2, XIcon } from "lucide-react";
+import {Info, Pen, SquarePen, Trash2, XIcon} from "lucide-react";
 import { useRouter } from "next/navigation";
 import {useLayoutEffect, useState} from "react";
 import { NumericFormat } from "react-number-format";
@@ -43,7 +43,7 @@ const months = [
 	"December"
 ];
 
-const EventInfo = ({ eventData, sum }) => {
+const EventInfo = ({ eventData, setEventData, sum }) => {
 	const isDesktop = useMediaQuery({ query: "(min-width: 1024px)" })
 	const [openDetails, setOpenDetails] = useState(false);
 	const [openEdit, setOpenEdit] = useState(false);
@@ -52,7 +52,7 @@ const EventInfo = ({ eventData, sum }) => {
 	const [group, setGroup] = useState(null)
 	const t = useScopedI18n('events')
 	const tMonths = useScopedI18n('months')
-	const {userOwnedGroups} = useData()
+	const {userOwnedGroups, userGroups} = useData()
 
 	const onDelete = async () => {
 		await db.events.delete(eventData?.$id);
@@ -78,14 +78,14 @@ const EventInfo = ({ eventData, sum }) => {
 	useLayoutEffect(() => {
 		const unsub = async () =>{
 			if(eventData?.teamId){
-				const response = await getGroup(eventData?.teamId)
+				const response = userGroups.find((item)=> item.$id === eventData?.teamId)
 				setGroup(response)
 			}else{
 				setGroup(null)
 			}
 		}
 		unsub()
-	}, []);
+	}, [openDetails]);
 
 
 	// Parse the date string
@@ -100,10 +100,11 @@ const EventInfo = ({ eventData, sum }) => {
 		<>
 			<Button
 				variant="ghost"
-				className={'w-20'}
+				className={'w-14'}
 				onClick={() => setOpenDetails(true)}
+				dir={'ltr'}
 			>
-				<Info/>
+				<SquarePen className={'w-6 h-6 text-primary'} />
 			</Button>
 
 			<Sheet
@@ -124,22 +125,26 @@ const EventInfo = ({ eventData, sum }) => {
 							<UIText
 								variant={"heading"}
 								className={cn(
-									"text-primary text-center self-center",
+									"text-center self-center",
 									isStringUrdu(eventData?.name) ? 'font-urdu' : 'rtl:font-sans font-medium',
 								)}
 							>
 								{eventData?.name}
 							</UIText>
-							<p className="font-semibold text-3xl">
-								<NumericFormat
-									allowNegative={false}
-									value={Number(sum)}
-									thousandSeparator={","}
-									decimalSeparator={"."}
-									displayType="text"
-									decimalScale={2}
-								/>
-							</p>
+
+							<div className="flex flex-1 justify-center col-span-4 items-center gap-2 relative select-none pointer-events-none" dir={'ltr'}>
+								<span className="text-sm font-semibold">Rs</span>
+								<span className="font-bold text-3xl text-primary">
+									<NumericFormat
+										allowNegative={false}
+										value={Number(sum)}
+										thousandSeparator={","}
+										decimalSeparator={"."}
+										displayType="text"
+										decimalScale={2}
+									/>
+								</span>
+							</div>
 						</div>
 
 						<Table className={'lg:mt-16'}>
@@ -148,7 +153,7 @@ const EventInfo = ({ eventData, sum }) => {
 									<TableCell><UIText>{t('labelGroup')}</UIText></TableCell>
 									<TableCell className="text-right">
 										<UIText isUrdu={isStringUrdu(group?.name)}>
-											{group?.name || <p className={'italic text-muted-foreground text-sm'}>Not Shared<br className={'flex md:hidden'}/>with any Group</p>}
+											{group?.name || <UIText className={'ltr:italic text-muted-foreground'} variant={'label'}>{t('notSharedWithGroup')}</UIText>}
 										</UIText>
 									</TableCell>
 								</TableRow>
@@ -194,7 +199,13 @@ const EventInfo = ({ eventData, sum }) => {
 				</SheetContent>
 			</Sheet>
 
-			<EditEvent open={openEdit} onOpenChange={setOpenEdit} eventData={eventData} setGroup={setGroup} userOwnedGroups={userOwnedGroups} />
+			<EditEvent
+				open={openEdit}
+				onOpenChange={setOpenEdit}
+				eventData={eventData}
+				setEventData={setEventData}
+				setGroup={setGroup}
+			/>
 			<DeleteEvent
 				open={openDelete}
 				onOpenChange={setOpenDelete}
