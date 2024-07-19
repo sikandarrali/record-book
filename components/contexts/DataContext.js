@@ -14,16 +14,11 @@ export const DataProvider = ({ children }) => {
     // get User groups
     useEffect(() => {
         const getUserGroups = async () =>{
-            if(user){
-                const tempGroups = await listUserGroups()
-                setUserGroups(tempGroups.teams)
+            const tempGroups = await listUserGroups()
+            setUserGroups(tempGroups.teams)
 
-                const tempOwnedGroups = tempGroups.teams.filter((item) => item.prefs.creatorEmail === user.email);
-                setUserOwnedGroups(tempOwnedGroups)
-            }else{
-                setUserOwnedGroups([])
-                setUserGroups([])
-            }
+            const tempOwnedGroups = tempGroups.teams.filter((item) => item.prefs.creatorEmail === user.email);
+            setUserOwnedGroups(tempOwnedGroups)
         }
 
         getUserGroups()

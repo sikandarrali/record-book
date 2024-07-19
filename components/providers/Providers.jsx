@@ -44,7 +44,7 @@ const Providers = ({ children }) => {
 							draggable={'touch'}
 							theme="light"
 						/>
-						<div className="relative max-w-screen-lg lg:max-w-[600px] mx-auto">
+						<div dir={params.locale === 'ur' ? 'rtl' : 'ltr'} className="relative max-w-screen-lg lg:max-w-[600px] mx-auto">
 							{children}
 						</div>
 					</TooltipProvider>

@@ -64,9 +64,8 @@ const SwitchLanguage = ({ light, inSidebar }) => {
             let prefs = {...preferences, lang: selected}
             const response =  await account.updatePrefs(prefs)
             if(response){
-                console.log('updated')
+                ChangeLocale(selected)
             }
-            ChangeLocale(selected)
         }
     }
 

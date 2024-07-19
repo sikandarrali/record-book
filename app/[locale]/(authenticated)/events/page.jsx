@@ -2,7 +2,7 @@
 import { AddEvent } from "@/components/event/AddEvent";
 import PageContainer from "@/components/providers/PageContainer";
 import UIText from "@/components/theme/UIText";
-import { FixStickyHeaderScrollError } from "@/lib/utils";
+import {cn, FixStickyHeaderScrollError} from "@/lib/utils";
 import { motion } from "framer-motion";
 import {useEffect, useRef, useState} from "react";
 import {client, listUserGroups, teams} from "@/components/appwrite/appwrite";
@@ -14,6 +14,10 @@ import {useRouter} from "next/navigation";
 import {useAuth} from "@/components/contexts/AuthContext";
 import usePWAStatus from "@/lib/hooks/usePWAStatus";
 import InstallApp from "@/components/InstallApp/InstallApp";
+import Link from "next/link";
+import {isStringUrdu} from "@/lib/isStringUrdu";
+import {Users2} from "lucide-react";
+import {SheetTrigger} from "@/components/ui/sheet";
 
 export default function Home() {
 	const [openAddModal, setOpenAddModal] = useState(false);
@@ -46,7 +50,7 @@ export default function Home() {
 	useEffect(() => {
 		getEvents();
 		getUserGroups();
-	}, [router]);
+	}, []);
 
 	// re-populate events when created, fixes missing $id issue
 	useEffect(() => {
@@ -120,7 +124,21 @@ export default function Home() {
 						key={event.$id}
 						className={'bg-muted hover:bg-muted-foreground/10 border border-primary/20 cursor-pointer text-primary text-xl font-semibold flex items-center justify-center shadow-sm rounded-lg'}
 					>
-						<SingleEventModal eventData={event} userOwnedGroups={userOwnedGroups}/>
+						<Link
+							href={`/event/${event.$id}`}
+							className={'w-full outline-none'}
+						>
+							<UIText
+								variant={'heading'}
+								className={cn(
+									'flex flex-1 justify-center items-center px-6 md:px-8 pt-8 pb-7 relative',
+									isStringUrdu(event.name) ? 'font-urdu' : 'rtl:font-sans rtl:!font-semibold')}
+							>
+								{event?.name}
+								{event.teamId && <Users2 className={'absolute right-2 top-2 w-5 h-5'}/>}
+							</UIText>
+						</Link>
+						{/*<SingleEventModal eventData={event} userOwnedGroups={userOwnedGroups}/>*/}
 					</motion.div>
 				))}
 			</motion.div>

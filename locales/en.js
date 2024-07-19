@@ -42,6 +42,7 @@ const Translation = {
     labelShareWithGroup: "Share with Group",
     labelVenue: "Venue",
     notSharedWithGroup: "Not shared with any group",
+    numOfItemsMatchingSearch: "Items found",
     pickDate: "Pick a date",
     searchNoItems: "No items matching your search",
     searchPlaceholder: "Type to Search...",
