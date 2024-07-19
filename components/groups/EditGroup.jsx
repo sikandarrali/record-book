@@ -14,6 +14,7 @@ import {UISheetFooter} from "@/components/theme/UISheetFooter";
 import {useScopedI18n} from "@/locales/client";
 import {isStringUrdu} from "@/lib/isStringUrdu";
 import UIText from "@/components/theme/UIText";
+import {useData} from "@/components/contexts/DataContext";
 
 const EditGroupSchema = Yup.object().shape({
     name: Yup.string()
@@ -22,12 +23,12 @@ const EditGroupSchema = Yup.object().shape({
         .required("required"),
 });
 
-export const EditGroup = ({ open, onOpenChange, data, userGroups, setUserGroups}) => {
+export const EditGroup = ({ open, onOpenChange, data}) => {
     const isDesktop = useMediaQuery({
         query: "(min-width: 1024px)",
     });
     const t = useScopedI18n('groups')
-
+    const {userGroups, setUserGroups} = useData()
     const [adding, setAdding] = useState(false);
     const [disabled, setDisabled] = useState(false);
 

@@ -5,7 +5,7 @@ const PageContainer = ({ children, hideNavbar, className, noPadding }) => {
 	return (
 		<div
 			className={cn(
-				"flex flex-col w-full min-h-screen relative pt-4 gap-4",
+				"flex flex-col w-full min-h-screen relative gap-4",
 				noPadding && "p-0 gap-0",
 				className
 			)}

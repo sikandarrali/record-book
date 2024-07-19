@@ -7,7 +7,7 @@ import {Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle} from "@/
 import { Textarea } from "@/components/ui/textarea";
 import {cn, scrollToTop} from "@/lib/utils";
 import { Form, Formik } from "formik";
-import {CalendarIcon, Plus, XIcon} from "lucide-react";
+import {CalendarIcon, ChevronDown, ChevronUp, Plus, XIcon} from "lucide-react";
 import {useEffect, useState} from "react";
 import { useMediaQuery } from "react-responsive";
 import * as Yup from "yup";
@@ -54,7 +54,6 @@ export const AddEvent = ({ open, onOpenChange, userOwnedGroups }) => {
 	const [date, setDate] = useState(new Date())
 	const [calendarOpen, setCalendarOpen] = useState(false);
 
-
 	const onAdd = async (values) => {
 		setAdding(true);
 		setDisabled(true);
@@ -91,6 +90,12 @@ export const AddEvent = ({ open, onOpenChange, userOwnedGroups }) => {
 		}
 	};
 
+	useEffect(() => {
+		if(selectedGroup){
+			const groupByID = userOwnedGroups.find((g)=> g.$id === selectedGroup);
+			setSelectedGroupName(groupByID?.name)
+		}
+	}, [selectedGroup]);
 
 	return (
 		<Sheet open={open} onOpenChange={onOpenChange} defaultOpen={false}>
@@ -139,15 +144,29 @@ export const AddEvent = ({ open, onOpenChange, userOwnedGroups }) => {
 										<div className={'flex gap-4 items-center relative'}>
 											<Select onValueChange={(selected)=> setSelectedGroup(selected)} key={selectedGroup}>
 												<SelectTrigger ref={null} className="w-full h-12 flex between rtl:flex-row-reverse">
-													<span>
-														{selectedGroup ?
-															<UIText variant={'label'} className={cn(isStringUrdu(selectedGroupName) ? 'font-urdu' : 'rtl:font-sans !text-base !font-normal' )}>{selectedGroupName}</UIText>
-															:
-															<UIText variant={'label'} className={"text-muted-foreground"}>{t('selectGroupPlaceholder')}</UIText>
-														}
-													</span>
+													{selectedGroup ?
+														<UIText variant={'label'} className={cn(isStringUrdu(selectedGroupName) ? 'font-urdu' : 'rtl:font-sans !text-lg' )}>{selectedGroupName}</UIText>
+														:
+														<UIText variant={'label'} className={"text-muted-foreground"}>{t('selectGroupPlaceholder')}</UIText>
+													}
 												</SelectTrigger>
-
+												<SelectContent>
+													{userOwnedGroups.length===0 &&
+														<SelectItem
+															value={null}
+														>
+															<UIText className={'text-muted-foreground'} variant={'sm'}>{t('groupNotFound')}</UIText>
+														</SelectItem>
+													}
+													{userOwnedGroups?.map((u)=>(
+														<SelectItem
+															key={u.$id}
+															value={u.$id}
+														>
+															<UIText variant={'sm'}>{u.name}</UIText>
+														</SelectItem>
+													))}
+												</SelectContent>
 											</Select>
 											{selectedGroup &&
 												<Button
@@ -181,11 +200,11 @@ export const AddEvent = ({ open, onOpenChange, userOwnedGroups }) => {
 									</div>
 
 									<div
-										className={'flex items-center justify-center gap-1.5 rtl:gap-3 cursor-pointer text-primary'}
+										className={'flex items-center rtl:items-start justify-center gap-1.5 rtl:gap-3 cursor-pointer text-primary'}
 										onClick={()=> setAddEventDetails(!addEventDetails)}
 									>
-										{addEventDetails ? <XIcon className={'w-4 h-4'}/> : <Plus className={'w-4 h-4'}/>}
 										<UIText variant={'sm'} className={'font-medium'}>{t('addMoreDetailsText')}</UIText>
+										{addEventDetails ? <ChevronUp className={'w-6 h-6 stroke-[3] rtl:mt-1'}/> : <ChevronDown className={'w-6 h-6 stroke-[3] rtl:mt-1'}/>}
 									</div>
 
 									{addEventDetails &&

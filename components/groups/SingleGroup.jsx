@@ -18,8 +18,9 @@ import {LeaveGroup} from "@/components/groups/LeaveGroup";
 import {useScopedI18n} from "@/locales/client";
 import {isStringUrdu} from "@/lib/isStringUrdu";
 import {UISheetInfoFooter} from "@/components/theme/UISheetInfoFooter";
+import {useData} from "@/components/contexts/DataContext";
 
-const SingleGroup = ({ data, userGroups, setUserGroups }) => {
+const SingleGroup = ({ data }) => {
     const isDesktop = useMediaQuery({ query: "(min-width: 1024px)" })
     const [open, setOpen] = useState(false)
     const [usersInGroup, setUsersInGroup] = useState([])
@@ -28,7 +29,7 @@ const SingleGroup = ({ data, userGroups, setUserGroups }) => {
     const {user} = useAuth()
     const [openLeaveGroup, setOpenLeaveGroup] = useState(false)
     const t = useScopedI18n('groups')
-
+    const {userGroups, setUserGroups} = useData()
     const isOwner = data?.prefs?.creatorEmail === user.email;
 
     useEffect(() => {
@@ -172,8 +173,6 @@ const SingleGroup = ({ data, userGroups, setUserGroups }) => {
                 data={data}
                 open={openEdit}
                 onOpenChange={setOpenEdit}
-                userGroups={userGroups}
-                setUserGroups={setUserGroups}
             />
             <DeleteGroup
                 groupName={data.name}

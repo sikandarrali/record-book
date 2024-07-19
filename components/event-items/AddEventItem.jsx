@@ -72,8 +72,7 @@ export const AddEventItem = ({open, onOpenChange, eventData}) => {
 					Permission.delete(Role.user(user.$id)),
 				]);
 			}else{
-				const resp = await db.eventItems.create(eventItemData);
-				console.log("add: ", resp)
+				await db.eventItems.create(eventItemData);
 			}
 			onOpenChange(false);
 			toast.success(t('alertEventItemCreated'), ToastOptions);

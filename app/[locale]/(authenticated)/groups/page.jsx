@@ -9,22 +9,14 @@ import {AddGroup} from "@/components/groups/AddGroup";
 import SingleGroup from "@/components/groups/SingleGroup";
 import {teams} from "@/components/appwrite/appwrite";
 import {useScopedI18n} from "@/locales/client";
+import {useData} from "@/components/contexts/DataContext";
 
 export default function Page() {
 
     const [openAddGroup, setOpenAddGroup] = useState(false)
-    const [userGroups, setUserGroups] = useState([])
-    const [refresh, setRefresh] = useState([])
     const [showInformation, setShowInformation] = useState(false)
     const t = useScopedI18n('groups')
-
-    const getUserGroups = async () =>{
-        const tempGroups = await teams.list()
-        setUserGroups(tempGroups.teams)
-    }
-    useEffect(() => {
-        getUserGroups()
-    }, [refresh]);
+    const {userGroups} = useData()
 
     return (
         <PageContainer hideTopbar>
@@ -70,7 +62,7 @@ export default function Page() {
                             }}
                             className={'w-full border-b last-of-type:border-b-0'}
                         >
-                            <SingleGroup data={data} userGroups={userGroups} setUserGroups={setUserGroups} />
+                            <SingleGroup data={data} />
                         </motion.div>
                     ))
                 }
@@ -93,7 +85,7 @@ export default function Page() {
                 </Button>
             </motion.div>
 
-            <AddGroup open={openAddGroup} setRefresh={setRefresh} onOpenChange={setOpenAddGroup} setUserGroups={setUserGroups}/>
+            <AddGroup open={openAddGroup} onOpenChange={setOpenAddGroup} />
         </PageContainer>
     );
 }

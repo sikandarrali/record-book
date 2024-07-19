@@ -10,6 +10,7 @@ export const DataProvider = ({ children }) => {
     const [userOwnedGroups, setUserOwnedGroups] = useState([])
     const [userGroups, setUserGroups] = useState([])
     const router = useRouter()
+    const [dataRefetch, setDataRefetch] = useState(false)
 
     // get User groups
     useEffect(() => {
@@ -22,13 +23,14 @@ export const DataProvider = ({ children }) => {
         }
 
         getUserGroups()
-    }, [router]);
+    }, [dataRefetch]);
 
 
     const values = {
         userOwnedGroups,
         userGroups,
-        setUserGroups
+        setUserGroups,
+        setDataRefetch
     };
 
     return (

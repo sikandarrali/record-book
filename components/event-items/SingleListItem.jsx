@@ -2,7 +2,7 @@
 import { db } from "@/components/appwrite/database";
 import UIText from "@/components/theme/UIText";
 import { Button } from "@/components/ui/button";
-import { Pen, Trash2, XIcon } from "lucide-react";
+import {ChevronsRight, CornerDownLeft, CornerDownRight, Pen, Trash2, XIcon} from "lucide-react";
 import {useEffect, useState} from "react";
 import { NumericFormat } from "react-number-format";
 import { DeleteEventItem } from "./DeleteEventItem";
@@ -101,14 +101,14 @@ export const SingleListItem = ({ item }) => {
 							isUrdu={isStringUrdu(item.name)}
 							className={cn(
 								'rtl:text-right',
-								isStringUrdu(item.name) ? 'font-urdu' : 'rtl:font-sans rtl:font-medium rtl:text-lg'
+								isStringUrdu(item.name) ? 'font-urdu ltr:text-2xl' : 'rtl:font-sans rtl:font-medium rtl:text-lg'
 							)}
 						>
 							{item.name}
 						</UIText>
 
-						<div className="flex gap-2 justify-end rtl:flex-row-reverse items-center relative flex-shrink-0 select-none">
-							<span className="text-sm select-none">Rs</span>
+						<div className="flex gap-2 justify-end items-center relative flex-shrink-0 select-none" dir={'ltr'}>
+							<span className="text-sm select-none font-semibold">Rs</span>
 							<span className="font-semibold text-xl select-none text-primary">
 								<NumericFormat
 									allowNegative={false}
@@ -123,15 +123,19 @@ export const SingleListItem = ({ item }) => {
 					</div>
 
 					{item.details &&
-						<UIText
-							isUrdu={isStringUrdu(item.details)}
-							className={cn(
-								'overflow-hidden line-clamp-1 mt-1 w-3/4 text-muted-foreground text text-left rtl:text-right',
-								isStringUrdu(item.details) ? 'font-urdu' : 'rtl:font-sans rtl:text-base'
-							)}
-						>
-							{item.details}
-						</UIText>
+						<div className={'flex items-center gap-2'}>
+							<CornerDownRight className={'w-5 h-5 text-muted-foreground rtl:hidden'}/>
+							<CornerDownLeft className={'w-5 h-5 text-muted-foreground ltr:hidden'}/>
+							<UIText
+								isUrdu={isStringUrdu(item.details)}
+								className={cn(
+									'overflow-hidden line-clamp-1 mt-1 w-3/4 text-muted-foreground text text-left rtl:text-right',
+									isStringUrdu(item.details) ? 'font-urdu' : 'rtl:font-sans rtl:text-base'
+								)}
+							>
+								{item.details}
+							</UIText>
+						</div>
 					}
 				</div>
 			</SheetTrigger>
@@ -146,17 +150,16 @@ export const SingleListItem = ({ item }) => {
 
 					<div className="flex flex-col justify-center items-center my-10 lg:mt-32">
 						<UIText
-							variant={"heading"}
+							isUrdu={isStringUrdu(item.name)}
 							className={cn(
-								'text-center',
-								isStringUrdu(item.name) ? 'font-urdu' : 'rtl:font-sans rtl:font-medium rtl:text-xl'
+								isStringUrdu(item.name) ? 'font-urdu ltr:text-3xl rtl:!text-3xl' : 'rtl:font-sans rtl:font-medium rtl:text-lg'
 							)}
 						>
 							{item.name}
 						</UIText>
 
-						<div className="flex text-foreground gap-2 mt-8 justify-center items-center relative select-none pointer-events-none">
-							<span className="text-lg font-medium">Rs</span>
+						<div className="flex text-foreground gap-2 mt-8 justify-center items-center relative select-none pointer-events-none" dir={'ltr'}>
+							<span className="text-lg font-semibold">Rs</span>
 							<span className="font-bold text-3xl text-primary">
 								<NumericFormat
 									allowNegative={false}
@@ -171,7 +174,7 @@ export const SingleListItem = ({ item }) => {
 
 						{item.details &&
 							<UIText className={'mt-20 self-start flex flex-col px-2'} isUrdu={isStringUrdu(item.details)}>
-								<UIText className={'font-semibold text-sm mb-2'}>{t('labelItemDetails')}</UIText>
+								<UIText className={'mb-2 text-primary'} weight={'semibold'}>{t('labelItemDetails')}</UIText>
 								<UIText className={cn(
 									isStringUrdu(item.details) ? 'font-urdu' : 'rtl:font-sans rtl:text-base'
 								)}>{item.details}</UIText>

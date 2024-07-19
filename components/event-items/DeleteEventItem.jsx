@@ -17,13 +17,13 @@ export const DeleteEventItem = ({ open, onOpenChange, personName, onDelete }) =>
 		<AlertDialog open={open} onOpenChange={onOpenChange}>
 			<AlertDialogContent className={"w-[90%] rounded-xl overflow-auto"}>
 				<AlertDialogHeader className={''}>
-					<AlertDialogTitle className={'text-primary flex items-center justify-center gap-2'}>
+					<AlertDialogTitle className={'text-primary flex items-center justify-center gap-2 font-normal'}>
 						<TriangleAlert className={'w-5 h-5'}/>
 						<UIText variant={'heading'}>{t('deleteEventItem')}</UIText>
 					</AlertDialogTitle>
 					<AlertDialogDescription className={"flex flex-col text-base items-center gap-1 !my-5"}>
 						<UIText>{t('deleteEventItemText')}</UIText>
-						<UIText className={'text-primary'}>{personName}</UIText>
+						<UIText className={'text-primary'} weight={'semibold'}>{personName}</UIText>
 					</AlertDialogDescription>
 				</AlertDialogHeader>
 
