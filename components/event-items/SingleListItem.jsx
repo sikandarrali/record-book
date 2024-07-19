@@ -123,14 +123,14 @@ export const SingleListItem = ({ item }) => {
 					</div>
 
 					{item.details &&
-						<div className={'flex items-center gap-2'}>
+						<div className={'flex items-center gap-2 mt-1'}>
 							<CornerDownRight className={'w-5 h-5 text-muted-foreground rtl:hidden'}/>
 							<CornerDownLeft className={'w-5 h-5 text-muted-foreground ltr:hidden'}/>
 							<UIText
 								isUrdu={isStringUrdu(item.details)}
 								className={cn(
 									'overflow-hidden line-clamp-1 mt-1 w-3/4 text-muted-foreground text text-left rtl:text-right',
-									isStringUrdu(item.details) ? 'font-urdu' : 'rtl:font-sans rtl:text-base'
+									isStringUrdu(item.details) ? 'font-urdu rtl:text-xl' : 'rtl:font-sans rtl:text-base'
 								)}
 							>
 								{item.details}

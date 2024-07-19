@@ -184,10 +184,10 @@ const EventPage = ({ userOwnedGroups }) => {
 
 	return (
 		<PageContainer noPadding>
-			<div
+			<motion.div
 				className={cn("w-full flex flex-col justify-start border-0")}
-				// side={isDesktop ? "right" : "bottom"}
-				// onOpenAutoFocus={(e) => e.preventDefault()}
+				initial={{opacity: 0}}
+				animate={{opacity: 1, transition:{ease: "easeInOut", duration: 0.75}}}
 			>
 				<div className={'relative flex flex-col flex-1'}>
 					<Suspense fallback={<LoadingFallback />}>
@@ -293,7 +293,11 @@ const EventPage = ({ userOwnedGroups }) => {
 
 								{searchValue === "" && items.length > 0 &&
 									<div className={'flex flex-col w-full justify-center items-center mt-8 !border-t-0'}>
-										{!hasMoreItems && <UIText className="mt-4 font-medium ltr:italic text-muted-foreground text-center">{t('allItemsShown')}</UIText>}
+										{!hasMoreItems &&
+											<UIText className="mt-4 font-medium ltr:italic text-muted-foreground text-center flex items-center">
+												{t('allItemsShown', { count: <span className={'text-primary px-2 font-sans text-2xl font-semibold'}>{items.length}</span> })}
+											</UIText>
+										}
 
 										{loadingItems ? (
 												<Button
@@ -304,7 +308,7 @@ const EventPage = ({ userOwnedGroups }) => {
 													dir={'ltr'}
 												>
 													<ReloadIcon className="h-4 w-4 animate-spin" />
-													<UIText>{t('btnLoading')}</UIText>
+													<UIText variant={'button'}>{t('btnLoading')}</UIText>
 												</Button>
 											) :
 											hasMoreItems && items.length > itemsPerPage && (
@@ -313,7 +317,7 @@ const EventPage = ({ userOwnedGroups }) => {
 													variant={'secondary'}
 													className={'w-40 rtl:w-60'}
 												>
-													<UIText>{t('btnLoadMore')}</UIText>
+													<UIText variant={'button'}>{t('btnLoadMore')}</UIText>
 												</Button>
 											)
 										}
@@ -344,7 +348,7 @@ const EventPage = ({ userOwnedGroups }) => {
 						/>
 					</Suspense>
 				</div>
-			</div>
+			</motion.div>
 		</PageContainer>
 	);
 };

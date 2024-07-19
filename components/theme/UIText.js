@@ -9,7 +9,7 @@ const UIText = ({ className, variant, weight, isUrdu, children, ...props }) => {
 				variant === "sm" && "text-lg",
 				variant === "lg" && "ltr:text-lg rtl:text-xl",
 				variant === "heading" && "ltr:font-semibold ltr:text-xl rtl:text-2xl",
-				variant === "button" && "rtl:text-xl ltr:text-lg",
+				variant === "button" && "rtl:text-xl ltr:text-base",
 				variant === "label" && "ltr:text-lg ltr:font-medium rtl:text-xl",
 				isUrdu ? 'font-urdu' : 'font-sans',
 				weight === 'medium' && 'ltr:font-medium',

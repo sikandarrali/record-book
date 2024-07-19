@@ -105,7 +105,7 @@ export default async function RootLayout({ children, params }) {
 		<HolyLoader
 			// color="#E11D48"
 			color="#000"
-			height="4px"
+			height="5px"
 			speed={250}
 			easing="linear"
 			showSpinner

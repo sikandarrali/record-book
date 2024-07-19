@@ -20,7 +20,7 @@ const Translation = {
     alertEventUpdated: "Event Updated",
     alertException: "Unable to process your request",
     alertNothingToUpdate: "Nothing to update",
-    allItemsShown: "All items shown",
+    allItemsShown: "All {count} items loaded",
     btnCancel: "Cancel",
     btnLoadMore: "Load more",
     btnLoading: "Loading...",
