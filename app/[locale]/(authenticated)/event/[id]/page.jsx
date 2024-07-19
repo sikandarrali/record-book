@@ -6,7 +6,7 @@ import LoadingFallback from "@/components/loaders/LoadingFallback";
 import UIText from "@/components/theme/UIText";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import {MoveLeft, Plus, Users2, XIcon} from "lucide-react";
+import {Info, MoveLeft, Plus, Users2, XIcon} from "lucide-react";
 import {Suspense, useCallback, useEffect, useLayoutEffect, useRef, useState} from "react";
 import { NumericFormat } from "react-number-format";
 import {db} from "@/components/appwrite/database";
@@ -190,37 +190,41 @@ const EventPage = ({ userOwnedGroups }) => {
 			>
 				<div className={'relative flex flex-col flex-1'}>
 					<Suspense fallback={<LoadingFallback />}>
-						<div className="flex flex-col z-10" dir={'ltr'}>
+						<div className="flex flex-col z-10">
 							{/* header */}
-							<div className="flex py-2 justify-between relative items-center w-full z-20 border-b px-4 border-primary-foreground/40 relative" ref={headerRef}>
-								<div
+							<div className="flex gap-4 pb-2 pt-2.5 rtl:flex-row-reverse justify-between items-center w-full z-20 border-b border-primary-foreground/40 relative" ref={headerRef}>
+
+								<Button
+									variant="ghost"
+									className={'w-20'}
 									onClick={()=> router.push('/events')}
-									className={'px-3 py-2 select-none cursor-pointer -ml-1'}
 								>
 									<MoveLeft/>
-								</div>
+								</Button>
 
-								<div className="flex items-center text-primary gap-2 relative select-none pointer-events-none">
+								<div className="flex flex-1 justify-center col-span-4 items-center text-primary gap-2 relative select-none pointer-events-none">
 									<span className="text-sm">Rs</span>
 									<span className="font-bold text-xl">
-                                    <NumericFormat
-										allowNegative={false}
-										value={totalSum}
-										thousandSeparator={","}
-										decimalSeparator={"."}
-										displayType="text"
-										decimalScale={2}
-									/>
-                                </span>
+										<NumericFormat
+											allowNegative={false}
+											value={totalSum}
+											thousandSeparator={","}
+											decimalSeparator={"."}
+											displayType="text"
+											decimalScale={2}
+										/>
+									</span>
 								</div>
-							</div>
 
-							<div className={'flex items-center gap-4 px-4 py-4 border-y rtl:flex-row-reverse text-primary bg-muted sticky top-40'}>
 								<EventInfo
 									eventData={eventData}
 									sum={totalSum}
 									userOwnedGroups={userOwnedGroups}
 								/>
+
+							</div>
+
+							<div className={'flex items-center justify-center text-center gap-4 px-4 py-4 border-y text-primary bg-muted sticky top-40'}>
 								<UIText
 									variant={"heading"}
 									className={cn(
@@ -260,9 +264,19 @@ const EventPage = ({ userOwnedGroups }) => {
 
 							<UIText variant={'sm'} className={'py-1.5 font-medium flex items-center justify-center px-6 gap-2 text-muted-foreground'}>
 								{searchValue === "" ?
-									<>{t('totalEntries')} <span className={'text-primary font-semibold text-base'}>{items.length}</span></>
+									<>
+										{t('totalEntries')}
+										<span className={'text-primary font-semibold text-xl'}>
+											{items.length}
+										</span>
+									</>
 									:
-									<>{t('numOfItemsMatchingSearch')} <span className={'text-primary font-semibold text-base'}>{visibleItems.length}</span></>
+									<>
+										{t('numOfItemsMatchingSearch')}
+										<span className={'text-primary font-semibold text-xl'}>
+											{visibleItems.length}
+										</span>
+									</>
 								}
 							</UIText>
 

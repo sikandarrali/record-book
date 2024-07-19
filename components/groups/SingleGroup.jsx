@@ -72,7 +72,7 @@ const SingleGroup = ({ data, userGroups, setUserGroups }) => {
                     >
                         {data.name}
                     </UIText>
-                    <UIText className={'text-muted-foreground text-sm rtl:text-sm rtl:mt-0 lowercase rtl:text-right flex gap-2'}>
+                    <UIText className={'text-muted-foreground text-sm rtl:text-lg rtl:mt-0 lowercase rtl:text-right flex gap-2'}>
                         <span>{data.total-1}</span>
                         <span>{t('labelMembers')}</span>
                     </UIText>
@@ -92,7 +92,7 @@ const SingleGroup = ({ data, userGroups, setUserGroups }) => {
                             variant={"heading"}
                             className={cn(
                                 "text-left flex items-center flex-wrap gap-2 border-b pb-4 justify-between text-primary",
-                                isStringUrdu(data.name) && 'font-urdu'
+                                isStringUrdu(data.name) ? 'font-urdu' : 'rtl:font-sans rtl:!font-medium rtl:text-xl'
                             )}
                         >
                             {data.name}

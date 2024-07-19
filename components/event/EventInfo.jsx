@@ -77,9 +77,11 @@ const EventInfo = ({ eventData, sum }) => {
 	// set group
 	useLayoutEffect(() => {
 		const unsub = async () =>{
-			if(eventData?.teamId === undefined || eventData?.teamId === null || eventData?.teamId===""){
+			if(eventData?.teamId){
 				const response = await getGroup(eventData?.teamId)
 				setGroup(response)
+			}else{
+				setGroup(null)
 			}
 		}
 		unsub()
@@ -96,7 +98,11 @@ const EventInfo = ({ eventData, sum }) => {
 
 	return (
 		<>
-			<Button variant="ghost" size="icon" onClick={() => setOpenDetails(true)}>
+			<Button
+				variant="ghost"
+				className={'w-20'}
+				onClick={() => setOpenDetails(true)}
+			>
 				<Info/>
 			</Button>
 

@@ -32,7 +32,7 @@ const Navbar = () => {
 	}
 
 	return (
-		<div className="flex items-center justify-between sticky top-0 z-[1000] bg-white shadow-sm p-4" dir={'ltr'}>
+		<div className="flex items-center justify-between sticky top-0 z-[49] bg-white shadow-sm p-4" dir={'ltr'}>
 
 			<Image
 				src={Logo}
