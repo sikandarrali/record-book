@@ -20,7 +20,7 @@ const Translation = {
     alertEventUpdated: "ایونٹ اپ ڈیٹ ہو گیا ہے",
     alertException: "آپ کی درخواست پرعمل نہیں ہو سکتا",
     alertNothingToUpdate: "اپ ڈیٹ کرنے کے لئے کچھ بھی نہیں",
-    allItemsShown: "تمام ریکارڈ لوڈ کر دیئے گئے ہیں",
+    allItemsShown: "تمام {count} ریکارڈ لوڈ کر دیئے گئے ہیں",
     btnCancel: "منسوخ کریں۔",
     btnLoadMore: "مزید ریکارڈ لوڈ کریں",
     btnLoading: "لوڈ ہو رہا ہے",
