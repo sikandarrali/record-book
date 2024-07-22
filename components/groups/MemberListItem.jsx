@@ -45,17 +45,17 @@ export const MemberListItem = ({data, teamID, setUsersInGroup, groupName, isGrou
                     <div className={'flex gap-2 items-stretch text-xs'}>
                         {isOwner  &&
                             <Badge className={'bg-muted-foreground'}>
-                                <UIText variant={'xs'}>{t('badgeAdmin')}</UIText>
+                                <UIText variant={'xs'} className={'rtl:-mt-2'} text={t('badgeAdmin')}/>
                             </Badge>
                         }
                         {isMember &&
                             <Badge variant={'secondary'}>
-                                <UIText variant={'xs'}>{t('badgeMember')}</UIText>
+                                <UIText variant={'xs'} className={'rtl:-mt-2'} text={t('badgeMember')}/>
                             </Badge>
                         }
                         {user.email === data.userEmail &&
                             <Badge variant={'outline'} className={'text-green-500 border-green-500'}>
-                                <UIText variant={'xs'}>{t('badgeYou')}</UIText>
+                                <UIText variant={'xs'} className={'rtl:-mt-1.5'} text={t('badgeYou')}/>
                             </Badge>
                         }
                     </div>
@@ -63,11 +63,11 @@ export const MemberListItem = ({data, teamID, setUsersInGroup, groupName, isGrou
                     <Tooltip>
                         <TooltipTrigger>
                             <Badge variant={'outline'} className={'text-xs bg-white border-destructive text-destructive'}>
-                                <UIText variant={'xs'}>{t('badgePending')}</UIText>
+                                <UIText variant={'xs'} className={'rtl:-mt-1'} text={t('badgePending')}/>
                             </Badge>
                         </TooltipTrigger>
                         <TooltipContent className={'bg-foreground'}>
-                            <UIText weight={'medium'}>{t('tooltipPendingUser')}</UIText>
+                            <UIText variant={'sm'} text={t('tooltipPendingUser')}/>
                         </TooltipContent>
                     </Tooltip>
                 }

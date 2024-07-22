@@ -52,6 +52,7 @@ const EventInfo = ({ eventData, setEventData, sum }) => {
 	const [group, setGroup] = useState(null)
 	const t = useScopedI18n('events')
 	const tMonths = useScopedI18n('months')
+	const tGeneral = useScopedI18n('general')
 	const {userOwnedGroups, userGroups} = useData()
 
 	const onDelete = async () => {
@@ -122,15 +123,7 @@ const EventInfo = ({ eventData, setEventData, sum }) => {
 					<div className="flex flex-col w-full min-h-full pt-4 justify-start">
 
 						<div className="flex flex-col justify-center items-center gap-5 my-10 lg:mt-32">
-							<UIText
-								variant={"heading"}
-								className={cn(
-									"text-center self-center",
-									isStringUrdu(eventData?.name) ? 'font-urdu' : 'rtl:font-sans font-medium',
-								)}
-							>
-								{eventData?.name}
-							</UIText>
+							<UIText variant={"heading"} text={eventData?.name}/>
 
 							<div className="flex flex-1 justify-center col-span-4 items-center gap-2 relative select-none pointer-events-none" dir={'ltr'}>
 								<span className="text-sm font-semibold">Rs</span>
@@ -150,40 +143,30 @@ const EventInfo = ({ eventData, setEventData, sum }) => {
 						<Table className={'lg:mt-16'}>
 							<TableBody className="font-medium text-base">
 								<TableRow className={'border-b-muted'}>
-									<TableCell><UIText>{t('labelGroup')}</UIText></TableCell>
-									<TableCell className="text-right">
-										<UIText isUrdu={isStringUrdu(group?.name)}>
-											{group?.name || <UIText className={'ltr:italic text-muted-foreground'} variant={'label'}>{t('notSharedWithGroup')}</UIText>}
-										</UIText>
+									<TableCell><UIText className={'text-muted-foreground'} text={t('labelGroup')}/></TableCell>
+									<TableCell>
+										<UIText
+											variant={'label'}
+											text={group?.name || t('notSharedWithGroup')}
+										/>
 									</TableCell>
 								</TableRow>
 								<TableRow className={'border-b-muted'}>
-									<TableCell><UIText>{t('labelDate')}</UIText></TableCell>
-									<TableCell className="text-right">
-										<p className={'flex gap-0.5 rtl:gap-2 items-center rtl:justify-end flex-row-reverse'}>
-											{eventData?.date ?
-												<>
-													<UIText className={'rtl:font-sans'}>{year}</UIText>
-													<span className={'w-2 h-0.5 bg-foreground rtl:hidden'}/>
-													<UIText>{tMonths(month.toLowerCase())}</UIText>
-													<span className={'w-2 h-0.5 bg-foreground rtl:hidden'}/>
-													<UIText className={'rtl:font-sans'}>{day}</UIText>
-												</>
-												: '-'
-											}
-										</p>
+									<TableCell><UIText className={'text-muted-foreground'} text={t('labelDate')}/></TableCell>
+									<TableCell>
+										{eventData?.date ? <UIText text={`${day} ${tMonths(month.toLowerCase())+tGeneral('comma')} ${year}`}/> : '-'}
 									</TableCell>
 								</TableRow>
 								<TableRow className={'border-b-muted'}>
-									<TableCell><UIText>{t('labelVenue')}</UIText></TableCell>
-									<TableCell className="text-right">
-										<UIText isUrdu={isStringUrdu(group?.venue)}>{eventData?.venue || '-'}</UIText>
+									<TableCell><UIText className={'text-muted-foreground'} text={t('labelVenue')}/></TableCell>
+									<TableCell>
+										<UIText text={eventData?.venue || '-'}/>
 									</TableCell>
 								</TableRow>
 								<TableRow className={'border-b-muted'}>
-									<TableCell><UIText>{t('labelDetails')}</UIText></TableCell>
-									<TableCell className="text-right">
-										<UIText isUrdu={isStringUrdu(group?.details)}>{eventData?.details || '-'}</UIText>
+									<TableCell><UIText className={'text-muted-foreground'} text={t('labelDetails')}/></TableCell>
+									<TableCell>
+										<UIText text={eventData?.details || '-'}/>
 									</TableCell>
 								</TableRow>
 							</TableBody>

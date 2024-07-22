@@ -36,7 +36,8 @@ const InstallApp = () => {
 
     return (
         <Button onClick={handleInstallClick} className={'flex items-center gap-2'}>
-            <Download className={'w-4 h-4'}/> <UIText variant={'xs'} weight={'semibold'}>{t('btn.installApp')}</UIText>
+            <Download className={'w-4 h-4'} />
+            <UIText variant={'xs'} weight={'semibold'} className={'rtl:-mt-1.5'} text={t('btn.installApp')} />
         </Button>
     );
 };

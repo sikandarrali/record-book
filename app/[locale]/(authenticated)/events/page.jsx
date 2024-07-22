@@ -2,22 +2,17 @@
 import { AddEvent } from "@/components/event/AddEvent";
 import PageContainer from "@/components/providers/PageContainer";
 import UIText from "@/components/theme/UIText";
-import {cn, FixStickyHeaderScrollError} from "@/lib/utils";
+import {FixStickyHeaderScrollError} from "@/lib/utils";
 import { motion } from "framer-motion";
 import {useEffect, useRef, useState} from "react";
-import {client, listUserGroups, teams} from "@/components/appwrite/appwrite";
+import {client, teams} from "@/components/appwrite/appwrite";
 import {db} from "@/components/appwrite/database";
 import {Query} from "appwrite";
-import SingleEventModal from "@/components/event/SingleEventModal";
 import {useScopedI18n} from "@/locales/client";
 import {useRouter} from "next/navigation";
 import {useAuth} from "@/components/contexts/AuthContext";
-import usePWAStatus from "@/lib/hooks/usePWAStatus";
-import InstallApp from "@/components/InstallApp/InstallApp";
 import Link from "next/link";
-import {isStringUrdu} from "@/lib/isStringUrdu";
 import {Users2} from "lucide-react";
-import {SheetTrigger} from "@/components/ui/sheet";
 
 export default function Home() {
 	const [openAddModal, setOpenAddModal] = useState(false);
@@ -26,7 +21,6 @@ export default function Home() {
 	const [events, setEvents] = useState([])
 	const [userOwnedGroups, setUserOwnedGroups] = useState([])
 	const t = useScopedI18n('events');
-	const router = useRouter()
 	const {user} = useAuth()
 
 	const getEvents = async () =>{
@@ -88,7 +82,7 @@ export default function Home() {
 	return (
 		<PageContainer hideTopbar>
 
-			<UIText variant="heading" className={'text-primary'}>{t('title')}</UIText>
+			<UIText variant="heading" className={'text-primary'} text={t('title')}/>
 
 			<motion.div
 				initial={{ opacity: 0 }}
@@ -108,9 +102,9 @@ export default function Home() {
 						transition: { delay: 0.3 },
 					}}
 					onClick={() => setOpenAddModal(!openAddModal)}
-					className="border-4 w-full border-dashed border-primary/30 hover:bg-muted cursor-pointer text-center justify-center flex items-center px-6 py-8 rounded-md"
+					className="border-4 w-full border-dashed border-primary/30 hover:bg-muted cursor-pointer text-center justify-center flex items-center px-6 py-9 rtl:py-6 rounded-md"
 				>
-					<UIText variant={'heading'}>{t('addEvent')}</UIText>
+					<UIText variant={'heading'} text={t('addEvent')}/>
 				</motion.div>
 
 				{events.map((event, i) => (
@@ -122,23 +116,14 @@ export default function Home() {
 							transition: { delay: 0.3 + i / 10 },
 						}}
 						key={event.$id}
-						className={'bg-muted hover:bg-muted-foreground/10 border border-primary/20 cursor-pointer text-primary text-xl font-semibold flex items-center justify-center shadow-sm rounded-lg'}
 					>
 						<Link
 							href={`/event/${event.$id}`}
-							className={'w-full outline-none'}
+							className={'relative bg-muted p-8 hover:bg-muted-foreground/10 border border-primary/20 cursor-pointer text-primary flex items-center justify-center shadow-sm rounded-lg text-center outline-none'}
 						>
-							<UIText
-								variant={'heading'}
-								className={cn(
-									'flex flex-1 justify-center items-center px-6 md:px-8 pt-8 pb-7 relative',
-									isStringUrdu(event.name) ? 'font-urdu' : 'rtl:font-sans rtl:!font-semibold')}
-							>
-								{event?.name}
-								{event.teamId && <Users2 className={'absolute right-2 top-2 w-5 h-5'}/>}
-							</UIText>
+							<UIText variant={'heading'} text={event?.name} />
+							{event.teamId && <Users2 className={'absolute right-2 top-2 w-5 h-5'}/>}
 						</Link>
-						{/*<SingleEventModal eventData={event} userOwnedGroups={userOwnedGroups}/>*/}
 					</motion.div>
 				))}
 			</motion.div>

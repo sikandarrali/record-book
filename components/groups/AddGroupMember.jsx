@@ -1,18 +1,18 @@
 import {Form, Formik} from "formik";
-import FormLabel from "@/components/theme/FormLabel";
 import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
 import {Asterisk, Loader2Icon, Plus} from "lucide-react";
 import * as Yup from "yup";
-import {useId, useState} from "react";
+import {useState} from "react";
 import {teams} from "@/components/appwrite/appwrite";
 import {toast} from "react-toastify";
 import {ToastOptions} from "@/lib/ToastOptions";
 import {cn, scrollToTop} from "@/lib/utils";
 import {ParseErrorCodes} from "@/lib/parseErrorCodes";
-import {useI18n, useScopedI18n} from "@/locales/client";
+import {useScopedI18n} from "@/locales/client";
 import UIText from "@/components/theme/UIText";
 import {isStringUrdu} from "@/lib/isStringUrdu";
+import {UITextInput} from "@/components/theme/UITextInput";
 
 
 const AddMemberSchema = Yup.object().shape({
@@ -77,34 +77,33 @@ export const AddGroupMember = ({groupID, setUsersInGroup}) =>{
                   setFieldValue,
               }) => (
                 <Form className="flex gap-4 w-full items-stretch justify-between" dir={'ltr'}>
-                    <UIText isUrdu={isStringUrdu(values.email)} className={'flex-1 flex w-full'}>
+                    <div className={'flex-1 flex w-full relative'}>
                         {errors.email && touched.email &&
-                            <span className={cn("absolute left-0 -top-7 flex items-center text-red-500 gap-1")}>
-                                <Asterisk className="w-4 h-4 shrink-0" />
-                                <span className={'text-base'}>
-                                    {errors.email === 'invalid' && tLabel('invalid')}
-                                    {errors.email === 'required' && tLabel('required')}
-                                </span>
-                            </span>
+                            <div className={cn("absolute left-0 -top-9 flex rtl:flex-row-reverse items-center text-red-500 gap-1")}>
+                                <Asterisk className="w-4 h-4 shrink-0 rtl:mt-2" />
+                                {errors.email === 'invalid' && <UIText variant={'sm'} text={tLabel('invalid')}/>}
+                                {errors.email === 'required' && <UIText variant={'sm'} text={tLabel('required')}/>}
+                            </div>
                         }
-                        <Input
+                        <UITextInput
                             onChange={handleChange}
                             onBlur={handleBlur}
                             name="email"
                             disabled={disabled}
                             placeholder={t('userEmailPlaceholder')}
                             value={values.email}
-                            className={cn('normal-case rtl:text-left rtl:font-urdu', isStringUrdu(values.email) ? 'font-urdu' : 'rtl:font-sans')}
+                            className={'lowercase'}
                         />
-                    </UIText>
+                    </div>
 
                     <Button
                         disabled={disabled}
                         type={'submit'}
                     >
-                        {adding ? (
-                            <Loader2Icon className="animate animate-spin w-5 h-5 stroke-[3]" />
-                        ) : <UIText variant={'button    '}>{t('btnAddMember')}</UIText>
+                        {adding ?
+                            <Loader2Icon className="animate animate-spin w-6 h-6 stroke-[3]" />
+                            :
+                            <Plus className="w-6 h-6 stroke-[3]" />
                         }
                     </Button>
                 </Form>

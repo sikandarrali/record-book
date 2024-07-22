@@ -7,10 +7,10 @@ export const UIDialogFooter = ({onDelete, onOpenChange, actionLabel, cancelLabel
     return(
         <AlertDialogFooter className={'!flex-row items-center !justify-between gap-4'} dir={'ltr'}>
             <AlertDialogCancel className={'mt-0'} onClick={() => onDelete()}>
-                <UIText variant={'button'}>{actionLabel || t('btn.yesDelete')}</UIText>
+                <UIText variant={'button'} text={actionLabel || t('btn.yesDelete')}/>
             </AlertDialogCancel>
             <AlertDialogAction onClick={() => onOpenChange(false)}>
-                <UIText variant={'button'}>{cancelLabel || t('btn.cancel')}</UIText>
+                <UIText variant={'button'} text={cancelLabel || t('btn.cancel')}/>
             </AlertDialogAction>
         </AlertDialogFooter>
     )

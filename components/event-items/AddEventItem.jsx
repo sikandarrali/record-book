@@ -22,6 +22,8 @@ import {useAuth} from "@/components/contexts/AuthContext";
 import {UISheetFooter} from "@/components/theme/UISheetFooter";
 import {useScopedI18n} from "@/locales/client";
 import {isStringUrdu} from "@/lib/isStringUrdu";
+import {UITextInput} from "@/components/theme/UITextInput";
+import {UITextArea} from "@/components/theme/UITextArea";
 
 const AddEventItemSchema = Yup.object().shape({
 	name: Yup.string()
@@ -97,7 +99,7 @@ export const AddEventItem = ({open, onOpenChange, eventData}) => {
 				<SheetHeader className={'hidden'}><SheetTitle/><SheetDescription /></SheetHeader>
 
 				<div className="flex flex-col gap-5 max-w-lg mx-auto items-center lg:py-10">
-					<UIText className={'text-primary self-start py-6'} weight={'semibold'} variant={'heading'}>{t('addEventItem')}</UIText>
+					<UIText className={'text-primary self-start py-6'} weight={'semibold'} variant={'heading'} text={t('addEventItem')}/>
 
 					<Formik
 						initialValues={{
@@ -125,15 +127,12 @@ export const AddEventItem = ({open, onOpenChange, eventData}) => {
 										errors={errors.name}
 										touched={touched.name}
 									/>
-									<UIText isUrdu={isStringUrdu(values.name)}>
-										<Input
-											onChange={handleChange}
-											onBlur={handleBlur}
-											name="name"
-											disabled={disabled}
-											className={cn(isStringUrdu(values.name) ? 'font-urdu' : 'font-sans')}
-										/>
-									</UIText>
+									<UITextInput
+										onChange={handleChange}
+										onBlur={handleBlur}
+										name="name"
+										disabled={disabled}
+									/>
 								</div>
 								<div className="flex flex-col">
 									<FormLabel
@@ -161,15 +160,12 @@ export const AddEventItem = ({open, onOpenChange, eventData}) => {
 										errors={errors.details}
 										touched={touched.details}
 									/>
-									<UIText isUrdu={isStringUrdu(values.details)}>
-										<Textarea
-											onChange={handleChange}
-											onBlur={handleBlur}
-											name="details"
-											disabled={disabled}
-											className={cn(isStringUrdu(values.details) ? 'font-urdu' : 'font-sans')}
-										/>
-									</UIText>
+									<UITextArea
+										onChange={handleChange}
+										onBlur={handleBlur}
+										name="details"
+										disabled={disabled}
+									/>
 								</div>
 
 								<UISheetFooter

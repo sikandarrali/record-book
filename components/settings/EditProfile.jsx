@@ -1,6 +1,5 @@
 "use client";
 import FormLabel from "@/components/theme/FormLabel";
-import { Input } from "@/components/ui/input";
 import {Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle} from "@/components/ui/sheet";
 import {cn, scrollToTop} from "@/lib/utils";
 import { Form, Formik } from "formik";
@@ -12,9 +11,9 @@ import {toast} from "react-toastify";
 import {account} from "@/components/appwrite/appwrite";
 import {useAuth} from "@/components/contexts/AuthContext";
 import {UISheetFooter} from "@/components/theme/UISheetFooter";
-import {isStringUrdu} from "@/lib/isStringUrdu";
 import UIText from "@/components/theme/UIText";
 import {useScopedI18n} from "@/locales/client";
+import {UITextInput} from "@/components/theme/UITextInput";
 
 const EditGroupSchema = Yup.object().shape({
     name: Yup.string()
@@ -31,8 +30,7 @@ export const EditProfile = ({ open, onOpenChange }) => {
     const [adding, setAdding] = useState(false);
     const [disabled, setDisabled] = useState(false);
     const {user, setUser} = useAuth()
-    const t = useScopedI18n('editProfile');
-    const tBtn = useScopedI18n('general.btn');
+    const t = useScopedI18n('settings.profile');
 
     const onUpdate = async (values) => {
         setAdding(true);
@@ -63,17 +61,15 @@ export const EditProfile = ({ open, onOpenChange }) => {
     return (
         <Sheet open={open} onOpenChange={onOpenChange} defaultOpen={false}>
             <SheetContent
-                className={cn("pb-8 lg:pb-14 overflow-auto max-h-fit")}
+                className={cn("pb-20 lg:pb-14 overflow-auto max-h-fit")}
                 side={isDesktop ? "right" : "bottom"}
                 onOpenAutoFocus={(e) => e.preventDefault()}
             >
                 <div className={'hidden'}><SheetHeader><SheetTitle/><SheetDescription/></SheetHeader></div>
-                <div className="flex flex-col w-full min-h-full pt-4 justify-start">
+                <div className="flex flex-col w-full pt-4 justify-start">
                     {/* Date & Close */}
                     <div className="flex items-center space-x-2 justify-between mb-4">
-                        <UIText variant={'heading'} className="text-primary">
-                            {t('title')}
-                        </UIText>
+                        <UIText variant={'heading'} className="text-primary" text={t('editProfile')}/>
                     </div>
                     <div className="flex flex-col gap-5 w-full items-center justify-center py-6 lg:py-10">
                         <Formik
@@ -93,22 +89,19 @@ export const EditProfile = ({ open, onOpenChange }) => {
                                   handleBlur
                               }) => (
                                 <Form className="flex flex-col w-full space-y-6">
-                                    <div className="flex flex-col">
+                                    <div className="flex flex-col gap-2">
                                         <FormLabel
                                             title={t('name')}
                                             errors={errors.name}
                                             touched={touched.name}
                                         />
-                                        <UIText isUrdu={isStringUrdu(values.name)}>
-                                            <Input
-                                                onChange={handleChange}
-                                                onBlur={handleBlur}
-                                                name="name"
-                                                disabled={disabled}
-                                                value={values.name}
-                                                className={cn(isStringUrdu(values.name) ? 'font-urdu' : 'rtl:font-sans')}
-                                            />
-                                        </UIText>
+                                        <UITextInput
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
+                                            name="name"
+                                            disabled={disabled}
+                                            value={values.name}
+                                        />
                                     </div>
 
                                     <UISheetFooter

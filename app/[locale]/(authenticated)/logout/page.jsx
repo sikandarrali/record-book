@@ -17,7 +17,9 @@ const Page = () => {
 		onLogout()
 	};
 
-	return <Button onClick={()=> onLogout()}><UIText>{t('text')}{t('btnLogout')}</UIText></Button>;
+	return <Button onClick={()=> onLogout()}>
+		<UIText text={t('text') + t('btnLogout')}></UIText>
+	</Button>;
 };
 
 export default Page;

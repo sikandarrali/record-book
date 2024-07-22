@@ -3,6 +3,12 @@
 Record all your Shadi Expense in one place.
 
 ## Changelog
+
+### 3.0
+- Added support to change Font Size of App
+- Fully functional, multilingual supported UIText, UITextInput & UITextArea components
+- Added new loader and lots of other enhancements.
+
 ### 2.0
 - Multiple Languages support: Urdu, English
 - Adpat UI based on Language
