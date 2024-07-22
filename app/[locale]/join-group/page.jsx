@@ -83,26 +83,26 @@ const Page = () => {
 						<div className={'flex flex-col w-full'}>
 							<div className={'flex w-full flex-1 gap-2 border-2 border-green-400 rtl:flex-row-reverse rounded-md p-3 px-4'}>
 								<Check className={'text-green-500 stroke-[3] mt-0.5'}/>
-								<UIText className={'flex flex-col gap-1'}>
-									<UIText className={'text-green-500'}>{t('titleJoined')}</UIText>
-									<UIText>{t('textJoined')}</UIText>
-								</UIText>
+								<div className={'flex flex-col gap-1'}>
+									<UIText className={'text-green-500'} text={t('titleJoined')}/>
+									<UIText text={t('textJoined')}/>
+								</div>
 							</div>
 						</div>
 					:
 						<div className={'flex flex-col w-full'}>
 							<div className={'flex w-full flex-1 gap-2 border-2 border-red-400 rtl:flex-row-reverse rounded-md p-3 px-4'}>
 								<XIcon className={'text-red-700 stroke-[3] mt-0.5'}/>
-								<UIText className={'flex flex-col gap-1'}>
-									<span className={'text-red-700 font-semibold'}>{alreadyJoined ? t('alreadyJoined') : t('unableToJoin')}</span>
-									<span>{error.text}</span>
-								</UIText>
+								<div className={'flex flex-col gap-1'}>
+									<UIText className={'text-red-700'} weight={'semibold'} text={alreadyJoined ? t('alreadyJoined') : t('unableToJoin')}/>
+									<UIText text={error.text}/>
+								</div>
 							</div>
 						</div>
 					}
 
 						<div className={'flex flex-col gap-4 mt-16 '}>
-							{!user && <UIText>{t('loginAndCheckGroups')}</UIText>}
+							{!user && <UIText text={t('loginAndCheckGroups')}/>}
 
 							<Link href={user ? '/groups' : '/login'}>
 								<Button
@@ -110,7 +110,7 @@ const Page = () => {
 									className={'gap-2 rtl:flex-row-reverse'}
 								>
 									<MoveLeft className={'w-4 h-4'}/>
-									<UIText variant={'button'}>{user ? t('btnBackToGroups') : t('btnLoginNow')}</UIText>
+									<UIText variant={'button'} text={user ? t('btnBackToGroups') : t('btnLoginNow')}/>
 								</Button>
 							</Link>
 						</div>

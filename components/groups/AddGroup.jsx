@@ -17,6 +17,7 @@ import {useScopedI18n} from "@/locales/client";
 import UIText from "@/components/theme/UIText";
 import {isStringUrdu} from "@/lib/isStringUrdu";
 import {useData} from "@/components/contexts/DataContext";
+import {UITextInput} from "@/components/theme/UITextInput";
 
 const AddGroupSchema = Yup.object().shape({
     name: Yup.string()
@@ -66,12 +67,7 @@ export const AddGroup = ({ open, onOpenChange }) => {
             >
                 <div className={'hidden'}><SheetHeader><SheetTitle/><SheetDescription/></SheetHeader></div>
                 <div className="flex flex-col w-full min-h-full pt-4 justify-start">
-                    {/* Date & Close */}
-                    <div className="flex items-center space-x-2 justify-between mb-4">
-                        <div className="flex items-center text-xl pt-2 space-x-2 font-semibold text-primary">
-                            <UIText>{t('createGroup')}</UIText>
-                        </div>
-                    </div>
+                    <UIText variant={'heading'} text={t('createGroup')} className={'text-primary mb-4'}/>
 
                     <div className="flex flex-col gap-5 w-full items-center justify-center py-6 lg:py-10">
                         <Formik
@@ -97,15 +93,12 @@ export const AddGroup = ({ open, onOpenChange }) => {
                                             errors={errors.name}
                                             touched={touched.name}
                                         />
-                                        <UIText isUrdu={isStringUrdu(values.name)}>
-                                            <Input
-                                                onChange={handleChange}
-                                                onBlur={handleBlur}
-                                                name="name"
-                                                disabled={disabled}
-                                                className={cn(isStringUrdu(values.name) ? 'font-urdu' : 'font-sans')}
-                                            />
-                                        </UIText>
+                                        <UITextInput
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
+                                            name="name"
+                                            disabled={disabled}
+                                        />
                                     </div>
 
                                     <UISheetFooter

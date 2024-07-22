@@ -22,12 +22,29 @@ module.exports = {
 			fontFamily: {
 				sans: ["var(--font-sans)", ...defaultTheme.fontFamily.sans],
 				urdu: ["var(--font-urdu)"],
+				"urdu-2": ["var(--font-urdu-2)"],
+				"urdu-3": ["var(--font-urdu-3)"],
+				"urdu-4": ["var(--font-urdu-3)"],
+				"urdu-5": ["var(--font-urdu-5)"],
 			},
 			fontSize: {
 				"urdu-body": '1.563rem',
 			},
+			height:{
+				18: '4.5rem'
+			},
 			lineHeight:{
-				"urdu-body": '2.5rem'
+				"urdu-body": '2.5rem',
+				"7.5": '1.875rem',
+				"8.5": '2.125rem',
+				"9.5": '2.375rem',
+				"11": '2.75rem',
+				"11.5": '2.875rem',
+				"12": '3rem',
+				"13": '3.25rem',
+				"14": '3.5rem',
+				"15": '3.75rem',
+				"16": '4rem'
 			},
 			colors: {
 				border: "hsl(var(--border))",

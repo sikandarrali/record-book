@@ -1,10 +1,10 @@
 import axios from "axios";
 import { usePathname, useRouter } from "next/navigation";
-import {createContext, useContext, useLayoutEffect, useMemo, useState} from "react";
+import {createContext, useContext, useEffect, useLayoutEffect, useMemo, useState} from "react";
 import {account} from "../appwrite/appwrite";
 import LoadingFallback from "../loaders/LoadingFallback";
 import {HOMEPAGE_ROUTE, LOGIN_ROUTE, PROTECTED_ROUTES} from "@/lib/routes";
-import {useChangeLocale} from "@/locales/client";
+import {useChangeLocale, useCurrentLocale} from "@/locales/client";
 import Cookies from 'js-cookie'
 
 
@@ -16,19 +16,21 @@ export const AuthProvider = ({ children }) => {
 	const router = useRouter();
 	const pathname = usePathname()
 	const changeLocale = useChangeLocale()
+	const currentLocale = useCurrentLocale()
 
 	useLayoutEffect(() => {
-		getLoggedInGoogleUser().then(() => setLoading(false));
+		getLoggedInGoogleUser();
 	}, []);
 
 	const getLoggedInGoogleUser = async () => {
+
 		let userPrefs = null
 		try {
 			const currentSession = await account.getSession('current');
 			const currentUser = await account.get();
 			setUser(currentUser)
 			userPrefs = currentUser.prefs
-			changeLocale(userPrefs.lang)
+			changeLocale(userPrefs?.lang || 'ur')
 
 			fetchGoogleUserData(currentSession.providerAccessToken)
 			.then((googleData) => {
@@ -40,16 +42,26 @@ export const AuthProvider = ({ children }) => {
 				// console.log(error)
 			});
 
-			if(pathname === LOGIN_ROUTE) router.replace(`/${currentUser.prefs.lang}/${HOMEPAGE_ROUTE}`);
+			if(userPrefs?.lang === currentLocale){
+				setLoading(false)
+			}
+			if(currentUser && pathname === LOGIN_ROUTE) router.replace(HOMEPAGE_ROUTE);
 		}
 		catch (e){
 			setUser(null)
+			setLoading(false)
 			if(PROTECTED_ROUTES.includes(pathname)){
 				router.replace(LOGIN_ROUTE)
 			}
 		}
-		setLoading(false)
+		finally {
+			setLoading(false)
+		}
 	};
+
+	useEffect(() => {
+		if(user) setLoading(false)
+	}, [router]);
 
 	const updateUserPrefs = async (prefs, picture) => {
 		let tempPrefs = {...prefs, picture:picture}
@@ -66,20 +78,24 @@ export const AuthProvider = ({ children }) => {
 
 	const onLogout = async () => {
 		setLoading(true);
-		Cookies.remove('Next-Locale');
 
 		try {
 			await account.deleteSession("current");
 			// await account.deleteSessions();
 			setUser(null);
+			Cookies.remove('Next-Locale');
+			setTimeout(()=>{
+				setLoading(false)
+			}, 500)
 		}catch (e){}
 		finally {
 			router.replace("/login");
 		}
-		setTimeout(()=>{
-			setLoading(false)
-		}, 500)
 	};
+
+	useLayoutEffect(() => {
+		if(user) router.replace(HOMEPAGE_ROUTE)
+	}, [router]);
 
 	const memoedValues = useMemo(
 		() => ({

@@ -30,7 +30,7 @@ export default function Home() {
 
 				<Button
 					onClick={() => onGoogleWithLogin()}
-					className="mx-4 mt-20 ltr:py-4 rtl:py-5 flex items-center gap-2"
+					className="mx-4 mt-20 ltr:py-4 rtl:py-5 flex items-center gap-2 rtl:gap-3"
 				>
 					<svg
 						width="24"
@@ -44,7 +44,7 @@ export default function Home() {
 							fill="currentColor"
 						/>
 					</svg>
-					<UIText className={'ltr:font-semibold rtl:text-2xl'}>{t('withGoogle')}</UIText>
+					<UIText weight={'semibold'} variant={'button'} text={t('withGoogle')}/>
 				</Button>
 
 			</div>

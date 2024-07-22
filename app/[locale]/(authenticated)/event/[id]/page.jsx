@@ -2,41 +2,31 @@
 import { AddEventItem } from "@/components/event-items/AddEventItem";
 import { SingleListItem } from "@/components/event-items/SingleListItem";
 import EventInfo from "@/components/event/EventInfo";
-import LoadingFallback from "@/components/loaders/LoadingFallback";
 import UIText from "@/components/theme/UIText";
 import { Button } from "@/components/ui/button";
-import { motion } from "framer-motion";
-import {Info, MoveLeft, Plus, Users2, XIcon} from "lucide-react";
-import {Suspense, useCallback, useEffect, useLayoutEffect, useRef, useState} from "react";
+import {AnimatePresence, motion} from "framer-motion";
+import {MoveLeft, Plus, Users2, XIcon} from "lucide-react";
+import {useCallback, useEffect, useLayoutEffect, useRef, useState} from "react";
 import { NumericFormat } from "react-number-format";
 import {db} from "@/components/appwrite/database";
 import {Query} from "appwrite";
 import {client, databases} from "@/components/appwrite/appwrite";
-import {useMediaQuery} from "react-responsive";
 import {cn} from "@/lib/utils";
-import {
-	Sheet,
-	SheetContent,SheetHeader,
-	SheetTitle, SheetTrigger
-} from "@/components/ui/sheet";
-import {SearchItems} from "@/components/event-items/SearchItems";
 import {ReloadIcon} from "@radix-ui/react-icons";
-import {useAuth} from "@/components/contexts/AuthContext";
 import {useScopedI18n} from "@/locales/client";
-import {isStringUrdu} from "@/lib/isStringUrdu";
-import {notFound, useParams, usePathname, useRouter, useSearchParams} from "next/navigation";
+import {useParams, useRouter} from "next/navigation";
 import PageContainer from "@/components/providers/PageContainer";
-import {Input} from "@/components/ui/input";
 import ScrollToTopButton from "@/components/event/ScrollToTopButton";
 import Link from "next/link";
-// import {toast} from "react-toastify";
-// import {ToastOptions} from "@/lib/ToastOptions";
+import {UITextInput} from "@/components/theme/UITextInput";
+import Loader from "@/components/loaders/loader";
+import {useAuth} from "@/components/contexts/AuthContext";
 
 const EventPage = ({ userOwnedGroups }) => {
-	const isDesktop = useMediaQuery({ query: "(min-width: 1024px)" })
-	const [isOpen, setIsOpen] = useState(false)
 	const headerRef = useRef(null);
 	const t = useScopedI18n('events');
+	const [localLoading, setLocalLoading] = useState(true)
+	const {user} = useAuth()
 
 	const [openAddModal, setOpenAddModal] = useState(false);
 	const [totalSum, setTotalSum] = useState(0);
@@ -44,10 +34,7 @@ const EventPage = ({ userOwnedGroups }) => {
 
 	const [items, setItems] = useState([])
 	const [itemsDefault, setItemsDefault] = useState([])
-	const {user} = useAuth()
-	const searchParams = useSearchParams()
 	const router = useRouter()
-	const pathname = usePathname()
 	const [searchValue, setSearchValue] = useState("");
 	const [searchResultsMessage, setSearchResultsMessage] = useState('')
 
@@ -78,6 +65,9 @@ const EventPage = ({ userOwnedGroups }) => {
 				}
 			}catch (e){
 				router.replace('/404')
+			}
+			finally {
+				setLocalLoading(false)
 			}
 		}
 		getEventItems();
@@ -184,171 +174,175 @@ const EventPage = ({ userOwnedGroups }) => {
 
 	return (
 		<PageContainer noPadding>
-			<motion.div
-				className={cn("w-full flex flex-col justify-start border-0")}
-				initial={{opacity: 0}}
-				animate={{opacity: 1, transition:{ease: "easeInOut", duration: 0.75}}}
-			>
-				<div className={'relative flex flex-col flex-1'}>
-					<Suspense fallback={<LoadingFallback />}>
-						<div className="flex flex-col z-10">
-							{/* header */}
-							<div className="flex gap-4 pb-2 px-2 pt-2.5 rtl:flex-row-reverse justify-between items-center w-full z-20 border-b border-primary-foreground/40 relative" ref={headerRef}>
+			<AnimatePresence>
+				{localLoading ?
+					<Loader/>
+					:
+					<motion.div
+						key={'content'}
+						className={cn("w-full flex flex-col justify-start border-0")}
+						initial={{opacity: 0, y: 4}}
+						animate={{opacity: 1, y: 0, transition:{ease: "easeInOut", duration: 0.3}}}
+					>
+						<div className={'relative flex flex-col flex-1'}>
+							{/*<Suspense fallback={<LoadingFallback />}>*/}
+							<div className="flex flex-col z-10">
+								{/* header */}
+								<div className="flex gap-4 pb-2 px-2 pt-2.5 rtl:flex-row-reverse justify-between items-center w-full z-20 border-b border-primary-foreground/40 relative" ref={headerRef}>
 
-								<Link href={'/events'}>
-									<Button
-										variant="ghost"
-										className={'w-14'}
-										dir={'ltr'}
-									>
-										<MoveLeft/>
-									</Button>
-								</Link>
+									<Link href={'/events'}>
+										<Button
+											variant="ghost"
+											className={'w-14'}
+											dir={'ltr'}
+										>
+											<MoveLeft/>
+										</Button>
+									</Link>
 
-								<motion.div className="flex flex-1 justify-center col-span-4 items-center gap-2 relative select-none pointer-events-none" dir={'ltr'}>
-									<span className="text-sm font-semibold">Rs</span>
-									<span className="font-bold text-xl text-primary">
-										<NumericFormat
-											allowNegative={false}
-											value={totalSum}
-											thousandSeparator={","}
-											decimalSeparator={"."}
-											displayType="text"
-											decimalScale={2}
+									<motion.div className="flex flex-1 justify-center col-span-4 items-center gap-2 relative select-none pointer-events-none" dir={'ltr'}>
+										<span className="text-sm font-semibold">Rs</span>
+										<UIText
+											weight={'bold'}
+											className="text-primary"
+											variant={'heading'}
+											text={
+												<NumericFormat
+													allowNegative={false}
+													value={totalSum}
+													thousandSeparator={","}
+													decimalSeparator={"."}
+													displayType="text"
+													decimalScale={2}
+												/>
+											}
 										/>
-									</span>
-								</motion.div>
-
-								<EventInfo
-									eventData={eventData}
-									setEventData={setEventData}
-									sum={totalSum}
-								/>
-
-							</div>
-
-							<div className={'flex items-center justify-center text-center gap-4 px-4 py-4 border-y text-primary bg-muted sticky top-40'}>
-								<UIText
-									variant={"heading"}
-									className={cn(
-										isStringUrdu(eventData?.name) ? 'font-urdu' : 'rtl:font-sans rtl:font-medium'
-									)}
-								>
-									{eventData?.name}
-								</UIText>
-							</div>
-						</div>
-
-						<div className="flex flex-col pb-44 mt-5 px-6">
-							{/* search */}
-							<div className="relative h-14 mb-4">
-								<Input
-									placeholder={t('searchPlaceholder')}
-									value={searchValue}
-									onChange={(e) => onSearch(e.target.value)}
-									className={cn("h-full normal-case rtl:text-xl rtl:font-urdu", isStringUrdu(searchValue) ? 'font-urdu' : 'rtl:font-sans')}
-								/>
-
-								{searchValue !== "" && (
-									<XIcon
-										className="w-4 h-4 text-primary absolute ltr:right-0 rtl:left-0 top-1/2 -translate-y-1/2 ltr:mr-3 rtl:ml-3 cursor-pointer hover:scale-125 duration-300"
-										onClick={() => resetSearch()}
-									/>
-								)}
-
-								{searchValue !== '' && searchResultsMessage !== '' && (
-									<div className="flex flex-col justify-center items-center gap-10 px-6 mt-20 text-destructive">
-										<UIText className="text-center text-lg font-medium">
-											{t(searchResultsMessage)}
-										</UIText>
-									</div>
-								)}
-							</div>
-
-							<UIText variant={'sm'} className={'py-1.5 font-medium flex items-center justify-center px-6 gap-2 text-muted-foreground'}>
-								{searchValue === "" ?
-									<>
-										{t('totalEntries')}
-										<span className={'text-primary font-semibold text-xl'}>
-											{items.length}
-										</span>
-									</>
-									:
-									<>
-										{t('numOfItemsMatchingSearch')}
-										<span className={'text-primary font-semibold text-xl'}>
-											{visibleItems.length}
-										</span>
-									</>
-								}
-							</UIText>
-
-							<div className="flex flex-col overflow-y-auto -mx-6">
-
-								{visibleItems.map((item, i) => (
-									<motion.div key={item.$id}>
-										<SingleListItem item={item} eventID={eventData.$id} />
 									</motion.div>
-								))}
 
-								{searchValue === "" && items.length > 0 &&
-									<div className={'flex flex-col w-full justify-center items-center mt-8 !border-t-0'}>
-										{!hasMoreItems &&
-											<UIText className="mt-4 font-medium ltr:italic text-muted-foreground text-center flex items-center">
-												{t('allItemsShown', { count: <span className={'text-primary px-2 font-sans text-2xl font-semibold'}>{items.length}</span> })}
-											</UIText>
-										}
+									<EventInfo
+										eventData={eventData}
+										setEventData={setEventData}
+										sum={totalSum}
+									/>
 
-										{loadingItems ? (
-												<Button
-													disabled={loadingItems}
-													onClick={loadMorePosts}
-													variant={'outline'}
-													className={'w-40 rtl:w-60 gap-2'}
-													dir={'ltr'}
-												>
-													<ReloadIcon className="h-4 w-4 animate-spin" />
-													<UIText variant={'button'}>{t('btnLoading')}</UIText>
-												</Button>
-											) :
-											hasMoreItems && items.length > itemsPerPage && (
-												<Button
-													onClick={loadMorePosts}
-													variant={'secondary'}
-													className={'w-40 rtl:w-60'}
-												>
-													<UIText variant={'button'}>{t('btnLoadMore')}</UIText>
-												</Button>
-											)
-										}
-									</div>
-								}
+								</div>
 
+								<div className={'flex items-center justify-center text-center gap-4 px-4 py-4 border-y text-primary bg-muted'}>
+									<UIText variant={"heading"} text={eventData?.name} />
+								</div>
 							</div>
+
+							<div className="flex flex-col pb-44 mt-5 px-6">
+								{/* search */}
+								<div className="relative h-14 mb-4">
+									<UITextInput
+										placeholder={t('searchPlaceholder')}
+										value={searchValue}
+										onChange={(e) => onSearch(e.target.value)}
+									/>
+
+									{searchValue !== "" && (
+										<XIcon
+											className="w-4 h-4 text-primary absolute ltr:right-0 rtl:left-0 top-1/2 -translate-y-1/2 ltr:mr-3 rtl:ml-3 cursor-pointer hover:scale-125 duration-300"
+											onClick={() => resetSearch()}
+										/>
+									)}
+
+									{searchValue !== '' && searchResultsMessage !== '' && (
+										<div className="flex flex-col justify-center items-center gap-10 px-6 mt-20 text-destructive">
+											<UIText variant={'heading'} weight={'medium'} text={t(searchResultsMessage)}/>
+										</div>
+									)}
+								</div>
+
+								<div className={cn(
+									'py-1.5 flex items-center justify-center px-6 gap-2 text-muted-foreground',
+									(user?.prefs?.fontSize === "lg" || user?.prefs?.fontSize === "xl")  && "!my-5"
+								)}>
+									{searchValue === "" ?
+										<>
+											<UIText text={t('totalEntries')} weight={'medium'} />
+											<UIText variant={'heading'} weight={'bold'} className={'text-primary rtl:mt-2'} text={items.length}/>
+										</>
+										:
+										<>
+											<UIText text={t('numOfItemsMatchingSearch')} weight={'medium'} />
+											<UIText variant={'heading'} weight={'bold'} className={'text-primary rtl:mt-2'} text={visibleItems.length}/>
+										</>
+									}
+								</div>
+
+								<div className="flex flex-col overflow-y-auto -mx-6">
+
+									{visibleItems.map((item, i) => (
+										<motion.div key={item.$id}>
+											<SingleListItem item={item} eventID={eventData.$id} />
+										</motion.div>
+									))}
+
+									{searchValue === "" && items.length > 0 &&
+										<div className={'flex flex-col w-full justify-center items-center mt-8 !border-t-0'}>
+											{!hasMoreItems &&
+												<UIText
+													text={t('allItemsShown', { count: <span className={'text-primary px-2 font-sans text-2xl ltr:-mt-1 rlt:mt-1 font-bold'}>{items.length}</span> })}
+													className="mt-4 text-muted-foreground text-center flex items-center"
+													weight={'medium'}
+												/>
+											}
+
+											{loadingItems ? (
+													<Button
+														disabled={loadingItems}
+														onClick={loadMorePosts}
+														variant={'outline'}
+														className={'w-40 rtl:w-60 gap-2 rtl:py-3'}
+														dir={'ltr'}
+													>
+														<ReloadIcon className="h-4 w-4 animate-spin" />
+														<UIText variant={'button'} text={t('btnLoading')}/>
+													</Button>
+												) :
+												hasMoreItems && items.length > itemsPerPage && (
+													<Button
+														onClick={loadMorePosts}
+														variant={'secondary'}
+														className={'w-40 rtl:w-60 rtl:py-3'}
+													>
+														<UIText variant={'button'} text={t('btnLoadMore')}/>
+													</Button>
+												)
+											}
+										</div>
+									}
+
+								</div>
+							</div>
+							{/*</Suspense>*/}
 						</div>
-
-						<div
-							className="w-[4.5rem] h-[4.5rem] fixed bottom-16 left-1/2 -translate-x-1/2 shadow-lg flex items-center justify-center rounded-full bg-primary cursor-pointer"
-							onClick={() => {
-								setOpenAddModal(true)
-								if (headerRef.current) {
-									headerRef.current.scrollIntoView({ behavior: 'smooth' });
-								}
-							}}
-						>
-							<Plus className="text-white w-10 h-10" />
-						</div>
-
-						<ScrollToTopButton/>
-
-						<AddEventItem
-							open={openAddModal}
-							onOpenChange={setOpenAddModal}
-							eventData={eventData}
-						/>
-					</Suspense>
+					</motion.div>
+				}
+			</AnimatePresence>
+			<div className={'relative'}>
+				<div
+					className="w-[4.5rem] h-[4.5rem] fixed bottom-16 left-1/2 -translate-x-1/2 shadow-lg flex items-center justify-center rounded-full bg-primary cursor-pointer"
+					onClick={() => {
+						setOpenAddModal(true)
+						if (headerRef.current) {
+							headerRef.current.scrollIntoView({ behavior: 'smooth' });
+						}
+					}}
+				>
+					<Plus className="text-white w-10 h-10" />
 				</div>
-			</motion.div>
+
+				<ScrollToTopButton/>
+
+				<AddEventItem
+					open={openAddModal}
+					onOpenChange={setOpenAddModal}
+					eventData={eventData}
+				/>
+			</div>
 		</PageContainer>
 	);
 };

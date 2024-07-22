@@ -3,7 +3,7 @@ import {Loader2Icon} from "lucide-react";
 import {useScopedI18n} from "@/locales/client";
 import UIText from "@/components/theme/UIText";
 
-export const UISheetFooter = ({disabled, adding, onOpenChange, labelAction, labelCancel }) =>{
+export const UISheetFooterWithAction = ({disabled, onSubmit, adding, onOpenChange, labelAction, labelCancel }) =>{
     const t = useScopedI18n('general')
     return(
         <div className={'flex flex-col w-full gap-2.5'}>
@@ -12,6 +12,7 @@ export const UISheetFooter = ({disabled, adding, onOpenChange, labelAction, labe
                 stretched
                 disabled={disabled}
                 type="submit"
+                onClick={()=> onSubmit()}
             >
                 {adding ? (
                     <>
@@ -28,7 +29,7 @@ export const UISheetFooter = ({disabled, adding, onOpenChange, labelAction, labe
                 type={'button'}
                 onClick={()=> onOpenChange(false)}
             >
-               <UIText variant={'button'} text={labelCancel || t('btn.cancel')}/>
+                <UIText variant={'button'} text={labelCancel || t('btn.cancel')}/>
             </Button>
         </div>
     )

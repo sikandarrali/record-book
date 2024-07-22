@@ -19,11 +19,11 @@ export const DeleteEventItem = ({ open, onOpenChange, personName, onDelete }) =>
 				<AlertDialogHeader className={''}>
 					<AlertDialogTitle className={'text-primary flex items-center justify-center gap-2 font-normal'}>
 						<TriangleAlert className={'w-5 h-5'}/>
-						<UIText variant={'heading'}>{t('deleteEventItem')}</UIText>
+						<UIText variant={'heading'} text={t('deleteEventItem')}/>
 					</AlertDialogTitle>
-					<AlertDialogDescription className={"flex flex-col text-base items-center gap-1 !my-5"}>
-						<UIText>{t('deleteEventItemText')}</UIText>
-						<UIText className={'text-primary'} weight={'semibold'}>{personName}</UIText>
+					<AlertDialogDescription className={"flex flex-col text-base items-center gap-4 !my-5"}>
+						<UIText text={t('deleteEventItemText')}/>
+						<UIText variant={'lg'} className={'text-primary'} weight={'semibold'} text={personName}/>
 					</AlertDialogDescription>
 				</AlertDialogHeader>
 

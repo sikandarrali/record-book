@@ -3,7 +3,7 @@ import {NetworkStatusIndicator} from "@/components/NetworkStatus/NetworkStatusIn
 import HolyLoader from "holy-loader";
 import Providers from "@/components/providers/Providers";
 import {cn} from "@/lib/utils";
-import {Inter} from "@next/font/google";
+import {Inter, Noto_Nastaliq_Urdu} from "@next/font/google";
 import localFont from "@next/font/local";
 
 
@@ -12,26 +12,10 @@ const fontSans = Inter({
 	variable: "--font-sans",
 });
 
-const fontUrdu = localFont({
-	display: "swap",
-	src: "../../fonts/NafeesWeb.woff",
+const fontUrdu = Noto_Nastaliq_Urdu({
+	subsets: ["latin"],
+	weight: ["variable"],
 	variable: "--font-urdu",
-});
-
-const fontUrdu2 = localFont({
-	display: "swap",
-	src: "../../fonts/NafeesWeb.woff",
-	variable: "--font-urdu-2",
-});
-const fontUrdu3 = localFont({
-	display: "swap",
-	src: "../../fonts/NafeesWeb.woff",
-	variable: "--font-urdu-3",
-});
-const fontUrdu4 = localFont({
-	display: "swap",
-	src: "../../fonts/NafeesWeb.woff",
-	variable: "--font-urdu-4",
 });
 
 const APP_NAME = "Shadi Kharcha Record";
@@ -84,22 +68,21 @@ export default async function RootLayout({ children, params }) {
 		<html lang={params.locale} suppressHydrationWarning>
 		<head>
 			<title>Shadi Kharcha Record</title>
-			{/*<link rel="manifest" href="/manifest.json" />*/}
-			{/*<link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png"/>*/}
-			{/*<link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png"/>*/}
-			{/*<link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png"/>*/}
-			{/*<link rel="mask-icon" href="/icons/safari-pinned-tab.svg" color="#5bbad5"/>*/}
-			{/*<link rel="manifest" crossOrigin="use-credentials" href="../../public/manifest.json" />*/}
+			<link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png"/>
+			<link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png"/>
+			<link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png"/>
+			<link rel="mask-icon" href="/icons/safari-pinned-tab.svg" color="#5bbad5"/>
 		</head>
 		<body
 			dir={params.locale === 'ur' ? 'rtl' : 'ltr'}
 			className={cn(
 				"min-h-screen bg-background font-sans antialiased",
-				fontSans.variable, fontUrdu.variable
+				fontSans.variable,
+				fontUrdu.variable,
 			)}
 		>
 
-		{/*<NetworkStatusIndicator />*/}
+		<NetworkStatusIndicator />
 
 		{/* topbar loader */}
 		<HolyLoader

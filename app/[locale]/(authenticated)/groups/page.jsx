@@ -17,27 +17,26 @@ export default function Page() {
     const [showInformation, setShowInformation] = useState(false)
     const t = useScopedI18n('groups')
     const {userGroups} = useData()
+    const [localLoading, setLocalLoading] = useState(true)
 
     return (
         <PageContainer hideTopbar>
-            <UIText variant="heading" className={'mb-2 text-primary'}>{t('title')}</UIText>
-            <UIText>{t('text')}</UIText>
+            <UIText variant="heading" className={'text-primary'} text={t('title')}/>
+            <UIText variant={'heading'} text={t('text')}/>
 
             <div className={'bg-muted py-4 px-6 rounded-lg mt-2 cursor-pointer'} onClick={()=> setShowInformation(!showInformation)} >
-                <UIText className={'flex items-center justify-between gap-2 font-medium text-primary'}>
-                    <span className={'flex items-center gap-2'}><Info className={'w-4 h-4'}/> {t('information')}</span>
+                <div className={'flex items-center justify-between gap-2 font-medium text-primary'}>
+                    <div className={'flex items-center gap-2'}>
+                        <Info className={'w-4 h-4 rtl:mt-2'}/>
+                        <UIText text={t('information')}/>
+                    </div>
                     {showInformation ? <ChevronUp className={'w-5 h-5 ltr:mt-1 stroke-[3]'} /> : <ChevronDown  className={'w-5 h-5 ltr:mt-1 stroke-[3]'} />}
-                </UIText>
+                </div>
                 {showInformation &&
                     <ul className={'list-disc px-5 gap-2 mt-2 flex flex-col rtl:text-right'}>
-                        <li><UIText variant={'sm'}>{t('informationP1')}</UIText></li>
-                        <li><UIText variant={'sm'}>{t('informationP2')}</UIText></li>
-                        <li><UIText variant={'sm'}>{t('informationP3')}</UIText></li>
-
-                        {/*<li><UIText variant={'sm'} className={'flex flex-col gap-1'}>*/}
-                        {/*    <span className={'flex gap-1 items-center'}><ShieldCheck className={'w-4 h-4 text-primary'}/> {`indicates Groups you've created`}</span>*/}
-                        {/*    <span className={'flex gap-1 items-center'}><Users2 className={'w-4 h-4 text-primary'}/> {`indicates Groups you've joined`}</span>*/}
-                        {/*</UIText></li>*/}
+                        <li><UIText variant={'sm'} text={t('informationP1')}/></li>
+                        <li><UIText variant={'sm'} text={t('informationP2')}/></li>
+                        <li><UIText variant={'sm'} text={t('informationP3')}/></li>
                     </ul>
                 }
             </div>
@@ -52,7 +51,7 @@ export default function Page() {
                 className={'flex flex-col bg-muted rounded-lg relative shadow'}
             >
                 {userGroups.length === 0 ?
-                    <UIText className={'p-4 rtl:pb-1.5 text-center ltr:italic rtl:text-base'}>{t('noGroups')}</UIText>
+                    <UIText text={t('noGroups')}/>
                     : userGroups.map((data, i)=>(
                         <motion.div
                             key={data.$id}
@@ -81,7 +80,7 @@ export default function Page() {
                     type={'submit'}
                     className={'mt-5'} onClick={()=> setOpenAddGroup(true)}
                 >
-                    <UIText variant={'button'}>{t('btnCreateNewGroup')}</UIText>
+                    <UIText variant={'button'} text={t('btnCreateNewGroup')}/>
                 </Button>
             </motion.div>
 
