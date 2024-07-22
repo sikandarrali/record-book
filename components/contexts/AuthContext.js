@@ -19,7 +19,7 @@ export const AuthProvider = ({ children }) => {
 	const currentLocale = useCurrentLocale()
 
 	useLayoutEffect(() => {
-		getLoggedInGoogleUser();
+		getLoggedInGoogleUser().then(()=> setLoading(false));
 	}, []);
 
 	const getLoggedInGoogleUser = async () => {

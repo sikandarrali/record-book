@@ -50,7 +50,7 @@ export const AddGroupMember = ({groupID, setUsersInGroup}) =>{
                 scrollToTop()
             }
         } catch (error) {
-            toast.error(ParseErrorCodes(t(error.response.type)), ToastOptions);
+            toast.error(t(error.response.type), ToastOptions);
             setAdding(false);
             setDisabled(false);
         }

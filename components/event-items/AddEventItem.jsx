@@ -17,13 +17,15 @@ import useScrollToView from "@/lib/hooks/useScrollToView";
 import {useMediaQuery} from "react-responsive";
 import UIText from "@/components/theme/UIText";
 import {cn, scrollToTop} from "@/lib/utils";
-import {Permission, Role} from "appwrite";
+import {ID, Permission, Role} from "appwrite";
 import {useAuth} from "@/components/contexts/AuthContext";
 import {UISheetFooter} from "@/components/theme/UISheetFooter";
 import {useScopedI18n} from "@/locales/client";
 import {isStringUrdu} from "@/lib/isStringUrdu";
 import {UITextInput} from "@/components/theme/UITextInput";
 import {UITextArea} from "@/components/theme/UITextArea";
+import {COLLECTION_EVENT_ITEMS, COLLECTION_EVENTS, DATABASE_ID, databases} from "@/components/appwrite/appwrite";
+import {UINumberInput} from "@/components/theme/UINumberInput";
 
 const AddEventItemSchema = Yup.object().shape({
 	name: Yup.string()
@@ -54,6 +56,16 @@ export const AddEventItem = ({open, onOpenChange, eventData}) => {
 		setDisabled(true);
 
 		let cleanAmount = parseFloat(values.amount.replace(/,/g, ""));
+		const tempCreatedBy = [user?.name, user?.email];
+
+		let teamPermissions = [
+			Permission.read(Role.team(eventData?.teamId, "member")),
+			Permission.update(Role.team(eventData?.teamId, "member")),
+			Permission.delete(Role.team(eventData?.teamId, "member")),
+			Permission.read(Role.user(user.$id)),
+			Permission.update(Role.user(user.$id)),
+			Permission.delete(Role.user(user.$id)),
+		]
 
 		try {
 			const eventItemData = {
@@ -61,20 +73,37 @@ export const AddEventItem = ({open, onOpenChange, eventData}) => {
 				amount: cleanAmount,
 				returned_amount: values.returned_amount,
 				details: values.details,
-				eventID: eventID
+				eventID: eventID,
+				createdBy: tempCreatedBy,
+				updatedBy: []
 			};
 
 			if(eventData?.teamId){
-				await db.eventItems.create(eventItemData, [
-					Permission.read(Role.team(eventData?.teamId, "member")),
-					Permission.update(Role.team(eventData?.teamId, "member")),
-					Permission.delete(Role.team(eventData?.teamId, "member")),
-					Permission.read(Role.user(user.$id)),
-					Permission.update(Role.user(user.$id)),
-					Permission.delete(Role.user(user.$id)),
-				]);
+				const response = databases.createDocument(
+					DATABASE_ID,
+					COLLECTION_EVENT_ITEMS,
+					ID.unique(),
+					eventItemData,
+					teamPermissions
+				);
+				response.then(function (response) {
+					toast.success(t("alertEventItemCreated"), ToastOptions);
+				}, function (error) {
+					toast.error(t('alertException'), ToastOptions);
+				});
+
 			}else{
-				await db.eventItems.create(eventItemData);
+				const response = databases.createDocument(
+					DATABASE_ID,
+					COLLECTION_EVENT_ITEMS,
+					ID.unique(),
+					eventItemData
+				);
+				response.then(function (response) {
+					toast.success(t("alertEventItemCreated"), ToastOptions);
+				}, function (error) {
+					toast.error(t('alertException'), ToastOptions);
+				});
 			}
 			onOpenChange(false);
 			toast.success(t('alertEventItemCreated'), ToastOptions);
@@ -140,18 +169,11 @@ export const AddEventItem = ({open, onOpenChange, eventData}) => {
 										errors={errors.amount}
 										touched={touched.amount}
 									/>
-									<NumericFormat
-										allowNegative={false}
-										thousandSeparator={","}
-										decimalSeparator={"."}
-										decimalScale={2}
-										className="flex h-12 w-full rounded-md text-[16px] border border-input bg-transparent px-3 py-1 shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+									<UINumberInput
 										onChange={handleChange}
 										onBlur={handleBlur}
 										disabled={disabled}
 										name="amount"
-										thousandsGroupStyle={'lakh'}
-										inputMode="numeric"
 									/>
 								</div>
 								<div className="flex flex-col">

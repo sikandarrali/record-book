@@ -47,6 +47,9 @@ export default function Home() {
 					<UIText weight={'semibold'} variant={'button'} text={t('withGoogle')}/>
 				</Button>
 
+
+				<UIText text={'By loggin in you accept our '}/>
+
 			</div>
 		</PageContainer>
 	);

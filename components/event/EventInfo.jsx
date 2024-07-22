@@ -20,28 +20,17 @@ import {
 import {Query} from "appwrite";
 import {cn} from "@/lib/utils";
 import {useMediaQuery} from "react-responsive";
-import {getGroup} from "@/components/appwrite/appwrite";
 import {useScopedI18n} from "@/locales/client";
 import {UISheetInfoFooter} from "@/components/theme/UISheetInfoFooter";
-import {isStringUrdu} from "@/lib/isStringUrdu";
-import {FormattedDateForCalenderDatePick} from "@/lib/FormattedDateForCalendarPick";
-import {FormattedDate} from "@/lib/hooks/FormattedDate";
-import {useData} from "@/components/contexts/DataContext";
+import {
+	Accordion,
+	AccordionContent,
+	AccordionItem,
+	AccordionTrigger,
+} from "@/components/ui/accordion"
 
-const months = [
-	"January",
-	"February",
-	"March",
-	"April",
-	"May",
-	"June",
-	"July",
-	"August",
-	"September",
-	"October",
-	"November",
-	"December"
-];
+import {useData} from "@/components/contexts/DataContext";
+import {EnglishMonths} from "@/lib/defaultData";
 
 const EventInfo = ({ eventData, setEventData, sum }) => {
 	const isDesktop = useMediaQuery({ query: "(min-width: 1024px)" })
@@ -50,10 +39,10 @@ const EventInfo = ({ eventData, setEventData, sum }) => {
 	const [openDelete, setOpenDelete] = useState(false);
 	const router = useRouter();
 	const [group, setGroup] = useState(null)
-	const t = useScopedI18n('events')
+	const t = useScopedI18n('events.eventInfo')
 	const tMonths = useScopedI18n('months')
 	const tGeneral = useScopedI18n('general')
-	const {userOwnedGroups, userGroups} = useData()
+	const {userGroups} = useData()
 
 	const onDelete = async () => {
 		await db.events.delete(eventData?.$id);
@@ -88,14 +77,12 @@ const EventInfo = ({ eventData, setEventData, sum }) => {
 		unsub()
 	}, [openDetails]);
 
-
 	// Parse the date string
 	const date = new Date(eventData?.date);
 	const year = date.getFullYear();
 	const day = date.getDate();
 	const monthIndex = date.getMonth(); // getMonth() returns a zero-based index (0 for January, 11 for December)
-	const month = months[monthIndex];
-
+	const month = EnglishMonths[monthIndex];
 
 	return (
 		<>
@@ -114,7 +101,7 @@ const EventInfo = ({ eventData, setEventData, sum }) => {
 				defaultOpen={false}
 			>
 				<SheetContent
-					className={cn("pb-8 lg:pb-14 overflow-auto max-h-fit")}
+					className={cn("pb-8 lg:pb-14 outline-0 overflow-auto h-[90%] lg:h-screen lg:max-h-screen border-t-0 border-l-0")}
 					side={isDesktop ? "right" : "bottom"}
 					onOpenAutoFocus={(e) => e.preventDefault()}
 				>
@@ -140,37 +127,83 @@ const EventInfo = ({ eventData, setEventData, sum }) => {
 							</div>
 						</div>
 
-						<Table className={'lg:mt-16'}>
-							<TableBody className="font-medium text-base">
-								<TableRow className={'border-b-muted'}>
-									<TableCell><UIText className={'text-muted-foreground'} text={t('labelGroup')}/></TableCell>
-									<TableCell>
-										<UIText
-											variant={'label'}
-											text={group?.name || t('notSharedWithGroup')}
-										/>
-									</TableCell>
-								</TableRow>
-								<TableRow className={'border-b-muted'}>
-									<TableCell><UIText className={'text-muted-foreground'} text={t('labelDate')}/></TableCell>
-									<TableCell>
-										{eventData?.date ? <UIText text={`${day} ${tMonths(month.toLowerCase())+tGeneral('comma')} ${year}`}/> : '-'}
-									</TableCell>
-								</TableRow>
-								<TableRow className={'border-b-muted'}>
-									<TableCell><UIText className={'text-muted-foreground'} text={t('labelVenue')}/></TableCell>
-									<TableCell>
-										<UIText text={eventData?.venue || '-'}/>
-									</TableCell>
-								</TableRow>
-								<TableRow className={'border-b-muted'}>
-									<TableCell><UIText className={'text-muted-foreground'} text={t('labelDetails')}/></TableCell>
-									<TableCell>
-										<UIText text={eventData?.details || '-'}/>
-									</TableCell>
-								</TableRow>
-							</TableBody>
-						</Table>
+
+						<div className={'flex flex-col divide-y lg:mt-16'}>
+							<div className={'flex py-2 items-center'}>
+								<div className={'w-1/4 flex shrink-0'}>
+									<UIText className={'text-muted-foreground'} text={t('labelGroup')}/>
+								</div>
+								<div className={'w-3/4 flex items-center pl-4'}>
+									{group?.name ?
+										<UIText variant={'label'} className={'text-primary'} text={group?.name}/>
+										:
+										<UIText variant={'label'} text={t('notSharedWithGroup')}/>
+									}
+								</div>
+							</div>
+
+							<div className={'flex py-2 items-center'}>
+								<div className={'w-1/4 flex shrink-0'}>
+									<UIText className={'text-muted-foreground'} text={t('labelDate')}/>
+								</div>
+								<div className={'w-3/4 flex items-center pl-4'}>
+									{eventData?.date ? <UIText text={`${day} ${tMonths(month.toLowerCase())+tGeneral('comma')} ${year}`}/> : '-'}
+								</div>
+							</div>
+
+							<div className={'flex py-2 items-center'}>
+								<div className={'w-1/4 flex shrink-0'}>
+									<UIText className={'text-muted-foreground'} text={t('labelVenue')}/>
+								</div>
+								<div className={'w-3/4 flex items-center pl-4'}>
+									<UIText text={eventData?.venue || '-'}/>
+								</div>
+							</div>
+
+							<div className={'flex py-2 items-center'}>
+								<div className={'w-1/4 flex shrink-0'}>
+									<UIText className={'text-muted-foreground'} text={t('labelDetails')}/>
+								</div>
+								<div className={'w-3/4 flex items-center pl-4'}>
+									<UIText text={eventData?.details || '-'}/>
+								</div>
+							</div>
+
+							<Accordion type="single" collapsible>
+								<AccordionItem value="item-1" className={'border-0'}>
+									<AccordionTrigger className={'text-muted-foreground hover:no-underline'}>
+										<UIText text={t('labelViewCreatedEditedBy')}/>
+									</AccordionTrigger>
+
+									<AccordionContent className={'divide-y'}>
+										<div className={'flex py-4'}>
+											<div className={'w-1/4 flex flex-col shrink-0'}>
+												<UIText className={'text-muted-foreground'} variant={'sm'} text={t('addedBy')}/>
+											</div>
+											<div className={'w-3/4 flex flex-col pl-4'}>
+												<UIText variant={'sm'} weight={'semibold'} className={'!text-left'} text={eventData?.createdBy[0] || '-'}/>
+												<UIText variant={'xs'} text={eventData?.createdBy[1] || '-'}/>
+												<UIText variant={'xs'} text={t('at')} className={'mt-1 mb-2 rtl:self-end text-muted-foreground'}/>
+												<UIText variant={'xs'} text={eventData.$createdAt}/>
+											</div>
+										</div>
+										{eventData?.updatedBy[0] &&
+											<div className={'flex py-4'}>
+												<div className={'w-1/4 flex flex-col shrink-0'}>
+													<UIText className={'text-muted-foreground'} variant={'sm'} text={t('updatedBy')}/>
+												</div>
+												<div className={'w-3/4 flex flex-col pl-4'}>
+													<UIText variant={'sm'} weight={'semibold'} text={eventData?.updatedBy[0] || '-'}/>
+													<UIText variant={'xs'} text={eventData?.updatedBy[1] || '-'}/>
+													<UIText variant={'xs'} text={t('at')} className={'mt-1 mb-2 rtl:self-end text-muted-foreground'}/>
+													<UIText variant={'xs'} text={eventData.$updatedAt}/>
+												</div>
+											</div>
+										}
+									</AccordionContent>
+								</AccordionItem>
+							</Accordion>
+						</div>
 
 						<UISheetInfoFooter
 							setOpen={setOpenDetails}

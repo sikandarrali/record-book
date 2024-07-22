@@ -10,7 +10,13 @@ import {useCallback, useEffect, useLayoutEffect, useRef, useState} from "react";
 import { NumericFormat } from "react-number-format";
 import {db} from "@/components/appwrite/database";
 import {Query} from "appwrite";
-import {client, databases} from "@/components/appwrite/appwrite";
+import {
+	client,
+	COLLECTION_EVENT_ITEMS,
+	COLLECTION_EVENTS,
+	DATABASE_ID,
+	databases
+} from "@/components/appwrite/appwrite";
 import {cn} from "@/lib/utils";
 import {ReloadIcon} from "@radix-ui/react-icons";
 import {useScopedI18n} from "@/locales/client";
@@ -22,7 +28,7 @@ import {UITextInput} from "@/components/theme/UITextInput";
 import Loader from "@/components/loaders/loader";
 import {useAuth} from "@/components/contexts/AuthContext";
 
-const EventPage = ({ userOwnedGroups }) => {
+const EventPage = () => {
 	const headerRef = useRef(null);
 	const t = useScopedI18n('events');
 	const [localLoading, setLocalLoading] = useState(true)
@@ -50,8 +56,8 @@ const EventPage = ({ userOwnedGroups }) => {
 		const getEventItems = async () => {
 			try{
 				const getEvent = await databases.getDocument(
-					process.env.NEXT_PUBLIC_DATABASE_ID,
-					process.env.NEXT_PUBLIC_COLLECTION_ID_EVENTS,
+					DATABASE_ID,
+					COLLECTION_EVENTS,
 					params.id
 				);
 				if(getEvent){
@@ -70,12 +76,16 @@ const EventPage = ({ userOwnedGroups }) => {
 				setLocalLoading(false)
 			}
 		}
-		getEventItems();
+		if(user){
+			getEventItems();
+		}else{
+			router.replace('/login')
+		}
 	}, [router]);
 	//
 	// appwrite realtime functionality
 	useEffect(() => {
-		const unsubscribe = client.subscribe(`databases.${process.env.NEXT_PUBLIC_DATABASE_ID}.collections.${process.env.NEXT_PUBLIC_COLLECTION_ID_EVENT_ITEMS}.documents`, (response) => {
+		const unsubscribe = client.subscribe(`databases.${DATABASE_ID}.collections.${COLLECTION_EVENT_ITEMS}.documents`, (response) => {
 			if(response.events.includes("databases.*.collections.*.documents.*.create")){
 				if(response.payload.eventID === params.id){
 					setItems(prev=> [response.payload, ...prev])

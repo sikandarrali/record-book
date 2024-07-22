@@ -1,8 +1,6 @@
 "use client";
 import { db } from "@/components/appwrite/database";
 import FormLabel from "@/components/theme/FormLabel";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Form, Formik } from "formik";
 import { useState } from "react";
 import { NumericFormat } from "react-number-format";
@@ -14,10 +12,10 @@ import {SheetDescription, SheetHeader, SheetTitle, SheetContent, Sheet} from "@/
 import UIText from "@/components/theme/UIText";
 import {UISheetFooter} from "@/components/theme/UISheetFooter";
 import {useScopedI18n} from "@/locales/client";
-import {isStringUrdu} from "@/lib/isStringUrdu";
-import {cn} from "@/lib/utils";
 import {UITextInput} from "@/components/theme/UITextInput";
 import {UITextArea} from "@/components/theme/UITextArea";
+import {useAuth} from "@/components/contexts/AuthContext";
+import {UINumberInput} from "@/components/theme/UINumberInput";
 
 const AddEventItemSchema = Yup.object().shape({
 	name: Yup.string()
@@ -38,23 +36,21 @@ export const EditEventItem = ({ open, onOpenChange, item }) => {
 
 	const [adding, setAdding] = useState(false);
 	const [disabled, setDisabled] = useState(false);
+	const {user} = useAuth()
 
 	const onEdit = async (values) => {
 		setAdding(true);
 		setDisabled(true);
 
 		let cleanAmount = parseFloat(values.amount.toString().replace(/,/g, ""));
+		const tempUpdatedBy = [user?.name, user?.email];
 
 		if (
 			values.name === item.name &&
 			values.amount === item.amount &&
 			values.details === item.details
 		) {
-			toast({
-				title: t('alertNothingToUpdate'),
-				variant: "info",
-			});
-
+			toast.info(t('alertNothingToUpdate'), ToastOptions);
 			setAdding(false);
 			setDisabled(false);
 			return;
@@ -66,6 +62,8 @@ export const EditEventItem = ({ open, onOpenChange, item }) => {
 				amount: cleanAmount,
 				returned_amount: values.returned_amount,
 				details: values.details,
+				createdBy: item.createdBy,
+				updatedBy: tempUpdatedBy
 			};
 
 			await db.eventItems.update(eventItemData, item.$id);
@@ -123,6 +121,7 @@ export const EditEventItem = ({ open, onOpenChange, item }) => {
 										onBlur={handleBlur}
 										name="name"
 										disabled={disabled}
+										defaultValue={item.name}
 									/>
 								</div>
 								<div className="flex flex-col">
@@ -131,19 +130,12 @@ export const EditEventItem = ({ open, onOpenChange, item }) => {
 										errors={errors.amount}
 										touched={touched.amount}
 									/>
-									<NumericFormat
-										allowNegative={false}
-										thousandSeparator={","}
-										decimalSeparator={"."}
-										decimalScale={2}
-										className="flex h-12 w-full rounded-md text-[16px] border border-input bg-transparent px-3 py-1 shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+									<UINumberInput
 										onChange={handleChange}
 										onBlur={handleBlur}
 										disabled={disabled}
 										name="amount"
 										defaultValue={item.amount}
-										thousandsGroupStyle={'lakh'}
-										inputMode="numeric"
 									/>
 								</div>
 								<div className="flex flex-col">

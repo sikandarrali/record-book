@@ -23,7 +23,7 @@ import {Label} from "@/components/ui/label";
 import UIText from "@/components/theme/UIText";
 import {isStringUrdu} from "@/lib/isStringUrdu";
 import {SheetStylesFlexibleHeight, SheetStylesMAxHeight90} from "@/lib/reusableStyles";
-import {databases, teams} from "@/components/appwrite/appwrite";
+import {COLLECTION_EVENT_ITEMS, COLLECTION_EVENTS, DATABASE_ID, databases, teams} from "@/components/appwrite/appwrite";
 import {useRouter} from "next/navigation";
 import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
 import {FormattedDateForCalenderDatePick} from "@/lib/FormattedDateForCalendarPick";
@@ -51,43 +51,29 @@ export const EditEvent = ({ open, onOpenChange, eventData, setEventData, setGrou
 	const [disabled, setDisabled] = useState(false);
 	const [selectedGroup, setSelectedGroup] = useState()
 	const [selectedGroupName, setSelectedGroupName] = useState('')
-	const [userJoinedGroups, setUserJoinedGroups] = useState([])
+	// const [userJoinedGroups, setUserJoinedGroups] = useState([])
 	const [userJoinedGroupName, setUserJoinedGroupName] = useState('')
 	const {user} = useAuth()
 	const router = useRouter()
 	const [calendarOpen, setCalendarOpen] = useState(false);
-	const {userOwnedGroups} = useData()
+	const {userOwnedGroups, userGroups} = useData()
 
 	let defaultTeamId = eventData?.teamId;
 
 	const isOwner = userOwnedGroups.some((grp)=> grp.$id === eventData?.teamId)
 
-	const getUserGroups = async () =>{
-		const response = await teams.list()
-		setUserJoinedGroups(response.teams)
-	}
+	// const getUserGroups = async () =>{
+	// 	const response = await teams.list()
+	// 	setUserJoinedGroups(response.teams)
+	// }
 
 	useLayoutEffect(() => {
-		setUserJoinedGroupName(userJoinedGroups?.find((filter)=> filter.$id===eventData?.teamId)?.name)
-		getUserGroups()
+		setUserJoinedGroupName(userGroups?.find((filter)=> filter.$id===eventData?.teamId)?.name)
+		// getUserGroups()
 		if(eventData?.teamId) {
 			setSelectedGroup(eventData?.teamId)
 		}
-	}, [open, router]);
-
-	let teamPermissions = [
-		Permission.read(Role.team(selectedGroup, "member")),
-		Permission.update(Role.team(selectedGroup, "member")),
-		Permission.delete(Role.team(selectedGroup, "member")),
-		Permission.read(Role.user(user.$id)),
-		Permission.update(Role.user(user.$id)),
-		Permission.delete(Role.user(user.$id)),
-	]
-	let userPermissions = [
-		Permission.read(Role.user(user.$id)),
-		Permission.update(Role.user(user.$id)),
-		Permission.delete(Role.user(user.$id)),
-	]
+	}, [open]);
 
 	const updateAllItemsInEvent = async (permissionsToUpdate) => {
 		const getItems = await db.eventItems.list([
@@ -114,6 +100,22 @@ export const EditEvent = ({ open, onOpenChange, eventData, setEventData, setGrou
 		setAdding(true);
 		setDisabled(true);
 
+		const tempUpdatedBy = [user?.name, user?.email];
+
+		let teamPermissions = [
+			Permission.read(Role.team(selectedGroup, "member")),
+			Permission.update(Role.team(selectedGroup, "member")),
+			Permission.delete(Role.team(selectedGroup, "member")),
+			Permission.read(Role.user(user.$id)),
+			Permission.update(Role.user(user.$id)),
+			Permission.delete(Role.user(user.$id)),
+		]
+		let userPermissions = [
+			Permission.read(Role.user(user.$id)),
+			Permission.update(Role.user(user.$id)),
+			Permission.delete(Role.user(user.$id)),
+		]
+
 		if (
 			values.name === eventData?.name &&
 			values.date === eventData?.date &&
@@ -135,15 +137,17 @@ export const EditEvent = ({ open, onOpenChange, eventData, setEventData, setGrou
 				venue: values.venue,
 				details: values.details,
 				teamId: selectedGroup,
+				createdBy: eventData.createdBy,
+				updatedBy: tempUpdatedBy
 			};
 
 			if(selectedGroup){
 				const result = await databases.updateDocument(
-					process.env.NEXT_PUBLIC_DATABASE_ID,
-					process.env.NEXT_PUBLIC_COLLECTION_ID_EVENTS,
+					DATABASE_ID,
+					COLLECTION_EVENTS,
 					eventData?.$id,
 					eventDataValues,
-					teamPermissions// )
+					teamPermissions
 				);
 				setEventData(result)
 				if(defaultTeamId !== selectedGroup){
@@ -151,8 +155,8 @@ export const EditEvent = ({ open, onOpenChange, eventData, setEventData, setGrou
 				}
 			}else{
 				const result = await databases.updateDocument(
-					process.env.NEXT_PUBLIC_DATABASE_ID,
-					process.env.NEXT_PUBLIC_COLLECTION_ID_EVENTS,
+					DATABASE_ID,
+					COLLECTION_EVENTS,
 					eventData?.$id,
 					eventDataValues,
 					userPermissions// )
@@ -170,6 +174,7 @@ export const EditEvent = ({ open, onOpenChange, eventData, setEventData, setGrou
 			onOpenChange(false)
 		} catch (error) {
 			toast.error(t('alertException'), ToastOptions);
+			console.log(error)
 			setAdding(false);
 			setDisabled(false);
 		}
@@ -225,13 +230,16 @@ export const EditEvent = ({ open, onOpenChange, eventData, setEventData, setGrou
 											<UIText variant={'label'} className="shrink-0" text={t('labelShareWithGroup')}/>
 										</Label>
 										{eventData?.teamId && !isOwner ?
-											<div className={cn("flex justify-betweenp-3 border rounded-lg ltr:pr-6 rtl:pl-6 cursor-not-allowed")}>
-												<UIText text={userJoinedGroupName}/>
-												<span className={'absolute rtl:left-4 ltr:right-4'}><LockKeyhole className={'text-destructive'}/> </span>
+											<div className={cn("flex justify-betweenp-3 border rounded-lg p-6 cursor-not-allowed")}>
+												<UIText text={userJoinedGroupName} className={'ltr:pr-14 rtl:pl-14'}/>
+												<span className={'absolute rtl:left-10 ltr:right-10'}><LockKeyhole className={'text-destructive'}/> </span>
 											</div>
 											:
 											<div className={'flex gap-4 items-center relative'}>
-												<Select onValueChange={(selected)=> setSelectedGroup(selected)} key={selectedGroup}>
+												<Select onValueChange={(selected)=> {
+													setSelectedGroup(selected);
+													console.log(selected)
+												}} key={selectedGroup}>
 													<SelectTrigger ref={null} className="w-full h-12 flex between rtl:flex-row-reverse">
 														{selectedGroup ?
 															<UIText text={selectedGroupName}/>
@@ -297,16 +305,16 @@ export const EditEvent = ({ open, onOpenChange, eventData, setEventData, setGrou
 												<Button
 													variant={"outline"}
 													className={cn(
-														"w-full p-4 h-12 gap-4 justify-start text-left font-normal",
+														"w-full p-4 gap-4 justify-start text-left font-normal",
 														!values.date &&
 														"text-muted-foreground"
 													)}
 												>
 													<CalendarIcon className=" h-4 w-4" />
 													{values.date ?
-														<UIText className={'rtl:font-sans'} variant={'xs'} text={new Date(values.date).toLocaleDateString()}/>
+														<UIText className={'rtl:font-sans'} weight={'medium'} text={new Date(values.date).toLocaleDateString()}/>
 														:
-														<UIText className={'rtl:font-sans'} variant={'xs'} text={new Date(eventData?.date).toLocaleDateString()}/>
+														<UIText className={'rtl:font-sans'} weight={'medium'} text={new Date(eventData?.date).toLocaleDateString()}/>
 													}
 												</Button>
 											</PopoverTrigger>

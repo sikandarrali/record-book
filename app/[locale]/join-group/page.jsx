@@ -1,7 +1,7 @@
 "use client";
 import Logo from "@/public/logo.png"
 import Image from "next/image";
-import {useSearchParams} from "next/navigation";
+import {useParams, useSearchParams} from "next/navigation";
 import {useLayoutEffect, useState} from "react";
 import {teams} from "@/components/appwrite/appwrite";
 import {Check, MoveLeft, XIcon} from "lucide-react";
@@ -10,7 +10,8 @@ import {useAuth} from "@/components/contexts/AuthContext";
 import Link from "next/link";
 import {ParseErrorCodes} from "@/lib/parseErrorCodes";
 import UIText from "@/components/theme/UIText";
-import {useScopedI18n} from "@/locales/client";
+import {useCurrentLocale, useScopedI18n} from "@/locales/client";
+import Loader from "@/components/loaders/loader";
 
 const Page = () => {
 
@@ -30,8 +31,6 @@ const Page = () => {
 
 	useLayoutEffect(() => {
 		const checkMembership = async () =>{
-
-			setShowError(true)
 			try {
 				const result = await teams.updateMembershipStatus(
 					teamId, // teamId
@@ -52,16 +51,12 @@ const Page = () => {
 				}
 			}
 
+			setShowError(true)
 		}
 
 		return ()=> checkMembership()
 	}, []);
 
-
-	// if(!userId || !secret || !userId || !teamId){
-	// 	redirect('/login')
-	// 	return <></>
-	// }
 
 	return(
 		<div className={'flex flex-col p-6 relative'}>
@@ -74,51 +69,38 @@ const Page = () => {
 				width={200}
 				height={79}
 			/>
-
-			<div className={'flex flex-col mt-20 mb-8 mx-4'}>
-				{showError &&
-
-					<>
+			{showError &&
+				<div className={'flex flex-col mt-20 mb-8 mx-4'}>
 					{error.correct ?
-						<div className={'flex flex-col w-full'}>
-							<div className={'flex w-full flex-1 gap-2 border-2 border-green-400 rtl:flex-row-reverse rounded-md p-3 px-4'}>
-								<Check className={'text-green-500 stroke-[3] mt-0.5'}/>
-								<div className={'flex flex-col gap-1'}>
-									<UIText className={'text-green-500'} text={t('titleJoined')}/>
-									<UIText text={t('textJoined')}/>
-								</div>
+						<div className={'flex w-full flex-1 items-center gap-4 border-2 border-green-400 rounded-md p-3 px-4'}>
+							<Check className={'text-green-500 stroke-[3] mt-0.5'}/>
+							<div className={'flex flex-col gap-1'}>
+								<UIText className={'text-green-500'} text={t('titleJoined')}/>
 							</div>
 						</div>
-					:
-						<div className={'flex flex-col w-full'}>
-							<div className={'flex w-full flex-1 gap-2 border-2 border-red-400 rtl:flex-row-reverse rounded-md p-3 px-4'}>
-								<XIcon className={'text-red-700 stroke-[3] mt-0.5'}/>
-								<div className={'flex flex-col gap-1'}>
-									<UIText className={'text-red-700'} weight={'semibold'} text={alreadyJoined ? t('alreadyJoined') : t('unableToJoin')}/>
-									<UIText text={error.text}/>
-								</div>
+						:
+						<div className={'flex w-full flex-1 items-center gap-4 border-2 border-red-400 rounded-md p-3 px-4'}>
+							<XIcon className={'text-red-700 stroke-[3] mt-0.5 rtl:mt-2'}/>
+							<div className={'flex flex-col gap-1'}>
+								<UIText className={'text-red-700'} weight={'semibold'} text={alreadyJoined ? t('titleAlreadyJoined') : t('titleUnableToJoin')}/>
 							</div>
 						</div>
 					}
+					<div className={'flex flex-col gap-4 mt-16 '}>
+						{!user && <UIText text={t('loginAndCheckGroups')}/>}
 
-						<div className={'flex flex-col gap-4 mt-16 '}>
-							{!user && <UIText text={t('loginAndCheckGroups')}/>}
-
-							<Link href={user ? '/groups' : '/login'}>
-								<Button
-									variant={'outline'}
-									className={'gap-2 rtl:flex-row-reverse'}
-								>
-									<MoveLeft className={'w-4 h-4'}/>
-									<UIText variant={'button'} text={user ? t('btnBackToGroups') : t('btnLoginNow')}/>
-								</Button>
-							</Link>
-						</div>
-
-					</>
-				}
-			</div>
-
+						<Link href={user ? '/groups' : '/login'}>
+							<Button
+								variant={'outline'}
+								className={'gap-2 rtl:flex-row-reverse'}
+							>
+								<MoveLeft className={'w-4 h-4'}/>
+								<UIText variant={'button'} className={'rtl:pt-2'} text={user ? t('btnBackToGroups') : t('btnLoginNow')}/>
+							</Button>
+						</Link>
+					</div>
+				</div>
+			}
 		</div>
 	)
 };
