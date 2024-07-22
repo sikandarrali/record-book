@@ -11,7 +11,7 @@ import { useMediaQuery } from "react-responsive";
 import * as Yup from "yup";
 import {toast} from "react-toastify";
 import {ToastOptions} from "@/lib/ToastOptions";
-import {Permission, Role} from "appwrite";
+import {ID, Permission, Role} from "appwrite";
 import {
 	Select,
 	SelectContent,
@@ -27,6 +27,7 @@ import { Calendar } from "@/components/ui/calendar"
 import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
 import {UITextInput} from "@/components/theme/UITextInput";
 import {UITextArea} from "@/components/theme/UITextArea";
+import {COLLECTION_EVENTS, DATABASE_ID, databases} from "@/components/appwrite/appwrite";
 
 const AddEventSchema = Yup.object().shape({
 	name: Yup.string()
@@ -53,28 +54,61 @@ export const AddEvent = ({ open, onOpenChange, userOwnedGroups }) => {
 		setAdding(true);
 		setDisabled(true);
 
+		let teamPermissions = [
+			Permission.read(Role.team(selectedGroup, "member")),
+			Permission.update(Role.team(selectedGroup, "member")),
+			Permission.delete(Role.team(selectedGroup, "member")),
+			Permission.read(Role.user(user.$id)),
+			Permission.update(Role.user(user.$id)),
+			Permission.delete(Role.user(user.$id)),
+		]
+		let userPermissions = [
+			Permission.read(Role.user(user.$id)),
+			Permission.update(Role.user(user.$id)),
+			Permission.delete(Role.user(user.$id)),
+		]
+
+		const tempCreatedBy = [user?.name, user?.email];
+
 		try {
 			const eventData = {
 				name: values.name,
 				date: values.date,
 				venue: values.venue,
 				details: values.details,
-				teamId: selectedGroup
+				teamId: selectedGroup,
+				createdBy: tempCreatedBy,
+				updatedBy: []
 			};
+
 			if(selectedGroup){
-				await db.events.create(eventData, [
-					Permission.read(Role.team(selectedGroup, "member")),
-					Permission.update(Role.team(selectedGroup, "member")),
-					Permission.delete(Role.team(selectedGroup, "member")),
-					Permission.read(Role.user(user.$id)),
-					Permission.update(Role.user(user.$id)),
-					Permission.delete(Role.user(user.$id)),
-				]);
+				const response = databases.createDocument(
+					DATABASE_ID,
+					COLLECTION_EVENTS,
+					ID.unique(),
+					eventData,
+					teamPermissions
+				);
+				response.then(function (response) {
+					toast.success(t("alertEventCreated"), ToastOptions);
+				}, function (error) {
+					toast.error(t('alertException'), ToastOptions);
+				});
 			}else{
-				await db.events.create(eventData, );
+				const response = databases.createDocument(
+					DATABASE_ID,
+					COLLECTION_EVENTS,
+					ID.unique(),
+					eventData,
+					userPermissions
+				);
+				response.then(function (response) {
+					toast.success(t("alertEventCreated"), ToastOptions);
+				}, function (error) {
+					toast.error(t('alertException'), ToastOptions);
+				});
 			}
 			onOpenChange(false);
-			toast.success(t("alertEventCreated"), ToastOptions);
 			setAdding(false);
 			setDisabled(false);
 			scrollToTop()
@@ -116,6 +150,8 @@ export const AddEvent = ({ open, onOpenChange, userOwnedGroups }) => {
 								venue: "",
 								details: "",
 								teamId:"",
+								createdBy: "",
+								updatedBy: "",
 							}}
 							validationSchema={AddEventSchema}
 							onSubmit={(values) => {
@@ -213,16 +249,16 @@ export const AddEvent = ({ open, onOpenChange, userOwnedGroups }) => {
 														<Button
 															variant={"outline"}
 															className={cn(
-																"w-full p-4 h-12 gap-4 justify-start text-left font-normal",
+																"w-full p-4 gap-4 justify-start text-left font-normal",
 																!values.date &&
 																"text-muted-foreground"
 															)}
 														>
 															<CalendarIcon className=" h-4 w-4" />
 															{values.date ?
-																<UIText className={'rtl:font-sans'} variant={'xs'} text={values.date.toLocaleDateString()}/>
+																<UIText weight={'medium'} className={'rtl:font-sans'} text={values.date.toLocaleDateString()}/>
 																:
-																<UIText text={t('pickDate')}/>
+																<UIText weight={'medium'} text={t('pickDate')}/>
 															}
 														</Button>
 													</PopoverTrigger>

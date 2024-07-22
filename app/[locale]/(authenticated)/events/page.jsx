@@ -5,14 +5,14 @@ import UIText from "@/components/theme/UIText";
 import {FixStickyHeaderScrollError} from "@/lib/utils";
 import { motion } from "framer-motion";
 import {useEffect, useRef, useState} from "react";
-import {client, teams} from "@/components/appwrite/appwrite";
+import {client, COLLECTION_EVENTS, DATABASE_ID, teams} from "@/components/appwrite/appwrite";
 import {db} from "@/components/appwrite/database";
 import {Query} from "appwrite";
 import {useScopedI18n} from "@/locales/client";
 import {useRouter} from "next/navigation";
 import {useAuth} from "@/components/contexts/AuthContext";
 import Link from "next/link";
-import {Users2} from "lucide-react";
+import {LockKeyhole, Users2} from "lucide-react";
 
 export default function Home() {
 	const [openAddModal, setOpenAddModal] = useState(false);
@@ -48,7 +48,7 @@ export default function Home() {
 
 	// re-populate events when created, fixes missing $id issue
 	useEffect(() => {
-		const unsubscribe = client.subscribe(`databases.${process.env.NEXT_PUBLIC_DATABASE_ID}.collections.${process.env.NEXT_PUBLIC_COLLECTION_ID_EVENTS}.documents`, (response) => {
+		const unsubscribe = client.subscribe(`databases.${DATABASE_ID}.collections.${COLLECTION_EVENTS}.documents`, (response) => {
 			if(response.events.includes("databases.*.collections.*.documents.*.create")){
 				setEvents(prev=> [response.payload, ...prev])
 			}
@@ -104,7 +104,7 @@ export default function Home() {
 					onClick={() => setOpenAddModal(!openAddModal)}
 					className="border-4 w-full border-dashed border-primary/30 hover:bg-muted cursor-pointer text-center justify-center flex items-center px-6 py-9 rtl:py-6 rounded-md"
 				>
-					<UIText variant={'heading'} text={t('addEvent')}/>
+					<UIText variant={'button'} text={t('addEvent')}/>
 				</motion.div>
 
 				{events.map((event, i) => (
@@ -122,6 +122,7 @@ export default function Home() {
 							className={'relative bg-muted p-8 hover:bg-muted-foreground/10 border border-primary/20 cursor-pointer text-primary flex items-center justify-center shadow-sm rounded-lg text-center outline-none'}
 						>
 							<UIText variant={'heading'} text={event?.name} />
+							{userOwnedGroups.some((grp)=> grp.$id === event?.teamId) && event.teamId && <LockKeyhole className={'absolute left-2 top-2 w-5 h-5'}/>}
 							{event.teamId && <Users2 className={'absolute right-2 top-2 w-5 h-5'}/>}
 						</Link>
 					</motion.div>

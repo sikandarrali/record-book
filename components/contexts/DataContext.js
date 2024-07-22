@@ -1,6 +1,6 @@
 import { useRouter } from "next/navigation";
 import {createContext, useContext, useEffect, useState} from "react";
-import {listUserGroups} from "../appwrite/appwrite";
+import {teams} from "../appwrite/appwrite";
 import {useAuth} from "@/components/contexts/AuthContext";
 
 const DataContext = createContext();
@@ -15,14 +15,16 @@ export const DataProvider = ({ children }) => {
     // get User groups
     useEffect(() => {
         const getUserGroups = async () =>{
-            const tempGroups = await listUserGroups()
+            const tempGroups = await teams.list()
             setUserGroups(tempGroups.teams)
 
             const tempOwnedGroups = tempGroups.teams.filter((item) => item.prefs.creatorEmail === user.email);
             setUserOwnedGroups(tempOwnedGroups)
         }
 
-        getUserGroups()
+       if(user){
+           getUserGroups()
+       }
     }, [dataRefetch]);
 
 

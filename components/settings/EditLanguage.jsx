@@ -77,7 +77,7 @@ export const EditLanguage = ({ open, onOpenChange }) => {
     return (
         <Sheet open={open} onOpenChange={onOpenChange} defaultOpen={false}>
             <SheetContent
-                className={cn("pb-20 lg:pb-14 overflow-auto max-h-fit")}
+                className={cn("pb-40 lg:pb-14 overflow-auto max-h-fit")}
                 side={isDesktop ? "right" : "bottom"}
                 onOpenAutoFocus={(e) => e.preventDefault()}
             >

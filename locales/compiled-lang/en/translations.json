@@ -25,6 +25,22 @@
     "deleteEventText": "This will permanently delete",
     "editEvent": "Edit Event",
     "editEventItem": "Edit Record",
+    "eventInfo": {
+      "addedBy": "Added By: ",
+      "at": "at",
+      "labelDate": "Date:",
+      "labelDetails": "Details:",
+      "labelGroup": "Group:",
+      "labelVenue": "Venue:",
+      "labelViewCreatedEditedBy": "More details:",
+      "updatedBy": "Updated By: "
+    },
+    "eventItemInfo": {
+      "addedBy": "Added By: ",
+      "at": "at",
+      "labelViewCreatedEditedBy": "More details:",
+      "updatedBy": "Updated By: "
+    },
     "groupNotFound": "No Groups found, add first",
     "labelDate": "Date",
     "labelDetails": "Details",
@@ -67,6 +83,7 @@
     "alertGroupDeleted": "Group Deleted",
     "alertGroupLeft": "You just left the Group",
     "alertGroupMemberAdded": "Group Member Added",
+    "alertGroupMemberAlreadyExisted": "Member Already Part of the Group",
     "alertGroupMemberRemoved": "Member Removed from Group",
     "alertGroupUpdated": "Group Name Updated",
     "alertNothingToUpdate": "Nothing to update",
@@ -112,8 +129,6 @@
     "userEmailPlaceholder": "Enter User Email"
   },
   "joinGroup": {
-    "alertGroupJoined": "Groups Joined!",
-    "alreadyJoined": "Already Joined.",
     "btnBackToGroups": "Back to Groups",
     "btnLoginNow": "Login Now",
     "general_argument_invalid": "Unable to Join Group",
@@ -124,9 +139,9 @@
     "team_invite_already_exists": "User is already part of the Group.",
     "team_invite_mismatch": "Invalid Invitation Link.",
     "team_not_found": "No matching group found.",
-    "textJoined": "You've successfully joined this Group.",
+    "titleAlreadyJoined": "Already Joined.",
     "titleJoined": "Group Joined",
-    "unableToJoin": "Unable to Join."
+    "titleUnableToJoin": "Unable to Join Group"
   },
   "login": {
     "withGoogle": "Login with Google"
