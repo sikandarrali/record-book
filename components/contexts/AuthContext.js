@@ -6,6 +6,7 @@ import LoadingFallback from "../loaders/LoadingFallback";
 import {HOMEPAGE_ROUTE, LOGIN_ROUTE, PROTECTED_ROUTES} from "@/lib/routes";
 import {useChangeLocale, useCurrentLocale} from "@/locales/client";
 import Cookies from 'js-cookie'
+import {EncodeUserId} from "@/lib/EncodeDecode";
 
 
 const AuthContext = createContext();
@@ -31,6 +32,7 @@ export const AuthProvider = ({ children }) => {
 			setUser(currentUser)
 			userPrefs = currentUser.prefs
 			changeLocale(userPrefs?.lang || 'ur')
+			Cookies.set(process.env.NEXT_PUBLIC_USER_SESSION_COOKIE_NAME, EncodeUserId(currentUser.$id));
 
 			fetchGoogleUserData(currentSession.providerAccessToken)
 			.then((googleData) => {
@@ -45,19 +47,27 @@ export const AuthProvider = ({ children }) => {
 			if(userPrefs?.lang === currentLocale){
 				setLoading(false)
 			}
-			if(currentUser && pathname === LOGIN_ROUTE) router.replace(HOMEPAGE_ROUTE);
+			// if(currentUser && pathname === LOGIN_ROUTE) router.replace(HOMEPAGE_ROUTE);
 		}
 		catch (e){
 			setUser(null)
 			setLoading(false)
-			if(PROTECTED_ROUTES.includes(pathname)){
-				router.replace(LOGIN_ROUTE)
-			}
+			// if(PROTECTED_ROUTES.includes(pathname)){
+			// 	router.replace(LOGIN_ROUTE)
+			// }
 		}
 		finally {
 			setLoading(false)
 		}
 	};
+
+	// useEffect(() => {
+	// 	if(user?.prefs?.lang !== currentLocale){
+	// 		setLoading(true)
+	// 	}else{
+	// 		setLoading(false)
+	// 	}
+	// }, [user]);
 
 	useEffect(() => {
 		if(user) setLoading(false)
@@ -65,6 +75,11 @@ export const AuthProvider = ({ children }) => {
 
 	const updateUserPrefs = async (prefs, picture) => {
 		let tempPrefs = {...prefs, picture:picture}
+		if(!prefs.lang)
+			tempPrefs = {...tempPrefs, lang: 'ur'}
+		if(!prefs.fontSize)
+			tempPrefs = {...tempPrefs, fontSize: 'base'}
+
 		await account.updatePrefs(tempPrefs)
 	}
 
@@ -83,6 +98,7 @@ export const AuthProvider = ({ children }) => {
 			await account.deleteSession("current");
 			// await account.deleteSessions();
 			setUser(null);
+			Cookies.remove(process.env.NEXT_PUBLIC_USER_SESSION_COOKIE_NAME);
 			Cookies.remove('Next-Locale');
 			setLoading(false)
 			router.replace("/login");
@@ -91,13 +107,13 @@ export const AuthProvider = ({ children }) => {
 		}
 		finally {
 			setLoading(false)
-			router.replace("/login");
+			// router.replace("/login");
 		}
 	};
 
-	useLayoutEffect(() => {
-		if(user) router.replace(HOMEPAGE_ROUTE)
-	}, [router]);
+	// useLayoutEffect(() => {
+	// 	if(user) router.replace(HOMEPAGE_ROUTE)
+	// }, [router]);
 
 	const memoedValues = useMemo(
 		() => ({

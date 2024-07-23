@@ -13,6 +13,7 @@ import {useRouter} from "next/navigation";
 import {useAuth} from "@/components/contexts/AuthContext";
 import Link from "next/link";
 import {LockKeyhole, Users2} from "lucide-react";
+import {LOCALE_PUBLIC_ROUTES} from "@/lib/routes";
 
 export default function Home() {
 	const [openAddModal, setOpenAddModal] = useState(false);
@@ -78,7 +79,8 @@ export default function Home() {
 			FixStickyHeaderScrollError(scrollRef.current);
 		}
 	}, []);
-
+	//
+	// console.log(LOCALE_PUBLIC_ROUTES())
 
 	return (
 		<PageContainer hideTopbar>
@@ -122,7 +124,7 @@ export default function Home() {
 							href={`/event/${event.$id}`}
 							className={'relative bg-muted p-8 hover:bg-muted-foreground/10 border border-primary/20 cursor-pointer text-primary flex items-center justify-center shadow-sm rounded-lg text-center outline-none'}
 						>
-							<UIText variant={'heading'} text={event?.name} />
+							<UIText variant={'heading'} className={'break-all'} text={event?.name} />
 							{event.$permissions.some(permission => permission === `delete("user:${user.$id}")`) && <LockKeyhole className={'absolute left-2 top-2 w-5 h-5'}/>}
 							{event.teamId && <Users2 className={'absolute right-2 top-2 w-5 h-5'}/>}
 						</Link>

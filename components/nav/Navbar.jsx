@@ -24,7 +24,7 @@ const Navbar = () => {
 	const isIOS = useIsIOS();
 
 	return (
-		<div className="flex items-center justify-between sticky top-0 z-[49] bg-white shadow-sm p-4" dir={'ltr'}>
+		<div className="flex items-center justify-between sticky top-0 bg-white z-10 shadow-sm p-4" dir={'ltr'}>
 
 			<Link href={'/events'}>
 				<Image

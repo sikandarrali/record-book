@@ -27,7 +27,6 @@ const Page = () => {
 	const {user} = useAuth()
 	const [error, setError] = useState({correct: true, text:''})
 	const [showError, setShowError] = useState(false)
-	const [alreadyJoined, setAlreadyJoined] = useState(false)
 
 	useLayoutEffect(() => {
 		const checkMembership = async () =>{
@@ -62,7 +61,7 @@ const Page = () => {
 				width={200}
 				height={79}
 			/>
-			{showError.toString()}
+
 			{showError &&
 				<div className={'flex flex-col mt-20 mb-8 mx-4'}>
 					{error.correct ?
@@ -83,13 +82,13 @@ const Page = () => {
 					<div className={'flex flex-col gap-4 mt-16 '}>
 						{!user && <UIText text={t('loginAndCheckGroups')}/>}
 
-						<Link href={user ? '/groups' : '/login'}>
+						<Link href={'/groups'}>
 							<Button
 								variant={'outline'}
 								className={'gap-2 rtl:flex-row-reverse'}
 							>
 								<MoveLeft className={'w-4 h-4'}/>
-								<UIText variant={'button'} className={'rtl:pt-2'} text={user ? t('btnBackToGroups') : t('btnLoginNow')}/>
+								<UIText variant={'button'} className={'rtl:pt-2'} text={t('btnBackToGroups')}/>
 							</Button>
 						</Link>
 					</div>

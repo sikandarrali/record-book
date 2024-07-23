@@ -87,7 +87,8 @@ export default async function RootLayout({ children, params }) {
 		{/* topbar loader */}
 		<HolyLoader
 			// color="#E11D48"
-			color="#000"
+			// color="#000"
+			color="linear-gradient(90deg, rgba(225,29,72,1) 0%, rgba(0,212,255,1) 100%)"
 			height="5px"
 			speed={250}
 			easing="linear"

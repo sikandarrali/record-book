@@ -1,6 +1,6 @@
 import UIText from "@/components/theme/UIText";
 import { Button } from "@/components/ui/button";
-import {Info, Pen, SquarePen, Trash2, XIcon} from "lucide-react";
+import {Info, LockKeyhole, Pen, SquarePen, Trash2, Users2, XIcon} from "lucide-react";
 import { useRouter } from "next/navigation";
 import {useLayoutEffect, useState} from "react";
 import { NumericFormat } from "react-number-format";
@@ -126,7 +126,7 @@ const EventInfo = ({ eventData, setEventData, sum }) => {
 				defaultOpen={false}
 			>
 				<SheetContent
-					className={cn("pb-8 lg:pb-14 outline-0 overflow-auto h-[90%] lg:h-screen lg:max-h-screen border-t-0 border-l-0")}
+					className={cn("pb-40 lg:pb-14 outline-0 overflow-auto h-[90%] lg:h-screen lg:max-h-screen border-t-0 border-l-0")}
 					side={isDesktop ? "right" : "bottom"}
 					onOpenAutoFocus={(e) => e.preventDefault()}
 				>
@@ -134,21 +134,33 @@ const EventInfo = ({ eventData, setEventData, sum }) => {
 
 					<div className="flex flex-col w-full min-h-full pt-4 justify-start">
 
-						<div className="flex flex-col justify-center items-center gap-5 my-10 lg:mt-32">
-							<UIText variant={"heading"} text={eventData?.name}/>
+						<div className={'flex items-center justify-between gap-4 text-primary'}>
+							{eventData.$permissions.some(permission => permission === `delete("user:${user.$id}")`) && <LockKeyhole className={'w-5 h-5'}/>}
+							<div/> {/*empty div fixes justify between*/}
+							{eventData.teamId && <Users2 className={'w-5 h-5'}/>}
+						</div>
+
+
+						<div className="flex flex-col justify-center text-center items-center gap-5 mt-5 mb-10 lg:mt-32">
+							<UIText variant={"heading"} text={eventData?.name} className={'break-all'}/>
 
 							<div className="flex flex-1 justify-center col-span-4 items-center gap-2 relative select-none pointer-events-none" dir={'ltr'}>
 								<span className="text-sm font-semibold">Rs</span>
-								<span className="font-bold text-3xl text-primary">
-									<NumericFormat
-										allowNegative={false}
-										value={Number(sum)}
-										thousandSeparator={","}
-										decimalSeparator={"."}
-										displayType="text"
-										decimalScale={2}
-									/>
-								</span>
+								<UIText
+									className="text-primary"
+									weight={'semibold'}
+									variant={'heading'}
+									text={
+										<NumericFormat
+											allowNegative={false}
+											value={Number(sum)}
+											thousandSeparator={","}
+											decimalSeparator={"."}
+											displayType="text"
+											decimalScale={2}
+										/>
+									}
+								/>
 							</div>
 						</div>
 
@@ -156,7 +168,7 @@ const EventInfo = ({ eventData, setEventData, sum }) => {
 						<div className={'flex flex-col divide-y lg:mt-16'}>
 							<div className={'flex py-2 items-center'}>
 								<div className={'w-1/4 flex shrink-0'}>
-									<UIText className={'text-muted-foreground'} text={t('labelGroup')}/>
+									<UIText weight={'medium'} className={'text-muted-foreground'} text={t('labelGroup')}/>
 								</div>
 								<div className={'w-3/4 flex items-center pl-4'}>
 									{group?.name ?
@@ -169,7 +181,7 @@ const EventInfo = ({ eventData, setEventData, sum }) => {
 
 							<div className={'flex py-2 items-center'}>
 								<div className={'w-1/4 flex shrink-0'}>
-									<UIText className={'text-muted-foreground'} text={t('labelDate')}/>
+									<UIText weight={'medium'} className={'text-muted-foreground'} text={t('labelDate')}/>
 								</div>
 								<div className={'w-3/4 flex items-center pl-4'}>
 									{eventData?.date ? <UIText text={`${day} ${tMonths(month.toLowerCase())+tGeneral('comma')} ${year}`}/> : '-'}
@@ -178,7 +190,7 @@ const EventInfo = ({ eventData, setEventData, sum }) => {
 
 							<div className={'flex py-2 items-center'}>
 								<div className={'w-1/4 flex shrink-0'}>
-									<UIText className={'text-muted-foreground'} text={t('labelVenue')}/>
+									<UIText weight={'medium'} className={'text-muted-foreground'} text={t('labelVenue')}/>
 								</div>
 								<div className={'w-3/4 flex items-center pl-4'}>
 									<UIText text={eventData?.venue || '-'}/>
@@ -187,7 +199,7 @@ const EventInfo = ({ eventData, setEventData, sum }) => {
 
 							<div className={'flex py-2 items-center'}>
 								<div className={'w-1/4 flex shrink-0'}>
-									<UIText className={'text-muted-foreground'} text={t('labelDetails')}/>
+									<UIText weight={'medium'} className={'text-muted-foreground'} text={t('labelDetails')}/>
 								</div>
 								<div className={'w-3/4 flex items-center pl-4'}>
 									<UIText text={eventData?.details || '-'}/>
@@ -197,13 +209,13 @@ const EventInfo = ({ eventData, setEventData, sum }) => {
 							<Accordion type="single" collapsible>
 								<AccordionItem value="item-1" className={'border-0'}>
 									<AccordionTrigger className={'text-muted-foreground hover:no-underline'}>
-										<UIText text={t('labelViewCreatedEditedBy')}/>
+										<UIText weight={'medium'} text={t('labelViewCreatedEditedBy')}/>
 									</AccordionTrigger>
 
 									<AccordionContent className={'divide-y'}>
 										<div className={'flex py-4'}>
 											<div className={'w-1/4 flex flex-col shrink-0'}>
-												<UIText className={'text-muted-foreground'} variant={'sm'} text={t('addedBy')}/>
+												<UIText weight={'medium'} className={'text-muted-foreground'} variant={'sm'} text={t('addedBy')}/>
 											</div>
 											<div className={'w-3/4 flex flex-col pl-4'}>
 												<UIText variant={'sm'} weight={'semibold'} className={'!text-left'} text={eventData?.createdBy[0] || '-'}/>
@@ -219,7 +231,7 @@ const EventInfo = ({ eventData, setEventData, sum }) => {
 										{eventData?.updatedBy[0] &&
 											<div className={'flex py-4'}>
 												<div className={'w-1/4 flex flex-col shrink-0'}>
-													<UIText className={'text-muted-foreground'} variant={'sm'} text={t('updatedBy')}/>
+													<UIText weight={'medium'} className={'text-muted-foreground'} variant={'sm'} text={t('updatedBy')}/>
 												</div>
 												<div className={'w-3/4 flex flex-col pl-4'}>
 													<UIText variant={'sm'} weight={'semibold'} text={eventData?.updatedBy[0] || '-'}/>
