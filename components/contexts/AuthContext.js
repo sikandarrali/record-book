@@ -1,10 +1,9 @@
 import axios from "axios";
-import { usePathname, useRouter } from "next/navigation";
+import {useRouter } from "next/navigation";
 import {createContext, useContext, useEffect, useLayoutEffect, useMemo, useState} from "react";
 import {account} from "../appwrite/appwrite";
 import LoadingFallback from "../loaders/LoadingFallback";
-import {HOMEPAGE_ROUTE, LOGIN_ROUTE, PROTECTED_ROUTES} from "@/lib/routes";
-import {useChangeLocale, useCurrentLocale} from "@/locales/client";
+import {useCurrentLocale} from "@/locales/client";
 import Cookies from 'js-cookie'
 import {EncodeUserId} from "@/lib/EncodeDecode";
 
@@ -15,8 +14,6 @@ export const AuthProvider = ({ children }) => {
 	const [user, setUser] = useState(null);
 	const [loading, setLoading] = useState(true);
 	const router = useRouter();
-	const pathname = usePathname()
-	const changeLocale = useChangeLocale()
 	const currentLocale = useCurrentLocale()
 
 	useLayoutEffect(() => {
@@ -31,7 +28,6 @@ export const AuthProvider = ({ children }) => {
 			const currentUser = await account.get();
 			setUser(currentUser)
 			userPrefs = currentUser.prefs
-			// changeLocale(userPrefs?.lang || 'ur')
 			Cookies.set(process.env.NEXT_PUBLIC_USER_SESSION_COOKIE_NAME, EncodeUserId(currentUser.$id), {sameSite: 'None', secure: true});
 
 			fetchGoogleUserData(currentSession.providerAccessToken)
@@ -47,27 +43,15 @@ export const AuthProvider = ({ children }) => {
 			if(userPrefs?.lang === currentLocale){
 				setLoading(false)
 			}
-			// if(currentUser && pathname === LOGIN_ROUTE) router.replace(HOMEPAGE_ROUTE);
 		}
 		catch (e){
 			setUser(null)
 			setLoading(false)
-			// if(PROTECTED_ROUTES.includes(pathname)){
-			// 	router.replace(LOGIN_ROUTE)
-			// }
 		}
 		finally {
 			setLoading(false)
 		}
 	};
-
-	// useEffect(() => {
-	// 	if(user?.prefs?.lang !== currentLocale){
-	// 		setLoading(true)
-	// 	}else{
-	// 		setLoading(false)
-	// 	}
-	// }, [user]);
 
 	useEffect(() => {
 		if(user) setLoading(false)
