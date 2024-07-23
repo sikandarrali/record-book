@@ -49,7 +49,7 @@ export default function Settings() {
                     <UIText text={t('language.title')} weight={'semibold'} className={'text-primary'}/>
 
                     <div className={'flex justify-between items-center gap-4'}>
-                        <UIText text={t(`language.${GetCurrentLanguage(user?.prefs?.lang)}`)} weight={'medium'}/>
+                        <UIText text={t(`language.${GetCurrentLanguage(user?.prefs?.lang || "ur")}`)} weight={'medium'}/>
                         <Button
                             size={'icon'}
                             variant={'ghost'}

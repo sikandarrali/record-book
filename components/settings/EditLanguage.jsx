@@ -43,7 +43,7 @@ export const EditLanguage = ({ open, onOpenChange }) => {
     const ChangeLocale = useChangeLocale();
 
     const [openLanguageDropdown, setOpenLanguageDropdown] = useState(false)
-    const [selectedLanguage, setSelectedLanguage] = useState(user?.prefs?.lang || "")
+    const [selectedLanguage, setSelectedLanguage] = useState(user?.prefs?.lang || "ur")
 
     const onUpdate = async (values) => {
         setAdding(true);
