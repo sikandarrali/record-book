@@ -1,5 +1,5 @@
 import { createI18nMiddleware } from 'next-international/middleware'
-import {APPWRITE_API_KEY, ENDPOINT, PROJECT_ID} from "@/components/appwrite/appwrite";
+import {ENDPOINT, PROJECT_ID} from "@/components/appwrite/appwrite";
 import {DecodeUserId} from "@/lib/EncodeDecode";
 import {NextResponse} from "next/server";
 import {LOCALE_PROTECTED_ROUTES, LOCALE_PUBLIC_ROUTES} from "@/lib/routes";
@@ -9,7 +9,7 @@ let client = new sdk.Client();
 client
     .setEndpoint(ENDPOINT) // Your API Endpoint
     .setProject(PROJECT_ID) // Your project ID
-    .setKey(APPWRITE_API_KEY) // Your secret API key
+    .setKey(process.env.APPWRITE_API_KEY) // Your secret API key
 ;
 const users = new sdk.Users(client);
 
