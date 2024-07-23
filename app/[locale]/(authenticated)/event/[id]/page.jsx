@@ -5,7 +5,7 @@ import EventInfo from "@/components/event/EventInfo";
 import UIText from "@/components/theme/UIText";
 import { Button } from "@/components/ui/button";
 import {AnimatePresence, motion} from "framer-motion";
-import {MoveLeft, Plus, Users2, XIcon} from "lucide-react";
+import {LockKeyhole, MoveLeft, Plus, Users2, XIcon} from "lucide-react";
 import {useCallback, useEffect, useLayoutEffect, useRef, useState} from "react";
 import { NumericFormat } from "react-number-format";
 import {db} from "@/components/appwrite/database";
@@ -196,9 +196,9 @@ const EventPage = () => {
 					>
 						<div className={'relative flex flex-col flex-1'}>
 							{/*<Suspense fallback={<LoadingFallback />}>*/}
-							<div className="flex flex-col z-10">
+							<div className="flex flex-col">
 								{/* header */}
-								<div className="flex gap-4 pb-2 px-2 pt-2.5 rtl:flex-row-reverse justify-between items-center w-full z-20 border-b border-primary-foreground/40 relative" ref={headerRef}>
+								<div className="flex gap-4 pb-2 px-2 pt-2.5 rtl:flex-row-reverse justify-between items-center w-full border-b border-primary-foreground/40 relative" ref={headerRef}>
 
 									<Link href={'/events'}>
 										<Button
@@ -237,8 +237,11 @@ const EventPage = () => {
 
 								</div>
 
-								<div className={'flex items-center justify-center text-center gap-4 px-4 py-4 border-y text-primary bg-muted'}>
-									<UIText variant={"heading"} text={eventData?.name} />
+								<div className={'flex items-center justify-center text-center break-all gap-4 px-14 py-8 border-y text-primary bg-muted relative'}>
+									<UIText variant={"heading"} text={eventData?.name} className={'self-center'} />
+
+									{eventData.$permissions.some(permission => permission === `delete("user:${user.$id}")`) && <LockKeyhole className={'absolute left-4 top-4 w-5 h-5'}/>}
+									{eventData.teamId && <Users2 className={'absolute right-4 top-4 w-5 h-5'}/>}
 								</div>
 							</div>
 

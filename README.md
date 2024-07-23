@@ -4,6 +4,9 @@ Record all your Shadi Expense in one place.
 
 ## Changelog
 
+### 3.3
+- Fixed Permissions: Now only the user who created can delete, all members of group can update.
+- a few other bugs fixed
 
 ### 3.2
 - Removed Group Permissions to delete Events & Items, now only the user who created them can delete.

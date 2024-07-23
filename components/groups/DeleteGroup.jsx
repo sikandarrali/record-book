@@ -24,6 +24,7 @@ export const DeleteGroup = ({ open, onOpenChange, groupName, onDelete }) => {
 					<AlertDialogDescription className={"flex flex-col text-base items-center gap-4 !my-5"}>
 						<UIText text={t('deleteGroupText')}/>
 						<UIText variant={'lg'} className={'text-primary'} weight={'semibold'} text={groupName}/>
+						<UIText text={t('deleteGroupUpdateEventText')}/>
 					</AlertDialogDescription>
 				</AlertDialogHeader>
 

@@ -158,7 +158,7 @@ export const SingleListItem = ({ item }) => {
 							<AccordionContent className={'divide-y'}>
 								<div className={'flex py-4'}>
 									<div className={'w-1/4 flex flex-col shrink-0'}>
-										<UIText className={'text-muted-foreground'} variant={'sm'} text={t('eventItemInfo.addedBy')}/>
+										<UIText weight={'medium'} className={'text-muted-foreground'} variant={'sm'} text={t('eventItemInfo.addedBy')}/>
 									</div>
 									<div className={'w-3/4 flex flex-col pl-4'}>
 										<UIText variant={'sm'} weight={'semibold'} className={'!text-left'} text={item?.createdBy[0] || '-'}/>
@@ -174,7 +174,7 @@ export const SingleListItem = ({ item }) => {
 								{item?.updatedBy[0] &&
 									<div className={'flex py-4'}>
 										<div className={'w-1/4 flex flex-col shrink-0'}>
-											<UIText className={'text-muted-foreground'} variant={'sm'} text={t('eventItemInfo.updatedBy')}/>
+											<UIText weight={'medium'} className={'text-muted-foreground'} variant={'sm'} text={t('eventItemInfo.updatedBy')}/>
 										</div>
 										<div className={'w-3/4 flex flex-col pl-4'}>
 											<UIText variant={'sm'} weight={'semibold'} text={item?.updatedBy[0] || '-'}/>

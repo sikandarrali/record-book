@@ -79,7 +79,7 @@ export const AddGroupMember = ({groupID, setUsersInGroup}) =>{
                 <Form className="flex gap-4 w-full items-stretch justify-between" dir={'ltr'}>
                     <div className={'flex-1 flex w-full relative'}>
                         {errors.email && touched.email &&
-                            <div className={cn("absolute ltr:right-0 rtl:left-0 ltr:-top-6 rtl-top-9 flex rtl:flex-row-reverse items-center text-red-500 gap-1")}>
+                            <div className={cn("absolute ltr:right-0 rtl:left-0 ltr:-top-6 rtl:-top-9 flex items-center text-red-500 gap-1")}>
                                 <Asterisk className="w-4 h-4 shrink-0 rtl:mt-2" />
                                 {errors.email === 'invalid' && <UIText variant={'sm'} text={tLabel('invalid')}/>}
                                 {errors.email === 'required' && <UIText variant={'sm'} text={tLabel('required')}/>}
@@ -91,7 +91,7 @@ export const AddGroupMember = ({groupID, setUsersInGroup}) =>{
                             name="email"
                             disabled={disabled}
                             placeholder={t('userEmailPlaceholder')}
-                            value={values.email}
+                            value={values.email.trim()}
                             className={'lowercase'}
                         />
                     </div>
@@ -99,6 +99,7 @@ export const AddGroupMember = ({groupID, setUsersInGroup}) =>{
                     <Button
                         disabled={disabled}
                         type={'submit'}
+                        className={'flex-wrap items-center justify-center shrink-0'}
                     >
                         {adding ?
                             <Loader2Icon className="animate animate-spin w-6 h-6 stroke-[3]" />

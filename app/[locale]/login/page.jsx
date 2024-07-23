@@ -7,25 +7,30 @@ import Logo from "../../../public/logo.png"
 import {useI18n, useScopedI18n} from "@/locales/client";
 import UIText from "@/components/theme/UIText";
 import Link from "next/link";
+import Cookies from "js-cookie";
+import LoadingFallback from "@/components/loaders/LoadingFallback";
+import {redirect} from "next/navigation";
 
 export default function Home() {
-	const { onGoogleWithLogin } = useAuth();
+	const { onGoogleWithLogin, user } = useAuth();
 	const t = useScopedI18n('login')
+
+	if(user) {
+		redirect('/events')
+		return <></>
+	}
 
 	return (
 		<PageContainer hideNavbar>
 			<div className="flex flex-col pt-8 w-full flex-1">
-
-				{/*<div className={"relative w-[200px] h-[150px]"}>*/}
-					<Image
-						src={Logo}
-						alt="Logo"
-						className="mx-auto"
-						priority
-						width={200}
-						height={79}
-					/>
-				{/*</div>*/}
+				<Image
+					src={Logo}
+					alt="Logo"
+					className="mx-auto"
+					priority
+					width={200}
+					height={79}
+				/>
 
 				<Button
 					onClick={() => onGoogleWithLogin()}
@@ -53,7 +58,6 @@ export default function Home() {
 					and{" "}
 					<Link href={'/privacy-policy'} className={'text-primary font-semibold'}>Privacy Policy</Link>{" "}
 				</div>
-
 			</div>
 		</PageContainer>
 	);

@@ -67,6 +67,9 @@ export const EditEvent = ({ open, onOpenChange, eventData, setEventData, setGrou
 	}, [open]);
 
 	const updateAllItemsInEvent = async (permissionsToUpdate) => {
+		let permissions = []
+		if(permissionsToUpdate) permissions = permissionsToUpdate
+
 		const getItems = await db.eventItems.list([
 			Query.orderDesc("$createdAt"),
 			Query.equal('eventID', eventData?.$id)
@@ -82,7 +85,7 @@ export const EditEvent = ({ open, onOpenChange, eventData, setEventData, setGrou
 				amount: item?.amount,
 				date: item?.date,
 			}
-			await db.eventItems.update(tempItem, item.$id, permissionsToUpdate);
+			await db.eventItems.update(tempItem, item.$id);
 		}
 	};
 
@@ -96,9 +99,9 @@ export const EditEvent = ({ open, onOpenChange, eventData, setEventData, setGrou
 		let teamPermissions = [
 			Permission.read(Role.team(selectedGroup, "member")),
 			Permission.update(Role.team(selectedGroup, "member")),
-			Permission.read(Role.user(user.$id)),
-			Permission.update(Role.user(user.$id)),
-			Permission.delete(Role.user(user.$id)),
+			// Permission.read(Role.user(user.$id)),
+			// Permission.update(Role.user(user.$id)),
+			// Permission.delete(Role.user(user.$id)),
 		]
 		let userPermissions = [
 			Permission.read(Role.user(user.$id)),
@@ -136,8 +139,7 @@ export const EditEvent = ({ open, onOpenChange, eventData, setEventData, setGrou
 					DATABASE_ID,
 					COLLECTION_EVENTS,
 					eventData?.$id,
-					eventDataValues,
-					teamPermissions
+					eventDataValues
 				);
 				setEventData(result)
 				if(defaultTeamId !== selectedGroup){
@@ -148,12 +150,11 @@ export const EditEvent = ({ open, onOpenChange, eventData, setEventData, setGrou
 					DATABASE_ID,
 					COLLECTION_EVENTS,
 					eventData?.$id,
-					eventDataValues,
-					userPermissions// )
+					eventDataValues
 				);
 				setEventData(result)
 				if(defaultTeamId){
-					await updateAllItemsInEvent(userPermissions);
+					await updateAllItemsInEvent();
 				}
 			}
 
