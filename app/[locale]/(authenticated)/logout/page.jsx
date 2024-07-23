@@ -1,5 +1,5 @@
 "use client";
-import { useEffect } from "react";
+import {useLayoutEffect} from "react";
 import {useAuth} from "@/components/contexts/AuthContext";
 import {Button} from "@/components/ui/button";
 import UIText from "@/components/theme/UIText"
@@ -9,13 +9,9 @@ const Page = () => {
 	const {onLogout} = useAuth()
 	const t = useScopedI18n('logout')
 
-	useEffect(() => {
-		init();
-	}, []);
-
-	const init = async () => {
+	useLayoutEffect(() => {
 		onLogout()
-	};
+	}, []);
 
 	return <Button onClick={()=> onLogout()}>
 		<UIText text={t('text') + t('btnLogout')}></UIText>

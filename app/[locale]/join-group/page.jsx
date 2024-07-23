@@ -31,6 +31,7 @@ const Page = () => {
 
 	useLayoutEffect(() => {
 		const checkMembership = async () =>{
+			setShowError(true)
 			try {
 				const result = await teams.updateMembershipStatus(
 					teamId, // teamId
@@ -39,19 +40,11 @@ const Page = () => {
 					secret // secret
 				);
 				if(result){
-					setError({correct: true, text: t('alertGroupJoined')})
+					setError({correct: true, text: t('titleJoined')})
 				}
 			}catch (e) {
 				setError({correct: false, text: t(e.response.type)})
-
-				if(e.response.type === 'membership_already_confirmed'){
-					setAlreadyJoined(true)
-				}else{
-					setAlreadyJoined(false)
-				}
 			}
-
-			setShowError(true)
 		}
 
 		return ()=> checkMembership()
@@ -69,20 +62,21 @@ const Page = () => {
 				width={200}
 				height={79}
 			/>
+			{showError.toString()}
 			{showError &&
 				<div className={'flex flex-col mt-20 mb-8 mx-4'}>
 					{error.correct ?
 						<div className={'flex w-full flex-1 items-center gap-4 border-2 border-green-400 rounded-md p-3 px-4'}>
 							<Check className={'text-green-500 stroke-[3] mt-0.5'}/>
 							<div className={'flex flex-col gap-1'}>
-								<UIText className={'text-green-500'} text={t('titleJoined')}/>
+								<UIText className={'text-green-500'} text={t(error.text)}/>
 							</div>
 						</div>
 						:
 						<div className={'flex w-full flex-1 items-center gap-4 border-2 border-red-400 rounded-md p-3 px-4'}>
 							<XIcon className={'text-red-700 stroke-[3] mt-0.5 rtl:mt-2'}/>
 							<div className={'flex flex-col gap-1'}>
-								<UIText className={'text-red-700'} weight={'semibold'} text={alreadyJoined ? t('titleAlreadyJoined') : t('titleUnableToJoin')}/>
+								<UIText className={'text-red-700'} weight={'semibold'} text={error.text}/>
 							</div>
 						</div>
 					}

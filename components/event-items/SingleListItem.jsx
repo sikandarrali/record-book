@@ -23,6 +23,8 @@ import {UISheetInfoFooter} from "@/components/theme/UISheetInfoFooter";
 import {isStringUrdu} from "@/lib/isStringUrdu";
 import {useRouter, useSearchParams} from "next/navigation";
 import {Accordion, AccordionContent, AccordionItem, AccordionTrigger} from "@/components/ui/accordion";
+import {EnglishMonths} from "@/lib/defaultData";
+import {useAuth} from "@/components/contexts/AuthContext";
 
 export const SingleListItem = ({ item }) => {
 	const isDesktop = useMediaQuery({ query: "(min-width: 1024px)" })
@@ -30,6 +32,11 @@ export const SingleListItem = ({ item }) => {
 	const [openEdit, setOpenEdit] = useState(false);
 	const [openDelete, setOpenDelete] = useState(false);
 	const t = useScopedI18n('events')
+	const tGeneral = useScopedI18n('general')
+	const tMonths = useScopedI18n('months')
+	const {user} = useAuth()
+	const hasDeletePermission =  item.$permissions.some(permission => permission === `delete("user:${user.$id}")`)
+
 
 	const onDelete = async () => {
 		setOpenDelete(false);
@@ -37,6 +44,27 @@ export const SingleListItem = ({ item }) => {
 		await db.eventItems.delete(item.$id);
 		toast.success(t('alertEventItemDeleted'), ToastOptions);
 	};
+
+	const createdAtDate = new Date(item.$createdAt);
+	const renderedCreatedDate = {
+		year: createdAtDate.getFullYear(),
+		day: createdAtDate.getDate(),
+		month: EnglishMonths[createdAtDate.getMonth()],
+		hours: String(createdAtDate.getHours()).padStart(2, '0'),
+		minutes: String(createdAtDate.getMinutes()).padStart(2, '0'),
+		seconds: String(createdAtDate.getSeconds()).padStart(2, '0')
+	}
+
+	const updatedAtDate = new Date(item.$updatedAt);
+	const renderedUpdatedDate = {
+		year: updatedAtDate.getFullYear(),
+		day: updatedAtDate.getDate(),
+		month: EnglishMonths[updatedAtDate.getMonth()],
+		hours: String(updatedAtDate.getHours()).padStart(2, '0'),
+		minutes: String(updatedAtDate.getMinutes()).padStart(2, '0'),
+		seconds: String(updatedAtDate.getSeconds()).padStart(2, '0')
+	}
+
 
 	return (
 		<Sheet
@@ -72,7 +100,7 @@ export const SingleListItem = ({ item }) => {
 						</div>
 					</div>
 
-					{item.details &&
+					{item.details && item.details !== ""  && item.details !== " " &&
 						<div className={'flex items-center gap-2 mt-1'}>
 							<CornerDownRight className={'w-5 h-5 mt-1 text-muted-foreground rtl:hidden'}/>
 							<CornerDownLeft className={'w-5 h-5 mt-1 text-muted-foreground ltr:hidden'}/>
@@ -135,8 +163,12 @@ export const SingleListItem = ({ item }) => {
 									<div className={'w-3/4 flex flex-col pl-4'}>
 										<UIText variant={'sm'} weight={'semibold'} className={'!text-left'} text={item?.createdBy[0] || '-'}/>
 										<UIText variant={'xs'} text={item?.createdBy[1] || '-'}/>
-										<UIText variant={'xs'} text={t('eventItemInfo.at')} className={'mt-1 mb-2 rtl:self-end text-muted-foreground'}/>
-										<UIText variant={'xs'} text={item.$createdAt}/>
+										<p className={'flex flex-wrap rtl:justify-end items-center gap-2 mt-2 text-muted-foreground'}>
+											<UIText variant={'xs'} weight={'medium'} className={'order-1 rtl:order-2'} text={t('eventItemInfo.onDay')}/>
+											<UIText variant={'xs'} weight={'medium'} className={'order-2 rtl:order-1'} text={`${renderedCreatedDate.day} ${tMonths(renderedCreatedDate.month.toLowerCase())+tGeneral('comma')} ${renderedCreatedDate.year}`}/>
+											<UIText variant={'xs'} weight={'medium'} className={'order-3 rtl:order-4'} text={t('eventItemInfo.atTime')}/>
+											<UIText variant={'xs'} weight={'medium'} className={'order-4 rtl:order-3 rtl:mt-2'} text={`${renderedCreatedDate.hours}:${renderedCreatedDate.minutes}:${renderedCreatedDate.minutes}`}/>
+										</p>
 									</div>
 								</div>
 								{item?.updatedBy[0] &&
@@ -147,8 +179,12 @@ export const SingleListItem = ({ item }) => {
 										<div className={'w-3/4 flex flex-col pl-4'}>
 											<UIText variant={'sm'} weight={'semibold'} text={item?.updatedBy[0] || '-'}/>
 											<UIText variant={'xs'} text={item?.updatedBy[1] || '-'}/>
-											<UIText variant={'xs'} text={t('eventItemInfo.at')} className={'mt-1 mb-2 rtl:self-end text-muted-foreground'}/>
-											<UIText variant={'xs'} text={item.$updatedAt}/>
+											<p className={'flex flex-wrap rtl:justify-end items-center gap-2 mt-2 text-muted-foreground'}>
+												<UIText variant={'xs'} weight={'medium'} className={'order-1 rtl:order-2'} text={t('eventItemInfo.onDay')}/>
+												<UIText variant={'xs'} weight={'medium'} className={'order-2 rtl:order-1'} text={`${renderedUpdatedDate.day} ${tMonths(renderedUpdatedDate.month.toLowerCase())+tGeneral('comma')} ${renderedUpdatedDate.year}`}/>
+												<UIText variant={'xs'} weight={'medium'} className={'order-3 rtl:order-4'} text={t('eventItemInfo.atTime')}/>
+												<UIText variant={'xs'} weight={'medium'} className={'order-4 rtl:order-3 rtl:mt-2'} text={`${renderedUpdatedDate.hours}:${renderedUpdatedDate.minutes}:${renderedUpdatedDate.minutes}`}/>
+											</p>
 										</div>
 									</div>
 								}
@@ -160,6 +196,7 @@ export const SingleListItem = ({ item }) => {
 						setOpen={setIsOpen}
 						setOpenDelete={setOpenDelete}
 						setOpenEdit={setOpenEdit}
+						hasDeletePermission={hasDeletePermission}
 					/>
 				</div>
 
@@ -168,12 +205,14 @@ export const SingleListItem = ({ item }) => {
 					open={openEdit}
 					onOpenChange={setOpenEdit}
 				/>
-				<DeleteEventItem
-					personName={item.name}
-					open={openDelete}
-					onOpenChange={setOpenDelete}
-					onDelete={onDelete}
-				/>
+				{hasDeletePermission &&
+					<DeleteEventItem
+						personName={item.name}
+						open={openDelete}
+						onOpenChange={setOpenDelete}
+						onDelete={onDelete}
+					/>
+				}
 			</SheetContent>
 		</Sheet>
 	);

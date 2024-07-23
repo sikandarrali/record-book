@@ -2,9 +2,7 @@
 import { db } from "@/components/appwrite/database";
 import FormLabel from "@/components/theme/FormLabel";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle} from "@/components/ui/sheet";
-import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { Form, Formik } from "formik";
 import {CalendarIcon, LockKeyhole, XIcon} from "lucide-react";
@@ -21,26 +19,24 @@ import {UISheetFooter} from "@/components/theme/UISheetFooter";
 import {useScopedI18n} from "@/locales/client";
 import {Label} from "@/components/ui/label";
 import UIText from "@/components/theme/UIText";
-import {isStringUrdu} from "@/lib/isStringUrdu";
-import {SheetStylesFlexibleHeight, SheetStylesMAxHeight90} from "@/lib/reusableStyles";
-import {COLLECTION_EVENT_ITEMS, COLLECTION_EVENTS, DATABASE_ID, databases, teams} from "@/components/appwrite/appwrite";
+import {COLLECTION_EVENTS, DATABASE_ID, databases} from "@/components/appwrite/appwrite";
 import {useRouter} from "next/navigation";
 import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
-import {FormattedDateForCalenderDatePick} from "@/lib/FormattedDateForCalendarPick";
-import {FormattedDate} from "@/lib/hooks/FormattedDate";
 import { Calendar } from "@/components/ui/calendar"
 import {UITextInput} from "@/components/theme/UITextInput";
 import {UITextArea} from "@/components/theme/UITextArea";
 
+const removeExtraSpaces = (value) => value.replace(/\s\s+/g, ' ').trim();
 const EditEventSchema = Yup.object().shape({
 	name: Yup.string()
 		.min(1)
 		.max(300, "max 300 characters")
+		.transform((value) => removeExtraSpaces(value))
 		.required("required"),
-	date: Yup.string().min(1).max(300, "max 300 characters"),
-	venue: Yup.string().min(1).max(300, "max 300 characters"),
-	details: Yup.string().min(1).max(300, "max 300 characters"),
-});
+	date: Yup.string().min(1).transform((value) => removeExtraSpaces(value)).max(300, "max 300 characters"),
+	venue: Yup.string().min(1).transform((value) => removeExtraSpaces(value)).max(300, "max 300 characters"),
+	details: Yup.string().min(1).transform((value) => removeExtraSpaces(value)).max(300, "max 300 characters"),
+})
 
 export const EditEvent = ({ open, onOpenChange, eventData, setEventData, setGroup }) => {
 	const isDesktop = useMediaQuery({
@@ -61,11 +57,6 @@ export const EditEvent = ({ open, onOpenChange, eventData, setEventData, setGrou
 	let defaultTeamId = eventData?.teamId;
 
 	const isOwner = userOwnedGroups.some((grp)=> grp.$id === eventData?.teamId)
-
-	// const getUserGroups = async () =>{
-	// 	const response = await teams.list()
-	// 	setUserJoinedGroups(response.teams)
-	// }
 
 	useLayoutEffect(() => {
 		setUserJoinedGroupName(userGroups?.find((filter)=> filter.$id===eventData?.teamId)?.name)
@@ -105,7 +96,6 @@ export const EditEvent = ({ open, onOpenChange, eventData, setEventData, setGrou
 		let teamPermissions = [
 			Permission.read(Role.team(selectedGroup, "member")),
 			Permission.update(Role.team(selectedGroup, "member")),
-			Permission.delete(Role.team(selectedGroup, "member")),
 			Permission.read(Role.user(user.$id)),
 			Permission.update(Role.user(user.$id)),
 			Permission.delete(Role.user(user.$id)),
@@ -132,10 +122,10 @@ export const EditEvent = ({ open, onOpenChange, eventData, setEventData, setGrou
 
 		try {
 			const eventDataValues = {
-				name: values.name,
+				name: values.name.trim(),
 				date: values.date,
-				venue: values.venue,
-				details: values.details,
+				venue: values.venue.trim(),
+				details: values.details.trim(),
 				teamId: selectedGroup,
 				createdBy: eventData.createdBy,
 				updatedBy: tempUpdatedBy
@@ -240,11 +230,11 @@ export const EditEvent = ({ open, onOpenChange, eventData, setEventData, setGrou
 													setSelectedGroup(selected);
 													console.log(selected)
 												}} key={selectedGroup}>
-													<SelectTrigger ref={null} className="w-full h-12 flex between rtl:flex-row-reverse">
+													<SelectTrigger ref={null} className="w-full min-h-16 py-4 flex between rtl:flex-row-reverse">
 														{selectedGroup ?
 															<UIText text={selectedGroupName}/>
 															:
-															<UIText className={"text-muted-foreground"} text={t('selectGroupPlaceholder')}/>
+															<UIText className={"text-muted-foreground rtl:pr-4"} text={t('selectGroupPlaceholder')}/>
 														}
 													</SelectTrigger>
 													<SelectContent>

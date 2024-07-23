@@ -15,10 +15,13 @@ import UIText from "@/components/theme/UIText";
 import {useScopedI18n} from "@/locales/client";
 import {UITextInput} from "@/components/theme/UITextInput";
 
+const removeExtraSpaces = (value) => value.replace(/\s\s+/g, ' ').trim();
+
 const EditGroupSchema = Yup.object().shape({
     name: Yup.string()
         .min(1)
         .max(100, "max 100 characters")
+        .transform((value) => removeExtraSpaces(value))
         .required("required"),
 });
 
@@ -44,7 +47,7 @@ export const EditProfile = ({ open, onOpenChange }) => {
         }
 
         try {
-            await account.updateName(values.name);
+            await account.updateName(values.name.trim());
             toast.success("Name Updated", ToastOptions);
             setUser({...user, name:values.name});
             setAdding(false);

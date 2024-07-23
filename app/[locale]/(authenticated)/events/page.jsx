@@ -79,6 +79,7 @@ export default function Home() {
 		}
 	}, []);
 
+
 	return (
 		<PageContainer hideTopbar>
 
@@ -122,13 +123,12 @@ export default function Home() {
 							className={'relative bg-muted p-8 hover:bg-muted-foreground/10 border border-primary/20 cursor-pointer text-primary flex items-center justify-center shadow-sm rounded-lg text-center outline-none'}
 						>
 							<UIText variant={'heading'} text={event?.name} />
-							{userOwnedGroups.some((grp)=> grp.$id === event?.teamId) && event.teamId && <LockKeyhole className={'absolute left-2 top-2 w-5 h-5'}/>}
+							{event.$permissions.some(permission => permission === `delete("user:${user.$id}")`) && <LockKeyhole className={'absolute left-2 top-2 w-5 h-5'}/>}
 							{event.teamId && <Users2 className={'absolute right-2 top-2 w-5 h-5'}/>}
 						</Link>
 					</motion.div>
 				))}
 			</motion.div>
-
 
 			<AddEvent
 				open={openAddModal}

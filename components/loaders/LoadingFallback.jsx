@@ -30,9 +30,9 @@ const LoadingFallback = ({hideMessage}) => {
 						style={{animation: "spin 1s linear infinite"}}
 					/>
 					{!hideMessage && showSlowNetworkMessage && (
-						<div className={'flex flex-col gap-6'}>
+						<div className={'flex flex-col gap-6'} dir={'ltr'}>
 							<p className="text-sm">{`it's taking too long...`}</p>
-							<Button onClick={()=> router.refresh()}>Reload App</Button>
+							<Button onClick={()=> window.location.reload()}>Reload App</Button>
 						</div>
 					)}
 				</>

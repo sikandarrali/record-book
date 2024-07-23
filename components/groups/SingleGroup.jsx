@@ -135,6 +135,7 @@ const SingleGroup = ({ data }) => {
                             setOpen={setOpen}
                             setOpenEdit={setOpenEdit}
                             setOpenDelete={setOpenDelete}
+                            hasDeletePermission
                         />
                         :
                         <div className={'mt-auto py-14 lg:py-0 flex flex-row items-center justify-between px-2'} dir={'ltr'}>

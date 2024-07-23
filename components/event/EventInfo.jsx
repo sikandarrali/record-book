@@ -31,6 +31,7 @@ import {
 
 import {useData} from "@/components/contexts/DataContext";
 import {EnglishMonths} from "@/lib/defaultData";
+import {useAuth} from "@/components/contexts/AuthContext";
 
 const EventInfo = ({ eventData, setEventData, sum }) => {
 	const isDesktop = useMediaQuery({ query: "(min-width: 1024px)" })
@@ -43,6 +44,9 @@ const EventInfo = ({ eventData, setEventData, sum }) => {
 	const tMonths = useScopedI18n('months')
 	const tGeneral = useScopedI18n('general')
 	const {userGroups} = useData()
+	const {user} = useAuth()
+
+	const hasDeletePermission =  eventData.$permissions.some(permission => permission === `delete("user:${user.$id}")`)
 
 	const onDelete = async () => {
 		await db.events.delete(eventData?.$id);
@@ -83,6 +87,26 @@ const EventInfo = ({ eventData, setEventData, sum }) => {
 	const day = date.getDate();
 	const monthIndex = date.getMonth(); // getMonth() returns a zero-based index (0 for January, 11 for December)
 	const month = EnglishMonths[monthIndex];
+
+	const createdAtDate = new Date(eventData.$createdAt);
+	const renderedCreatedDate = {
+		year: createdAtDate.getFullYear(),
+		day: createdAtDate.getDate(),
+		month: EnglishMonths[createdAtDate.getMonth()],
+		hours: String(createdAtDate.getHours()).padStart(2, '0'),
+		minutes: String(createdAtDate.getMinutes()).padStart(2, '0'),
+		seconds: String(createdAtDate.getSeconds()).padStart(2, '0')
+	}
+
+	const updatedAtDate = new Date(eventData.$updatedAt);
+	const renderedUpdatedDate = {
+		year: updatedAtDate.getFullYear(),
+		day: updatedAtDate.getDate(),
+		month: EnglishMonths[updatedAtDate.getMonth()],
+		hours: String(updatedAtDate.getHours()).padStart(2, '0'),
+		minutes: String(updatedAtDate.getMinutes()).padStart(2, '0'),
+		seconds: String(updatedAtDate.getSeconds()).padStart(2, '0')
+	}
 
 	return (
 		<>
@@ -183,8 +207,12 @@ const EventInfo = ({ eventData, setEventData, sum }) => {
 											<div className={'w-3/4 flex flex-col pl-4'}>
 												<UIText variant={'sm'} weight={'semibold'} className={'!text-left'} text={eventData?.createdBy[0] || '-'}/>
 												<UIText variant={'xs'} text={eventData?.createdBy[1] || '-'}/>
-												<UIText variant={'xs'} text={t('at')} className={'mt-1 mb-2 rtl:self-end text-muted-foreground'}/>
-												<UIText variant={'xs'} text={eventData.$createdAt}/>
+												<p className={'flex flex-wrap rtl:justify-end items-center gap-2 mt-2 text-muted-foreground'}>
+													<UIText variant={'xs'} weight={'medium'} className={'order-1 rtl:order-2'} text={t('onDay')}/>
+													<UIText variant={'xs'} weight={'medium'} className={'order-2 rtl:order-1'} text={`${renderedCreatedDate.day} ${tMonths(renderedCreatedDate.month.toLowerCase())+tGeneral('comma')} ${renderedCreatedDate.year}`}/>
+													<UIText variant={'xs'} weight={'medium'} className={'order-3 rtl:order-4'} text={t('atTime')}/>
+													<UIText variant={'xs'} weight={'medium'} className={'order-4 rtl:order-3 rtl:mt-2'} text={`${renderedCreatedDate.hours}:${renderedCreatedDate.minutes}:${renderedCreatedDate.minutes}`}/>
+												</p>
 											</div>
 										</div>
 										{eventData?.updatedBy[0] &&
@@ -195,8 +223,12 @@ const EventInfo = ({ eventData, setEventData, sum }) => {
 												<div className={'w-3/4 flex flex-col pl-4'}>
 													<UIText variant={'sm'} weight={'semibold'} text={eventData?.updatedBy[0] || '-'}/>
 													<UIText variant={'xs'} text={eventData?.updatedBy[1] || '-'}/>
-													<UIText variant={'xs'} text={t('at')} className={'mt-1 mb-2 rtl:self-end text-muted-foreground'}/>
-													<UIText variant={'xs'} text={eventData.$updatedAt}/>
+													<p className={'flex flex-wrap rtl:justify-end items-center gap-2 mt-2 text-muted-foreground'}>
+														<UIText variant={'xs'} weight={'medium'} className={'order-1 rtl:order-2'} text={t('onDay')}/>
+														<UIText variant={'xs'} weight={'medium'} className={'order-2 rtl:order-1'} text={`${renderedUpdatedDate.day} ${tMonths(renderedUpdatedDate.month.toLowerCase())+tGeneral('comma')} ${renderedUpdatedDate.year}`}/>
+														<UIText variant={'xs'} weight={'medium'} className={'order-3 rtl:order-4'} text={t('atTime')}/>
+														<UIText variant={'xs'} weight={'medium'} className={'order-4 rtl:order-3 rtl:mt-2'} text={`${renderedUpdatedDate.hours}:${renderedUpdatedDate.minutes}:${renderedUpdatedDate.minutes}`}/>
+													</p>
 												</div>
 											</div>
 										}
@@ -209,6 +241,7 @@ const EventInfo = ({ eventData, setEventData, sum }) => {
 							setOpen={setOpenDetails}
 							setOpenDelete={setOpenDelete}
 							setOpenEdit={setOpenEdit}
+							hasDeletePermission={hasDeletePermission}
 						/>
 
 					</div>
@@ -222,12 +255,14 @@ const EventInfo = ({ eventData, setEventData, sum }) => {
 				setEventData={setEventData}
 				setGroup={setGroup}
 			/>
-			<DeleteEvent
-				open={openDelete}
-				onOpenChange={setOpenDelete}
-				onDelete={onDelete}
-				eventName={eventData?.name}
-			/>
+			{hasDeletePermission &&
+				<DeleteEvent
+					open={openDelete}
+					onOpenChange={setOpenDelete}
+					onDelete={onDelete}
+					eventName={eventData?.name}
+				/>
+			}
 		</>
 	);
 };

@@ -44,7 +44,7 @@ export const EditFontSize = ({ open, onOpenChange }) => {
     const router = useRouter()
 
     const [openFontSizeDropdown, setOpenFontSizeDropdown] = useState(false)
-    const [selectedFontSize, setSelectedFont] = useState(user?.prefs?.fontSize || "")
+    const [selectedFontSize, setSelectedFont] = useState(user?.prefs?.fontSize || "base")
 
     const onUpdate = async (values) => {
         setAdding(true);

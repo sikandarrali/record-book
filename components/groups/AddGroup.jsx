@@ -19,10 +19,13 @@ import {isStringUrdu} from "@/lib/isStringUrdu";
 import {useData} from "@/components/contexts/DataContext";
 import {UITextInput} from "@/components/theme/UITextInput";
 
+const removeExtraSpaces = (value) => value.replace(/\s\s+/g, ' ').trim();
+
 const AddGroupSchema = Yup.object().shape({
     name: Yup.string()
         .min(1)
         .max(300, "max 50 characters")
+        .transform((value) => removeExtraSpaces(value))
         .required("required"),
 });
 
@@ -39,7 +42,7 @@ export const AddGroup = ({ open, onOpenChange }) => {
         setDisabled(true);
 
         try {
-            const response = await teams.create(ID.unique(), values.name, ['member']);
+            const response = await teams.create(ID.unique(), values.name.trim(), ['member']);
             await teams.updatePrefs(
                 response.$id,
                 {

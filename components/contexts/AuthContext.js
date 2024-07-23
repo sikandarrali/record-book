@@ -84,11 +84,13 @@ export const AuthProvider = ({ children }) => {
 			// await account.deleteSessions();
 			setUser(null);
 			Cookies.remove('Next-Locale');
-			setTimeout(()=>{
-				setLoading(false)
-			}, 500)
-		}catch (e){}
+			setLoading(false)
+			router.replace("/login");
+		}catch (e){
+			// console.log(e)
+		}
 		finally {
+			setLoading(false)
 			router.replace("/login");
 		}
 	};

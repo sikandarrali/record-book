@@ -79,7 +79,7 @@ export const AddGroupMember = ({groupID, setUsersInGroup}) =>{
                 <Form className="flex gap-4 w-full items-stretch justify-between" dir={'ltr'}>
                     <div className={'flex-1 flex w-full relative'}>
                         {errors.email && touched.email &&
-                            <div className={cn("absolute left-0 -top-9 flex rtl:flex-row-reverse items-center text-red-500 gap-1")}>
+                            <div className={cn("absolute ltr:right-0 rtl:left-0 ltr:-top-6 rtl-top-9 flex rtl:flex-row-reverse items-center text-red-500 gap-1")}>
                                 <Asterisk className="w-4 h-4 shrink-0 rtl:mt-2" />
                                 {errors.email === 'invalid' && <UIText variant={'sm'} text={tLabel('invalid')}/>}
                                 {errors.email === 'required' && <UIText variant={'sm'} text={tLabel('required')}/>}
