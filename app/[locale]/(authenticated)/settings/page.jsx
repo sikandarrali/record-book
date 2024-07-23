@@ -77,6 +77,11 @@ export default function Settings() {
                         </Button>
                     </div>
                 </div>
+
+
+              <div className={'-mx-6 px-6 pb-6 gap-2 text-center mt-10 text-sm text-muted-foreground'}>
+                  App Version <span className={'font-semibold'}>3.3</span>
+              </div>
             </div>
 
 
