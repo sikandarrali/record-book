@@ -40,6 +40,7 @@ const EventInfo = ({ eventData, setEventData, sum }) => {
 	const [openDelete, setOpenDelete] = useState(false);
 	const router = useRouter();
 	const [group, setGroup] = useState(null)
+	const tEvents = useScopedI18n('events')
 	const t = useScopedI18n('events.eventInfo')
 	const tMonths = useScopedI18n('months')
 	const tGeneral = useScopedI18n('general')
@@ -53,7 +54,7 @@ const EventInfo = ({ eventData, setEventData, sum }) => {
 		await DeleteAllItemsInThisEvent()
 		setOpenDelete(false);
 		setOpenDetails(false);
-		toast.success(t('alertEventDeleted'), ToastOptions);
+		toast.success(tEvents('alertEventDeleted'), ToastOptions);
 		router.replace("/events");
 	};
 
