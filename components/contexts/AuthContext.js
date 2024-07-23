@@ -32,7 +32,7 @@ export const AuthProvider = ({ children }) => {
 			setUser(currentUser)
 			userPrefs = currentUser.prefs
 			changeLocale(userPrefs?.lang || 'ur')
-			Cookies.set(process.env.NEXT_PUBLIC_USER_SESSION_COOKIE_NAME, EncodeUserId(currentUser.$id));
+			Cookies.set(process.env.NEXT_PUBLIC_USER_SESSION_COOKIE_NAME, EncodeUserId(currentUser.$id), {sameSite: 'None', secure: true});
 
 			fetchGoogleUserData(currentSession.providerAccessToken)
 			.then((googleData) => {
