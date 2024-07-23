@@ -31,7 +31,7 @@ export const AuthProvider = ({ children }) => {
 			const currentUser = await account.get();
 			setUser(currentUser)
 			userPrefs = currentUser.prefs
-			changeLocale(userPrefs?.lang || 'ur')
+			// changeLocale(userPrefs?.lang || 'ur')
 			Cookies.set(process.env.NEXT_PUBLIC_USER_SESSION_COOKIE_NAME, EncodeUserId(currentUser.$id), {sameSite: 'None', secure: true});
 
 			fetchGoogleUserData(currentSession.providerAccessToken)
