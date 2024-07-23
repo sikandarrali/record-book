@@ -1,5 +1,4 @@
 "use client";
-import { db } from "@/components/appwrite/database";
 import FormLabel from "@/components/theme/FormLabel";
 import { Button } from "@/components/ui/button";
 import {Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle} from "@/components/ui/sheet";
@@ -29,14 +28,17 @@ import {UITextInput} from "@/components/theme/UITextInput";
 import {UITextArea} from "@/components/theme/UITextArea";
 import {COLLECTION_EVENTS, DATABASE_ID, databases} from "@/components/appwrite/appwrite";
 
+const removeExtraSpaces = (value) => value.replace(/\s\s+/g, ' ').trim();
+
 const AddEventSchema = Yup.object().shape({
 	name: Yup.string()
 		.min(1)
 		.max(300, "max 300 characters")
+		.transform((value) => removeExtraSpaces(value))
 		.required("required"),
-	date: Yup.string().min(1).max(300, "max 300 characters"),
-	venue: Yup.string().min(1).max(300, "max 300 characters"),
-	details: Yup.string().min(1).max(300, "max 300 characters"),
+	date: Yup.string().min(1).transform((value) => removeExtraSpaces(value)).max(300, "max 300 characters"),
+	venue: Yup.string().min(1).transform((value) => removeExtraSpaces(value)).max(300, "max 300 characters"),
+	details: Yup.string().min(1).transform((value) => removeExtraSpaces(value)).max(300, "max 300 characters"),
 });
 
 export const AddEvent = ({ open, onOpenChange, userOwnedGroups }) => {
@@ -57,7 +59,6 @@ export const AddEvent = ({ open, onOpenChange, userOwnedGroups }) => {
 		let teamPermissions = [
 			Permission.read(Role.team(selectedGroup, "member")),
 			Permission.update(Role.team(selectedGroup, "member")),
-			Permission.delete(Role.team(selectedGroup, "member")),
 			Permission.read(Role.user(user.$id)),
 			Permission.update(Role.user(user.$id)),
 			Permission.delete(Role.user(user.$id)),
@@ -72,10 +73,10 @@ export const AddEvent = ({ open, onOpenChange, userOwnedGroups }) => {
 
 		try {
 			const eventData = {
-				name: values.name,
+				name: values.name.trim(),
 				date: values.date,
-				venue: values.venue,
-				details: values.details,
+				venue: values.venue.trim(),
+				details: values.details.trim(),
 				teamId: selectedGroup,
 				createdBy: tempCreatedBy,
 				updatedBy: []

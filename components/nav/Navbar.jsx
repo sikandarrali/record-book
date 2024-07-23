@@ -15,11 +15,13 @@ import Logo from "../../public/logo.png"
 import usePWAStatus from "@/lib/hooks/usePWAStatus";
 import InstallApp from "@/components/InstallApp/InstallApp";
 import {Button} from "@/components/ui/button";
+import useIsIOS from "@/lib/hooks/useIsIOS";
 
 const Navbar = () => {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	const isPWAInstalled = usePWAStatus();
-	const {user} = useAuth()
+	const {user, setLoading} = useAuth()
+	const isIOS = useIsIOS();
 
 	return (
 		<div className="flex items-center justify-between sticky top-0 z-[49] bg-white shadow-sm p-4" dir={'ltr'}>
@@ -36,11 +38,22 @@ const Navbar = () => {
 			</Link>
 
 			{user &&
-				<div className={'flex items-center gap-4'}>
-					{isPWAInstalled ?
-						<Button size={'icon'} variant={'secondary'} onClick={()=> window.location.reload()}><RefreshCw/> </Button>
-						:
+				<div className={'flex items-center gap-6'}>
+					{!isPWAInstalled && !isIOS ?
 						<InstallApp/>
+						:
+						<Button
+							size={'icon'}
+							variant={'secondary'}
+							onClick={()=> {
+								setLoading(true)
+								setTimeout(()=>{
+									window.location.reload()
+								}, 1000)
+							}}
+						>
+							<RefreshCw/>
+						</Button>
 					}
 					<div
 						className={'border p-2 rounded-md hover:bg-muted cursor-pointer'}
@@ -133,6 +146,11 @@ const Sidebar = ({ open, onOpenChange, isPWAInstalled }) => {
 					<div className={'mx-6 !mt-4 px-4 pt-6 text-muted flex justify-center items-center gap-1'} dir={'ltr'}>
 						<Copyright className={'w-3 h-3 stroke-[1.5]'}/>
 						<span className={'font-medium text-sm'}>Sikandar Ali Chishty</span>
+					</div>
+
+					<div className={'flex gap-4 justify-center text-sm text-muted mt-8 mb-4'}>
+						<Link href={'/privacy-policy'}>Privacy Policy</Link>
+						<Link href={'/terms-of-service'}>Terms of Service</Link>
 					</div>
 				</div>
 

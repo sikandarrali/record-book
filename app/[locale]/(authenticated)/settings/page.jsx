@@ -66,7 +66,7 @@ export default function Settings() {
                     <UIText text={t('fontSize.title')} weight={'semibold'} className={'text-primary'}/>
 
                     <div className={'flex justify-between items-center gap-4'}>
-                        <UIText text={t(`fontSize.${GetCurrentFontSize(user?.prefs?.fontSize)}`)} weight={'medium'}/>
+                        <UIText text={t(`fontSize.${GetCurrentFontSize(user?.prefs?.fontSize || "base" )}`)} weight={'medium'}/>
                         <Button
                             size={'icon'}
                             variant={'ghost'}

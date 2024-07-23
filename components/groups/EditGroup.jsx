@@ -17,10 +17,13 @@ import UIText from "@/components/theme/UIText";
 import {useData} from "@/components/contexts/DataContext";
 import {UITextInput} from "@/components/theme/UITextInput";
 
+
+const removeExtraSpaces = (value) => value.replace(/\s\s+/g, ' ').trim();
 const EditGroupSchema = Yup.object().shape({
     name: Yup.string()
         .min(1)
         .max(300, "max 50 characters")
+        .transform((value) => removeExtraSpaces(value))
         .required("required"),
 });
 
@@ -50,7 +53,7 @@ export const EditGroup = ({ open, onOpenChange, data}) => {
         }
 
         try {
-            await teams.updateName(data.$id, values.name);
+            await teams.updateName(data.$id, values.name.trim());
             toast.success(t('alertGroupUpdated'), ToastOptions);
 
             const tempGroups = userGroups.map((g)=>{

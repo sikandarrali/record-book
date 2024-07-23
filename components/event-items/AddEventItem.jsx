@@ -27,16 +27,23 @@ import {UITextArea} from "@/components/theme/UITextArea";
 import {COLLECTION_EVENT_ITEMS, COLLECTION_EVENTS, DATABASE_ID, databases} from "@/components/appwrite/appwrite";
 import {UINumberInput} from "@/components/theme/UINumberInput";
 
+const removeExtraSpaces = (value) => value.replace(/\s\s+/g, ' ').trim();
+
 const AddEventItemSchema = Yup.object().shape({
 	name: Yup.string()
 		.min(1)
 		.max(300, "max 300 characters")
+		.transform((value) => removeExtraSpaces(value))
 		.required("required"),
 	amount: Yup.string()
 		.min(1)
 		.max(100, "max 100 characters")
+		.transform((value) => removeExtraSpaces(value))
 		.required("required"),
-	details: Yup.string().min(1).max(500, "max 500 characters"),
+	details: Yup.string()
+		.min(1)
+		.max(500, "max 500 characters")
+		.transform((value) => removeExtraSpaces(value))
 });
 
 export const AddEventItem = ({open, onOpenChange, eventData}) => {
@@ -61,7 +68,6 @@ export const AddEventItem = ({open, onOpenChange, eventData}) => {
 		let teamPermissions = [
 			Permission.read(Role.team(eventData?.teamId, "member")),
 			Permission.update(Role.team(eventData?.teamId, "member")),
-			Permission.delete(Role.team(eventData?.teamId, "member")),
 			Permission.read(Role.user(user.$id)),
 			Permission.update(Role.user(user.$id)),
 			Permission.delete(Role.user(user.$id)),
@@ -69,10 +75,10 @@ export const AddEventItem = ({open, onOpenChange, eventData}) => {
 
 		try {
 			const eventItemData = {
-				name: values.name,
+				name: values.name.trim(),
 				amount: cleanAmount,
 				returned_amount: values.returned_amount,
-				details: values.details,
+				details: values.details.trim(),
 				eventID: eventID,
 				createdBy: tempCreatedBy,
 				updatedBy: []

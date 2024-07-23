@@ -17,16 +17,23 @@ import {UITextArea} from "@/components/theme/UITextArea";
 import {useAuth} from "@/components/contexts/AuthContext";
 import {UINumberInput} from "@/components/theme/UINumberInput";
 
+const removeExtraSpaces = (value) => value.replace(/\s\s+/g, ' ').trim();
+
 const AddEventItemSchema = Yup.object().shape({
 	name: Yup.string()
 		.min(1)
 		.max(300, "max 300 characters")
+		.transform((value) => removeExtraSpaces(value))
 		.required("required"),
 	amount: Yup.string()
 		.min(1)
 		.max(100, "max 100 characters")
+		.transform((value) => removeExtraSpaces(value))
 		.required("required"),
-	details: Yup.string().min(1).max(500, "max 500 characters"),
+	details: Yup.string()
+		.min(1)
+		.max(500, "max 500 characters")
+		.transform((value) => removeExtraSpaces(value))
 });
 export const EditEventItem = ({ open, onOpenChange, item }) => {
 	const isDesktop = useMediaQuery({
@@ -58,10 +65,10 @@ export const EditEventItem = ({ open, onOpenChange, item }) => {
 
 		try {
 			const eventItemData = {
-				name: values.name,
+				name: values.name.trim(),
 				amount: cleanAmount,
 				returned_amount: values.returned_amount,
-				details: values.details,
+				details: values.details.trim(),
 				createdBy: item.createdBy,
 				updatedBy: tempUpdatedBy
 			};
@@ -72,6 +79,7 @@ export const EditEventItem = ({ open, onOpenChange, item }) => {
 			setDisabled(false);
 		} catch (error) {
 			toast.error(t('alertException'), ToastOptions);
+			console.log(error)
 			setAdding(false);
 			setDisabled(false);
 		}
@@ -92,10 +100,10 @@ export const EditEventItem = ({ open, onOpenChange, item }) => {
 					<UIText className={'text-primary self-start py-6'} variant={'heading'} text={t('editEventItem')}/>
 					<Formik
 						initialValues={{
-							name: item.name,
+							name: item.name.trim(),
 							amount: item.amount,
 							returned_amount: [],
-							details: item.details,
+							details: item.details.trim(),
 						}}
 						validationSchema={AddEventItemSchema}
 						onSubmit={(values) => {
