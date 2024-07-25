@@ -20,7 +20,7 @@ import {Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle} from "..
 import {Badge} from "@/components/ui/badge";
 import {cn} from "@/lib/utils";
 import {usePathname, useRouter} from "next/navigation";
-import {useScopedI18n} from "@/locales/client";
+import {useCurrentLocale, useScopedI18n} from "@/locales/client";
 import UIText from "@/components/theme/UIText";
 import Logo from "../../public/logo.png"
 import usePWAStatus from "@/lib/hooks/usePWAStatus";
@@ -34,7 +34,8 @@ const Navbar = () => {
 	const isPWAInstalled = usePWAStatus();
 	const {user, setLoading} = useAuth()
 	const isIOS = useIsIOS();
-	const pathname = usePathname()
+	const pathname = usePathname();
+	const locale = useCurrentLocale()
 
 	const router = useRouter()
 
@@ -42,7 +43,7 @@ const Navbar = () => {
 		<div className="flex flex-col p-6 pt-8" dir={'ltr'}>
 
 			<div className={'flex justify-between items-start gap-2'}>
-				{pathname === HOMEPAGE_ROUTE ?
+				{pathname === HOMEPAGE_ROUTE || pathname === `/${locale}` ?
 					<>
 						{user?.prefs?.picture ?
 							<div className={'flex gap-4'}>
@@ -61,7 +62,7 @@ const Navbar = () => {
 								</div>
 							</div>
 							:
-							<div className={"rounded-full border-[9px] border-primary w-[88px] h-[88px] self-start bg-muted text-primary shrink-0 mr-2 text-5xl flex items-center justify-center font-medium"}>
+							<div className={"rounded-full border-4 border-primary w-12 p-4 h-12 self-start bg-muted text-primary text-4xl flex items-center justify-center font-medium"}>
 								{user?.name?.charAt(0)}
 							</div>
 						}
