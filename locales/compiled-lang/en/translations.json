@@ -286,6 +286,13 @@
       "name": "Name",
       "title": "Profile"
     },
+    "theme": {
+      "alertException": "Unable to Update",
+      "alertUpdated": "Theme Updated",
+      "alertNoChanges": "Nothing to update",
+      "editTitle": "Choose Theme",
+      "label": "Theme"
+    },
     "title": "Settings"
   }
 }

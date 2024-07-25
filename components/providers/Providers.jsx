@@ -8,6 +8,7 @@ import {ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import {I18nProviderClient} from "@/locales/client";
 import {useEffect} from "react";
+import {NextJSThemeProvider} from "@/components/providers/NextJSThemeProvider";
 // import PullToRefresh from "pulltorefreshjs";
 
 const Providers = ({ children }) => {
@@ -35,19 +36,26 @@ const Providers = ({ children }) => {
 		>
 			<AuthProvider>
 				<DataProvider>
-					<TooltipProvider>
-						<ToastContainer
-							limit={1}
-							autoClose={1500}
-							position="top-center"
-							pauseOnFocusLoss
-							draggable={'touch'}
-							theme="light"
-						/>
-						<div className="relative max-w-screen-lg lg:max-w-lg mx-auto">
-							{children}
-						</div>
-					</TooltipProvider>
+					<NextJSThemeProvider
+						attribute="class"
+						defaultTheme="system"
+						enableSystem
+						disableTransitionOnChange
+					>
+						<TooltipProvider>
+							<ToastContainer
+								limit={1}
+								autoClose={1500}
+								position="top-center"
+								pauseOnFocusLoss
+								draggable={'touch'}
+								theme="light"
+							/>
+							<div className="relative max-w-screen-lg lg:max-w-lg mx-auto">
+								{children}
+							</div>
+						</TooltipProvider>
+					</NextJSThemeProvider>
 				</DataProvider>
 			</AuthProvider>
 		</I18nProviderClient>

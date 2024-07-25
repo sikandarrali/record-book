@@ -28,6 +28,7 @@ import InstallApp from "@/components/InstallApp/InstallApp";
 import {Button} from "@/components/ui/button";
 import useIsIOS from "@/lib/hooks/useIsIOS";
 import {HOMEPAGE_ROUTE} from "@/lib/routes";
+import {ThemeModeToggle} from "@/components/theme/ThemeModeToggle";
 
 const Navbar = () => {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -74,16 +75,19 @@ const Navbar = () => {
 					</div>
 				}
 
-				<div
-					className={'border p-3 rounded-2xl hover:bg-muted cursor-pointer'}
-					onClick={() => setIsMenuOpen(!isMenuOpen)}
-				>
-					<svg className={'fill-primary'} width="24" height="20.57" viewBox="0 0 72 61" fill="none" xmlns="http://www.w3.org/2000/svg">
-						<rect width="47.8049" height="11.1666" rx="5.58328" transform="matrix(-1 0 0 1 71.9545 0.878265)"/>
-						<rect width="60.7074" height="11.1666" rx="5.58328" transform="matrix(-1 0 0 1 71.9545 25.2947)"/>
-						<rect width="71.7074" height="11.1666" rx="5.58328" transform="matrix(-1 0 0 1 71.9545 49.7117)"/>
-					</svg>
+				<div className={'flex  items-center gap-4'}>
+					<ThemeModeToggle/>
+					<div
+						className={'border p-3 rounded-2xl hover:bg-muted cursor-pointer'}
+						onClick={() => setIsMenuOpen(!isMenuOpen)}
+					>
+						<svg className={'fill-primary'} width="24" height="20.57" viewBox="0 0 72 61" fill="none" xmlns="http://www.w3.org/2000/svg">
+							<rect width="47.8049" strokeLinecap={"round"} height="11.1666" rx="5.58328" transform="matrix(-1 0 0 1 71.9545 0.878265)"/>
+							<rect width="60.7074" strokeLinecap={"round"} height="11.1666" rx="5.58328" transform="matrix(-1 0 0 1 71.9545 25.2947)"/>
+							<rect width="71.7074" strokeLinecap={"round"} height="11.1666" rx="5.58328" transform="matrix(-1 0 0 1 71.9545 49.7117)"/>
+						</svg>
 
+					</div>
 				</div>
 			</div>
 
