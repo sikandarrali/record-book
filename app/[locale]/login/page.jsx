@@ -10,13 +10,14 @@ import Link from "next/link";
 import Cookies from "js-cookie";
 import LoadingFallback from "@/components/loaders/LoadingFallback";
 import {redirect} from "next/navigation";
+import {HOMEPAGE_ROUTE} from "@/lib/routes";
 
 export default function Home() {
 	const { onGoogleWithLogin, user } = useAuth();
 	const t = useScopedI18n('login')
 
 	if(user) {
-		redirect('/events')
+		redirect(HOMEPAGE_ROUTE)
 		return <></>
 	}
 

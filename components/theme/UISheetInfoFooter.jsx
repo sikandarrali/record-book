@@ -12,7 +12,7 @@ export const UISheetInfoFooter = ({setOpenDelete, setOpenEdit, setOpen, hasDelet
                         variant="outline"
                         onClick={() => setOpenDelete(true)}
                     >
-                        <Trash2 className="h-6 w-6 text-primary" />
+                        <Trash2 className="h-6 w-6 text-destructive" />
                     </Button>
                 }
 
