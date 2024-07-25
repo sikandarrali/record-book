@@ -1,17 +1,33 @@
 {
+  "alerts": {
+    "added": "Added Successfully",
+    "deleted": "Deleted Successfully",
+    "exception": "Unable to process your request",
+    "noChanges": "Nothing to update",
+    "updated": "Updated Successfully"
+  },
+  "buttons": {
+    "btnLoadMore": "Load more",
+    "btnLoading": "Loading...",
+    "cancel": "Cancel",
+    "installApp": "Install App",
+    "save": "Save Entry",
+    "saveChanges": "Save Changes",
+    "yesDelete": "Yes, delete"
+  },
   "edit": {
     "alertUpdated": "Name Updated Successfully!"
   },
   "events": {
-    "addEvent": "Add New Event",
+    "addEvent": "Add New Page",
     "addEventItem": "Add New Record",
     "addMoreDetailsText": "Add Date, Venue & Details etc.",
-    "alertEventCreated": "Event Created",
-    "alertEventDeleted": "Event Deleted",
+    "alertEventCreated": "Page Created",
+    "alertEventDeleted": "Page Deleted",
     "alertEventItemCreated": "Record Created",
     "alertEventItemDeleted": "Record Deleted",
     "alertEventItemUpdated": "Record Updated",
-    "alertEventUpdated": "Event Updated",
+    "alertEventUpdated": "Page Updated",
     "alertException": "Unable to process your request",
     "alertNothingToUpdate": "Nothing to update",
     "allItemsShown": "All {count} items loaded",
@@ -23,7 +39,7 @@
     "deleteEventItem": "Delete record",
     "deleteEventItemText": "This will permanently delete",
     "deleteEventText": "This will permanently delete",
-    "editEvent": "Edit Event",
+    "editEvent": "Page Event",
     "editEventItem": "Edit Record",
     "eventInfo": {
       "addedBy": "Added By: ",
@@ -50,7 +66,7 @@
     "labelGroup": "Group",
     "labelItemAmount": "Amount",
     "labelItemDetails": "Details",
-    "labelItemName": "Name of Person",
+    "labelItemName": "Name",
     "labelName": "Event Name",
     "labelShareWithGroup": "Share with Group",
     "labelVenue": "Venue",
@@ -59,7 +75,7 @@
     "searchNoItems": "No items matching your search",
     "searchPlaceholder": "Type to Search...",
     "selectGroupPlaceholder": "Select Group",
-    "title": "Events",
+    "title": "Pages",
     "totalEntries": "Total Entries: "
   },
   "general": {
@@ -85,7 +101,6 @@
     "alertGroupDeleted": "Group Deleted",
     "alertGroupLeft": "You just left the Group",
     "alertGroupMemberAdded": "Group Member Added",
-    "general_argument_invalid": "Unable to  perform such action",
     "alertGroupMemberAlreadyExisted": "Member Already Part of the Group",
     "alertGroupMemberRemoved": "Member Removed from Group",
     "alertGroupUpdated": "Group Name Updated",
@@ -104,27 +119,28 @@
     "deleteGroupMember": "Remove User from Group",
     "deleteGroupMemberText1": "Do you really want to remove",
     "deleteGroupMemberText2": "from",
-    "deleteGroupMemberText3": "They will not be able to access Events Data anymore.",
+    "deleteGroupMemberText3": "They will not be able to access Books Data anymore.",
     "deleteGroupText": "This will permanently delete",
-    "deleteGroupUpdateEventText": "All events shared with this group would no longer be shared",
+    "deleteGroupUpdateEventText": "All Books shared with this group would no longer be shared",
     "editGroup": "Edit Group",
+    "general_argument_invalid": "Unable to  perform such action",
     "information": "Important Information",
     "informationP1": "When a new user is added they will receive an invitation email to join the group.",
     "informationP2": "Users have to accept invitation before they can access shared data.",
-    "informationP3": "Added user will be able to Add, Update, Delete and View Events and all its Data.",
+    "informationP3": "Added user will be able to Add, Update and View Books and all its Data.",
     "labelAddMembers": "Add Members",
-    "labelEventsSharedWithThisGroup": "Events shared with this Group",
+    "labelEvents": "Books",
+    "labelEventsSharedWithThisGroup": "Books shared with this Group",
     "labelGroupName": "Group name",
     "labelMembers": "Members",
-    "labelEvents": "Events",
     "labelMembersInGroup": "Members in Group",
-    "labelNoEventsSharedWithThisGroup": "No Events shared with this Group",
+    "labelNoEventsSharedWithThisGroup": "No Books shared with this Group",
     "labelNoMembersInGroup": "No Members in Group.",
     "labelYourGroups": "Your groups",
     "leaveGroupText1": "You're about to leave:",
-    "leaveGroupText2": "You will no longer be able to access Events & other data shared with this group.",
+    "leaveGroupText2": "You will no longer be able to access Books & other data shared with this group.",
     "noGroups": "No Groups found, Create Group First",
-    "text": "Groups are a way of sharing your Events Data with others.",
+    "text": "Groups are a way of sharing your Books Data with others.",
     "title": "Groups",
     "tooltipPendingUser": "User has not accepted invitation.",
     "userEmailPlaceholder": "Enter User Email"
@@ -142,6 +158,36 @@
     "titleAlreadyJoined": "Already Joined.",
     "titleJoined": "Group Joined",
     "titleUnableToJoin": "Unable to Join Group"
+  },
+  "labels": {
+    "addMoreDetails": "Add Date & Details etc.",
+    "amount": "Amount",
+    "atTime": "at",
+    "createdBy": "Added by",
+    "date": "Date",
+    "details": "Details",
+    "group": "Group",
+    "invalidEmail": "invalid email",
+    "khaataBook": "Khaata Book",
+    "max100characters": "max 100 characters",
+    "max200characters": "max 200 characters",
+    "max20characters": "max 20 characters",
+    "max300characters": "max 300 characters",
+    "max50characters": "max 50 characters",
+    "name": "Name",
+    "noGroups": "No Groups found, Add First",
+    "notSharedWithGroup": "Not Shared with any Group",
+    "onDay": "on",
+    "pickDate": "Choose Date",
+    "recordBook": "Record Book",
+    "recordTypeIn": "In",
+    "recordTypeOut": "Out",
+    "required": "required",
+    "selectGroup": "Select Group",
+    "shareWithGroup": "Share with Group",
+    "type": "Type",
+    "updatedBy": "Updated by",
+    "viewCreatedEditedBy": "More Information"
   },
   "login": {
     "withGoogle": "Login with Google"
@@ -166,14 +212,44 @@
   },
   "navbar": {
     "googleAccount": "Google Account",
-    "linkEvents": "Events",
+    "linkEvents": "Pages",
     "linkGroups": "Groups",
     "linkLogout": "Logout",
-    "linkSettings": "Settings"
+    "linkSettings": "Settings",
+    "links": {
+      "groups": "Groups",
+      "home": "Home",
+      "logout": "Logout",
+      "settings": "Settings"
+    }
   },
   "pageNotFound": {
     "btnGoBack": "Back home",
     "text": "Page not found"
+  },
+  "pages": {
+    "home": {
+      "add": "Add Book",
+      "addNew": "Add New Book",
+      "deletePage": "Delete Book",
+      "deletePageText": "This will permanently delete",
+      "editPage": "Edit Book",
+      "title": "Books"
+    },
+    "records": {
+      "add": "Add Record",
+      "addNew": "Add New Record",
+      "allItemsShown": "All {count} items loaded",
+      "badgeCreatedByYou": "Created by You",
+      "badgeSharedWithGroup": "Shared with Group",
+      "deletePage": "Delete Record",
+      "deletePageText": "This will permanently delete",
+      "editPage": "Edit Record",
+      "noSearchItemsFound": "No Records found for your Search",
+      "numOfItemsMatchingSearch": "Items found:",
+      "searchPlaceholder": "Type to Search...",
+      "totalEntries": "Total Entries: "
+    }
   },
   "settings": {
     "fontSize": {

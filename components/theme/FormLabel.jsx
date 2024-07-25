@@ -5,7 +5,7 @@ import {useI18n, useScopedI18n} from "@/locales/client";
 import UIText from "@/components/theme/UIText";
 
 const FormLabel = ({ title, touched, errors, requiredClassName }) => {
-	const t = useScopedI18n('general')
+	const t = useI18n()
 	return (
 		<Label
 			className={cn(
@@ -23,7 +23,7 @@ const FormLabel = ({ title, touched, errors, requiredClassName }) => {
 					)}
 				>
 					<Asterisk className="w-4 h-4 shrink-0 mr-1" />
-					<UIText variant={'xs'} text={t(`label.${errors}`)}/>
+					<UIText variant={'xs'} text={t(`labels.${errors}`)}/>
 				</span>
 			)}
 		</Label>

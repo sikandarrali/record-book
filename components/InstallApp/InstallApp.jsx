@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import {Button} from "@/components/ui/button";
 import {Download} from "lucide-react";
-import {useScopedI18n} from "@/locales/client";
+import {useI18n, useScopedI18n} from "@/locales/client";
 import UIText from "@/components/theme/UIText";
 
 const InstallApp = () => {
     const [deferredPrompt, setDeferredPrompt] = useState(null);
-    const t = useScopedI18n('general')
+    const t = useI18n()
 
     useEffect(() => {
         const handler = (event) => {
@@ -37,7 +37,7 @@ const InstallApp = () => {
     return (
         <Button onClick={handleInstallClick} className={'flex items-center gap-2'}>
             <Download className={'w-4 h-4'} />
-            <UIText variant={'xs'} weight={'semibold'} className={'rtl:-mt-1.5'} text={t('btn.installApp')} />
+            <UIText variant={'xs'} weight={'semibold'} className={'rtl:-mt-1.5'} text={t('buttons.installApp')} />
         </Button>
     );
 };

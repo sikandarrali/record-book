@@ -1,28 +1,17 @@
-import {databases} from "./appwrite";
-
-const DATABASE_ID = process.env.NEXT_PUBLIC_DATABASE_ID;
-const COLLECTION_ID_EVENTS = process.env.NEXT_PUBLIC_COLLECTION_ID_EVENTS;
-const COLLECTION_ID_EVENT_ITEMS = process.env.NEXT_PUBLIC_COLLECTION_ID_EVENT_ITEMS;
-const COLLECTION_ID_USERS = process.env.NEXT_PUBLIC_COLLECTION_ID_USERS;
-
+import {COLLECTION_ID_PAGES, COLLECTION_ID_RECORDS, DATABASE_ID, databases} from "./appwrite";
 
 import { ID } from "appwrite";
 
 const collections = [
 	{
 		databaseID: DATABASE_ID,
-		id: COLLECTION_ID_EVENTS,
-		name: "events",
+		id: COLLECTION_ID_PAGES,
+		name: "pages",
 	},
 	{
 		databaseID: DATABASE_ID,
-		id: COLLECTION_ID_EVENT_ITEMS,
-		name: "eventItems",
-	},
-	{
-		databaseID: DATABASE_ID,
-		id: COLLECTION_ID_USERS,
-		name: "users",
+		id: COLLECTION_ID_RECORDS,
+		name: "records",
 	},
 ];
 

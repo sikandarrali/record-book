@@ -82,7 +82,7 @@ const SingleGroup = ({ data }) => {
                 createdBy: item.createdBy,
                 updatedBy: item.updatedBy
             };
-            await db.events.update({...eventDataValues, teamId: null}, item.$id, userPermissions);
+            await db.pages.update({...eventDataValues, teamId: null}, item.$id, userPermissions);
         }
     };
 
@@ -99,7 +99,7 @@ const SingleGroup = ({ data }) => {
 
     useLayoutEffect(() => {
         const getEvents = async () =>{
-            const result = await db.events.list([Query.equal('teamId', data.$id)])
+            const result = await db.pages.list([Query.equal('teamId', data.$id)])
             setEventInThisGroup(result.documents)
         }
 

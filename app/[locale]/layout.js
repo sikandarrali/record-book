@@ -18,10 +18,10 @@ const fontUrdu = Noto_Nastaliq_Urdu({
 	variable: "--font-urdu",
 });
 
-const APP_NAME = "Shadi Kharcha Record";
-const APP_DEFAULT_TITLE = "Shadi Kharcha Record";
-const APP_TITLE_TEMPLATE = "Shadi Kharcha Redcord";
-const APP_DESCRIPTION = "All your Shadi expenses in one place";
+const APP_NAME = "Record Book";
+const APP_DEFAULT_TITLE = "Record Book";
+const APP_TITLE_TEMPLATE = "Record Book";
+const APP_DESCRIPTION = "All your records in one place. Say goodbye to your record diaries";
 
 export const metadata = {
 	applicationName: APP_NAME,
@@ -67,11 +67,10 @@ export default async function RootLayout({ children, params }) {
 	return (
 		<html lang={params.locale} suppressHydrationWarning>
 		<head>
-			<title>Shadi Kharcha Record</title>
+			<title>Record Book</title>
 			<link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png"/>
 			<link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png"/>
 			<link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png"/>
-			<link rel="mask-icon" href="/icons/safari-pinned-tab.svg" color="#5bbad5"/>
 		</head>
 		<body
 			dir={params.locale === 'ur' ? 'rtl' : 'ltr'}
