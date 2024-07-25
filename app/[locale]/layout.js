@@ -65,7 +65,11 @@ export const viewport = {
 export default async function RootLayout({ children, params }) {
 
 	return (
-		<html lang={params.locale} suppressHydrationWarning>
+		<html
+			lang={params.locale}
+			suppressHydrationWarning
+			style={{width: "100%", height: "100%"}}
+		>
 		<head>
 			<title>Record Book</title>
 			<link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png"/>
