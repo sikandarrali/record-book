@@ -2,7 +2,7 @@ import UIText from "@/components/theme/UIText";
 import { Button } from "@/components/ui/button";
 import {
 	Info,
-	LockKeyhole,
+	LockKeyhole, MoveLeft,
 	Pen,
 	Settings,
 	Settings2,
@@ -127,8 +127,8 @@ const PageInfo = ({ pageData, setPageData, sum }) => {
 
 	return (
 		<>
-			<div onClick={() => setOpenDetails(true)} className={'p-2 -mr-2'}>
-				<SquarePen className={'w-6 h-6 text-primary'} />
+			<div onClick={()=> setOpenDetails(true)} className={'p-3 -mr-2 rounded-2xl hover:bg-muted cursor-pointer'}>
+				<SquarePen className={'w-6 h-6'} />
 			</div>
 
 			<Sheet

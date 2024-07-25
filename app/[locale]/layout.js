@@ -5,6 +5,7 @@ import Providers from "@/components/providers/Providers";
 import {cn} from "@/lib/utils";
 import {Inter, Noto_Nastaliq_Urdu} from "@next/font/google";
 import localFont from "@next/font/local";
+import {APP_THEME} from "@/lib/appSettings";
 
 
 const fontSans = Inter({
@@ -60,10 +61,11 @@ export const metadata = {
 };
 
 export const viewport = {
-	themeColor: "#FFFFFF",
+	themeColor: APP_THEME.VIEWPORT,
 };
-export default async function RootLayout({ children, params }) {
 
+
+export default async function RootLayout({ children, params }) {
 	return (
 		<html
 			lang={params.locale}

@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import Navbar from "../nav/Navbar";
 
-const PageContainer = ({ children, hideNavbar, className, noPadding }) => {
+const PageContainer = ({ children, hideNavbar, className }) => {
 	return (
 		<div
 			className={cn(
@@ -11,7 +11,7 @@ const PageContainer = ({ children, hideNavbar, className, noPadding }) => {
 		>
 			{!hideNavbar && <Navbar />}
 			<div className={cn(
-				'p-6 py-8 flex flex-col w-full relative bg-white flex-1 rounded-t-[40px] shadow-xl',
+				'p-6 py-8 flex flex-col w-full relative bg-white dark:bg-black flex-1 rounded-t-[40px] shadow-xl',
 			)}>
 				{children}
 			</div>

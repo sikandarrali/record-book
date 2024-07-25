@@ -14,9 +14,8 @@ import {UISheetFooter} from "@/components/theme/UISheetFooter";
 import UIText from "@/components/theme/UIText";
 import {useScopedI18n} from "@/locales/client";
 import {UITextInput} from "@/components/theme/UITextInput";
-import {ProfileSchema} from "@/lib/schemas/profileSchema";
 
-export const EditProfile = ({ open, onOpenChange }) => {
+export const EditTheme = ({ open, onOpenChange }) => {
     const isDesktop = useMediaQuery({
         query: "(min-width: 1024px)",
     });
@@ -24,31 +23,31 @@ export const EditProfile = ({ open, onOpenChange }) => {
     const [adding, setAdding] = useState(false);
     const [disabled, setDisabled] = useState(false);
     const {user, setUser} = useAuth()
-    const t = useScopedI18n('settings.profile');
+    const t = useScopedI18n('settings.theme');
 
     const onUpdate = async (values) => {
         setAdding(true);
         setDisabled(true);
 
-        if (values.name === user.name) {
-            toast.info("Nothing to update", ToastOptions);
-            setAdding(false);
-            setDisabled(false);
-            return;
-        }
-
-        try {
-            await account.updateName(values.name.trim());
-            toast.success("Name Updated", ToastOptions);
-            setUser({...user, name:values.name});
-            setAdding(false);
-            setDisabled(false);
-            scrollToTop()
-        } catch (error) {
-            toast.error(`Unable to Update: ${error}`, ToastOptions);
-            setAdding(false);
-            setDisabled(false);
-        }
+        // if (values.name === user.name) {
+        //     toast.info("Nothing to update", ToastOptions);
+        //     setAdding(false);
+        //     setDisabled(false);
+        //     return;
+        // }
+        //
+        // try {
+        //     await account.updateName(values.name.trim());
+        //     toast.success("Name Updated", ToastOptions);
+        //     setUser({...user, name:values.name});
+        //     setAdding(false);
+        //     setDisabled(false);
+        //     scrollToTop()
+        // } catch (error) {
+        //     toast.error(`Unable to Update: ${error}`, ToastOptions);
+        //     setAdding(false);
+        //     setDisabled(false);
+        // }
         onOpenChange(false);
     };
 
@@ -63,14 +62,14 @@ export const EditProfile = ({ open, onOpenChange }) => {
                 <div className="flex flex-col w-full pt-4 justify-start">
                     {/* Date & Close */}
                     <div className="flex items-center space-x-2 justify-between mb-4">
-                        <UIText variant={'heading'} className="text-primary" text={t('editProfile')}/>
+                        <UIText variant={'heading'} className="text-primary" text={t('editTitle')}/>
                     </div>
                     <div className="flex flex-col gap-5 w-full items-center justify-center py-6 lg:py-10">
                         <Formik
                             initialValues={{
                                 name: user?.name,
                             }}
-                            validationSchema={ProfileSchema}
+                            // validationSchema={EditGroupSchema}
                             onSubmit={(values) => {
                                 onUpdate(values);
                             }}

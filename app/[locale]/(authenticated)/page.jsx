@@ -107,7 +107,7 @@ export default function Home() {
 						transition: { delay: 0.3 },
 					}}
 					onClick={() => setOpenAddModal(!openAddModal)}
-					className="border-4 w-full border-dashed border-primary/30 hover:bg-muted cursor-pointer text-center justify-center flex items-center px-6 py-9 rtl:py-6 rounded-md"
+					className="border-4 w-full border-dashed border-primary/30 hover:border-transparent bg-background hover:bg-primary/80 dark:hover:bg-primary/50 cursor-pointer text-center justify-center flex items-center px-6 py-9 rtl:py-6 rounded-md"
 				>
 					<UIText variant={'button'} text={t('pages.home.addNew')}/>
 				</motion.div>
@@ -124,7 +124,7 @@ export default function Home() {
 					>
 						<Link
 							href={`/book/${event.$id}`}
-							className={'relative bg-muted p-8 hover:bg-muted-foreground/10 border border-primary/20 cursor-pointer text-primary flex items-center justify-center shadow-sm rounded-lg text-center outline-none'}
+							className={'relative p-8 bg-card hover:bg-primary/80 dark:hover:bg-primary/50 border border-primary/20 cursor-pointer flex items-center justify-center shadow-sm rounded-lg text-center outline-none'}
 						>
 							<UIText variant={'heading'} className={'break-all'} text={event?.name} />
 							{event.$permissions.some(permission => permission === `delete("user:${user.$id}")`) && <LockKeyhole className={'absolute left-2 top-2 w-5 h-5'}/>}
