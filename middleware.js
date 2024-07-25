@@ -3,6 +3,7 @@ import {ENDPOINT, PROJECT_ID} from "@/components/appwrite/appwrite";
 import {DecodeUserId} from "@/lib/EncodeDecode";
 import {NextResponse} from "next/server";
 import {HOMEPAGE_ROUTE, LOCALE_PROTECTED_ROUTES, LOCALE_PUBLIC_ROUTES} from "@/lib/routes";
+import {cookies} from "next/headers";
 const sdk = require('node-appwrite');
 
 let client = new sdk.Client();
@@ -33,7 +34,11 @@ export default async function middleware(request) {
     const isProtectedPath = LOCALE_PROTECTED_ROUTES().includes(pathname);
 
     if (user && isPublicPath) {
-        return NextResponse.redirect(new URL(`${user?.prefs?.lang}${HOMEPAGE_ROUTE}`, request.url))
+        return NextResponse.redirect(new URL(user?.prefs?.lang + HOMEPAGE_ROUTE, request.url))
+    }
+
+    if (user && pathname==="/") {
+        return NextResponse.redirect(new URL(user?.prefs?.lang + HOMEPAGE_ROUTE, request.url))
     }
 
     if (!user && isProtectedPath) {
@@ -43,7 +48,7 @@ export default async function middleware(request) {
     const I18nMiddleware = createI18nMiddleware({
         locales: ['ur', 'en'],
         defaultLocale: "ur" ,
-        urlMappingStrategy: 'rewrite',
+        urlMappingStrategy: 'redirect',
         resolveLocaleFromRequest: request => {
             return user?.prefs?.lang
         }
