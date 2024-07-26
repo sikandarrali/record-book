@@ -5,7 +5,9 @@ import Providers from "@/components/providers/Providers";
 import {cn} from "@/lib/utils";
 import {Inter, Noto_Nastaliq_Urdu} from "@next/font/google";
 import localFont from "@next/font/local";
-import {APP_THEME} from "@/lib/appSettings";
+import {APP_THEME, COOKIE_THEME_NAME} from "@/lib/defaults";
+import Cookies from "js-cookie";
+import {getThemeCookie} from "@/lib/cookiesStore";
 
 
 const fontSans = Inter({
@@ -66,6 +68,7 @@ export const viewport = {
 
 
 export default async function RootLayout({ children, params }) {
+
 	return (
 		<html
 			lang={params.locale}
@@ -81,7 +84,7 @@ export default async function RootLayout({ children, params }) {
 		<body
 			dir={params.locale === 'ur' ? 'rtl' : 'ltr'}
 			className={cn(
-				"min-h-screen bg-background font-sans antialiased",
+				"min-h-screen bg-muted dark:bg-foreground font-sans antialiased",
 				fontSans.variable,
 				fontUrdu.variable,
 			)}

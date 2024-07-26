@@ -7,26 +7,15 @@ import {useParams, useRouter} from "next/navigation";
 import {ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import {I18nProviderClient} from "@/locales/client";
-import {useEffect} from "react";
 import {NextJSThemeProvider} from "@/components/providers/NextJSThemeProvider";
+import {useLayoutEffect, useState} from "react";
+import Cookies from "js-cookie";
+import {COOKIE_THEME_NAME, DEFAULT_THEME} from "@/lib/defaults";
 // import PullToRefresh from "pulltorefreshjs";
 
 const Providers = ({ children }) => {
 
 	const params = useParams()
-	const router = useRouter()
-
-
-	// if (typeof window !== 'undefined') {
-	// 	const standalone = window.matchMedia("(display-mode: standalone)").matches
-	// 	if (standalone) {
-	// 		PullToRefresh.init({
-	// 			onRefresh() {
-	// 				window.location.reload()
-	// 			},
-	// 		})
-	// 	}
-	// }
 
 	return (
 		<I18nProviderClient

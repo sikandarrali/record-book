@@ -77,13 +77,12 @@ export const EditLanguage = ({ open, onOpenChange }) => {
     return (
         <Sheet open={open} onOpenChange={onOpenChange} defaultOpen={false}>
             <SheetContent
-                className={cn("pb-40 lg:pb-14 overflow-auto max-h-fit")}
+                className={cn("pb-12 bg-accent dark:bg-accent-foreground overflow-auto max-h-fit")}
                 side={isDesktop ? "right" : "bottom"}
                 onOpenAutoFocus={(e) => e.preventDefault()}
             >
                 <div className={'hidden'}><SheetHeader><SheetTitle/><SheetDescription/></SheetHeader></div>
-                <div className="flex flex-col w-full pt-4 justify-start">
-                    {/* Date & Close */}
+                <div className="flex flex-col flex-1 w-full pt-4 justify-start min-h-[200px]">
                     <div className="flex items-center space-x-2 justify-between mb-4">
                         <UIText variant={'heading'} className="text-primary" text={t('change')}/>
                     </div>
@@ -102,7 +101,7 @@ export const EditLanguage = ({ open, onOpenChange }) => {
                                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                 </Button>
                             </PopoverTrigger>
-                            <PopoverContent className="w-[200px] p-0">
+                            <PopoverContent side={'top'} className="p-0">
                                 <Command>
                                     {/*<CommandInput placeholder={t('search')} />*/}
                                     {/*<CommandEmpty><UIText text={t('noLanguagesFound')}/> </CommandEmpty>*/}

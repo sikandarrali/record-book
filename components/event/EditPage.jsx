@@ -29,6 +29,11 @@ import { Calendar } from "@/components/ui/calendar"
 import {UITextInput} from "@/components/theme/UITextInput";
 import {UITextArea} from "@/components/theme/UITextArea";
 import {PageSchema} from "@/lib/schemas/pageSchema";
+import {InputFieldWithLabel} from "@/components/theme/form/InputFieldWithLabel";
+import {DropdownSelectFieldWithLabel} from "@/components/theme/form/DropdownSelectFieldWithLabel";
+import * as React from "react";
+import {DatePickerWithLabel} from "@/components/theme/form/DatePickerWithLabel";
+import {TextareaWithLabel} from "@/components/theme/form/TextareaWithLabel";
 
 export const EditPage = ({ open, onOpenChange, pageData, setPageData, setGroup }) => {
 	const isDesktop = useMediaQuery({
@@ -37,24 +42,13 @@ export const EditPage = ({ open, onOpenChange, pageData, setPageData, setGroup }
 	const t = useI18n()
 	const [adding, setAdding] = useState(false);
 	const [disabled, setDisabled] = useState(false);
-	const [selectedGroup, setSelectedGroup] = useState()
-	const [selectedGroupName, setSelectedGroupName] = useState('')
-	const [userJoinedGroupName, setUserJoinedGroupName] = useState('')
 	const {user} = useAuth()
-	const [calendarOpen, setCalendarOpen] = useState(false);
 	const {userOwnedGroups, userGroups} = useData()
 	const [addEventDetails, setAddEventDetails] = useState(false)
 
 	let defaultTeamId = pageData?.teamId;
 
 	const isOwner = userOwnedGroups.some((grp)=> grp.$id === pageData?.teamId)
-
-	useLayoutEffect(() => {
-		setUserJoinedGroupName(userGroups?.find((filter)=> filter.$id===pageData?.teamId)?.name)
-		if(pageData?.teamId) {
-			setSelectedGroup(pageData?.teamId)
-		}
-	}, [open]);
 
 	const updateAllItemsInEvent = async () => {
 		const getItems = await db.records.list([
@@ -87,12 +81,12 @@ export const EditPage = ({ open, onOpenChange, pageData, setPageData, setGroup }
 				name: values.name.trim(),
 				date: values.date,
 				details: values.details.trim(),
-				teamId: selectedGroup,
+				teamId: values.teamId,
 				createdBy: pageData.createdBy,
 				updatedBy: tempUpdatedBy
 			};
 
-			if(selectedGroup){
+			if(values.teamId){
 				const result = await databases.updateDocument(
 					DATABASE_ID,
 					COLLECTION_ID_PAGES,
@@ -100,7 +94,7 @@ export const EditPage = ({ open, onOpenChange, pageData, setPageData, setGroup }
 					pageDataValues
 				);
 				setPageData(result)
-				if(defaultTeamId !== selectedGroup){
+				if(defaultTeamId !== values.teamId){
 					await updateAllItemsInEvent();
 				}
 			}else{
@@ -116,30 +110,22 @@ export const EditPage = ({ open, onOpenChange, pageData, setPageData, setGroup }
 				}
 			}
 
-			setGroup(userOwnedGroups.find((item)=> item.$id === selectedGroup))
+			setGroup(userOwnedGroups.find((item)=> item.$id === values.teamId))
 			toast.success(t('alerts.updated'), ToastOptions);
 			setAdding(false);
 			setDisabled(false);
 			onOpenChange(false)
 		} catch (error) {
 			toast.error(t('alerts.exception'), ToastOptions);
-			console.log(error)
 			setAdding(false);
 			setDisabled(false);
 		}
 	};
 
-	useEffect(() => {
-		if(selectedGroup){
-			const groupByID = userOwnedGroups.find((g)=> g.$id === selectedGroup);
-			setSelectedGroupName(groupByID?.name)
-		}
-	}, [selectedGroup]);
-
 	return (
 		<Sheet open={open} onOpenChange={onOpenChange} defaultOpen={false}>
 			<SheetContent
-				className={cn("pb-8 lg:pb-14 outline-0 overflow-auto h-[90%] lg:h-screen lg:max-h-screen border-t-0 border-l-0")}
+				className={cn("pb-8 lg:pb-14 bg-background dark:bg-foreground outline-0 overflow-auto h-[90%] lg:h-screen lg:max-h-screen border-t-0 border-l-0")}
 				side={isDesktop ? "right" : "bottom"}
 				onOpenAutoFocus={(e) => e.preventDefault()}
 			>
@@ -158,6 +144,7 @@ export const EditPage = ({ open, onOpenChange, pageData, setPageData, setGroup }
 								name: pageData?.name,
 								date: pageData?.date,
 								details: pageData?.details,
+								teamId: pageData?.teamId
 								// type: pageData?.type
 							}}
 							validationSchema={PageSchema}
@@ -174,73 +161,32 @@ export const EditPage = ({ open, onOpenChange, pageData, setPageData, setGroup }
 								setFieldValue
 							}) => (
 								<Form className="flex flex-col w-full space-y-6">
-									<div className="flex flex-col gap-2">
-										<Label className={"relative text-sm flex items-center justify-between gap-4"}>
-											<UIText variant={'label'} className="shrink-0" text={t('labels.shareWithGroup')}/>
-										</Label>
-										{pageData?.teamId && !isOwner ?
-											<div className={cn("flex justify-betweenp-3 border rounded-lg p-6 cursor-not-allowed")}>
-												<UIText text={userJoinedGroupName} className={'ltr:pr-14 rtl:pl-14'}/>
-												<span className={'absolute rtl:left-10 ltr:right-10'}><LockKeyhole className={'text-destructive'}/> </span>
-											</div>
-											:
-											<div className={'flex gap-4 items-center relative'}>
-												<Select onValueChange={(selected)=> {
-													setSelectedGroup(selected);
-													console.log(selected)
-												}} key={selectedGroup}>
-													<SelectTrigger ref={null} className="w-full min-h-16 py-4 flex between rtl:flex-row-reverse">
-														{selectedGroup ?
-															<UIText text={selectedGroupName}/>
-															:
-															<UIText className={"text-muted-foreground rtl:pr-4"} text={t('labels.selectGroup')}/>
-														}
-													</SelectTrigger>
-													<SelectContent>
-														{userOwnedGroups.length===0 &&
-															<SelectItem value={null}>
-																<UIText className={'text-muted-foreground'} variant={'sm'} text={t('labels.noGroups')}/>
-															</SelectItem>
-														}
-														{userOwnedGroups?.map((u)=>(
-															<SelectItem
-																key={u.$id}
-																value={u.$id}
-															>
-																<UIText variant={'sm'} text={u.name}/>
-															</SelectItem>
-														))}
-													</SelectContent>
-												</Select>
-												{selectedGroup &&
-													<Button
-														variant={'ghost'}
-														type={'button'}
-														size={'icon'}
-														onClick={()=> setSelectedGroup(null)}
-														className={'flex items-center justify-center text-primary hover:text-primary absolute ltr:right-1 rtl:left-1 bg-white'}
-													>
-														<XIcon className={'w-4 h-4'} />
-													</Button>
-												}
-											</div>
-										}
-									</div>
 
-									<div className="flex flex-col">
-										<FormLabel
-											title={t('labels.name')}
-											errors={errors.name}
-											touched={touched.name}
-										/>
-										<UITextInput
-											onChange={handleChange}
-											onBlur={handleBlur}
-											name="name"
-											disabled={disabled}
-											value={values.name}
-										/>
-									</div>
+									{/* Select Group */}
+									<DropdownSelectFieldWithLabel
+										data={userOwnedGroups}
+										fieldValue={pageData.teamId}
+										onSelect={(value)=> {
+											setFieldValue('teamId', value)
+											console.log(values.teamId)
+										}}
+										onClear={()=>{
+											setFieldValue("teamId", "");
+										}}
+										isOwner={isOwner}
+									/>
+
+									{/* Name */}
+									<InputFieldWithLabel
+										label={t('labels.name')}
+										errors={errors.name}
+										touched={touched.name}
+										onChange={handleChange}
+										onBlur={handleBlur}
+										name="name"
+										value={values.name}
+										disabled={disabled}
+									/>
 
 									<div
 										className={'flex items-center rtl:items-start justify-center gap-1.5 rtl:gap-3 cursor-pointer text-primary'}
@@ -252,75 +198,27 @@ export const EditPage = ({ open, onOpenChange, pageData, setPageData, setGroup }
 
 									{addEventDetails &&
 										<>
-											<div className="flex flex-col">
-												<FormLabel
-													title={t('labels.date')}
-													errors={errors.date}
-													touched={touched.date}
-												/>
-												<div className={'flex gap-4 items-center'}>
-													<Popover
-														open={calendarOpen}
-														onOpenChange={setCalendarOpen}
-													>
-														<PopoverTrigger asChild>
-															<Button
-																variant={"outline"}
-																className={cn(
-																	"w-full p-4 gap-4 justify-start text-left font-normal",
-																	!values.date &&
-																	"text-muted-foreground"
-																)}
-															>
-																<CalendarIcon className=" h-4 w-4" />
-																{values.date ?
-																	<UIText className={'rtl:font-sans'} weight={'medium'} text={new Date(values.date).toLocaleDateString()}/>
-																	:
-																	<UIText weight={'medium'} text={t('labels.pickDate')}/>
-																}
-															</Button>
-														</PopoverTrigger>
-														<PopoverContent className="w-auto p-0">
-															<Calendar
-																mode="single"
-																selected={values.date}
-																onSelect={(selectedDate) => {
-																	setFieldValue("date", selectedDate);
-																	setCalendarOpen(false);
-																}}
-															/>
-														</PopoverContent>
-													</Popover>
+											{/* Date */}
+											<DatePickerWithLabel
+												label={t('labels.date')}
+												setFieldValue={setFieldValue}
+												name={'date'}
+												disabled={disabled}
+												fieldValue={values.date}
+												onClear={()=> setFieldValue('date', '')}
+											/>
 
-													{/* Clear Date Button */}
-													{values.date &&
-														<Button
-															variant={'outline'}
-															type={'button'}
-															size={'icon'}
-															onClick={()=> setFieldValue("date", "")}
-															className={'!w-10 !h-10 px-2 flex items-center justify-center text-destructive stroke-[2.5] hover:text-destructive'}
-														>
-															<XIcon className={'w-4 h-4'} />
-														</Button>
-													}
-												</div>
-											</div>
-
-											<div className="flex flex-col">
-												<FormLabel
-													title={t('labels.details')}
-													errors={errors.details}
-													touched={touched.details}
-												/>
-												<UITextArea
-													onChange={handleChange}
-													onBlur={handleBlur}
-													name="details"
-													disabled={disabled}
-													value={values.details}
-												/>
-											</div>
+											{/* Details */}
+											<TextareaWithLabel
+												label={t('labels.details')}
+												errors={errors.details}
+												touched={touched.details}
+												onChange={handleChange}
+												onBlur={handleBlur}
+												name="details"
+												disabled={disabled}
+												value={values.details}
+											/>
 
 										</>
 									}

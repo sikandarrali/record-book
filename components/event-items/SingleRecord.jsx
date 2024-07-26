@@ -75,13 +75,13 @@ export const SingleRecord = ({ item }) => {
 			<SheetTrigger className={'w-full outline-none'}>
 				<div
 					onClick={() => setIsOpen(true)}
-					className="flex flex-col w-full px-8 hover:bg-muted select-none py-4 cursor-pointer border-b"
+					className="flex flex-col w-full px-8 bg-accent dark:bg-accent-foreground/50 hover:bg-accent-foreground/20 dark:hover:bg-accent-foreground/10 select-none py-4 cursor-pointer border-b border-accent-foreground/20 dark:border-accent/20"
 				>
 					<div className="flex w-full justify-between gap-5">
 						<UIText variant={'heading'} weight={'medium'} text={item.name}/>
 
 						<div className="flex justify-end items-center relative shrink-0 select-none" dir={'ltr'}>
-							<span className="text-sm select-none font-semibold mr-2">Rs</span>
+							<span className="text-sm select-none font-semibold mr-2 text-accent-foreground dark:text-accent">Rs</span>
 							{item.type==='expense' ?
 								<Minus className={'text-destructive w-4 h-4 stroke-[2.5]'}/>
 							:
@@ -117,7 +117,7 @@ export const SingleRecord = ({ item }) => {
 				</div>
 			</SheetTrigger>
 			<SheetContent
-				className={cn("pb-8 lg:pb-14 overflow-auto max-h-fit")}
+				className={cn("pb-8 lg:pb-14 bg-background border-t-0 border-l-0 dark:bg-foreground overflow-auto max-h-fit")}
 				side={isDesktop ? "right" : "bottom"}
 				onOpenAutoFocus={(e) => e.preventDefault()}
 			>
@@ -129,7 +129,7 @@ export const SingleRecord = ({ item }) => {
 						<UIText weight={'medium'} variant={'lg'} className={'!text-center'} text={item.name}/>
 
 						<div className="flex text-foreground mt-8 justify-center items-center relative select-none pointer-events-none" dir={'ltr'}>
-							<span className="text-lg font-semibold mr-2">Rs</span>
+							<UIText weight={'bold'} className="mr-2 text-accent-foreground dark:text-accent" text={'Rs'}/>
 							{item.type==='expense' ?
 								<Minus className={'text-destructive w-5 h-5 stroke-[2.5]'}/>
 								:
@@ -147,6 +147,7 @@ export const SingleRecord = ({ item }) => {
 										decimalSeparator={"."}
 										displayType="text"
 										decimalScale={2}
+										className={'text-primary'}
 									/>
 								}
 							/>
