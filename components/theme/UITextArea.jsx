@@ -46,7 +46,7 @@ export const UITextArea = ({className, variant, onChange, ...props}) => {
     }, {});
     const selectedTypography = typographyMap[fontSize];
 
-    const defaultStyles = "flex min-h-[60px] w-full rounded-md border text-[16px] border-input bg-transparent px-3 py-2 shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50";
+    const defaultStyles = "flex min-h-[60px] text-foreground dark:text-background flex p-3 capitalize w-full rounded-md text-[16px] bg-transparent shadow-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none ring-[1.5px] ring-accent-foreground dark:ring-muted-foreground focus-visible:ring-ring dark:focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50";
     const inputVariants = cva([defaultStyles], {
         variants: {
             variant: {

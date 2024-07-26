@@ -287,11 +287,18 @@
       "title": "Profile"
     },
     "theme": {
-      "alertException": "Unable to Update",
-      "alertUpdated": "Theme Updated",
+      "alertException": "Unable to Change Theme",
+      "alertUpdated": "Theme Changed",
       "alertNoChanges": "Nothing to update",
       "editTitle": "Choose Theme",
-      "label": "Theme"
+      "label": "Theme",
+      "violet": "Violet",
+      "rose": "Rose",
+      "green": "Green",
+      "slate": "Slate",
+      "blue": "Blue",
+      "stone": "Stone",
+      "orange": "Orange"
     },
     "title": "Settings"
   }

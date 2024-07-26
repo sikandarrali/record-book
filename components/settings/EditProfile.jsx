@@ -55,12 +55,12 @@ export const EditProfile = ({ open, onOpenChange }) => {
     return (
         <Sheet open={open} onOpenChange={onOpenChange} defaultOpen={false}>
             <SheetContent
-                className={cn("pb-40 lg:pb-14 overflow-auto max-h-fit")}
+                className={cn("pb-12 bg-accent dark:bg-accent-foreground overflow-auto max-h-fit")}
                 side={isDesktop ? "right" : "bottom"}
                 onOpenAutoFocus={(e) => e.preventDefault()}
             >
                 <div className={'hidden'}><SheetHeader><SheetTitle/><SheetDescription/></SheetHeader></div>
-                <div className="flex flex-col w-full pt-4 justify-start">
+                <div className="flex flex-col flex-1 w-full pt-4 justify-start min-h-[200px]">
                     {/* Date & Close */}
                     <div className="flex items-center space-x-2 justify-between mb-4">
                         <UIText variant={'heading'} className="text-primary" text={t('editProfile')}/>
@@ -83,7 +83,7 @@ export const EditProfile = ({ open, onOpenChange }) => {
                                   handleBlur
                               }) => (
                                 <Form className="flex flex-col w-full space-y-6">
-                                    <div className="flex flex-col gap-2">
+                                    <div className="flex flex-col gap-2 mb-8">
                                         <FormLabel
                                             title={t('name')}
                                             errors={errors.name}

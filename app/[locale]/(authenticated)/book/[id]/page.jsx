@@ -207,15 +207,15 @@ const Page = () => {
 						<div className={'relative flex flex-col flex-1'}>
 
 							<div className={'flex items-center gap-4 justify-center mb-4'}>
-								{pageData.$permissions.some(permission => permission === `delete("user:${user.$id}")`) && <Badge variant={'secondary'}><UIText variant={'xs'} text={t('pages.records.badgeCreatedByYou')}/> </Badge>}
-								{pageData.teamId && <Badge><UIText variant={'xs'} text={t('pages.records.badgeSharedWithGroup')}/> </Badge>}
+								{pageData.$permissions.some(permission => permission === `delete("user:${user.$id}")`) && <Badge variant={'secondary'}><UIText variant={'xs'} className={'!text-accent-foreground'} text={t('pages.records.badgeCreatedByYou')}/> </Badge>}
+								{pageData.teamId && <Badge><UIText variant={'xs'} className={'!text-accent'} text={t('pages.records.badgeSharedWithGroup')}/> </Badge>}
 							</div>
 
 							{/* header */}
 							<div className="flex gap-4 pb-2 pt-2.5 justify-between items-center w-full border-b border-primary-foreground/40 relative" ref={headerRef}>
 
-								<div className={'flex items-center justify-center text-center break-all gap-4 text-primary relative'}>
-									<UIText variant={"heading"} text={pageData?.name} className={'self-center'} />
+								<div className={'flex items-center justify-center text-center break-all gap-4 relative'}>
+									<UIText variant={"heading"} text={pageData?.name} className={'self-center !text-primary'} />
 								</div>
 
 								<PageInfo
@@ -227,10 +227,10 @@ const Page = () => {
 							</div>
 
 							<motion.div className="flex flex-1 py-8 justify-center col-span-4 items-center gap-2 relative select-none pointer-events-none" dir={'ltr'}>
-								<span className="text-sm font-semibold">Rs</span>
+								<span className="text-sm font-semibold text-accent-foreground dark:text-accent">Rs</span>
 								<UIText
 									weight={'bold'}
-									className=""
+									className="!text-primary"
 									variant={'heading'}
 									text={
 										<NumericFormat
@@ -255,14 +255,14 @@ const Page = () => {
 
 									{searchValue !== "" && (
 										<XIcon
-											className="w-4 h-4 text-primary absolute ltr:right-0 rtl:left-0 top-1/2 -translate-y-1/2 ltr:mr-3 rtl:ml-3 cursor-pointer hover:scale-125 duration-300"
+											className="w-4 h-4 !text-primary absolute ltr:right-0 -mt-1 rtl:left-0 top-1/2 -translate-y-1/2 ltr:mr-3 rtl:ml-3 cursor-pointer hover:scale-125 duration-300"
 											onClick={() => resetSearch()}
 										/>
 									)}
 
 									{searchValue !== '' && searchResultsMessage !== '' && (
-										<div className="flex flex-col justify-center items-center gap-10 px-6 mt-20 text-destructive">
-											<UIText variant={'heading'} weight={'medium'} text={t(searchResultsMessage)}/>
+										<div className="flex flex-col justify-center items-center gap-10 px-6 mt-20 ">
+											<UIText variant={'heading'} weight={'medium'} className={'!text-destructive'} text={t(searchResultsMessage)}/>
 										</div>
 									)}
 								</div>
@@ -274,12 +274,12 @@ const Page = () => {
 									{searchValue === "" ?
 										<>
 											<UIText text={t('pages.records.totalEntries')} weight={'medium'} />
-											<UIText variant={'heading'} weight={'bold'} className={'text-primary rtl:mt-2'} text={items.length}/>
+											<UIText variant={'heading'} weight={'bold'} className={'!text-primary rtl:mt-2'} text={items.length}/>
 										</>
 										:
 										<>
 											<UIText text={t('pages.records.numOfItemsMatchingSearch')} weight={'medium'} />
-											<UIText variant={'heading'} weight={'bold'} className={'text-primary rtl:mt-2'} text={visibleItems.length}/>
+											<UIText variant={'heading'} weight={'bold'} className={'!text-primary rtl:mt-2'} text={visibleItems.length}/>
 										</>
 									}
 								</div>
@@ -296,7 +296,7 @@ const Page = () => {
 										<div className={'flex flex-col w-full justify-center items-center mt-8 !border-t-0'}>
 											{!hasMoreItems &&
 												<UIText
-													text={t('pages.records.allItemsShown', { count: <span className={'text-primary px-2 font-sans text-2xl ltr:-mt-1 rlt:mt-1 font-bold'}>{items.length}</span> })}
+													text={t('pages.records.allItemsShown', { count: <span className={'!text-primary px-2 font-sans text-2xl ltr:-mt-1 rlt:mt-1 font-bold'}>{items.length}</span> })}
 													className="mt-4 text-muted-foreground text-center flex items-center"
 													weight={'medium'}
 												/>

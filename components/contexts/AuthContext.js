@@ -6,6 +6,7 @@ import LoadingFallback from "../loaders/LoadingFallback";
 import {useCurrentLocale} from "@/locales/client";
 import Cookies from 'js-cookie'
 import {EncodeUserId} from "@/lib/EncodeDecode";
+import {COOKIE_THEME_NAME, DEFAULT_THEME, LOCAL_STORAGE_THEME_NAME_ITEM, USER_THEME_COOKIE} from "@/lib/defaults";
 
 
 const AuthContext = createContext();
@@ -63,6 +64,12 @@ export const AuthProvider = ({ children }) => {
 			tempPrefs = {...tempPrefs, lang: 'ur'}
 		if(!prefs.fontSize)
 			tempPrefs = {...tempPrefs, fontSize: 'base'}
+		if(!prefs.theme) {
+			tempPrefs = {...tempPrefs, theme: DEFAULT_THEME};
+			localStorage.setItem(COOKIE_THEME_NAME, DEFAULT_THEME)
+		}else{
+			localStorage.setItem(COOKIE_THEME_NAME, prefs.theme)
+		}
 
 		await account.updatePrefs(tempPrefs)
 	}

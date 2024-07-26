@@ -28,7 +28,7 @@ export const UISheetFooter = ({disabled, adding, onOpenChange, labelAction, labe
                 type={'button'}
                 onClick={()=> onOpenChange(false)}
             >
-               <UIText variant={'button'} text={labelCancel || t('buttons.cancel')}/>
+               <UIText variant={'button'} className={'text-background dark:text-foreground'} text={labelCancel || t('buttons.cancel')}/>
             </Button>
         </div>
     )

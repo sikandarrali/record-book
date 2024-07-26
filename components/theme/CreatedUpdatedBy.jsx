@@ -7,11 +7,11 @@ export const CreatedUpdatedBy = ({createdDate, updatedDate, data}) =>{
     return(
         <Accordion type="single" collapsible>
             <AccordionItem value="item-1" className={'border-0 w-full'}>
-                <AccordionTrigger className={'text-muted-foreground hover:no-underline justify-start gap-4'}>
+                <AccordionTrigger className={'text-muted-foreground hover:no-underline pt-4 justify-start gap-4'}>
                     <UIText text={t('labels.viewCreatedEditedBy')}/>
                 </AccordionTrigger>
 
-                <AccordionContent className={'divide-y'}>
+                <AccordionContent className={'divide-y divide-accent-foreground'}>
                     <div className={'flex py-4'}>
                         <div className={'w-1/4 flex flex-col shrink-0'}>
                             <UIText weight={'medium'} className={'text-muted-foreground'} variant={'sm'} text={t('labels.createdBy')}/>

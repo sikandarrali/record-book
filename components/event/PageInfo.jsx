@@ -122,12 +122,12 @@ const PageInfo = ({ pageData, setPageData, sum }) => {
 
 	const deleteTexts = [
 		<UIText key={1} text={t('pages.home.deletePageText')}/>,
-		<UIText key={2} variant={'lg'} className={'text-primary'} weight={'semibold'} text={pageData?.name}/>
+		<UIText key={2} variant={'lg'} className={'!text-primary'} weight={'semibold'} text={pageData?.name}/>
 	]
 
 	return (
 		<>
-			<div onClick={()=> setOpenDetails(true)} className={'p-3 -mr-2 rounded-2xl hover:bg-muted cursor-pointer'}>
+			<div onClick={()=> setOpenDetails(true)} className={'p-3 -mr-2 rounded-2xl bg-accent dark:bg-accent-foreground text-accent-foreground dark:text-accent cursor-pointer'}>
 				<SquarePen className={'w-6 h-6'} />
 			</div>
 
@@ -137,7 +137,7 @@ const PageInfo = ({ pageData, setPageData, sum }) => {
 				defaultOpen={false}
 			>
 				<SheetContent
-					className={cn("pb-40 lg:pb-14 outline-0 overflow-auto h-[90%] lg:h-screen lg:max-h-screen border-t-0 border-l-0")}
+					className={cn("pb-40 lg:pb-14 bg-background dark:bg-foreground outline-0 overflow-auto h-[90%] lg:h-screen lg:max-h-screen border-t-0 border-l-0")}
 					side={isDesktop ? "right" : "bottom"}
 					onOpenAutoFocus={(e) => e.preventDefault()}
 				>
@@ -156,9 +156,9 @@ const PageInfo = ({ pageData, setPageData, sum }) => {
 							<UIText variant={"heading"} text={pageData?.name} className={'break-all'}/>
 
 							<div className="flex flex-1 justify-center col-span-4 items-center gap-2 relative select-none pointer-events-none" dir={'ltr'}>
-								<span className="text-sm font-semibold">Rs</span>
+								<span className="text-sm font-semibold text-accent-foreground dark:text-accent">Rs</span>
 								<UIText
-									className="text-primary"
+									className="!text-primary"
 									weight={'semibold'}
 									variant={'heading'}
 									text={
@@ -176,21 +176,21 @@ const PageInfo = ({ pageData, setPageData, sum }) => {
 						</div>
 
 
-						<div className={'flex flex-col divide-y lg:mt-16'}>
-							<div className={'flex py-2 items-center'}>
+						<div className={'flex flex-col divide-y divide-accent-foreground lg:mt-16'}>
+							<div className={'flex py-4 items-center'}>
 								<div className={'w-1/4 flex shrink-0'}>
 									<UIText weight={'medium'} className={'text-muted-foreground'} text={t('labels.group')}/>
 								</div>
 								<div className={'w-3/4 flex items-center pl-4'}>
 									{group?.name ?
-										<UIText variant={'label'} className={'text-primary'} text={group?.name}/>
+										<UIText variant={'label'} className={'!text-primary'} text={group?.name}/>
 										:
 										<UIText variant={'label'} text={t('labels.notSharedWithGroup')}/>
 									}
 								</div>
 							</div>
 
-							<div className={'flex py-2 items-center'}>
+							<div className={'flex py-4 items-center'}>
 								<div className={'w-1/4 flex shrink-0'}>
 									<UIText weight={'medium'} className={'text-muted-foreground'} text={t('labels.date')}/>
 								</div>
@@ -199,7 +199,7 @@ const PageInfo = ({ pageData, setPageData, sum }) => {
 								</div>
 							</div>
 
-							<div className={'flex py-2 items-center'}>
+							<div className={'flex py-4 items-center'}>
 								<div className={'w-1/4 flex shrink-0'}>
 									<UIText weight={'medium'} className={'text-muted-foreground'} text={t('labels.details')}/>
 								</div>
