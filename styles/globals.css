@@ -7,7 +7,7 @@
 	/* violet */
 	:root,
 	.violet,
-	.violet.light {
+	.light.violet {
 		--background: 0 0% 100%;
 		--foreground: 224 71.4% 4.1%;
 		--card: 0 0% 100%;
@@ -35,7 +35,7 @@
 		--chart-5: 27 87% 67%;
 	}
 	.dark,
-	.violet.dark {
+	.dark.violet {
 		--background: 224 71.4% 4.1%;
 		--foreground: 210 20% 98%;
 		--card: 224 71.4% 4.1%;
@@ -64,7 +64,7 @@
 
 	/* Slate */
 	.slate,
-	.slate.light{
+	.light.slate{
 		--background: 0 0% 100%;
 		--foreground: 222.2 84% 4.9%;
 		--card: 0 0% 100%;
@@ -91,7 +91,7 @@
 		--chart-4: 43 74% 66%;
 		--chart-5: 27 87% 67%;
 	}
-	.slate.dark {
+	.dark.slate {
 		--background: 222.2 84% 4.9%;
 		--foreground: 210 40% 98%;
 		--card: 222.2 84% 4.9%;
@@ -120,7 +120,7 @@
 
 	/* Stone */
 	.stone,
-	.stone.light{
+	.light.stone{
 		--background: 0 0% 100%;
 		--foreground: 20 14.3% 4.1%;
 		--card: 0 0% 100%;
@@ -147,7 +147,7 @@
 		--chart-4: 43 74% 66%;
 		--chart-5: 27 87% 67%;
 	}
-	.stone.dark {
+	.dark.stone {
 		--background: 20 14.3% 4.1%;
 		--foreground: 60 9.1% 97.8%;
 		--card: 20 14.3% 4.1%;
@@ -176,7 +176,7 @@
 
 	/* Blue */
 	.blue,
-	.blue.light {
+	.light.blue {
 		--background: 0 0% 100%;
 		--foreground: 222.2 84% 4.9%;
 		--card: 0 0% 100%;
@@ -203,7 +203,7 @@
 		--chart-4: 43 74% 66%;
 		--chart-5: 27 87% 67%;
 	}
-	.blue.dark {
+	.dark.blue {
 		--background: 222.2 84% 4.9%;
 		--foreground: 210 40% 98%;
 		--card: 222.2 84% 4.9%;
@@ -232,7 +232,7 @@
 
 	/* Rose */
 	.rose,
-	.rose.light {
+	.light.rose {
 		--background: 0 0% 100%;
 		--foreground: 240 10% 3.9%;
 		--card: 0 0% 100%;
@@ -288,7 +288,7 @@
 
 	/* Green */
 	.green,
-	.green.light {
+	.light.green {
 		--background: 0 0% 100%;
 		--foreground: 240 10% 3.9%;
 		--card: 0 0% 100%;
@@ -315,7 +315,7 @@
 		--chart-4: 43 74% 66%;
 		--chart-5: 27 87% 67%;
 	}
-	.green.dark {
+	.dark.green {
 		--background: 20 14.3% 4.1%;
 		--foreground: 0 0% 95%;
 		--card: 24 9.8% 10%;
@@ -344,7 +344,7 @@
 
 	/* Orange */
 	.orange,
-	.orange.light {
+	.light.orange {
 		--background: 0 0% 100%;
 		--foreground: 20 14.3% 4.1%;
 		--card: 0 0% 100%;
