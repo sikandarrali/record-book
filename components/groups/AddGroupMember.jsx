@@ -92,7 +92,7 @@ export const AddGroupMember = ({groupID, setUsersInGroup}) =>{
                             disabled={disabled}
                             placeholder={t('userEmailPlaceholder')}
                             value={values.email.trim()}
-                            className={'lowercase'}
+                            className={'lowercase ring-muted-foreground'}
                         />
                     </div>
 

@@ -9,7 +9,8 @@ export const UISheetInfoFooter = ({setOpenDelete, setOpenEdit, setOpen, hasDelet
                 {hasDeletePermission &&
                     <Button
                         type="button"
-                        className={'group bg-accent hover:bg-accent-foreground dark:bg-accent-foreground dark:hover:bg-accent w-14 h-14 p-2 rounded-full'}
+                        variant={'outline'}
+                        className={'group w-14 h-14 p-2 rounded-full'}
                         onClick={() => setOpenDelete(true)}
                     >
                         <Trash2 className="h-6 w-6 text-destructive" />
@@ -18,17 +19,18 @@ export const UISheetInfoFooter = ({setOpenDelete, setOpenEdit, setOpen, hasDelet
 
                 <Button
                     type="button"
-                    className={'group bg-accent hover:bg-accent-foreground dark:bg-accent-foreground dark:hover:bg-accent w-14 h-14 p-2 rounded-full'}
+                    variant={'outline'}
+                    className={'group w-14 h-14 p-2 rounded-full'}
                     onClick={() => setOpenEdit(true)}
                 >
-                    <Pen className="h-6 w-6 group-hover:text-accent dark:group-hover:text-accent-foreground text-accent-foreground dark:text-accent" />
+                    <Pen className="h-6 w-6" />
                 </Button>
             </div>
 
             <Button
                 type="button"
-                variant="outline"
-                className="w-16 h-16 rounded-full self-center bg-accent hover:bg-accent-foreground dark:bg-accent-foreground dark:text-accent dark:hover:bg-accent"
+                variant={'outline'}
+                className="w-16 h-16 rounded-full self-center"
                 onClick={() => setOpen(false)}
             >
                 <XIcon className="text-primary w-12 h-12" />

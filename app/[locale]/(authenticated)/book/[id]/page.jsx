@@ -208,11 +208,11 @@ const Page = () => {
 
 							<div className={'flex items-center gap-4 justify-center mb-4'}>
 								{pageData.$permissions.some(permission => permission === `delete("user:${user.$id}")`) && <Badge variant={'secondary'}><UIText variant={'xs'} className={'!text-accent-foreground'} text={t('pages.records.badgeCreatedByYou')}/> </Badge>}
-								{pageData.teamId && <Badge><UIText variant={'xs'} className={'!text-accent'} text={t('pages.records.badgeSharedWithGroup')}/> </Badge>}
+								{pageData.teamId && <Badge><UIText variant={'xs'} text={t('pages.records.badgeSharedWithGroup')}/> </Badge>}
 							</div>
 
 							{/* header */}
-							<div className="flex gap-4 pb-2 pt-2.5 justify-between items-center w-full border-b border-primary-foreground/40 relative" ref={headerRef}>
+							<div className="flex gap-4 pb-4 pt-2.5 justify-between items-center w-full border-b border-border relative" ref={headerRef}>
 
 								<div className={'flex items-center justify-center text-center break-all gap-4 relative'}>
 									<UIText variant={"heading"} text={pageData?.name} className={'self-center !text-primary'} />
@@ -227,7 +227,7 @@ const Page = () => {
 							</div>
 
 							<motion.div className="flex flex-1 py-8 justify-center col-span-4 items-center gap-2 relative select-none pointer-events-none" dir={'ltr'}>
-								<span className="text-sm font-semibold text-accent-foreground dark:text-accent">Rs</span>
+								<span className="text-sm font-semibold">Rs</span>
 								<UIText
 									weight={'bold'}
 									className="!text-primary"

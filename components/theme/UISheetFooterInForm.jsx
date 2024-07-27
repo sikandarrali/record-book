@@ -3,7 +3,7 @@ import {Loader2Icon} from "lucide-react";
 import {useI18n, useScopedI18n} from "@/locales/client";
 import UIText from "@/components/theme/UIText";
 
-export const UISheetFooter = ({disabled, adding, onOpenChange, labelAction, labelCancel }) =>{
+export const UISheetFooterInForm = ({disabled, adding, onOpenChange, labelAction, labelCancel}) =>{
     const t = useI18n()
     return(
         <div className={'flex flex-col w-full gap-2.5'}>

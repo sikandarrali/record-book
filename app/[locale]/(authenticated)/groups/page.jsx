@@ -24,7 +24,7 @@ export default function Page() {
             <UIText variant="heading" className={'text-primary'} text={t('title')}/>
             <UIText text={t('text')}/>
 
-            <div className={'bg-muted py-4 px-6 rounded-lg mt-4 cursor-pointer'} onClick={()=> setShowInformation(!showInformation)} >
+            <div className={'border border-border py-4 px-6 rounded-lg mt-6 cursor-pointer'} onClick={()=> setShowInformation(!showInformation)} >
                 <div className={'flex items-center justify-between gap-2 font-medium text-primary'}>
                     <div className={'flex items-center gap-2'}>
                         <Info className={'w-4 h-4 rtl:mt-2'}/>
@@ -48,7 +48,7 @@ export default function Page() {
                 animate={{opacity: 1, y: 0,
                     transition: { delay: 0.2 }
                 }}
-                className={'flex flex-col bg-muted rounded-lg relative shadow'}
+                className={'flex flex-col border border-border rounded-lg relative shadow overflow-hidden'}
             >
                 {userGroups.length === 0 ?
                     <UIText text={t('noGroups')} className={'p-4'}/>
@@ -59,7 +59,7 @@ export default function Page() {
                             animate={{opacity: 1, y: 0,
                                 transition: { delay: 0.3 + i / 10 }
                             }}
-                            className={'w-full border-b last-of-type:border-b-0'}
+                            className={'w-full border-b border-border hover:bg-muted last-of-type:border-b-0 cursor-pointer'}
                         >
                             <SingleGroup data={data} />
                         </motion.div>

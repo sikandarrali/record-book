@@ -10,11 +10,10 @@ import {EditProfile} from "@/components/settings/EditProfile";
 import {EditLanguage} from "@/components/settings/EditLanguage";
 import {EditFontSize} from "@/components/settings/EditFontSize";
 import {SupportedLanguages} from "@/lib/defaultData";
-import {GetCurrentFontSize, GetCurrentLanguage, GetCurrentTheme, ResolveCurrentTheme} from "@/lib/utils";
+import {GetCurrentFontSize, GetCurrentLanguage, GetCurrentTheme} from "@/lib/utils";
 import {UITextInput} from "@/components/theme/UITextInput";
 import {EditTheme} from "@/components/settings/EditTheme";
 import {APP_THEME, COOKIE_THEME_NAME, DEFAULT_THEME} from "@/lib/defaults";
-import {themesData} from "@/lib/themesData";
 import Cookies from "js-cookie";
 import {useData} from "@/components/contexts/DataContext";
 
@@ -32,92 +31,46 @@ export default function Settings() {
     return (
         <PageContainer hideTopbar>
 
-            <UIText variant="heading" className={'!text-primary mb-8'} text={t('title')}/>
+            <UIText variant="heading" className={'!text-primary mb-6'} text={t('title')}/>
 
-            <div className={'flex flex-col gap-6'}>
+            <div className={'flex flex-col divide-y -mx-6 last:border-0'}>
+
                 {/* Profile */}
-                <div className={'flex items-center justify-between -mx-6 px-6 pb-6 border-b border-b-accent-foreground gap-2'}>
-                    <div className={'flex items-center gap-4'}>
-                        <User className={'w-5 h-5 text-primary'}/>
-                        <UIText text={t('profile.title')} weight={'semibold'} className={''}/>
-                    </div>
-
-                    <div className={'flex justify-between items-center gap-4'}>
-                        <UIText className={'!text-primary'} text={user?.name} weight={'medium'}/>
-
-                        <Button
-                            size={'icon'}
-                            className={'border rtl:mt-3 rounded-md border-accent-foreground bg-accent dark:bg-accent-foreground group'}
-                            onClick={()=> setOpenEditProfile(true)}
-                        >
-                            <Pencil className={'w-5 h-5 text-accent-foreground dark:text-accent group-hover:text-primary'}/>
-                        </Button>
-                    </div>
-                </div>
+                <SettingsMenu
+                    icon={<Globe className={'w-5 h-5 text-primary'}/>}
+                    label={t('profile.title')}
+                    settingsValue={user?.name}
+                    toggleEdit={()=> setOpenEditProfile(true)}
+                />
 
                 {/* Language */}
-                <div className={'flex items-center justify-between -mx-6 px-6 pb-6 border-b border-b-accent-foreground gap-2'}>
-                    <div className={'flex items-center gap-4'}>
-                        <Globe className={'w-5 h-5 text-primary'}/>
-                        <UIText text={t('language.title')} weight={'semibold'} className={''}/>
-                    </div>
-
-                    <div className={'flex justify-between items-center gap-4'}>
-                        <UIText className={'!text-primary'} text={t(`language.${GetCurrentLanguage(user?.prefs?.lang || "ur")}`)} weight={'medium'}/>
-
-                        <Button
-                            size={'icon'}
-                            className={'border rtl:mt-3 rounded-md border-accent-foreground bg-accent dark:bg-accent-foreground group'}
-                            onClick={()=> setOpenEditLanguage(true)}
-                        >
-                            <Pencil className={'w-5 h-5 text-accent-foreground dark:text-accent group-hover:text-primary'}/>
-                        </Button>
-                    </div>
-                </div>
+                <SettingsMenu
+                    icon={<Globe className={'w-5 h-5 text-primary'}/>}
+                    label={t('language.title')}
+                    settingsValue={t(`language.${GetCurrentLanguage(user?.prefs?.lang || "ur")}`)}
+                    toggleEdit={()=> setOpenEditLanguage(true)}
+                />
 
                 {/* Font Size */}
-                <div className={'flex items-center justify-between -mx-6 px-6 pb-6 border-b border-b-accent-foreground gap-2'}>
-                    <div className={'flex items-center gap-4'}>
-                        <TypeOutline className={'w-5 h-5 text-primary'}/>
-                        <UIText text={t('fontSize.title')} weight={'semibold'} className={''}/>
-                    </div>
-
-                    <div className={'flex justify-between items-center gap-4'}>
-                        <UIText className={'!text-primary'} text={t(`fontSize.${GetCurrentFontSize(user?.prefs?.fontSize || "base" )}`)} weight={'medium'}/>
-
-                        <Button
-                            size={'icon'}
-                            className={'border rtl:mt-3 rounded-md border-accent-foreground bg-accent dark:bg-accent-foreground group'}
-                            onClick={()=> setOpenEditFontSize(true)}
-                        >
-                            <Pencil className={'w-5 h-5 text-accent-foreground dark:text-accent group-hover:text-primary'}/>
-                        </Button>
-                    </div>
-                </div>
+                <SettingsMenu
+                    icon={<TypeOutline className={'w-5 h-5 text-primary'}/>}
+                    label={t('fontSize.title')}
+                    settingsValue={t(`fontSize.${GetCurrentFontSize(user?.prefs?.fontSize || "base" )}`)}
+                    toggleEdit={()=> setOpenEditFontSize(true)}
+                />
 
                 {/* Theme */}
-                <div className={'flex items-center justify-between -mx-6 px-6 pb-6 gap-2'}>
-                  <div className={'flex items-center gap-4'}>
-                      <Paintbrush className={'w-5 h-5 text-primary'}/>
-                      <UIText text={t('theme.label')} weight={'semibold'} className={''}/>
-                  </div>
+                <SettingsMenu
+                    icon={<Paintbrush className={'w-5 h-5 text-primary'}/>}
+                    label={t('theme.label')}
+                    settingsValue={t(GetCurrentTheme(currentTheme).label)}
+                    toggleEdit={()=> setOpenEditTheme(true)}
+                />
 
-                  <div className={'flex justify-between items-center gap-4'}>
-                      <UIText className={'!text-primary'} text={t(`theme.${GetCurrentTheme(currentTheme)}`)} weight={'medium'}/>
+            </div>
 
-                      <Button
-                          size={'icon'}
-                          className={'border rtl:mt-3 rounded-md border-accent-foreground bg-accent dark:bg-accent-foreground group'}
-                          onClick={()=> setOpenEditTheme(true)}
-                      >
-                          <Pencil className={'w-5 h-5 text-accent-foreground dark:text-accent group-hover:text-primary'}/>
-                      </Button>
-                  </div>
-                </div>
-
-                <div className={'-mx-6 px-6 pb-6 gap-2 text-center mt-10 text-sm text-muted-foreground'}>
-                  App Version <span className={'font-semibold'}>3.3</span>
-                </div>
+            <div className={'px-6 py-8 gap-2 text-center mt-10 text-sm text-muted-foreground'}>
+                App Version <span className={'font-semibold'}>3.3</span>
             </div>
 
             <EditProfile open={openEditProfile} onOpenChange={setOpenEditProfile} />
@@ -127,4 +80,28 @@ export default function Settings() {
 
         </PageContainer>
     );
+}
+
+const SettingsMenu = ({icon, label, settingsValue, toggleEdit}) =>{
+    return(
+        <div className={'flex items-center justify-between px-6 py-8 gap-2'}>
+            <div className={'flex items-center gap-4'}>
+                {icon}
+                <UIText text={label} weight={'semibold'} className={''}/>
+            </div>
+
+            <div className={'flex justify-between items-center gap-4'}>
+                <UIText text={settingsValue} weight={'medium'}/>
+
+                <Button
+                    size={'icon'}
+                    className={'border rtl:mt-3 rounded-md'}
+                    onClick={toggleEdit}
+                    variant={'outline'}
+                >
+                    <Pencil className={'w-5 h-5'}/>
+                </Button>
+            </div>
+        </div>
+    )
 }

@@ -22,6 +22,7 @@
     "addEvent": "Add New Page",
     "addEventItem": "Add New Record",
     "addMoreDetailsText": "Add Date, Venue & Details etc.",
+    "showDetailsFieldText": "Add Date, Venue & Details etc.",
     "alertEventCreated": "Page Created",
     "alertEventDeleted": "Page Deleted",
     "alertEventItemCreated": "Record Created",
@@ -161,6 +162,7 @@
   },
   "labels": {
     "addMoreDetails": "Add Date & Details etc.",
+    "addMoreDetailsShort": "Add Details etc.",
     "amount": "Amount",
     "atTime": "at",
     "createdBy": "Added by",
@@ -185,7 +187,7 @@
     "required": "required",
     "selectGroup": "Select Group",
     "shareWithGroup": "Share with Group",
-    "type": "Type",
+    "bookType": "Book Type",
     "updatedBy": "Updated by",
     "viewCreatedEditedBy": "More Information"
   },
@@ -292,13 +294,13 @@
       "alertNoChanges": "Nothing to update",
       "editTitle": "Choose Theme",
       "label": "Theme",
-      "violet": "Violet",
-      "rose": "Rose",
-      "green": "Green",
-      "slate": "Slate",
-      "blue": "Blue",
-      "stone": "Stone",
-      "orange": "Orange"
+      "Violet": "Violet",
+      "Rose": "Rose",
+      "Green": "Green",
+      "Slate": "Slate",
+      "Blue": "Blue",
+      "Stone": "Stone",
+      "Orange": "Orange"
     },
     "title": "Settings"
   }

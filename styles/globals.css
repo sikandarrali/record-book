@@ -6,8 +6,8 @@
 @layer base {
 	/* violet */
 	:root,
-	.violet,
-	.light.violet {
+	.theme-violet,
+	.light .theme-violet {
 		--background: 0 0% 100%;
 		--foreground: 224 71.4% 4.1%;
 		--card: 0 0% 100%;
@@ -35,7 +35,7 @@
 		--chart-5: 27 87% 67%;
 	}
 	.dark,
-	.dark.violet {
+	.dark .theme-violet {
 		--background: 224 71.4% 4.1%;
 		--foreground: 210 20% 98%;
 		--card: 224 71.4% 4.1%;
@@ -63,8 +63,8 @@
 	}
 
 	/* Slate */
-	.slate,
-	.light.slate{
+	.theme-slate,
+	.light .theme-slate{
 		--background: 0 0% 100%;
 		--foreground: 222.2 84% 4.9%;
 		--card: 0 0% 100%;
@@ -91,7 +91,7 @@
 		--chart-4: 43 74% 66%;
 		--chart-5: 27 87% 67%;
 	}
-	.dark.slate {
+	.dark .theme-slate {
 		--background: 222.2 84% 4.9%;
 		--foreground: 210 40% 98%;
 		--card: 222.2 84% 4.9%;
@@ -119,8 +119,8 @@
 	}
 
 	/* Stone */
-	.stone,
-	.light.stone{
+	.theme-stone,
+	.light .theme-stone{
 		--background: 0 0% 100%;
 		--foreground: 20 14.3% 4.1%;
 		--card: 0 0% 100%;
@@ -147,7 +147,7 @@
 		--chart-4: 43 74% 66%;
 		--chart-5: 27 87% 67%;
 	}
-	.dark.stone {
+	.dark .theme-stone {
 		--background: 20 14.3% 4.1%;
 		--foreground: 60 9.1% 97.8%;
 		--card: 20 14.3% 4.1%;
@@ -175,8 +175,8 @@
 	}
 
 	/* Blue */
-	.blue,
-	.light.blue {
+	.theme-blue,
+	.light .theme-blue {
 		--background: 0 0% 100%;
 		--foreground: 222.2 84% 4.9%;
 		--card: 0 0% 100%;
@@ -203,7 +203,7 @@
 		--chart-4: 43 74% 66%;
 		--chart-5: 27 87% 67%;
 	}
-	.dark.blue {
+	.dark .theme-blue {
 		--background: 222.2 84% 4.9%;
 		--foreground: 210 40% 98%;
 		--card: 222.2 84% 4.9%;
@@ -231,8 +231,8 @@
 	}
 
 	/* Rose */
-	.rose,
-	.light.rose {
+	.theme-rose,
+	.light .theme-rose {
 		--background: 0 0% 100%;
 		--foreground: 240 10% 3.9%;
 		--card: 0 0% 100%;
@@ -259,7 +259,7 @@
 		--chart-4: 43 74% 66%;
 		--chart-5: 27 87% 67%;
 	}
-	.rose.dark{
+	.dark .theme-rose{
 		--background: 20 14.3% 4.1%;
 		--foreground: 0 0% 95%;
 		--card: 24 9.8% 10%;
@@ -287,8 +287,8 @@
 	}
 
 	/* Green */
-	.green,
-	.light.green {
+	.theme-green,
+	.light .theme-green {
 		--background: 0 0% 100%;
 		--foreground: 240 10% 3.9%;
 		--card: 0 0% 100%;
@@ -315,7 +315,7 @@
 		--chart-4: 43 74% 66%;
 		--chart-5: 27 87% 67%;
 	}
-	.dark.green {
+	.dark .theme-green {
 		--background: 20 14.3% 4.1%;
 		--foreground: 0 0% 95%;
 		--card: 24 9.8% 10%;
@@ -343,8 +343,8 @@
 	}
 
 	/* Orange */
-	.orange,
-	.light.orange {
+	.theme-orange,
+	.light .theme-orange {
 		--background: 0 0% 100%;
 		--foreground: 20 14.3% 4.1%;
 		--card: 0 0% 100%;
@@ -371,7 +371,7 @@
 		--chart-4: 43 74% 66%;
 		--chart-5: 27 87% 67%;
 	}
-	.orange.dark{
+	.dark .theme-orange {
 		--background: 20 14.3% 4.1%;
 		--foreground: 60 9.1% 97.8%;
 		--card: 20 14.3% 4.1%;

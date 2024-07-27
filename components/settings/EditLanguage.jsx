@@ -28,6 +28,7 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover"
 import {UISheetFooterWithAction} from "@/components/theme/UISheetFooterWithAction";
+import {UISheet} from "@/components/theme/UISheet";
 
 
 export const EditLanguage = ({ open, onOpenChange }) => {
@@ -75,75 +76,68 @@ export const EditLanguage = ({ open, onOpenChange }) => {
 
 
     return (
-        <Sheet open={open} onOpenChange={onOpenChange} defaultOpen={false}>
-            <SheetContent
-                className={cn("pb-12 bg-accent dark:bg-accent-foreground overflow-auto max-h-fit")}
-                side={isDesktop ? "right" : "bottom"}
-                onOpenAutoFocus={(e) => e.preventDefault()}
-            >
-                <div className={'hidden'}><SheetHeader><SheetTitle/><SheetDescription/></SheetHeader></div>
-                <div className="flex flex-col flex-1 w-full pt-4 justify-start min-h-[200px]">
-                    <div className="flex items-center space-x-2 justify-between mb-4">
-                        <UIText variant={'heading'} className="text-primary" text={t('change')}/>
-                    </div>
-                    <div className="flex flex-col gap-5 w-full items-center justify-center py-6 lg:py-10">
-                        <Popover open={openLanguageDropdown} onOpenChange={setOpenLanguageDropdown}>
-                            <PopoverTrigger asChild>
-                                <Button
-                                    variant="outline"
-                                    role="combobox"
-                                    aria-expanded={open}
-                                    className="w-full justify-between py-4"
-                                >
-                                    {selectedLanguage
-                                        ? <UIText text={t(GetCurrentLanguage(selectedLanguage))}/>
-                                        : <UIText text={t('selectLanguage')}/>}
-                                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                                </Button>
-                            </PopoverTrigger>
-                            <PopoverContent side={'top'} className="p-0">
-                                <Command>
-                                    {/*<CommandInput placeholder={t('search')} />*/}
-                                    {/*<CommandEmpty><UIText text={t('noLanguagesFound')}/> </CommandEmpty>*/}
-                                    <CommandList>
-                                        <CommandGroup>
-                                            {SupportedLanguages.map((language) => (
-                                                <CommandItem
-                                                    key={language.value}
-                                                    value={language.value}
-                                                    onSelect={(currentValue) => {
-                                                        setSelectedLanguage(currentValue === selectedLanguage ? "" : currentValue)
-                                                        setOpenLanguageDropdown(false)
-                                                    }}
-                                                    className={cn(
-                                                        'gap-4',
-                                                        selectedLanguage === language.value && "!text-primary"
-                                                    )}
-                                                >
-                                                    <Check
-                                                        className={cn(
-                                                            "mr-2 h-5 w-5 rtl:mt-1.5 stroke-[2.5]",
-                                                            selectedLanguage === language.value ? "opacity-100" : "opacity-0"
-                                                        )}
-                                                    />
-                                                    <UIText weight={selectedLanguage === language.value && "semibold"} text={t(language.value)}/>
-                                                </CommandItem>
-                                            ))}
-                                        </CommandGroup>
-                                    </CommandList>
-                                    </Command>
-                            </PopoverContent>
-                        </Popover>
-                    </div>
+        <UISheet open={open} onOpenChange={onOpenChange} defaultOpen={false}>
+            <div className="flex flex-col flex-1 w-full pt-4 justify-start min-h-[200px]">
+                <div className="flex items-center space-x-2 justify-between mb-4">
+                    <UIText variant={'heading'} className="text-primary" text={t('change')}/>
                 </div>
+                <div className="flex flex-col gap-5 w-full items-center justify-center py-6 lg:py-10">
+                    <Popover open={openLanguageDropdown} onOpenChange={setOpenLanguageDropdown}>
+                        <PopoverTrigger asChild>
+                            <Button
+                                variant="outline"
+                                role="combobox"
+                                aria-expanded={open}
+                                className="w-full justify-between py-4"
+                            >
+                                {selectedLanguage
+                                    ? <UIText text={t(GetCurrentLanguage(selectedLanguage))}/>
+                                    : <UIText text={t('selectLanguage')}/>}
+                                <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                            </Button>
+                        </PopoverTrigger>
+                        <PopoverContent side={'top'} className="p-0">
+                            <Command>
+                                {/*<CommandInput placeholder={t('search')} />*/}
+                                {/*<CommandEmpty><UIText text={t('noLanguagesFound')}/> </CommandEmpty>*/}
+                                <CommandList>
+                                    <CommandGroup>
+                                        {SupportedLanguages.map((language) => (
+                                            <CommandItem
+                                                key={language.value}
+                                                value={language.value}
+                                                onSelect={(currentValue) => {
+                                                    setSelectedLanguage(currentValue === selectedLanguage ? "" : currentValue)
+                                                    setOpenLanguageDropdown(false)
+                                                }}
+                                                className={cn(
+                                                    'gap-4',
+                                                    selectedLanguage === language.value && "!text-primary"
+                                                )}
+                                            >
+                                                <Check
+                                                    className={cn(
+                                                        "mr-2 h-5 w-5 rtl:mt-1.5 stroke-[2.5]",
+                                                        selectedLanguage === language.value ? "opacity-100" : "opacity-0"
+                                                    )}
+                                                />
+                                                <UIText weight={selectedLanguage === language.value && "semibold"} text={t(language.value)}/>
+                                            </CommandItem>
+                                        ))}
+                                    </CommandGroup>
+                                </CommandList>
+                                </Command>
+                        </PopoverContent>
+                    </Popover>
+                </div>
+            </div>
 
-                <UISheetFooterWithAction
-                    adding={adding}
-                    disabled={disabled}
-                    onOpenChange={onOpenChange}
-                    onSubmit={onUpdate}
-                />
-            </SheetContent>
-        </Sheet>
+            <UISheetFooterWithAction
+                adding={adding}
+                disabled={disabled}
+                onOpenChange={onOpenChange}
+                onSubmit={onUpdate}
+            />
+        </UISheet>
     );
 };

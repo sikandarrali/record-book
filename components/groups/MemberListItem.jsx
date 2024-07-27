@@ -77,7 +77,7 @@ export const MemberListItem = ({data, teamID, setUsersInGroup, groupName, isGrou
             {isGroupOwner && !isOwner &&
                 <Button
                     variant={'ghost'}
-                    className={'h-8 border-primary text-primary px-2 hover:text-primary'}
+                    className={'h-8 border-primary text-destructive px-2 hover:text-primary'}
                     onClick={()=> setOpenDelete(true)}
                 >
                     <Trash2 className={'w-4 h-4'}/>

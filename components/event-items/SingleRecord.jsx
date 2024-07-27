@@ -22,6 +22,8 @@ import {EnglishMonths} from "@/lib/defaultData";
 import {useAuth} from "@/components/contexts/AuthContext";
 import {CreatedUpdatedBy} from "@/components/theme/CreatedUpdatedBy";
 import {DeleteDialog} from "@/components/theme/DeleteDialog";
+import {Button} from "@/components/ui/button";
+import {UISheet} from "@/components/theme/UISheet";
 
 export const SingleRecord = ({ item }) => {
 	const isDesktop = useMediaQuery({ query: "(min-width: 1024px)" })
@@ -67,124 +69,117 @@ export const SingleRecord = ({ item }) => {
 
 
 	return (
-		<Sheet
-			open={isOpen}
-			onOpenChange={setIsOpen}
-			defaultOpen={false}
-		>
-			<SheetTrigger className={'w-full outline-none'}>
-				<div
-					onClick={() => setIsOpen(true)}
-					className="flex flex-col w-full px-8 bg-accent dark:bg-accent-foreground/50 hover:bg-accent-foreground/20 dark:hover:bg-accent-foreground/10 select-none py-4 cursor-pointer border-b border-accent-foreground/20 dark:border-accent/20"
-				>
-					<div className="flex w-full justify-between gap-5">
-						<UIText variant={'heading'} weight={'medium'} text={item.name}/>
+		<>
+			{/* Trigger */}
+			<div
+				onClick={() => setIsOpen(true)}
+				className="flex flex-col w-full px-8 select-none py-4 cursor-pointer hover:bg-muted shadow-sm border-b border-border"
+			>
+				<div className="flex w-full justify-between gap-5">
+					<UIText variant={'heading'} weight={'medium'} text={item.name}/>
 
-						<div className="flex justify-end items-center relative shrink-0 select-none" dir={'ltr'}>
-							<span className="text-sm select-none font-semibold mr-2 text-accent-foreground dark:text-accent">Rs</span>
-							{item.type==='expense' ?
-								<Minus className={'text-destructive w-4 h-4 stroke-[2.5]'}/>
+					<div className="flex justify-end items-center relative shrink-0 select-none" dir={'ltr'}>
+						<span className="text-sm select-none font-semibold mr-2">Rs</span>
+						{item.type==='expense' ?
+							<Minus className={'text-destructive w-4 h-4 stroke-[2.5]'}/>
 							:
-								<Plus className={'text-primary w-4 h-4 stroke-[2.5]'}/>
+							<Plus className={'w-4 h-4 stroke-[2.5]'}/>
+						}
+						<UIText
+							weight={'semibold'}
+							variant={'lg'}
+							className={cn(item.type==='expense' ? "text-destructive" : "text-primary")}
+							text={
+								<NumericFormat
+									allowNegative={false}
+									value={item.amount}
+									thousandSeparator={","}
+									decimalSeparator={"."}
+									displayType="text"
+									decimalScale={2}
+								/>
 							}
-							<UIText
-								weight={'semibold'}
-								variant={'lg'}
-								className={cn(item.type==='expense' ? "text-destructive" : "text-primary")}
-								text={
-									<NumericFormat
-										allowNegative={false}
-										value={item.amount}
-										thousandSeparator={","}
-										decimalSeparator={"."}
-										displayType="text"
-										decimalScale={2}
-									/>
-								}
-							/>
-						</div>
+						/>
+					</div>
+				</div>
+
+				{item.details && item.details !== ""  && item.details !== " " &&
+					<div className={'flex items-center gap-2 mt-1'}>
+						<CornerDownRight className={'w-5 h-5 mt-1 text-muted-foreground rtl:hidden'}/>
+						<CornerDownLeft className={'w-5 h-5 mt-1 text-muted-foreground ltr:hidden'}/>
+						<p className={'overflow-hidden line-clamp-1 w-3/4 text-muted-foreground text text-left rtl:text-right'}>
+							<UIText text={item.details}/>
+						</p>
+					</div>
+				}
+			</div>
+
+			<UISheet
+				open={isOpen}
+				onOpenChange={setIsOpen}
+			>
+				<div className="flex flex-col w-full min-h-full pt-4 justify-start">
+
+				<div className="flex flex-col justify-center items-center my-10 lg:mt-32">
+					<UIText weight={'medium'} variant={'lg'} className={'!text-center'} text={item.name}/>
+
+					<div className="flex text-foreground mt-8 justify-center items-center relative select-none pointer-events-none" dir={'ltr'}>
+						<UIText weight={'bold'} className="mr-2 text-accent-foreground dark:text-accent" text={'Rs'}/>
+						{item.type==='expense' ?
+							<Minus className={'text-destructive w-5 h-5 stroke-[2.5]'}/>
+							:
+							<Plus className={'text-primary w-5 h-5 stroke-[2.5]'}/>
+						}
+						<UIText
+							weight={'bold'}
+							className={cn(item.type==='expense' ? "text-destructive" : "text-primary")}
+							variant={'heading'}
+							text={
+								<NumericFormat
+									allowNegative={false}
+									value={item.amount}
+									thousandSeparator={","}
+									decimalSeparator={"."}
+									displayType="text"
+									decimalScale={2}
+									className={'text-primary'}
+								/>
+							}
+						/>
 					</div>
 
-					{item.details && item.details !== ""  && item.details !== " " &&
-						<div className={'flex items-center gap-2 mt-1'}>
-							<CornerDownRight className={'w-5 h-5 mt-1 text-muted-foreground rtl:hidden'}/>
-							<CornerDownLeft className={'w-5 h-5 mt-1 text-muted-foreground ltr:hidden'}/>
-							<p className={'overflow-hidden line-clamp-1 w-3/4 text-muted-foreground text text-left rtl:text-right'}>
-								<UIText text={item.details}/>
-							</p>
+					{item.details &&
+						<div className={'mt-20 mb-10 self-start flex flex-col px-2'}>
+							<UIText className={'mb-2 text-primary'} weight={'semibold'} text={t('labels.details')}/>
+							<UIText text={item.details} />
 						</div>
 					}
 				</div>
-			</SheetTrigger>
-			<SheetContent
-				className={cn("pb-8 lg:pb-14 bg-background border-t-0 border-l-0 dark:bg-foreground overflow-auto max-h-fit")}
-				side={isDesktop ? "right" : "bottom"}
-				onOpenAutoFocus={(e) => e.preventDefault()}
-			>
-				<div className={'hidden'}><SheetHeader><SheetTitle/><SheetDescription/></SheetHeader></div>
+				<CreatedUpdatedBy data={item} createdDate={renderedCreatedDate} updatedDate={renderedUpdatedDate}/>
 
-				<div className="flex flex-col w-full min-h-full pt-4 justify-start">
-
-					<div className="flex flex-col justify-center items-center my-10 lg:mt-32">
-						<UIText weight={'medium'} variant={'lg'} className={'!text-center'} text={item.name}/>
-
-						<div className="flex text-foreground mt-8 justify-center items-center relative select-none pointer-events-none" dir={'ltr'}>
-							<UIText weight={'bold'} className="mr-2 text-accent-foreground dark:text-accent" text={'Rs'}/>
-							{item.type==='expense' ?
-								<Minus className={'text-destructive w-5 h-5 stroke-[2.5]'}/>
-								:
-								<Plus className={'text-primary w-5 h-5 stroke-[2.5]'}/>
-							}
-							<UIText
-								weight={'bold'}
-								className={cn(item.type==='expense' ? "text-destructive" : "text-primary")}
-								variant={'heading'}
-								text={
-									<NumericFormat
-										allowNegative={false}
-										value={item.amount}
-										thousandSeparator={","}
-										decimalSeparator={"."}
-										displayType="text"
-										decimalScale={2}
-										className={'text-primary'}
-									/>
-								}
-							/>
-						</div>
-
-						{item.details &&
-							<div className={'mt-20 mb-10 self-start flex flex-col px-2'}>
-								<UIText className={'mb-2 text-primary'} weight={'semibold'} text={t('labels.details')}/>
-								<UIText text={item.details} />
-							</div>
-						}
-					</div>
-					<CreatedUpdatedBy data={item} createdDate={renderedCreatedDate} updatedDate={renderedUpdatedDate}/>
-
-					<UISheetInfoFooter
-						setOpen={setIsOpen}
-						setOpenDelete={setOpenDelete}
-						setOpenEdit={setOpenEdit}
-						hasDeletePermission={hasDeletePermission}
-					/>
-				</div>
-
-				<EditRecord
-					item={item}
-					open={openEdit}
-					onOpenChange={setOpenEdit}
+				<UISheetInfoFooter
+					setOpen={setIsOpen}
+					setOpenDelete={setOpenDelete}
+					setOpenEdit={setOpenEdit}
+					hasDeletePermission={hasDeletePermission}
 				/>
-				{hasDeletePermission &&
-					<DeleteDialog
-						open={openDelete}
-						onOpenChange={setOpenDelete}
-						onDelete={onDelete}
-						title={t('pages.records.deletePage')}
-						texts={deleteTexts}
-					/>
-				}
-			</SheetContent>
-		</Sheet>
+			</div>
+			</UISheet>
+
+			<EditRecord
+				item={item}
+				open={openEdit}
+				onOpenChange={setOpenEdit}
+			/>
+			{hasDeletePermission &&
+				<DeleteDialog
+					open={openDelete}
+					onOpenChange={setOpenDelete}
+					onDelete={onDelete}
+					title={t('pages.records.deletePage')}
+					texts={deleteTexts}
+				/>
+			}
+		</>
 	);
 };

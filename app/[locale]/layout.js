@@ -7,7 +7,6 @@ import {Inter, Noto_Nastaliq_Urdu} from "@next/font/google";
 import localFont from "@next/font/local";
 import {APP_THEME, COOKIE_THEME_NAME} from "@/lib/defaults";
 import Cookies from "js-cookie";
-import {getThemeCookie} from "@/lib/cookiesStore";
 
 
 const fontSans = Inter({
@@ -84,9 +83,16 @@ export default async function RootLayout({ children, params }) {
 		<body
 			dir={params.locale === 'ur' ? 'rtl' : 'ltr'}
 			className={cn(
-				"min-h-screen bg-muted dark:bg-foreground font-sans antialiased",
+				"min-h-screen font-sans antialiased",
 				fontSans.variable,
 				fontUrdu.variable,
+				// "theme-violet",
+				// "theme-blue",
+				// "theme-rose",
+				// "theme-orange",
+				// "theme-slate",
+				// "theme-stone",
+				// "theme-green",
 			)}
 		>
 

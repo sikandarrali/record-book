@@ -14,7 +14,7 @@ import {Select, SelectContent, SelectItem, SelectTrigger} from "@/components/ui/
 import {useAuth} from "@/components/contexts/AuthContext";
 import {Query} from "appwrite";
 import {useData} from "@/components/contexts/DataContext";
-import {UISheetFooter} from "@/components/theme/UISheetFooter";
+import {UISheetFooterInForm} from "@/components/theme/UISheetFooterInForm";
 import {useI18n} from "@/locales/client";
 import {Label} from "@/components/ui/label";
 import UIText from "@/components/theme/UIText";
@@ -34,6 +34,8 @@ import {DropdownSelectFieldWithLabel} from "@/components/theme/form/DropdownSele
 import * as React from "react";
 import {DatePickerWithLabel} from "@/components/theme/form/DatePickerWithLabel";
 import {TextareaWithLabel} from "@/components/theme/form/TextareaWithLabel";
+import {UISheet} from "@/components/theme/UISheet";
+import {BookTypeToggleGroup} from "@/components/event/BookTypeToggleGroup";
 
 export const EditPage = ({ open, onOpenChange, pageData, setPageData, setGroup }) => {
 	const isDesktop = useMediaQuery({
@@ -80,6 +82,7 @@ export const EditPage = ({ open, onOpenChange, pageData, setPageData, setGroup }
 			const pageDataValues = {
 				name: values.name.trim(),
 				date: values.date,
+				type: values.type,
 				details: values.details.trim(),
 				teamId: values.teamId,
 				createdBy: pageData.createdBy,
@@ -123,117 +126,116 @@ export const EditPage = ({ open, onOpenChange, pageData, setPageData, setGroup }
 	};
 
 	return (
-		<Sheet open={open} onOpenChange={onOpenChange} defaultOpen={false}>
-			<SheetContent
-				className={cn("pb-8 lg:pb-14 bg-background dark:bg-foreground outline-0 overflow-auto h-[90%] lg:h-screen lg:max-h-screen border-t-0 border-l-0")}
-				side={isDesktop ? "right" : "bottom"}
-				onOpenAutoFocus={(e) => e.preventDefault()}
-			>
-				<div className={'hidden'}><SheetHeader><SheetTitle/><SheetDescription/></SheetHeader></div>
-				<div className="flex flex-col w-full min-h-full pt-4 justify-start">
+		<UISheet
+			open={open}
+			onOpenChange={onOpenChange}
+		>
+			<UIText
+				variant={'heading'}
+				className="text-primary mb-4"
+				text={t('pages.home.editPage')}
+			/>
 
-					<UIText
-						variant={'heading'}
-						className="text-primary mb-4"
-						text={t('pages.home.editPage')}
-					/>
+			<div className="flex flex-col gap-5 w-full items-center justify-center py-6 lg:py-10">
+				<Formik
+					initialValues={{
+						name: pageData?.name,
+						date: pageData?.date,
+						details: pageData?.details,
+						teamId: pageData?.teamId,
+						type: pageData?.type
+					}}
+					validationSchema={PageSchema}
+					onSubmit={(values) => {
+						onUpdate(values);
+					}}
+				>
+					{({
+						  errors,
+						  touched,
+						  values,
+						  handleChange,
+						  handleBlur,
+						  setFieldValue
+					  }) => (
+						<Form className="flex flex-col w-full space-y-6">
 
-					<div className="flex flex-col gap-5 w-full items-center justify-center py-6 lg:py-10">
-						<Formik
-							initialValues={{
-								name: pageData?.name,
-								date: pageData?.date,
-								details: pageData?.details,
-								teamId: pageData?.teamId
-								// type: pageData?.type
-							}}
-							validationSchema={PageSchema}
-							onSubmit={(values) => {
-								onUpdate(values);
-							}}
-						>
-							{({
-								errors,
-								touched,
-								values,
-								handleChange,
-								handleBlur,
-								setFieldValue
-							}) => (
-								<Form className="flex flex-col w-full space-y-6">
+							{/* Book Type */}
+							<div className={'flex flex-col'}>
+								<FormLabel title={t('labels.bookType')}/>
+								<BookTypeToggleGroup value={values.type} setFieldValue={setFieldValue} />
+							</div>
 
-									{/* Select Group */}
-									<DropdownSelectFieldWithLabel
-										data={userOwnedGroups}
-										fieldValue={pageData.teamId}
-										onSelect={(value)=> {
-											setFieldValue('teamId', value)
-											console.log(values.teamId)
-										}}
-										onClear={()=>{
-											setFieldValue("teamId", "");
-										}}
-										isOwner={isOwner}
+							{/* Select Group */}
+							<DropdownSelectFieldWithLabel
+								label={t('labels.group')}
+								data={userOwnedGroups}
+								fieldValue={pageData.teamId}
+								onSelect={(value)=> {
+									setFieldValue('teamId', value)
+								}}
+								onClear={()=>{
+									setFieldValue("teamId", "");
+								}}
+								isOwner={isOwner}
+							/>
+
+							{/* Name */}
+							<InputFieldWithLabel
+								label={t('labels.name')}
+								errors={errors.name}
+								touched={touched.name}
+								onChange={handleChange}
+								onBlur={handleBlur}
+								name="name"
+								value={values.name}
+								disabled={disabled}
+							/>
+
+							<div
+								className={'flex items-center rtl:items-start justify-center gap-1.5 rtl:gap-3 cursor-pointer text-primary'}
+								onClick={()=> setAddEventDetails(!addEventDetails)}
+							>
+								<UIText variant={'sm'} className={'font-medium'} text={t('labels.addMoreDetails')}/>
+								{addEventDetails ? <ChevronUp className={'w-6 h-6 stroke-[3] rtl:mt-2'}/> : <ChevronDown className={'w-6 h-6 stroke-[3] rtl:mt-2'}/>}
+							</div>
+
+							{addEventDetails &&
+								<>
+									{/* Date */}
+									<DatePickerWithLabel
+										label={t('labels.date')}
+										setFieldValue={setFieldValue}
+										name={'date'}
+										disabled={disabled}
+										fieldValue={values.date}
+										onClear={()=> setFieldValue('date', '')}
 									/>
 
-									{/* Name */}
-									<InputFieldWithLabel
-										label={t('labels.name')}
-										errors={errors.name}
-										touched={touched.name}
+									{/* Details */}
+									<TextareaWithLabel
+										label={t('labels.details')}
+										errors={errors.details}
+										touched={touched.details}
 										onChange={handleChange}
 										onBlur={handleBlur}
-										name="name"
-										value={values.name}
+										name="details"
 										disabled={disabled}
+										value={values.details}
 									/>
 
-									<div
-										className={'flex items-center rtl:items-start justify-center gap-1.5 rtl:gap-3 cursor-pointer text-primary'}
-										onClick={()=> setAddEventDetails(!addEventDetails)}
-									>
-										<UIText variant={'sm'} className={'font-medium'} text={t('labels.addMoreDetails')}/>
-										{addEventDetails ? <ChevronUp className={'w-6 h-6 stroke-[3] rtl:mt-2'}/> : <ChevronDown className={'w-6 h-6 stroke-[3] rtl:mt-2'}/>}
-									</div>
+								</>
+							}
 
-									{addEventDetails &&
-										<>
-											{/* Date */}
-											<DatePickerWithLabel
-												label={t('labels.date')}
-												setFieldValue={setFieldValue}
-												name={'date'}
-												disabled={disabled}
-												fieldValue={values.date}
-												onClear={()=> setFieldValue('date', '')}
-											/>
-
-											{/* Details */}
-											<TextareaWithLabel
-												label={t('labels.details')}
-												errors={errors.details}
-												touched={touched.details}
-												onChange={handleChange}
-												onBlur={handleBlur}
-												name="details"
-												disabled={disabled}
-												value={values.details}
-											/>
-
-										</>
-									}
-
-									<UISheetFooter
-										adding={adding}
-										disabled={disabled}
-										onOpenChange={onOpenChange}
-									/>
-								</Form>
-							)}
-						</Formik>
-					</div>
-				</div>
-			</SheetContent>
-		</Sheet>
+							<UISheetFooterInForm
+								adding={adding}
+								disabled={disabled}
+								onOpenChange={onOpenChange}
+							/>
+						</Form>
+					)}
+				</Formik>
+			</div>
+		</UISheet>
 	);
 };

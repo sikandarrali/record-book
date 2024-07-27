@@ -14,7 +14,7 @@ import UIText from "@/components/theme/UIText";
 import {scrollToTop} from "@/lib/utils";
 import {ID, Permission, Role} from "appwrite";
 import {useAuth} from "@/components/contexts/AuthContext";
-import {UISheetFooter} from "@/components/theme/UISheetFooter";
+import {UISheetFooterInForm} from "@/components/theme/UISheetFooterInForm";
 import {useI18n} from "@/locales/client";
 import {UITextInput} from "@/components/theme/UITextInput";
 import {UITextArea} from "@/components/theme/UITextArea";
@@ -25,6 +25,12 @@ import { Toggle } from "@/components/ui/toggle"
 import {ChevronDown, ChevronUp, Minus, Plus, TrendingDown, TrendingUp} from "lucide-react";
 import {ToggleGroup, ToggleGroupItem} from "@/components/ui/toggle-group";
 import {RecordTypeToggleGroup} from "@/components/event-items/RecordTypeToggleGroup";
+import {UISheet} from "@/components/theme/UISheet";
+import * as React from "react";
+import {DatePickerWithLabel} from "@/components/theme/form/DatePickerWithLabel";
+import {InputFieldWithLabel} from "@/components/theme/form/InputFieldWithLabel";
+import {NumberInputFieldWithLabel} from "@/components/theme/form/NumberInputFieldWithLabel";
+import {TextareaWithLabel} from "@/components/theme/form/TextareaWithLabel";
 
 // @TODO: store last type in localstorage
 
@@ -61,6 +67,7 @@ export const AddRecord = ({open, onOpenChange, pageData}) => {
 				name: values.name.trim(),
 				amount: cleanAmount,
 				type: values.type,
+				date: values.date,
 				details: values.details.trim(),
 				pageId: pageID,
 				createdBy: tempCreatedBy,
@@ -108,103 +115,101 @@ export const AddRecord = ({open, onOpenChange, pageData}) => {
 	};
 
 	return (
-		<Sheet open={open} onOpenChange={onOpenChange}>
-			<SheetContent
-				className={'p-6 pb-10'}
-				side={isDesktop ? "right" : "bottom"}
-				onOpenAutoFocus={(e) => e.preventDefault()}
+		<UISheet open={open} onOpenChange={onOpenChange}>
+
+			<Formik
+				initialValues={{
+					name: "",
+					amount: "",
+					date: pageData?.type === "khaataBook" ? new Date() : '',
+					type: pageData?.type === "recordBook" ? "income" : "expense",
+					details: "",
+				}}
+				validationSchema={RecordSchema}
+				onSubmit={(values) => {
+					onAdd(values);
+				}}
 			>
-				<SheetHeader className={'hidden'}><SheetTitle/><SheetDescription /></SheetHeader>
+				{({
+					  errors,
+					  touched,
+					  handleChange,
+					  handleBlur,
+					  setFieldValue,
+					  values
+				  }) => (
+					<Form className="flex flex-col w-full space-y-6">
 
-				<div className="flex flex-col gap-5 max-w-lg mx-auto items-center lg:py-10">
-					<UIText className={'text-primary self-start py-6'} weight={'semibold'} variant={'heading'} text={t('pages.records.add')}/>
+						{/* Record Type */}
+						<div className={'flex justify-between items-center py-6 mb-4'}>
+							<UIText className={"text-primary self-start"} weight={'semibold'} variant={'heading'} text={t('pages.records.add')}/>
+							<RecordTypeToggleGroup value={values.type} setFieldValue={setFieldValue} />
+						</div>
 
-					<Formik
-						initialValues={{
-							name: "",
-							amount: "",
-							type: "expense",
-							details: "",
-						}}
-						validationSchema={RecordSchema}
-						onSubmit={(values) => {
-							onAdd(values);
-						}}
-					>
-						{({
-							  errors,
-							  touched,
-							  handleChange,
-							  handleBlur,
-							  setFieldValue,
-							  values
-						  }) => (
-							<Form className="flex flex-col w-full space-y-6">
+						{/* Name */}
+						<InputFieldWithLabel
+							label={t('labels.name')}
+							errors={errors.name}
+							touched={touched.name}
+							onChange={handleChange}
+							onBlur={handleBlur}
+							name="name"
+							disabled={disabled}
+						/>
 
-								<RecordTypeToggleGroup value={values.type} setFieldValue={setFieldValue} />
+						{/* Amount */}
+						<NumberInputFieldWithLabel
+							label={t('labels.amount')}
+							errors={errors.amount}
+							touched={touched.amount}
+							onChange={handleChange}
+							onBlur={handleBlur}
+							name="amount"
+							disabled={disabled}
+						/>
 
-								<div className="flex flex-col">
-									<FormLabel
-										title={t('labels.name')}
-										errors={errors.name}
-										touched={touched.name}
-									/>
-									<UITextInput
-										onChange={handleChange}
-										onBlur={handleBlur}
-										name="name"
-										disabled={disabled}
-									/>
-								</div>
-								<div className="flex flex-col">
-									<FormLabel
-										title={t('labels.amount')}
-										errors={errors.amount}
-										touched={touched.amount}
-									/>
-									<UINumberInput
-										onChange={handleChange}
-										onBlur={handleBlur}
-										disabled={disabled}
-										name="amount"
-									/>
-								</div>
+						{/* Date */}
+						<DatePickerWithLabel
+							label={t('labels.date')}
+							setFieldValue={setFieldValue}
+							name={'date'}
+							disabled={disabled}
+							fieldValue={values.date}
+							onClear={()=> setFieldValue('date', '')}
+						/>
 
-								<div
-									className={'flex items-center rtl:items-start justify-center gap-1.5 rtl:gap-3 cursor-pointer text-primary'}
-									onClick={()=> setShowAddDetails(!showAddDetails)}
-								>
-									<UIText variant={'sm'} className={'font-medium'} text={t('labels.addMoreDetails')}/>
-									{showAddDetails ? <ChevronUp className={'w-6 h-6 stroke-[3] rtl:mt-2'}/> : <ChevronDown className={'w-6 h-6 stroke-[3] rtl:mt-2'}/>}
-								</div>
+						<div
+							className={'flex items-center rtl:items-start justify-center gap-1.5 rtl:gap-3 cursor-pointer text-primary dark:text-foreground'}
+							onClick={()=> setShowAddDetails(!showAddDetails)}
+						>
+							<UIText variant={'sm'} className={'font-medium'} text={t('labels.addMoreDetailsShort')}/>
+							{showAddDetails ? <ChevronUp className={'w-6 h-6 stroke-[3] rtl:mt-2 text-primary'}/> : <ChevronDown className={'w-6 h-6 stroke-[3] rtl:mt-2 text-primary'}/>}
+						</div>
 
-								{showAddDetails &&
-									<div className="flex flex-col">
-										<FormLabel
-											title={t('labels.details')}
-											errors={errors.details}
-											touched={touched.details}
-										/>
-										<UITextArea
-											onChange={handleChange}
-											onBlur={handleBlur}
-											name="details"
-											disabled={disabled}
-										/>
-									</div>
-								}
-
-								<UISheetFooter
-									adding={adding}
+						{showAddDetails &&
+							<>
+								{/* Details */}
+								<TextareaWithLabel
+									label={t('labels.details')}
+									errors={errors.details}
+									touched={touched.details}
+									onChange={handleChange}
+									onBlur={handleBlur}
+									name="details"
 									disabled={disabled}
-									onOpenChange={onOpenChange}
 								/>
-							</Form>
-						)}
-					</Formik>
-				</div>
+							</>
+						}
 
-			</SheetContent>
-		</Sheet>
+						<UISheetFooterInForm
+							adding={adding}
+							disabled={disabled}
+							onOpenChange={onOpenChange}
+						/>
+					</Form>
+				)}
+			</Formik>
+
+		</UISheet>
 	);
 };

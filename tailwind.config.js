@@ -19,6 +19,9 @@ module.exports = {
 			},
 		},
 		extend: {
+			boxShadow: {
+				'top-only': '0 -2px 6px -1px rgba(0, 0, 0, 0.05), 0 -0px 4px -1px rgba(0, 0, 0, 0.06)',
+			},
 			fontFamily: {
 				sans: ["var(--font-sans)", ...defaultTheme.fontFamily.sans],
 				urdu: ["var(--font-urdu)"],
