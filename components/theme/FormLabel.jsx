@@ -10,7 +10,7 @@ const FormLabel = ({ title, touched, errors, requiredClassName }) => {
 		<Label
 			className={cn(
 				"relative text-sm flex items-center mb-1 justify-between gap-4 rtl:flex-row",
-				errors && touched && "text-destructive"
+				errors && touched && "text-red-500"
 			)}
 		>
 			<UIText variant={'label'} text={title}/>

@@ -26,11 +26,11 @@ export function ThemeModeToggle() {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <div className="h-10 w-10 bg-white dark:bg-black group cursor-pointer flex items-center justify-center shadow rounded-md select-none">
-                    <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0 text-accent-foreground group-hover:text-primary" />
-                    <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100 text-accent group-hover:text-primary" />
+                <Button variant={'outline'} className="rounded-lg group cursor-pointer flex items-center justify-center select-none w-10 h-9 p-1">
+                    <Sun className="w-6 h-6 flex dark:hidden" />
+                    <Moon className="w-6 h-6 hidden dark:flex" />
                     <span className="sr-only">Toggle theme</span>
-                </div>
+                </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
                 <DropdownMenuRadioGroup

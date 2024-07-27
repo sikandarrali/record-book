@@ -10,7 +10,7 @@ import {toast} from "react-toastify";
 import {ToastOptions} from "@/lib/ToastOptions";
 import {SheetDescription, SheetHeader, SheetTitle, SheetContent, Sheet} from "@/components/ui/sheet";
 import UIText from "@/components/theme/UIText";
-import {UISheetFooter} from "@/components/theme/UISheetFooter";
+import {UISheetFooterInForm} from "@/components/theme/UISheetFooterInForm";
 import {useI18n, useScopedI18n} from "@/locales/client";
 import {UITextInput} from "@/components/theme/UITextInput";
 import {UITextArea} from "@/components/theme/UITextArea";
@@ -18,25 +18,14 @@ import {useAuth} from "@/components/contexts/AuthContext";
 import {UINumberInput} from "@/components/theme/UINumberInput";
 import {ChevronDown, ChevronUp} from "lucide-react";
 import {RecordTypeToggleGroup} from "@/components/event-items/RecordTypeToggleGroup";
+import {RecordSchema} from "@/lib/schemas/RecordSchema";
+import * as React from "react";
+import {DatePickerWithLabel} from "@/components/theme/form/DatePickerWithLabel";
+import {TextareaWithLabel} from "@/components/theme/form/TextareaWithLabel";
+import {InputFieldWithLabel} from "@/components/theme/form/InputFieldWithLabel";
+import {NumberInputFieldWithLabel} from "@/components/theme/form/NumberInputFieldWithLabel";
+import {UISheet} from "@/components/theme/UISheet";
 
-const removeExtraSpaces = (value) => value.replace(/\s\s+/g, ' ').trim();
-
-const AddEventItemSchema = Yup.object().shape({
-	name: Yup.string()
-		.min(1)
-		.max(300, "max 300 characters")
-		.transform((value) => removeExtraSpaces(value))
-		.required("required"),
-	amount: Yup.string()
-		.min(1)
-		.max(100, "max 100 characters")
-		.transform((value) => removeExtraSpaces(value))
-		.required("required"),
-	details: Yup.string()
-		.min(1)
-		.max(500, "max 500 characters")
-		.transform((value) => removeExtraSpaces(value))
-});
 export const EditRecord = ({ open, onOpenChange, item }) => {
 	const isDesktop = useMediaQuery({
 		query: "(min-width: 1024px)",
@@ -59,6 +48,7 @@ export const EditRecord = ({ open, onOpenChange, item }) => {
 		if (
 			values.name === item.name &&
 			values.amount === item.amount &&
+			values.date === item.date &&
 			values.details === item.details &&
 			values.type === item.type
 		) {
@@ -72,6 +62,7 @@ export const EditRecord = ({ open, onOpenChange, item }) => {
 			const eventItemData = {
 				name: values.name.trim(),
 				amount: cleanAmount,
+				date: values.date,
 				type: values.type,
 				details: values.details.trim(),
 				createdBy: item.createdBy,
@@ -93,105 +84,105 @@ export const EditRecord = ({ open, onOpenChange, item }) => {
 
 	return (
 
-		<Sheet open={open} onOpenChange={onOpenChange}>
-			<SheetContent
-				className={'p-6 pb-10'}
-				side={isDesktop ? "right" : "bottom"}
-				onOpenAutoFocus={(e) => e.preventDefault()}
-			>
-				<SheetHeader className={'hidden'}><SheetTitle/><SheetDescription /></SheetHeader>
+		<UISheet open={open} onOpenChange={onOpenChange}>
+			<div className="flex flex-col w-full gap-5 max-w-lg mx-auto items-center lg:py-10">
+				<Formik
+					initialValues={{
+						name: item.name.trim(),
+						amount: item.amount,
+						date: item.date,
+						details: item.details.trim(),
+						type: item.type
+					}}
+					validationSchema={RecordSchema}
+					onSubmit={(values) => {
+						onEdit(values);
+					}}
+				>
+					{({
+						  errors,
+						  touched,
+						  handleChange,
+						  handleBlur,
+						  setFieldValue,
+						  values
+					  }) => (
+						<Form className="flex flex-col w-full space-y-6">
 
-				<div className="flex flex-col gap-5 max-w-lg mx-auto items-center lg:py-10">
-					<UIText className={'text-primary self-start py-6'} variant={'heading'} text={t('pages.records.editPage')}/>
-					<Formik
-						initialValues={{
-							name: item.name.trim(),
-							amount: item.amount,
-							details: item.details.trim(),
-							type: item.type
-						}}
-						validationSchema={AddEventItemSchema}
-						onSubmit={(values) => {
-							onEdit(values);
-						}}
-					>
-						{({
-							  errors,
-							  touched,
-							  handleChange,
-							  handleBlur,
-							  setFieldValue,
-							  values
-						  }) => (
-							<Form className="flex flex-col w-full space-y-6">
-
+							{/* Record Type */}
+							<div className={'flex justify-between items-center py-6 mb-4'}>
+								<UIText className={"text-primary self-start"} weight={'semibold'} variant={'heading'} text={t('pages.records.editPage')}/>
 								<RecordTypeToggleGroup value={values.type} setFieldValue={setFieldValue} />
+							</div>
 
-								<div className="flex flex-col">
-									<FormLabel
-										title={t('labels.name')}
-										errors={errors.name}
-										touched={touched.name}
-									/>
-									<UITextInput
+							{/* Name */}
+							<InputFieldWithLabel
+								label={t('labels.name')}
+								errors={errors.name}
+								touched={touched.name}
+								onChange={handleChange}
+								onBlur={handleBlur}
+								name="name"
+								value={values.name}
+								disabled={disabled}
+							/>
+
+							{/* Amount */}
+							<NumberInputFieldWithLabel
+								label={t('labels.amount')}
+								errors={errors.amount}
+								touched={touched.amount}
+								onChange={handleChange}
+								onBlur={handleBlur}
+								name="amount"
+								disabled={disabled}
+								defaultValue={item.amount}
+							/>
+
+							{/* Date */}
+							<DatePickerWithLabel
+								label={t('labels.date')}
+								setFieldValue={setFieldValue}
+								name={'date'}
+								disabled={disabled}
+								fieldValue={values.date}
+								onClear={()=> setFieldValue('date', '')}
+							/>
+
+							<div
+								className={'flex items-center rtl:items-start justify-center gap-1.5 rtl:gap-3 cursor-pointer text-primary'}
+								onClick={()=> setShowAddDetails(!showAddDetails)}
+							>
+								<UIText variant={'sm'} className={'font-medium'} text={t('labels.addMoreDetailsShort')}/>
+								{showAddDetails ? <ChevronUp className={'w-6 h-6 stroke-[3] rtl:mt-2'}/> : <ChevronDown className={'w-6 h-6 stroke-[3] rtl:mt-2'}/>}
+							</div>
+
+							{showAddDetails &&
+								<>
+									{/* Details */}
+									<TextareaWithLabel
+										label={t('labels.details')}
+										errors={errors.details}
+										touched={touched.details}
 										onChange={handleChange}
 										onBlur={handleBlur}
-										name="name"
+										name="details"
 										disabled={disabled}
-										defaultValue={item.name}
+										value={values.details}
 									/>
-								</div>
 
-								<div className="flex flex-col">
-									<FormLabel
-										title={t('labels.amount')}
-										errors={errors.amount}
-										touched={touched.amount}
-									/>
-									<UINumberInput
-										onChange={handleChange}
-										onBlur={handleBlur}
-										disabled={disabled}
-										name="amount"
-										defaultValue={item.amount}
-									/>
-								</div>
+								</>
+							}
 
-								<div
-									className={'flex items-center rtl:items-start justify-center gap-1.5 rtl:gap-3 cursor-pointer text-primary'}
-									onClick={()=> setShowAddDetails(!showAddDetails)}
-								>
-									<UIText variant={'sm'} className={'font-medium'} text={t('labels.addMoreDetails')}/>
-									{showAddDetails ? <ChevronUp className={'w-6 h-6 stroke-[3] rtl:mt-2'}/> : <ChevronDown className={'w-6 h-6 stroke-[3] rtl:mt-2'}/>}
-								</div>
-
-								{showAddDetails &&
-									<div className="flex flex-col">
-										<FormLabel
-											title={t('labels.details')}
-											errors={errors.details}
-											touched={touched.details}
-										/>
-										<UITextArea
-											onChange={handleChange}
-											onBlur={handleBlur}
-											name="details"
-											disabled={disabled}
-											defaultValue={item.details}
-										/>
-									</div>
-								}
-
-								<UISheetFooter
-									adding={adding}
-									disabled={disabled}
-									onOpenChange={onOpenChange}
-								/>
-							</Form>
-						)}
-					</Formik>
-				</div>
-			</SheetContent>
-		</Sheet>
+							<UISheetFooterInForm
+								adding={adding}
+								disabled={disabled}
+								onOpenChange={onOpenChange}
+							/>
+						</Form>
+					)}
+				</Formik>
+			</div>
+		</UISheet>
 	);
 };

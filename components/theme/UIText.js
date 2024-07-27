@@ -61,7 +61,7 @@ const UIText = ({ className, variant, weight, text, ...props }) => {
 	const selectedTypography = typographyMap[fontSize];
 
 	const textVariants = cva([
-		"relative text-foreground dark:text-background",
+		"relative",
 		`${isUrdu ? "font-urdu" : "font-sans"}`,
 		selectedTypography.body
 	], {

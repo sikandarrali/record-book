@@ -10,11 +10,12 @@ import {ToastOptions} from "@/lib/ToastOptions";
 import {toast} from "react-toastify";
 import {account} from "@/components/appwrite/appwrite";
 import {useAuth} from "@/components/contexts/AuthContext";
-import {UISheetFooter} from "@/components/theme/UISheetFooter";
+import {UISheetFooterInForm} from "@/components/theme/UISheetFooterInForm";
 import UIText from "@/components/theme/UIText";
 import {useScopedI18n} from "@/locales/client";
 import {UITextInput} from "@/components/theme/UITextInput";
 import {ProfileSchema} from "@/lib/schemas/profileSchema";
+import {UISheet} from "@/components/theme/UISheet";
 
 export const EditProfile = ({ open, onOpenChange }) => {
     const isDesktop = useMediaQuery({
@@ -53,62 +54,55 @@ export const EditProfile = ({ open, onOpenChange }) => {
     };
 
     return (
-        <Sheet open={open} onOpenChange={onOpenChange} defaultOpen={false}>
-            <SheetContent
-                className={cn("pb-12 bg-accent dark:bg-accent-foreground overflow-auto max-h-fit")}
-                side={isDesktop ? "right" : "bottom"}
-                onOpenAutoFocus={(e) => e.preventDefault()}
-            >
-                <div className={'hidden'}><SheetHeader><SheetTitle/><SheetDescription/></SheetHeader></div>
-                <div className="flex flex-col flex-1 w-full pt-4 justify-start min-h-[200px]">
-                    {/* Date & Close */}
-                    <div className="flex items-center space-x-2 justify-between mb-4">
-                        <UIText variant={'heading'} className="text-primary" text={t('editProfile')}/>
-                    </div>
-                    <div className="flex flex-col gap-5 w-full items-center justify-center py-6 lg:py-10">
-                        <Formik
-                            initialValues={{
-                                name: user?.name,
-                            }}
-                            validationSchema={ProfileSchema}
-                            onSubmit={(values) => {
-                                onUpdate(values);
-                            }}
-                        >
-                            {({
-                                  errors,
-                                  touched,
-                                  values,
-                                  handleChange,
-                                  handleBlur
-                              }) => (
-                                <Form className="flex flex-col w-full space-y-6">
-                                    <div className="flex flex-col gap-2 mb-8">
-                                        <FormLabel
-                                            title={t('name')}
-                                            errors={errors.name}
-                                            touched={touched.name}
-                                        />
-                                        <UITextInput
-                                            onChange={handleChange}
-                                            onBlur={handleBlur}
-                                            name="name"
-                                            disabled={disabled}
-                                            value={values.name}
-                                        />
-                                    </div>
-
-                                    <UISheetFooter
-                                        adding={adding}
-                                        disabled={disabled}
-                                        onOpenChange={onOpenChange}
-                                    />
-                                </Form>
-                            )}
-                        </Formik>
-                    </div>
+        <UISheet open={open} onOpenChange={onOpenChange} defaultOpen={false}>
+            <div className="flex flex-col flex-1 w-full pt-4 justify-start min-h-[200px]">
+                {/* Date & Close */}
+                <div className="flex items-center space-x-2 justify-between mb-4">
+                    <UIText variant={'heading'} className="text-primary" text={t('editProfile')}/>
                 </div>
-            </SheetContent>
-        </Sheet>
+                <div className="flex flex-col gap-5 w-full items-center justify-center py-6 lg:py-10">
+                    <Formik
+                        initialValues={{
+                            name: user?.name,
+                        }}
+                        validationSchema={ProfileSchema}
+                        onSubmit={(values) => {
+                            onUpdate(values);
+                        }}
+                    >
+                        {({
+                              errors,
+                              touched,
+                              values,
+                              handleChange,
+                              handleBlur
+                          }) => (
+                            <Form className="flex flex-col w-full space-y-6">
+                                <div className="flex flex-col gap-2 mb-8">
+                                    <FormLabel
+                                        title={t('name')}
+                                        errors={errors.name}
+                                        touched={touched.name}
+                                    />
+                                    <UITextInput
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
+                                        name="name"
+                                        disabled={disabled}
+                                        value={values.name}
+                                    />
+                                </div>
+
+                                <UISheetFooterInForm
+                                    adding={adding}
+                                    disabled={disabled}
+                                    onOpenChange={onOpenChange}
+                                />
+                            </Form>
+                        )}
+                    </Formik>
+                </div>
+            </div>
+        </UISheet>
     );
 };

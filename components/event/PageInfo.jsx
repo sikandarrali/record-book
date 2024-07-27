@@ -45,6 +45,8 @@ import {DeleteDialog} from "@/components/theme/DeleteDialog";
 import {PARENT_FIELD_IN_SINGLE_RECORD} from "@/components/appwrite/appwrite";
 import {CreatedUpdatedBy} from "@/components/theme/CreatedUpdatedBy";
 import {HOMEPAGE_ROUTE} from "@/lib/routes";
+import {UISheet} from "@/components/theme/UISheet";
+import {Badge} from "@/components/ui/badge";
 
 const PageInfo = ({ pageData, setPageData, sum }) => {
 	const isDesktop = useMediaQuery({ query: "(min-width: 1024px)" })
@@ -127,100 +129,98 @@ const PageInfo = ({ pageData, setPageData, sum }) => {
 
 	return (
 		<>
-			<div onClick={()=> setOpenDetails(true)} className={'p-3 -mr-2 rounded-2xl bg-accent dark:bg-accent-foreground text-accent-foreground dark:text-accent cursor-pointer'}>
+			<Button
+				onClick={()=> setOpenDetails(true)}
+				className={'p-2 w-12 h-12 -mr-2 rounded-2xl cursor-pointer'}
+				size={'icon'}
+				variant={'outline'}
+			>
 				<SquarePen className={'w-6 h-6'} />
-			</div>
+			</Button>
 
-			<Sheet
+			<UISheet
 				open={openDetails}
 				onOpenChange={setOpenDetails}
 				defaultOpen={false}
 			>
-				<SheetContent
-					className={cn("pb-40 lg:pb-14 bg-background dark:bg-foreground outline-0 overflow-auto h-[90%] lg:h-screen lg:max-h-screen border-t-0 border-l-0")}
-					side={isDesktop ? "right" : "bottom"}
-					onOpenAutoFocus={(e) => e.preventDefault()}
-				>
-					<div className={'hidden'}><SheetHeader><SheetTitle/><SheetDescription/></SheetHeader></div>
+				<div className={'grid grid-cols-5 gap-4 items-center text-primary'}>
+					{pageData.$permissions.some(permission => permission === `delete("user:${user.$id}")`) && <LockKeyhole className={'w-5 h-5'}/>}
 
-					<div className="flex flex-col w-full min-h-full pt-4 justify-start">
-
-						<div className={'flex justify-between gap-4 text-primary'}>
-							{pageData.$permissions.some(permission => permission === `delete("user:${user.$id}")`) && <LockKeyhole className={'w-5 h-5'}/>}
-							<div/> {/* empty div fixes justify-between when only one item is showing*/}
-							{pageData.teamId && <Users2 className={'w-5 h-5'}/>}
-						</div>
-
-
-						<div className="flex flex-col justify-center text-center items-center gap-5 mt-10 mb-10 lg:mt-32">
-							<UIText variant={"heading"} text={pageData?.name} className={'break-all'}/>
-
-							<div className="flex flex-1 justify-center col-span-4 items-center gap-2 relative select-none pointer-events-none" dir={'ltr'}>
-								<span className="text-sm font-semibold text-accent-foreground dark:text-accent">Rs</span>
-								<UIText
-									className="!text-primary"
-									weight={'semibold'}
-									variant={'heading'}
-									text={
-										<NumericFormat
-											allowNegative={false}
-											value={Number(sum)}
-											thousandSeparator={","}
-											decimalSeparator={"."}
-											displayType="text"
-											decimalScale={2}
-										/>
-									}
-								/>
-							</div>
-						</div>
-
-
-						<div className={'flex flex-col divide-y divide-accent-foreground lg:mt-16'}>
-							<div className={'flex py-4 items-center'}>
-								<div className={'w-1/4 flex shrink-0'}>
-									<UIText weight={'medium'} className={'text-muted-foreground'} text={t('labels.group')}/>
-								</div>
-								<div className={'w-3/4 flex items-center pl-4'}>
-									{group?.name ?
-										<UIText variant={'label'} className={'!text-primary'} text={group?.name}/>
-										:
-										<UIText variant={'label'} text={t('labels.notSharedWithGroup')}/>
-									}
-								</div>
-							</div>
-
-							<div className={'flex py-4 items-center'}>
-								<div className={'w-1/4 flex shrink-0'}>
-									<UIText weight={'medium'} className={'text-muted-foreground'} text={t('labels.date')}/>
-								</div>
-								<div className={'w-3/4 flex items-center pl-4'}>
-									{pageData?.date ? <UIText text={`${day} ${t(`months.${month.toLowerCase()}`)+t('general.comma')} ${year}`}/> : '-'}
-								</div>
-							</div>
-
-							<div className={'flex py-4 items-center'}>
-								<div className={'w-1/4 flex shrink-0'}>
-									<UIText weight={'medium'} className={'text-muted-foreground'} text={t('labels.details')}/>
-								</div>
-								<div className={'w-3/4 flex items-center pl-4'}>
-									<UIText text={pageData?.details || '-'}/>
-								</div>
-							</div>
-
-							<CreatedUpdatedBy data={pageData} createdDate={renderedCreatedDate} updatedDate={renderedUpdatedDate}/>
-						</div>
-
-						<UISheetInfoFooter
-							setOpen={setOpenDetails}
-							setOpenDelete={setOpenDelete}
-							setOpenEdit={setOpenEdit}
-							hasDeletePermission={hasDeletePermission}
-						/>
-
+					<div className={'flex justify-center col-span-3'}>
+						{pageData?.type === "khaataBook" && <Badge variant={'secondary'} className={'px-2 py-1.5'}>{t('labels.khaataBook')}</Badge>}
+						{pageData?.type === "recordBook" && <Badge variant={'secondary'} className={'px-2 py-1.5'}>{t('labels.recordBook')}</Badge>}
 					</div>
-				</SheetContent>
-			</Sheet>
+
+					{pageData.teamId && <Users2 className={'w-5 h-5 ltr:ml-auto rtl:mr-auto'}/>}
+				</div>
+
+
+				<div className="flex flex-col justify-center text-center items-center gap-5 mt-10 mb-10 lg:mt-32">
+					<UIText variant={"heading"} text={pageData?.name} className={'break-all'}/>
+
+					<div className="flex flex-1 justify-center col-span-4 items-center gap-2 relative select-none pointer-events-none" dir={'ltr'}>
+						<span className="text-sm font-semibold">Rs</span>
+						<UIText
+							className="!text-primary"
+							weight={'semibold'}
+							variant={'heading'}
+							text={
+								<NumericFormat
+									allowNegative={false}
+									value={Number(sum)}
+									thousandSeparator={","}
+									decimalSeparator={"."}
+									displayType="text"
+									decimalScale={2}
+								/>
+							}
+						/>
+					</div>
+				</div>
+
+
+				<div className={'flex flex-col divide-y divide-muted lg:mt-16'}>
+					<div className={'flex py-4 items-center'}>
+						<div className={'w-1/4 flex shrink-0'}>
+							<UIText weight={'medium'} text={t('labels.group')}/>
+						</div>
+						<div className={'w-3/4 flex items-center pl-4'}>
+							{group?.name ?
+								<UIText variant={'label'} className={'!text-primary'} text={group?.name}/>
+								:
+								<UIText variant={'label'} text={t('labels.notSharedWithGroup')}/>
+							}
+						</div>
+					</div>
+
+					<div className={'flex py-4 items-center'}>
+						<div className={'w-1/4 flex shrink-0'}>
+							<UIText weight={'medium'} text={t('labels.date')}/>
+						</div>
+						<div className={'w-3/4 flex items-center pl-4'}>
+							{pageData?.date ? <UIText text={`${day} ${t(`months.${month.toLowerCase()}`)+t('general.comma')} ${year}`}/> : '-'}
+						</div>
+					</div>
+
+					<div className={'flex py-4 items-center'}>
+						<div className={'w-1/4 flex shrink-0'}>
+							<UIText weight={'medium'} text={t('labels.details')}/>
+						</div>
+						<div className={'w-3/4 flex items-center pl-4'}>
+							<UIText text={pageData?.details || '-'}/>
+						</div>
+					</div>
+
+					<CreatedUpdatedBy data={pageData} createdDate={renderedCreatedDate} updatedDate={renderedUpdatedDate}/>
+				</div>
+
+				<UISheetInfoFooter
+					setOpen={setOpenDetails}
+					setOpenDelete={setOpenDelete}
+					setOpenEdit={setOpenEdit}
+					hasDeletePermission={hasDeletePermission}
+				/>
+			</UISheet>
 
 			<EditPage
 				open={openEdit}

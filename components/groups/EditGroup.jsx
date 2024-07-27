@@ -10,7 +10,7 @@ import * as Yup from "yup";
 import {ToastOptions} from "@/lib/ToastOptions";
 import {toast} from "react-toastify";
 import {teams} from "@/components/appwrite/appwrite";
-import {UISheetFooter} from "@/components/theme/UISheetFooter";
+import {UISheetFooterInForm} from "@/components/theme/UISheetFooterInForm";
 import {useScopedI18n} from "@/locales/client";
 import {isStringUrdu} from "@/lib/isStringUrdu";
 import UIText from "@/components/theme/UIText";
@@ -120,7 +120,7 @@ export const EditGroup = ({ open, onOpenChange, data}) => {
                                         />
                                     </div>
 
-                                    <UISheetFooter
+                                    <UISheetFooterInForm
                                         adding={adding}
                                         disabled={disabled}
                                         onOpenChange={onOpenChange}

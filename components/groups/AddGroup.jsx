@@ -12,7 +12,7 @@ import {ToastOptions} from "@/lib/ToastOptions";
 import {teams} from "@/components/appwrite/appwrite";
 import {ID} from "appwrite";
 import {useAuth} from "@/components/contexts/AuthContext";
-import {UISheetFooter} from "@/components/theme/UISheetFooter";
+import {UISheetFooterInForm} from "@/components/theme/UISheetFooterInForm";
 import {useScopedI18n} from "@/locales/client";
 import UIText from "@/components/theme/UIText";
 import {isStringUrdu} from "@/lib/isStringUrdu";
@@ -104,7 +104,7 @@ export const AddGroup = ({ open, onOpenChange }) => {
                                         />
                                     </div>
 
-                                    <UISheetFooter
+                                    <UISheetFooterInForm
                                         adding={adding}
                                         disabled={disabled}
                                         onOpenChange={onOpenChange}

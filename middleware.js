@@ -2,7 +2,7 @@ import { createI18nMiddleware } from 'next-international/middleware'
 import {ENDPOINT, PROJECT_ID} from "@/components/appwrite/appwrite";
 import {DecodeUserId} from "@/lib/EncodeDecode";
 import {NextResponse} from "next/server";
-import {HOMEPAGE_ROUTE, LOCALE_PROTECTED_ROUTES, LOCALE_PUBLIC_ROUTES} from "@/lib/routes";
+import {HOMEPAGE_ROUTE, LOCALE_NEUTRAL_ROUTES, LOCALE_PROTECTED_ROUTES, LOCALE_PUBLIC_ROUTES} from "@/lib/routes";
 import {cookies} from "next/headers";
 const sdk = require('node-appwrite');
 
@@ -24,6 +24,13 @@ const getCurrentUser = async (userSessionCookie) =>{
     }
     return response
 }
+
+const neutralPaths = [
+    "/terms-of-service",
+    "/privacy-policy",
+    "/dev",
+    "/join-group",
+]
 
 export default async function middleware(request) {
     let userSessionCookie = request.cookies.get(process.env.NEXT_PUBLIC_USER_SESSION_COOKIE_NAME)
@@ -48,7 +55,7 @@ export default async function middleware(request) {
     const I18nMiddleware = createI18nMiddleware({
         locales: ['ur', 'en'],
         defaultLocale: "ur" ,
-        urlMappingStrategy: 'redirect',
+        urlMappingStrategy: 'rewrite',
         resolveLocaleFromRequest: request => {
             return user?.prefs?.lang
         }
@@ -58,5 +65,12 @@ export default async function middleware(request) {
 }
 
 export const config = {
-    matcher: ['/((?!api|_next|.*\\..*).*)']
+    matcher: [
+        '/((?!api|_next|.*\\..*).*)',
+        '/login',
+        '/logout',
+        '/',
+        '/page',
+        '/logout'
+    ]
 }

@@ -30,13 +30,12 @@ export const DatePickerWithLabel = ({rootClass, errors, touched, setFieldValue, 
                     <PopoverTrigger asChild>
                         <div
                             className={cn(
-                                "flex w-full ring-[1.5px] ring-accent-foreground dark:ring-muted-foreground cursor-pointer rounded-md p-4 gap-4 items-center justify-start text-left text-accent font-normal relative bg-transparent dark:hover:bg-black",
+                                "flex w-full ring-[1.5px] ring-input cursor-pointer rounded-md p-4 gap-4 items-center justify-start text-left font-normal relative",
                                 calendarOpen && "border-0",
-                                calendarOpen && "ring-ring dark:ring-ring",
-                                !fieldValue && "text-muted-foreground"
+                                calendarOpen && "ring-ring dark:ring-ring"
                             )}
                         >
-                            <CalendarIcon className="h-4 w-4 dark:text-accent text-accent-foreground" />
+                            <CalendarIcon className="h-4 w-4" />
                             {fieldValue ?
                                 <>{new Date(fieldValue).toLocaleDateString()}</>
                                 // <UIText weight={'medium'} className={'rtl:font-sans'} text={fieldValue.toLocaleDateString()}/>
@@ -45,7 +44,7 @@ export const DatePickerWithLabel = ({rootClass, errors, touched, setFieldValue, 
                             }
                         </div>
                     </PopoverTrigger>
-                    <PopoverContent className="w-auto dark:border-accent-foreground dark:bg-black dark:text-muted">
+                    <PopoverContent className="w-auto">
                         <Calendar
                             mode="single"
                             selected={fieldValue}

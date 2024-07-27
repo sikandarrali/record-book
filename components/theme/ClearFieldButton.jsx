@@ -8,7 +8,7 @@ export const ClearFieldButton = ({onClick}) =>{
             type={'button'}
             size={'icon'}
             onClick={onClick}
-            className={'!w-10 !h-10 px-2 flex items-center justify-center text-destructive stroke-[2.5] hover:text-destructive'}
+            className={'!w-10 !h-10 px-2 flex items-center justify-center text-destructive stroke-[2.5]'}
         >
             <XIcon className={'w-4 h-4'} />
         </Button>
