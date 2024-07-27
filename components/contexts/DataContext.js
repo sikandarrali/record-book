@@ -19,7 +19,6 @@ export const DataProvider = ({ children }) => {
     // add theme class to body
     useLayoutEffect(() => {
         document.body.classList.add(currentTheme)
-        document.documentElement.classList.add(currentTheme)
     }, [currentTheme]);
 
     // get User groups
