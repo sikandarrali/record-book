@@ -210,7 +210,8 @@
     "may": "May",
     "november": "November",
     "october": "October",
-    "september": "September"
+    "september": "September",
+    "comma": ","
   },
   "navbar": {
     "googleAccount": "Google Account",
@@ -236,7 +237,8 @@
       "deletePage": "Delete Book",
       "deletePageText": "This will permanently delete",
       "editPage": "Edit Book",
-      "title": "Books"
+      "title": "Books",
+      "noBooks": "No Books Found, Add New"
     },
     "records": {
       "add": "Add Record",

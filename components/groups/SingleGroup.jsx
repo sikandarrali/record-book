@@ -111,6 +111,7 @@ const SingleGroup = ({ data }) => {
     return (
 
         <>
+            {/* Trigger */}
             <div onClick={()=> setOpen(true)} className={'relative w-full text-left py-4 flex gap-4 items-center justify-between rounded-lg transition-all duration-300 px-5'}>
                 <div className={'flex flex-col gap-1'}>
                     <UIText text={data.name} weight={'semibold'}/>
@@ -132,6 +133,8 @@ const SingleGroup = ({ data }) => {
             <UISheet open={open} onOpenChange={setOpen} defaultOpen={false} bgColor={'bg-background'}>
 
                 <div className="flex flex-col gap-10 w-full">
+
+                    {/* Name in Sheet */}
                     <UIText variant={"heading"} className={'text-primary'} text={data.name}/>
 
                     {/* Users in Group */}
@@ -145,9 +148,9 @@ const SingleGroup = ({ data }) => {
                                 <UIText weight={'semibold'} text={`(${data.total-1})`}/>
                             </div>
 
-                            <div className={'flex flex-col divide-y bg-muted rounded-lg'}>
+                            <div className={'flex flex-col divide-y divide-muted-foreground bg-muted rounded-lg'}>
                                 {usersInGroup.length-1 === 0 ?
-                                    <UIText className={'py-4'} text={t('labelNoMembersInGroup')}/>
+                                    <UIText className={'p-6 text-destructive text-center'} weight={'semibold'} text={t('labelNoMembersInGroup')}/>
                                     :
                                     usersInGroup?.map((person)=>(
                                         <MemberListItem
@@ -163,6 +166,7 @@ const SingleGroup = ({ data }) => {
                         </div>
                     }
 
+                    {/* Add Group Member */}
                     {isOwner &&
                         <div className={'flex flex-col gap-4 bg-muted -mx-6 px-6 py-6'}>
                             <div className={'flex items-center gap-2 text-primary'}>
@@ -173,18 +177,19 @@ const SingleGroup = ({ data }) => {
                         </div>
                     }
 
-                    <div className={'flex flex-col gap-4 bg-muted -mx-6 py-6'}>
-                        <div className={'flex items-center gap-2 text-primary px-6'}>
-                            <CalendarRange className={'w-5 h-5 rtl:stroke-[2.5] rtl:mt-1'}/>
+                    {/* Books Shared with Group */}
+                    <div className={'flex flex-col bg-muted -mx-6 py-6'}>
+                        <div className={'flex items-start gap-4 text-primary px-6'}>
+                            <CalendarRange className={'w-5 h-5 rtl:stroke-[2.5] mt-1 rtl:mt-4'}/>
                             <UIText weight={'semibold'} text={t('labelEventsSharedWithThisGroup')}/>
-                            <UIText weight={'semibold'} text={`(${eventInThisGroup.length})`}/>
+                            <UIText weight={'semibold'} className={"rtl:mt-3"} text={`(${eventInThisGroup.length})`}/>
                         </div>
 
-                        <div className={'flex flex-col divide-y bg-muted rounded-lg'}>
+                        <div className={'flex flex-col divide-y bg-muted rounded-lg mt-6'}>
                             {eventInThisGroup.length === 0 ?
-                                <UIText className={'p-4'} text={t('labelNoEventsSharedWithThisGroup')}/>
+                                <UIText className={'p-4 text-destructive text-center mt-4'} weight={'semibold'} text={t('labelNoEventsSharedWithThisGroup')}/>
                                 :
-                                <div className={'flex flex-col divide-y'}>
+                                <div className={'flex flex-col divide-y divide-muted-foreground'}>
                                     {eventInThisGroup?.map((event)=>(
                                     <Link key={event.$id} href={`/page/${event.$id}`} className={'py-4 px-6 flex justify-between items-center gap-6 hover:bg-background'}>
                                         <UIText weight={'medium'} text={event.name}/>
@@ -198,6 +203,7 @@ const SingleGroup = ({ data }) => {
                     </div>
                 </div>
 
+                {/* Delete & Leave Group */}
                 {isOwner ?
                     <UISheetInfoFooter
                         setOpen={setOpen}
@@ -206,7 +212,7 @@ const SingleGroup = ({ data }) => {
                         hasDeletePermission
                     />
                     :
-                    <div className={'mt-auto py-14 lg:py-0 flex flex-row items-center justify-between px-2'} dir={'ltr'}>
+                    <div className={'mt-auto py-14 lg:py-0 lg:mt-10 flex flex-row items-center justify-between px-2'} dir={'ltr'}>
                         <Button
                             variant={'outline'}
                             className={'flex items-center gap-2 text-primary'}

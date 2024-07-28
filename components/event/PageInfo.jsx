@@ -60,7 +60,7 @@ const PageInfo = ({ pageData, setPageData, sum }) => {
 	const {userGroups} = useData()
 	const {user} = useAuth()
 
-	const hasDeletePermission =  pageData.$permissions.some(permission => permission === `delete("user:${user.$id}")`)
+	const hasDeletePermission =  pageData?.$permissions.some(permission => permission === `delete("user:${user.$id}")`)
 
 	const onDelete = async () => {
 		await db.pages.delete(pageData?.$id);
@@ -102,7 +102,7 @@ const PageInfo = ({ pageData, setPageData, sum }) => {
 	const monthIndex = date.getMonth(); // getMonth() returns a zero-based index (0 for January, 11 for December)
 	const month = EnglishMonths[monthIndex];
 
-	const createdAtDate = new Date(pageData.$createdAt);
+	const createdAtDate = new Date(pageData?.$createdAt);
 	const renderedCreatedDate = {
 		year: createdAtDate.getFullYear(),
 		day: createdAtDate.getDate(),
@@ -112,7 +112,7 @@ const PageInfo = ({ pageData, setPageData, sum }) => {
 		seconds: String(createdAtDate.getSeconds()).padStart(2, '0')
 	}
 
-	const updatedAtDate = new Date(pageData.$updatedAt);
+	const updatedAtDate = new Date(pageData?.$updatedAt);
 	const renderedUpdatedDate = {
 		year: updatedAtDate.getFullYear(),
 		day: updatedAtDate.getDate(),
@@ -144,14 +144,14 @@ const PageInfo = ({ pageData, setPageData, sum }) => {
 				defaultOpen={false}
 			>
 				<div className={'grid grid-cols-5 gap-4 items-center text-primary'}>
-					{pageData.$permissions.some(permission => permission === `delete("user:${user.$id}")`) && <LockKeyhole className={'w-5 h-5'}/>}
+					{pageData?.$permissions.some(permission => permission === `delete("user:${user.$id}")`) && <LockKeyhole className={'w-5 h-5'}/>}
 
 					<div className={'flex justify-center col-span-3'}>
 						{pageData?.type === "khaataBook" && <Badge variant={'secondary'} className={'px-2 py-1.5'}>{t('labels.khaataBook')}</Badge>}
 						{pageData?.type === "recordBook" && <Badge variant={'secondary'} className={'px-2 py-1.5'}>{t('labels.recordBook')}</Badge>}
 					</div>
 
-					{pageData.teamId && <Users2 className={'w-5 h-5 ltr:ml-auto rtl:mr-auto'}/>}
+					{pageData?.teamId && <Users2 className={'w-5 h-5 ltr:ml-auto rtl:mr-auto'}/>}
 				</div>
 
 

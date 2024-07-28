@@ -24,6 +24,8 @@ import {CreatedUpdatedBy} from "@/components/theme/CreatedUpdatedBy";
 import {DeleteDialog} from "@/components/theme/DeleteDialog";
 import {Button} from "@/components/ui/button";
 import {UISheet} from "@/components/theme/UISheet";
+import {Badge} from "@/components/ui/badge";
+import {UrduDate} from "@/lib/UrduDate";
 
 export const SingleRecord = ({ item }) => {
 	const isDesktop = useMediaQuery({ query: "(min-width: 1024px)" })
@@ -120,11 +122,20 @@ export const SingleRecord = ({ item }) => {
 			>
 				<div className="flex flex-col w-full min-h-full pt-4 justify-start">
 
-				<div className="flex flex-col justify-center items-center my-10 lg:mt-32">
+				<div className="flex flex-col justify-center items-center my-8 lg:mt-32">
+
+					{item?.date &&
+						<Badge variant={'outline'} className={'self-start mb-10'}>
+							<UIText variant={'button'} text={UrduDate(item?.date).day}/>
+						</Badge>
+					}
+
+					{/* Name */}
 					<UIText weight={'medium'} variant={'lg'} className={'!text-center'} text={item.name}/>
 
-					<div className="flex text-foreground mt-8 justify-center items-center relative select-none pointer-events-none" dir={'ltr'}>
-						<UIText weight={'bold'} className="mr-2 text-accent-foreground dark:text-accent" text={'Rs'}/>
+					{/* Amount */}
+					<div className="flex mt-8 justify-center items-center relative select-none pointer-events-none" dir={'ltr'}>
+						<UIText weight={'bold'} className="mr-2" text={'Rs'}/>
 						{item.type==='expense' ?
 							<Minus className={'text-destructive w-5 h-5 stroke-[2.5]'}/>
 							:
@@ -148,14 +159,19 @@ export const SingleRecord = ({ item }) => {
 						/>
 					</div>
 
+					{/* Details */}
 					{item.details &&
-						<div className={'mt-20 mb-10 self-start flex flex-col px-2'}>
+						<div className={'!mt-20 self-start flex flex-col px-2'}>
 							<UIText className={'mb-2 text-primary'} weight={'semibold'} text={t('labels.details')}/>
 							<UIText text={item.details} />
 						</div>
 					}
 				</div>
-				<CreatedUpdatedBy data={item} createdDate={renderedCreatedDate} updatedDate={renderedUpdatedDate}/>
+
+				{/*	Created Updated By*/}
+				<div className={'mt-10'}>
+					<CreatedUpdatedBy data={item} createdDate={renderedCreatedDate} updatedDate={renderedUpdatedDate}/>
+				</div>
 
 				<UISheetInfoFooter
 					setOpen={setIsOpen}

@@ -3,7 +3,7 @@ import {Pen, Trash2, XIcon} from "lucide-react";
 
 export const UISheetInfoFooter = ({setOpenDelete, setOpenEdit, setOpen, hasDeletePermission}) =>{
     return(
-        <div className={'mt-auto py-14 lg:py-0 flex flex-row items-center justify-between px-2'} dir={'ltr'}>
+        <div className={'mt-auto py-14 flex flex-row items-center justify-between px-2'} dir={'ltr'}>
             <div className={"flex flex-row justify-end gap-4"}>
 
                 {hasDeletePermission &&

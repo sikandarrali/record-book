@@ -60,7 +60,7 @@ const Navbar = () => {
 								</div>
 								<div className={'flex flex-col'}>
 									<UIText text={'Hello,'}/>
-									<UIText text={user?.name} weight={'semibold'}/>
+									<UIText text={user?.name} variant={'xs'} weight={'semibold'}/>
 								</div>
 							</div>
 							:

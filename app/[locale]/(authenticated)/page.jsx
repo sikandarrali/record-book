@@ -112,7 +112,12 @@ export default function Home() {
 					<UIText variant={'heading'} text={t('pages.home.addNew')}/>
 				</motion.div>
 
-				{events.map((event, i) => (
+				{events.length === 0 ?
+					<div className={'p-4 text-center mt-4 text-destructive'}>
+						<UIText text={t('pages.home.noBooks')} weight={'semibold'}/>
+					</div>
+					:
+					events.map((event, i) => (
 					<motion.div
 						initial={{ opacity: 0, y: 5 }}
 						animate={{

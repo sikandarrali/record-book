@@ -23,6 +23,10 @@ export const AuthProvider = ({ children }) => {
 
 	const getLoggedInGoogleUser = async () => {
 
+		// fix: if lang is changed from another device,
+		// it will remove on load and sets from user prefs
+		Cookies.remove('Next-Locale');
+
 		let userPrefs = null
 		try {
 			const currentSession = await account.getSession('current');
@@ -30,6 +34,7 @@ export const AuthProvider = ({ children }) => {
 			setUser(currentUser)
 			userPrefs = currentUser.prefs
 			Cookies.set(process.env.NEXT_PUBLIC_USER_SESSION_COOKIE_NAME, EncodeUserId(currentUser.$id), {sameSite: 'None', secure: true});
+			localStorage.setItem(COOKIE_THEME_NAME, currentUser?.prefs?.theme)
 
 			fetchGoogleUserData(currentSession.providerAccessToken)
 			.then((googleData) => {

@@ -12,7 +12,7 @@ export const UISheet = ({open, onOpenChange, defaultOpen, bgColor, children}) =>
     return(
         <Sheet open={open} onOpenChange={onOpenChange} defaultOpen={defaultOpen}>
             <SheetContent
-                className={cn("pb-8 lg:pb-14 flex flex-col flex-1 outline-0 overflow-auto !max-h-[90%] lg:min-h-screen lg:max-h-screen border-t-0 border-l-0", bgColor)}
+                className={cn("pb-32 flex flex-col flex-1 outline-0 overflow-auto !max-h-[90%] sm:!max-w-screen lg:!max-w-[40rem] lg:!max-h-fit lg:min-h-screen border-t-0 border-l-0", bgColor)}
                 side={isDesktop ? "right" : "bottom"}
                 onOpenAutoFocus={(e) => e.preventDefault()}
             >
