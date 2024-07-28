@@ -37,27 +37,15 @@ export const MemberListItem = ({data, teamID, setUsersInGroup, groupName, isGrou
     }
 
     return(
-        <div className={'relative overflow-hidden flex items-center justify-between gap-4 px-4 py-3'}>
+        <div className={'relative overflow-hidden flex items-center justify-between gap-4 px-4 py-5'}>
 
-            <div className={'flex flex-col items-start w-full gap-2 line-clamp-1'}>
+            <div className={'flex flex-col items-start w-full gap-4 line-clamp-1'}>
                 <span className={'font-medium select-auto'}>{data?.userEmail}</span>
                 {data.confirm ?
                     <div className={'flex gap-2 items-stretch text-xs'}>
-                        {isOwner  &&
-                            <Badge className={'bg-muted-foreground'}>
-                                <UIText variant={'xs'} className={'rtl:-mt-2'} text={t('badgeAdmin')}/>
-                            </Badge>
-                        }
-                        {isMember &&
-                            <Badge variant={'secondary'}>
-                                <UIText variant={'xs'} className={'rtl:-mt-2'} text={t('badgeMember')}/>
-                            </Badge>
-                        }
-                        {user.email === data.userEmail &&
-                            <Badge variant={'outline'} className={'text-green-500 border-green-500'}>
-                                <UIText variant={'xs'} className={'rtl:-mt-1.5'} text={t('badgeYou')}/>
-                            </Badge>
-                        }
+                        {isOwner  && <Badge>{t('badgeAdmin')}</Badge>}
+                        {isMember && <Badge variant={'outline'} className={'border-muted-foreground'}>{t('badgeMember')}</Badge>}
+                        {user.email === data.userEmail && <Badge variant={'outline'} className={'text-green-500 border-green-500'}>{t('badgeYou')}</Badge>}
                     </div>
                     :
                     <Tooltip>
@@ -76,8 +64,8 @@ export const MemberListItem = ({data, teamID, setUsersInGroup, groupName, isGrou
 
             {isGroupOwner && !isOwner &&
                 <Button
-                    variant={'ghost'}
-                    className={'h-8 border-primary text-destructive px-2 hover:text-primary'}
+                    variant={'destructive'}
+                    className={'h-8'}
                     onClick={()=> setOpenDelete(true)}
                 >
                     <Trash2 className={'w-4 h-4'}/>

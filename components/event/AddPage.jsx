@@ -36,8 +36,6 @@ export const AddPage = ({ open, onOpenChange, userOwnedGroups }) => {
 		setAdding(true);
 		setDisabled(true);
 
-		console.log(values)
-
 		let teamPermissions = [
 			Permission.read(Role.team(values.teamId, "member")),
 			Permission.update(Role.team(values.teamId, "member")),
@@ -113,7 +111,7 @@ export const AddPage = ({ open, onOpenChange, userOwnedGroups }) => {
 			<UIText
 				variant={'heading'}
 				className="text-primary mb-4"
-				text={t('pages.home.addPage')}
+				text={t('pages.home.add')}
 			/>
 
 			<div className="flex flex-col gap-5 w-full items-center justify-center py-6 lg:py-10">

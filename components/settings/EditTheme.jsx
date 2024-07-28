@@ -65,7 +65,7 @@ export const EditTheme = ({ open, onOpenChange }) => {
                 const response =  await account.updatePrefs(prefs)
 
                 document.body.classList.remove(tempCurrentTheme)
-                localStorage.setItem(COOKIE_THEME_NAME, selectedTheme)
+                // localStorage.setItem(COOKIE_THEME_NAME, selectedTheme)
 
                 toast.success(t('alertUpdated'), ToastOptions);
                 // if(response){

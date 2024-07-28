@@ -73,7 +73,7 @@ const Page = () => {
 				}
 			}catch (e){
 				// console.log(e)
-				router.replace('/404')
+				router.replace(HOMEPAGE_ROUTE)
 			}
 			finally {
 				setLocalLoading(false)
@@ -207,8 +207,8 @@ const Page = () => {
 						<div className={'relative flex flex-col flex-1'}>
 
 							<div className={'flex items-center gap-4 justify-center mb-4'}>
-								{pageData.$permissions.some(permission => permission === `delete("user:${user.$id}")`) && <Badge variant={'secondary'}><UIText variant={'xs'} className={'!text-accent-foreground'} text={t('pages.records.badgeCreatedByYou')}/> </Badge>}
-								{pageData.teamId && <Badge><UIText variant={'xs'} text={t('pages.records.badgeSharedWithGroup')}/> </Badge>}
+								{pageData?.$permissions.some(permission => permission === `delete("user:${user.$id}")`) && <Badge variant={'secondary'}>{t('pages.records.badgeCreatedByYou')} </Badge>}
+								{pageData?.teamId && <Badge>{t('pages.records.badgeSharedWithGroup')}</Badge>}
 							</div>
 
 							{/* header */}
@@ -336,7 +336,7 @@ const Page = () => {
 			</AnimatePresence>
 			<div className={'relative'}>
 				<div
-					className="w-[4.5rem] h-[4.5rem] fixed bottom-16 left-1/2 -translate-x-1/2 shadow-lg flex items-center justify-center rounded-full bg-primary cursor-pointer"
+					className="w-[4.5rem] h-[4.5rem] fixed bottom-16 left-1/2 -translate-x-1/2 shadow-lg flex items-center justify-center rounded-full bg-primary text-primary-foreground cursor-pointer"
 					onClick={() => {
 						setOpenAddModal(true)
 						if (headerRef.current) {
@@ -344,7 +344,7 @@ const Page = () => {
 						}
 					}}
 				>
-					<Plus className="text-white w-10 h-10" />
+					<Plus className="w-10 h-10" />
 				</div>
 
 				<ScrollToTopButton/>

@@ -18,7 +18,8 @@ export const DataProvider = ({ children }) => {
 
     // add theme class to body
     useLayoutEffect(() => {
-        document.body.classList.add(currentTheme)
+        document.body.classList.add(currentTheme);
+        localStorage.setItem(COOKIE_THEME_NAME, currentTheme)
     }, [currentTheme]);
 
     // get User groups

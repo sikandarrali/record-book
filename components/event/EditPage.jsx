@@ -12,7 +12,7 @@ import {ToastOptions} from "@/lib/ToastOptions";
 import {toast} from "react-toastify";
 import {Select, SelectContent, SelectItem, SelectTrigger} from "@/components/ui/select";
 import {useAuth} from "@/components/contexts/AuthContext";
-import {Query} from "appwrite";
+import {Permission, Query, Role} from "appwrite";
 import {useData} from "@/components/contexts/DataContext";
 import {UISheetFooterInForm} from "@/components/theme/UISheetFooterInForm";
 import {useI18n} from "@/locales/client";
@@ -48,9 +48,9 @@ export const EditPage = ({ open, onOpenChange, pageData, setPageData, setGroup }
 	const {userOwnedGroups, userGroups} = useData()
 	const [addEventDetails, setAddEventDetails] = useState(false)
 
-	let defaultTeamId = pageData?.teamId;
+	let defaultTeamId = pageData?.teamId || null;
 
-	const isOwner = userOwnedGroups.some((grp)=> grp.$id === pageData?.teamId)
+	const isOwner =  pageData?.$permissions.some(permission => permission === `delete("user:${user.$id}")`)
 
 	const updateAllItemsInEvent = async () => {
 		const getItems = await db.records.list([
@@ -89,13 +89,35 @@ export const EditPage = ({ open, onOpenChange, pageData, setPageData, setGroup }
 				updatedBy: tempUpdatedBy
 			};
 
-			if(values.teamId){
-				const result = await databases.updateDocument(
-					DATABASE_ID,
-					COLLECTION_ID_PAGES,
-					pageData?.$id,
-					pageDataValues
-				);
+			if(isOwner){
+				let result = null
+				if(values.teamId){
+					result = await databases.updateDocument(
+						DATABASE_ID,
+						COLLECTION_ID_PAGES,
+						pageData?.$id,
+						pageDataValues,
+						[
+							Permission.read(Role.team(values.teamId, "member")),
+							Permission.update(Role.team(values.teamId, "member")),
+							Permission.read(Role.user(user.$id)),
+							Permission.update(Role.user(user.$id)),
+							Permission.delete(Role.user(user.$id)),
+						]
+					);
+				}else{
+					result = await databases.updateDocument(
+						DATABASE_ID,
+						COLLECTION_ID_PAGES,
+						pageData?.$id,
+						pageDataValues,
+						[
+							Permission.read(Role.user(user.$id)),
+							Permission.update(Role.user(user.$id)),
+							Permission.delete(Role.user(user.$id)),
+						]
+					);
+				}
 				setPageData(result)
 				if(defaultTeamId !== values.teamId){
 					await updateAllItemsInEvent();
