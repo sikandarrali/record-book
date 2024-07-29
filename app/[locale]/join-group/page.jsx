@@ -43,7 +43,7 @@ const Page = () => {
 			}
 		}
 
-		return ()=> checkMembership()
+		checkMembership()
 	}, []);
 
 

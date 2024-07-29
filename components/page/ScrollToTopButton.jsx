@@ -37,7 +37,7 @@ const ScrollToTopButton = () =>{
                    className={'fixed bottom-20 right-10'}
                    onClick={scrollToTop}
                >
-                   <Button variant={'secondary'} className={'rounded-full h-12 w-12 p-2'}>
+                   <Button variant={'secondary'} className={'rounded-full h-12 w-12 p-2 hover:bg-muted-foreground/30'}>
                        <ArrowUpCircle className={'w-6 h-6'}/>
                    </Button>
                </motion.div>

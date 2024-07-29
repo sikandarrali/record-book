@@ -93,6 +93,7 @@ export const AddGroupMember = ({groupID, setUsersInGroup}) =>{
                             placeholder={t('userEmailPlaceholder')}
                             value={values.email.trim()}
                             className={'lowercase ring-muted-foreground'}
+                            inputMode={'email'}
                         />
                     </div>
 

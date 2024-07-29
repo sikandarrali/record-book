@@ -17,7 +17,7 @@ import {
 	DATABASE_ID,
 	databases, PARENT_FIELD_IN_SINGLE_RECORD
 } from "@/components/appwrite/appwrite";
-import {cn} from "@/lib/utils";
+import {cn, SortItemsByDateAndCreatedAt} from "@/lib/utils";
 import {ReloadIcon} from "@radix-ui/react-icons";
 import {useI18n, useScopedI18n} from "@/locales/client";
 import {useParams, useRouter} from "next/navigation";
@@ -30,6 +30,14 @@ import {HOMEPAGE_ROUTE} from "@/lib/routes";
 import {useData} from "@/components/contexts/DataContext";
 import {PopupPageCreatedByYou} from "@/components/theme/PopupPageCreatedByYou";
 import {PopupPageSharedWithGroup} from "@/components/theme/PopupPageSharedWithGroup";
+import {BookType} from "@/components/page/BookType";
+
+const data = [
+	{id: 1, name: 'a', date:'2024-07-29T21:00:07.364Z', createdAt: '2024-07-28T21:00:07.364Z'},
+	{id: 2, name: 'b', date:'', createdAt: '2024-07-28T21:00:07.364Z'},
+	{id: 3, name: 'c', date:'2023-07-29T21:00:07.364Z', createdAt: '2024-07-28T21:00:07.364Z'},
+	{id: 4, name: 'd', date:'2023-07-29T21:00:07.364Z', createdAt: '2024-07-28T21:00:07.364Z'},
+]
 
 const Page = () => {
 	const headerRef = useRef(null);
@@ -67,14 +75,15 @@ const Page = () => {
 				if(getEvent){
 					setPageData(getEvent)
 					const response = await db.records.list([
+						Query.equal(PARENT_FIELD_IN_SINGLE_RECORD, params.id),
 						Query.orderDesc("$createdAt"),
-						Query.equal(PARENT_FIELD_IN_SINGLE_RECORD, params.id)
+						Query.orderDesc("date"),
 					]);
 					setItems(response.documents)
 					setItemsDefault(response.documents)
 				}
 			}catch (e){
-				// console.log(e)
+				console.log(e)
 				router.replace(HOMEPAGE_ROUTE)
 			}
 			finally {
@@ -94,13 +103,14 @@ const Page = () => {
 
 			if(response.events.includes("databases.*.collections.*.documents.*.create")){
 				if(response.payload[PARENT_FIELD_IN_SINGLE_RECORD] === params.id){
-					setItems(prev=> [response.payload, ...prev])
-					setItemsDefault(prev=> [response.payload, ...prev])
+					// const sorted = SortItemsByDateAndCreatedAt()
+					setItems(prev=> SortItemsByDateAndCreatedAt([response.payload, ...prev]))
+					setItemsDefault(prev=> SortItemsByDateAndCreatedAt([response.payload, ...prev]))
 				}
 			}
 			if(response.events.includes("databases.*.collections.*.documents.*.delete")){
-				setItems(prev=> prev.filter(item=> item.$id !== response.payload.$id))
-				setItemsDefault(prev=> prev.filter(item=> item.$id !== response.payload.$id))
+				setItems(prev=> SortItemsByDateAndCreatedAt(prev.filter(item=> item.$id !== response.payload.$id)))
+				setItemsDefault(prev=> SortItemsByDateAndCreatedAt(prev.filter(item=> item.$id !== response.payload.$id)))
 			}
 			if (response.events.includes("databases.*.collections.*.documents.*.update")) {
 				setItems(prev => {
@@ -110,9 +120,10 @@ const Page = () => {
 						// Create a new array with the updated item
 						const updatedItems = [...prev];
 						updatedItems[index] = response.payload; // Assuming response.payload contains the updated document data
-						return updatedItems;
+						return SortItemsByDateAndCreatedAt(updatedItems);
 					}
-					return prev;
+					return SortItemsByDateAndCreatedAt([...prev, response.payload]);
+
 				});
 				setItemsDefault(prev => {
 					// Find the index of the item to update
@@ -121,9 +132,10 @@ const Page = () => {
 						// Create a new array with the updated item
 						const updatedItemsDefault = [...prev];
 						updatedItemsDefault[index] = response.payload; // Assuming response.payload contains the updated document data
-						return updatedItemsDefault;
+						return SortItemsByDateAndCreatedAt(updatedItemsDefault);
 					}
-					return prev;
+					return SortItemsByDateAndCreatedAt([...prev, response.payload]);
+
 				});
 			}
 		});
@@ -209,7 +221,7 @@ const Page = () => {
 						<div className={'relative flex flex-col flex-1'}>
 
 							{/* Badges */}
-							<div className={'flex items-center gap-4 justify-end -mt-6 mb-4'} dir={"ltr"}>
+							<div className={'flex items-center gap-2 justify-end -mt-6 mb-4'} dir={"ltr"}>
 								{pageData?.$permissions.some(permission => permission === `delete("user:${user.$id}")`) &&
 									<PopupPageCreatedByYou side={'left'} align={'start'} className={'max-w-56 bg-muted'}/>
 								}
@@ -217,6 +229,9 @@ const Page = () => {
 									<PopupPageSharedWithGroup teamId={pageData?.teamId} side={'left'} align={'start'} className={'flex bg-muted flex-col gap-2'}/>
 								}
 							</div>
+
+							{/* Book Type */}
+							<div className={'absolute position-center-horizontally -top-5'}><BookType type={pageData?.type}/></div>
 
 							{/* Name & Info Icon */}
 							<div className="flex gap-6 pb-4 pt-2.5 justify-between items-center w-full border-b border-border relative" ref={headerRef}>
@@ -297,7 +312,7 @@ const Page = () => {
 								<div className="flex flex-col overflow-y-auto -mx-8">
 
 									{/* Records List */}
-									{visibleItems.map((item, i) => (
+									{SortItemsByDateAndCreatedAt(visibleItems).map((item, i) => (
 										<motion.div key={item.$id}>
 											<SingleRecord item={item} />
 										</motion.div>

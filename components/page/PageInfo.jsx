@@ -22,6 +22,7 @@ import {UISheet} from "@/components/theme/UISheet";
 import {Badge} from "@/components/ui/badge";
 import {PopupPageCreatedByYou} from "@/components/theme/PopupPageCreatedByYou";
 import {PopupPageSharedWithGroup} from "@/components/theme/PopupPageSharedWithGroup";
+import {BookType} from "@/components/page/BookType";
 
 const PageInfo = ({ pageData, setPageData, sum }) => {
 	const [openDetails, setOpenDetails] = useState(false);
@@ -106,9 +107,11 @@ const PageInfo = ({ pageData, setPageData, sum }) => {
 			<Button
 				onClick={()=> setOpenDetails(true)}
 				variant={'outline'}
-				size={'icon'}
+				// size={'icon'}
+				className={'px-3 gap-2'}
 			>
-				<SquarePen className={'w-5 h-5 text-primary'} />
+				<SquarePen className={'w-4 h-4 text-primary'} />
+				<UIText text={t('labels.edit')} variant={'xs'}/>
 			</Button>
 
 			<UISheet
@@ -117,24 +120,13 @@ const PageInfo = ({ pageData, setPageData, sum }) => {
 				defaultOpen={false}
 			>
 				{/* Name & Badges */}
-				<div className={'flex items-center text-primary'} dir={'ltr'}>
+				<div className={'flex relative items-center justify-between text-primary'} dir={'ltr'}>
 					{pageData?.$permissions.some(permission => permission === `delete("user:${user.$id}")`) &&
 						<PopupPageCreatedByYou side={'right'} align={'start'} className={'max-w-56 bg-muted'}/>
 					}
 
 					{/* Book Type */}
-					<div className={'flex justify-center flex-1'}>
-						{pageData?.type === "khaataBook" &&
-							<Badge variant={'secondary'} className={'px-2 py-1.5'}>
-								<UIText text={t('labels.khaataBook')} variant={'xs'}/>
-							</Badge>
-						}
-						{pageData?.type === "recordBook" &&
-							<Badge variant={'secondary'} className={'px-2 py-1.5'}>
-								<UIText text={t('labels.recordBook')} variant={'xs'}/>
-							</Badge>
-						}
-					</div>
+					<div className={'absolute position-center-horizontally'}><BookType type={pageData?.type}/></div>
 
 					{pageData?.teamId &&
 						<PopupPageSharedWithGroup teamId={pageData?.teamId} side={'left'} align={'start'} className={'flex bg-muted flex-col gap-2'}/>

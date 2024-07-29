@@ -6,9 +6,6 @@ import {toast} from "react-toastify";
 import {ToastOptions} from "@/lib/ToastOptions";
 import {teams} from "@/components/appwrite/appwrite";
 import {MemberListItem} from "@/components/groups/MemberListItem";
-import {Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger} from "@/components/ui/sheet";
-import {cn} from "@/lib/utils";
-import {useMediaQuery} from "react-responsive";
 import {AddGroupMember} from "@/components/groups/AddGroupMember";
 import {EditGroup} from "@/components/groups/EditGroup";
 import {DeleteGroup} from "@/components/groups/DeleteGroup";
@@ -26,7 +23,6 @@ import {useRouter} from "next/navigation";
 import {UISheet} from "@/components/theme/UISheet";
 
 const SingleGroup = ({ data }) => {
-    const isDesktop = useMediaQuery({ query: "(min-width: 1024px)" })
     const [open, setOpen] = useState(false)
     const [usersInGroup, setUsersInGroup] = useState([])
     const [openEdit, setOpenEdit] = useState(false);
@@ -34,7 +30,7 @@ const SingleGroup = ({ data }) => {
     const {user} = useAuth()
     const [openLeaveGroup, setOpenLeaveGroup] = useState(false)
     const t = useScopedI18n('groups')
-    const {userGroups, setUserGroups} = useData()
+    const {setUserGroups} = useData()
     const isOwner = data?.prefs?.creatorEmail === user.email;
     const [localLoading, setLocalLoading] = useState(true)
     const [eventInThisGroup, setEventInThisGroup] = useState([])
@@ -75,10 +71,10 @@ const SingleGroup = ({ data }) => {
         for (const item of eventInThisGroup) {
 
             const eventDataValues = {
-                name: item.name.trim(),
+                name: item.name,
                 date: item.date,
-                venue: item.venue.trim(),
-                details: item.details.trim(),
+                venue: item.venue,
+                details: item.details,
                 teamId: item.teamId,
                 createdBy: item.createdBy,
                 updatedBy: item.updatedBy
