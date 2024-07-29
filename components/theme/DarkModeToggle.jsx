@@ -28,7 +28,7 @@ export function DarkModeToggle() {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant={'outline'} className="dark:border-muted-foreground dark:bg-transparent rounded-lg group cursor-pointer flex items-center justify-center select-none w-10 h-9 p-1">
+                <Button variant={'outline'} className="rounded-lg group cursor-pointer flex items-center justify-center select-none w-10 h-9 p-1">
                     <Sun className="w-6 h-6 flex dark:hidden" />
                     <Moon className="w-6 h-6 hidden dark:flex" />
                     <span className="sr-only">Toggle theme</span>
@@ -46,8 +46,8 @@ export function DarkModeToggle() {
                         }else if(selectedMode === 'light') {
                             setDarkMode(false)
                         }else {
-                            if(systemMode === "system" && systemMode) setDarkMode(true)
-                            if(systemMode === "system" && !systemMode) setDarkMode(false)
+                            if(selectedMode === "system" && systemMode) setDarkMode(true)
+                            if(selectedMode === "system" && !systemMode) setDarkMode(false)
                         }
                     }}
                 >

@@ -39,66 +39,31 @@ const Navbar = () => {
 	return (
 		<div className="flex flex-col p-6 pt-8" dir={'ltr'}>
 
-			<div className={'flex justify-between items-start gap-4'}>
+			<div className={'flex justify-between items-center gap-4 relative'}>
 
-				{/* Logo & User's Name/Photo (only for home page */}
-				{pathname === HOMEPAGE_ROUTE || pathname === `/${locale}` ?
-					<>
-						{user &&
-							<>
-								{user?.prefs?.picture ?
-									<div className={'flex items-center gap-2'}>
-
-										{/* Image */}
-										<div className="p-3 rounded-2xl overflow-hidden self-start bg-primary shrink-0 relative w-12 h-12">
-											<Image
-												src={user?.prefs?.picture}
-												fill
-												alt=""
-											/>
-										</div>
-
-										{/* Name */}
-										<div className={'flex flex-col text-ellipsis overflow-hidden'}>
-											<UIText text={t('navbar.hello')} variant={'xs'} textOrientation={'left'}/>
-											<UIText text={user?.name} className="pr-8 line-clamp-1 overflow-hidden" variant={'xs'} weight={'semibold'} textOrientation={"left"} />
-										</div>
-										<div className={'flex flex-col'} dir={'ltr'}>
-
-										</div>
-									</div>
-									:
-									// User's Name initials when no image is found
-									<div className={"rounded-full border-4 border-primary w-12 p-4 h-12 self-start bg-muted text-primary text-4xl flex items-center justify-center font-medium"}>
-										{user?.name?.charAt(0)}
-									</div>
-								}
-							</>
-						}
-					</>
-					:
-					// Logo
+				<div className={'flex gap-8'}>
 					<Logo/>
-				}
+					<DarkModeToggle/>
+				</div>
 
-				{/* Menu & Dark Mode Toggle */}
-				<div className={'flex  items-center gap-4'}>
 
+				<div className={'flex gap-4 items-center'}>
+					{/* Reload Page */}
 					<Button
 						onClick={()=> {
 							setLoading(true);
 							window.location.reload();
 						}}
 						variant={'outline'}
-						className="dark:border-muted-foreground dark:bg-transparent rounded-lg group cursor-pointer flex items-center justify-center select-none w-10 h-9 p-1"
+						className="rounded-lg group cursor-pointer flex items-center justify-center select-none w-10 h-9 p-1"
 					>
 						<RefreshCw className="w-5 h-5" />
 					</Button>
 
-					<DarkModeToggle/>
+					{/* Open Sidebar Button */}
 					<Button
 						variant={'outline'}
-						className={'dark:border-muted-foreground dark:bg-transparent p-3 rounded-2xl cursor-pointer'}
+						className={'p-3 rounded-2xl cursor-pointer'}
 						onClick={() => setIsMenuOpen(!isMenuOpen)}
 					>
 						<svg className={'fill-primary'} width="24" height="20.57" viewBox="0 0 72 61" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -108,6 +73,8 @@ const Navbar = () => {
 						</svg>
 					</Button>
 				</div>
+
+
 			</div>
 
 			{/* Sidebar */}
@@ -133,7 +100,7 @@ const Sidebar = ({ open, onOpenChange, isPWAInstalled }) => {
 					{user ?
 						<>
 							{/* Logged In By Account Badge */}
-							<Badge className={'self-start px-2 absolute top-2 lg:top-10 left-1/2 -translate-x-1/2'}>
+							<Badge className={'self-start px-2 absolute top-2 lg:top-2 left-1/2 -translate-x-1/2'}>
 								<UIText variant={'xs'} text={t('googleAccount')}/>
 							</Badge>
 
@@ -181,29 +148,30 @@ const Sidebar = ({ open, onOpenChange, isPWAInstalled }) => {
 								/>
 							</div>
 
+							<div className="mb-0 mx-2 px-4 flex flex-col gap-0.5">
+								<MenuItem
+									label={t('links.settings')}
+									href={"/settings"}
+									icon={
+										<SettingsIcon className={cn("w-[18px] h-[18px] rtl:mt-1", pathname === "/settings"  && "text-muted")} />
+									}
+								/>
+
+								<div
+									onClick={onLogout}
+									className={cn(
+										"flex items-center gap-2 rtl:gap-4 px-4 py-4 rounded-md group hover:bg-muted-foreground hover:text-muted cursor-pointer",
+									)}
+								>
+									<LogOut className="w-[18px] h-[18px]" />
+									<UIText weight={'semibold'} text={t('links.logout')} />
+								</div>
+							</div>
+
 						</>
 						:
 						<div className={'mt-auto'}/>
 					}
-					<div className="mb-0 mx-2 px-4 flex flex-col gap-0.5">
-						<MenuItem
-							label={t('links.settings')}
-							href={"/settings"}
-							icon={
-								<SettingsIcon className={cn("w-[18px] h-[18px] rtl:mt-1", pathname === "/settings"  && "text-muted")} />
-							}
-						/>
-
-						<div
-							onClick={onLogout}
-							className={cn(
-								"flex items-center gap-2 rtl:gap-4 px-4 py-4 rounded-md group hover:bg-muted-foreground hover:text-muted cursor-pointer",
-							)}
-						>
-							<LogOut className="w-[18px] h-[18px]" />
-							<UIText weight={'semibold'} text={t('links.logout')} />
-						</div>
-					</div>
 
 					<div className={'mx-6 !mt-4 px-4 pt-6 flex justify-center items-center gap-1'} dir={'ltr'}>
 						<Copyright className={'w-3 h-3 stroke-[1.5]'}/>

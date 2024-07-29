@@ -14,15 +14,17 @@ const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
     const [isDarkMode, setIsDarkMode] = useState(false);
-    const [systemMode, setSystemMode] = useState('');
+    // const [systemMode, setSystemMode] = useState('');
     const [currentTheme, setCurrentTheme] = useState(localStorage.getItem(LOCAL_THEME_NAME));
     const htmlElement = document.documentElement;
+
+    const systemMode = window.matchMedia('(prefers-color-scheme: dark)').matches
 
     // Get/Set Dark Mode & Current Theme Variables
     useLayoutEffect(() => {
         if (typeof document !== 'undefined') {
             setIsDarkMode(htmlElement.classList.contains('dark'));
-            setSystemMode(window.matchMedia('(prefers-color-scheme: dark)').matches);
+            // setSystemMode(window.matchMedia('(prefers-color-scheme: dark)').matches);
             // setCurrentTheme(localStorage.getItem(LOCAL_THEME_NAME));
         }
     }, []);
@@ -40,13 +42,22 @@ export const AppProvider = ({ children }) => {
     useLayoutEffect(() => {
         if (typeof window !== 'undefined') {
             const themeColors = GetCurrentTheme(currentTheme).colors;
-            const color = isDarkMode ? themeColors.dark || DEFAULT_VIEWPORT_COLOR_DARK: themeColors.light || DEFAULT_VIEWPORT_COLOR_LIGHT;
+
+            let color = ''
+
+            if(isDarkMode) {
+                color = themeColors.dark
+            }else {
+                if(systemMode && isDarkMode)  color = themeColors.dark
+                if(systemMode && !systemMode)  color = themeColors.light
+            }
+
             const metaTag = document.querySelector('meta[name="theme-color"]');
             if (metaTag) {
                 metaTag.setAttribute('content', color);
             }
         }
-    }, [isDarkMode, currentTheme]);
+    }, [isDarkMode, currentTheme, systemMode]);
 
     const values = {
         currentTheme,

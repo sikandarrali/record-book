@@ -12,7 +12,6 @@ import {EditFontSize} from "@/components/settings/EditFontSize";
 import {GetCurrentFontSize, GetCurrentLanguage, GetCurrentTheme} from "@/lib/utils";
 import {EditTheme} from "@/components/settings/EditTheme";
 import {useApp} from "@/components/contexts/AppContext";
-import {version} from "./../../../../package.json";
 
 export default function Settings() {
     const t = useScopedI18n('settings');
@@ -65,7 +64,7 @@ export default function Settings() {
             </div>
 
             <div className={'px-6 py-8 gap-2 text-center mt-10 text-sm text-muted-foreground'}>
-                App Version <span className={'font-semibold'}>{version}</span>
+                App Version <span className={'font-semibold'}>3.1</span>
             </div>
 
             <EditProfile open={openEditProfile} onOpenChange={setOpenEditProfile} />

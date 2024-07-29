@@ -92,7 +92,7 @@ export default function Home() {
 	return (
 		<PageContainer title={t('pages.home.title')}>
 
-
+			<p className={'text-4xl font-urdu'}>لفافدب جکفندسا دنسام،فکدجوا</p>
 
 			{localLoading ?
 				<Loader/>
