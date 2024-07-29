@@ -134,7 +134,7 @@ const PageInfo = ({ pageData, setPageData, sum }) => {
 				</div>
 
 				{/* Amount */}
-				<div className="flex flex-col justify-center text-center items-center gap-5 mt-10 mb-10 lg:mt-32">
+				<div className="flex flex-col justify-center text-center items-center gap-5 mt-10 mb-10">
 					<UIText variant={"heading"} text={pageData?.name} className={'break-all'}/>
 
 					<div className="flex flex-1 justify-center col-span-4 items-center gap-2 relative select-none pointer-events-none" dir={'ltr'}>
