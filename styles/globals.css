@@ -354,3 +354,15 @@
 		@apply bg-background text-foreground select-none m-0 p-0 rtl:font-urdu ltr:font-sans;
 	}
 }
+
+@layer utilities {
+	.position-center-horizontally {
+		left: 50%;
+		transform: translateX(-50%);
+	}
+	.position-center-vertically {
+		top: 50%;
+		transform: translateY(-50%);
+	}
+	/* ... */
+}

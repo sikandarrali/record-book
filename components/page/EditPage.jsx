@@ -52,12 +52,13 @@ export const EditPage = ({ open, onOpenChange, pageData, setPageData, setGroup }
 
 	const isOwner =  pageData?.$permissions.some(permission => permission === `delete("user:${user.$id}")`)
 
-	const updateAllItemsInEvent = async () => {
+	const updateAllItemsInEvent = async (teamId) => {
+
 		const getItems = await db.records.list([
 			Query.orderDesc("$createdAt"),
 			Query.equal(PARENT_FIELD_IN_SINGLE_RECORD, pageData?.$id)
 		]);
-		// Iterate over each document and delete it
+
 		for (const item of getItems.documents) {
 			let tempItem = {
 				name: item?.name,
@@ -67,7 +68,21 @@ export const EditPage = ({ open, onOpenChange, pageData, setPageData, setGroup }
 				amount: item?.amount,
 				date: item?.date,
 			}
-			await db.records.update(tempItem, item.$id);
+			if(teamId){
+				await db.records.update(tempItem, item.$id, [
+					Permission.read(Role.team(teamId, "member")),
+					Permission.update(Role.team(teamId, "member")),
+					Permission.read(Role.user(user.$id)),
+					Permission.update(Role.user(user.$id)),
+					Permission.delete(Role.user(user.$id)),
+				]);
+			}else{
+				await db.records.update(tempItem, item.$id, [
+					Permission.read(Role.user(user.$id)),
+					Permission.update(Role.user(user.$id)),
+					Permission.delete(Role.user(user.$id)),
+				]);
+			}
 		}
 	};
 
@@ -120,7 +135,7 @@ export const EditPage = ({ open, onOpenChange, pageData, setPageData, setGroup }
 				}
 				setPageData(result)
 				if(defaultTeamId !== values.teamId){
-					await updateAllItemsInEvent();
+					await updateAllItemsInEvent(values.teamId);
 				}
 			}else{
 				const result = await databases.updateDocument(

@@ -78,7 +78,12 @@ export const SingleRecord = ({ item }) => {
 				className="flex flex-col w-full px-8 select-none py-4 cursor-pointer hover:bg-muted shadow-sm border-b border-border"
 			>
 				<div className="flex w-full justify-between gap-5">
-					<UIText variant={'heading'} weight={'medium'} text={item.name}/>
+					<div className={'flex flex-col gap-1'}>
+						{item?.date &&
+							<UIText text={UrduDate(item.date).day} variant={'sm'} className={'text-muted-foreground'} />
+						}
+						<UIText variant={'heading'} weight={'medium'} text={item.name}/>
+					</div>
 
 					<div className="flex justify-end items-center relative shrink-0 select-none" dir={'ltr'}>
 						<span className="text-sm select-none font-semibold mr-2">Rs</span>

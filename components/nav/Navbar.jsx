@@ -126,7 +126,7 @@ const Sidebar = ({ open, onOpenChange, isPWAInstalled }) => {
 								{/* Name */}
 								<div className={'flex flex-col text-ellipsis overflow-hidden'}>
 									<UIText weight={'semibold'} className="pr-8 mt-2" text={user?.name} textOrientation={'left'}/>
-									<UIText variant={'sm'} className="pr-8 text-ellipsis overflow-hidden" text={user?.email}/>
+									<UIText variant={'sm'} className="pr-8 text-ellipsis overflow-hidden" text={user?.email} textOrientation={'left'}/>
 								</div>
 							</div>
 

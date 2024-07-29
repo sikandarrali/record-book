@@ -6,7 +6,7 @@ export const Logo = ({size}) =>{
         <Link
             href={'/'}
             className={cn(
-                'flex gap-1 self-start -mt-1 cursor-pointer select-none',
+                'flex gap-1 self-start -mt-2 cursor-pointer select-none',
                 size === '2xl' && "scale-150"
             )}
             dir={'ltr'}

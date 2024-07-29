@@ -1,7 +1,10 @@
 import {Button} from "@/components/ui/button";
-import {Pen, Trash2, XIcon} from "lucide-react";
+import {Pen, SquarePen, Trash2, XIcon} from "lucide-react";
+import UIText from "@/components/theme/UIText";
+import {useI18n} from "@/locales/client";
 
-export const UISheetInfoFooter = ({setOpenDelete, setOpenEdit, setOpen, hasDeletePermission}) =>{
+export const UISheetInfoFooter = ({setOpenDelete, setOpenEdit, setOpen, hasDeletePermission, editLabel, deleteLabel}) =>{
+    const t = useI18n()
     return(
         <div className={'mt-auto py-14 flex flex-row items-center justify-between px-2'} dir={'ltr'}>
             <div className={"flex flex-row justify-end gap-4"}>
@@ -10,20 +13,22 @@ export const UISheetInfoFooter = ({setOpenDelete, setOpenEdit, setOpen, hasDelet
                     <Button
                         type="button"
                         variant={'outline'}
-                        className={'group w-14 h-14 p-2 rounded-full'}
+                        className={'rounded-md flex items-center gap-2'}
                         onClick={() => setOpenDelete(true)}
                     >
-                        <Trash2 className="h-6 w-6 text-destructive" />
+                        <Trash2 className={'w-4 h-4 text-destructive'} />
+                        <UIText text={deleteLabel || t('labels.delete')} variant={'xs'}/>
                     </Button>
                 }
 
                 <Button
                     type="button"
                     variant={'outline'}
-                    className={'group w-14 h-14 p-2 rounded-full'}
+                    className={'rounded-md flex items-center gap-2'}
                     onClick={() => setOpenEdit(true)}
                 >
-                    <Pen className="h-6 w-6" />
+                    <Pen className={'w-4 h-4 text-primary'} />
+                    <UIText text={editLabel || t('labels.edit')} variant={'xs'}/>
                 </Button>
             </div>
 
