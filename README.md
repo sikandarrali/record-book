@@ -4,6 +4,9 @@ All your records in one place. Say goodbye to your record diaries
 
 ## Changelog
 
+### 3.2.1
+- Fix logout issue
+
 ### 3.2
 - Fix: Delete Group Issue with Shared with Event
 - Add Sort by Date & createdAt for Records

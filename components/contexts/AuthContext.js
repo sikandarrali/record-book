@@ -100,10 +100,11 @@ export const AuthProvider = ({ children }) => {
 			router.replace("/login");
 		}catch (e){
 			// console.log(e)
+			console.log('logout error:', e)
 		}
 		finally {
 			setLoading(false)
-			// router.replace("/login");
+			router.replace("/login");
 		}
 	};
 
