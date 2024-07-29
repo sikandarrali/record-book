@@ -34,13 +34,14 @@ export default async function middleware(request) {
     const pathname = request.nextUrl.pathname;
     const isPublicPath = LOCALE_PUBLIC_ROUTES().includes(pathname);
     const isProtectedPath = LOCALE_PROTECTED_ROUTES().includes(pathname);
+    const locale = user?.prefs?.lang || "ur";
 
     if (user && isPublicPath) {
-        return NextResponse.redirect(new URL(user?.prefs?.lang + HOMEPAGE_ROUTE, request.url))
+        return NextResponse.redirect(new URL(locale + HOMEPAGE_ROUTE, request.url))
     }
 
     if (user && pathname==="/") {
-        return NextResponse.redirect(new URL(user?.prefs?.lang + HOMEPAGE_ROUTE, request.url))
+        return NextResponse.redirect(new URL(locale + HOMEPAGE_ROUTE, request.url))
     }
 
     if (!user && isProtectedPath) {
@@ -61,8 +62,6 @@ export default async function middleware(request) {
 
 const otherConfig = ['/((?!api|_next|.*\\..*).*)'];
 const matcher = otherConfig.concat(LOCALE_PROTECTED_ROUTES());
-
-console.log("matcher: ", matcher)
 
 export const config = {
     matcher: ['/((?!api|_next|.*\\..*).*)']

@@ -44,31 +44,34 @@ const Navbar = () => {
 				{/* Logo & User's Name/Photo (only for home page */}
 				{pathname === HOMEPAGE_ROUTE || pathname === `/${locale}` ?
 					<>
-						{user?.prefs?.picture ?
-							<div className={'flex gap-4'}>
+						{user &&
+							<>
+								{user?.prefs?.picture ?
+									<div className={'flex gap-4'}>
 
-								{/* Image */}
-								<div className="p-3 rounded-2xl overflow-hidden self-start bg-primary shrink-0 relative w-12 h-12">
-									<Image
-										src={user?.prefs?.picture}
-										fill
-										alt=""
-									/>
-								</div>
+										{/* Image */}
+										<div className="p-3 rounded-2xl overflow-hidden self-start bg-primary shrink-0 relative w-12 h-12">
+											<Image
+												src={user?.prefs?.picture}
+												fill
+												alt=""
+											/>
+										</div>
 
-								{/* Name */}
-								<div className={'flex flex-col'} dir={'ltr'}>
-									<UIText text={t('navbar.hello')} variant={'xs'} textOrientation={'left'}/>
-									<UIText text={user?.name} variant={'xs'} weight={'semibold'} textOrientation={"left"} />
-								</div>
-							</div>
-							:
-							// User's Name initials when no image is found
-							<div className={"rounded-full border-4 border-primary w-12 p-4 h-12 self-start bg-muted text-primary text-4xl flex items-center justify-center font-medium"}>
-								{user?.name?.charAt(0)}
-							</div>
+										{/* Name */}
+										<div className={'flex flex-col'} dir={'ltr'}>
+											<UIText text={t('navbar.hello')} variant={'xs'} textOrientation={'left'}/>
+											<UIText text={user?.name} variant={'xs'} weight={'semibold'} textOrientation={"left"} />
+										</div>
+									</div>
+									:
+									// User's Name initials when no image is found
+									<div className={"rounded-full border-4 border-primary w-12 p-4 h-12 self-start bg-muted text-primary text-4xl flex items-center justify-center font-medium"}>
+										{user?.name?.charAt(0)}
+									</div>
+								}
+							</>
 						}
-
 					</>
 					:
 					// Logo
@@ -112,58 +115,64 @@ const Sidebar = ({ open, onOpenChange, isPWAInstalled }) => {
 				<div className={'hidden'}><SheetHeader><SheetTitle/><SheetDescription/></SheetHeader></div>
 				<div className="h-full flex flex-col relative">
 
-					{/* Logged In By Account Badge */}
-					<Badge className={'self-start px-2 absolute top-2 lg:top-10 left-1/2 -translate-x-1/2'}>
-						<UIText variant={'xs'} text={t('googleAccount')}/>
-					</Badge>
+					{user ?
+						<>
+							{/* Logged In By Account Badge */}
+							<Badge className={'self-start px-2 absolute top-2 lg:top-10 left-1/2 -translate-x-1/2'}>
+								<UIText variant={'xs'} text={t('googleAccount')}/>
+							</Badge>
 
-					<div className="flex items-center -ml-4 mt-14 mb-10" dir={'ltr'}>
+							<div className="flex items-center -ml-4 mt-14 mb-10" dir={'ltr'}>
 
-						{/* Image */}
-						{user?.prefs?.picture ?
-							<div className="p-3 rounded-full self-start bg-muted shrink-0">
-								<Image
-									src={user?.prefs?.picture}
-									width={80}
-									height={80}
-									className="rounded-full w-20 h-20 shadow-xl"
-									alt=""
+								{/* Image */}
+								{user?.prefs?.picture ?
+									<div className="p-3 rounded-full self-start bg-muted shrink-0">
+										<Image
+											src={user?.prefs?.picture}
+											width={80}
+											height={80}
+											className="rounded-full w-20 h-20 shadow-xl"
+											alt=""
+										/>
+									</div>
+									:
+									<div className={"rounded-full border-[9px] border-primary w-[88px] h-[88px] self-start bg-primary text-muted shrink-0 mr-2 text-5xl flex items-center justify-center font-medium"}>
+										{user?.name?.charAt(0)}
+									</div>
+								}
+
+
+								{/* Name */}
+								<div className={'flex flex-col text-ellipsis overflow-hidden'}>
+									<UIText weight={'semibold'} className="pr-8 mt-2" text={user?.name} textOrientation={'left'}/>
+									<UIText variant={'sm'} className="pr-8 text-ellipsis overflow-hidden" text={user?.email}/>
+								</div>
+							</div>
+
+							<div className="flex flex-col px-6 h-full mt-10 gap-0.5">
+								<MenuItem
+									label={t('links.home')}
+									href={"/"}
+									icon={
+										<Home className={cn("w-[18px] h-[18px] rtl:mt-1", pathname === "/"  && "text-muted")} />
+									}
 								/>
+
+								<MenuItem
+									label={t('links.groups')}
+									href={"/groups"}
+									icon={
+										<Users className={cn("w-[18px] h-[18px] rtl:mt-1", pathname === "/groups"  && "text-muted")} />
+									}
+								/>
+
+
 							</div>
-							:
-							<div className={"rounded-full border-[9px] border-primary w-[88px] h-[88px] self-start bg-primary text-muted shrink-0 mr-2 text-5xl flex items-center justify-center font-medium"}>
-								{user?.name?.charAt(0)}
-							</div>
-						}
 
-
-						{/* Name */}
-						<div className={'flex flex-col text-ellipsis overflow-hidden'}>
-							<UIText weight={'semibold'} className="pr-8 mt-2" text={user?.name} textOrientation={'left'}/>
-							<UIText variant={'sm'} className="pr-8 text-ellipsis overflow-hidden" text={user?.email}/>
-						</div>
-					</div>
-
-					<div className="flex flex-col px-6 h-full mt-10 gap-0.5">
-						<MenuItem
-							label={t('links.home')}
-							href={"/"}
-							icon={
-								<Home className={cn("w-[18px] h-[18px] rtl:mt-1", pathname === "/"  && "text-muted")} />
-							}
-						/>
-
-						<MenuItem
-							label={t('links.groups')}
-							href={"/groups"}
-							icon={
-								<Users className={cn("w-[18px] h-[18px] rtl:mt-1", pathname === "/groups"  && "text-muted")} />
-							}
-						/>
-
-
-					</div>
-
+						</>
+						:
+						<div className={'mt-auto'}/>
+					}
 					<div className="mb-0 mx-2 px-4 flex flex-col gap-0.5">
 						<MenuItem
 							label={t('links.settings')}

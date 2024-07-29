@@ -1,17 +1,14 @@
 "use client";
-import Logo from "@/public/logo.png"
-import Image from "next/image";
-import {useParams, useSearchParams} from "next/navigation";
+import {useSearchParams} from "next/navigation";
 import {useLayoutEffect, useState} from "react";
 import {teams} from "@/components/appwrite/appwrite";
 import {Check, MoveLeft, XIcon} from "lucide-react";
 import {Button} from "@/components/ui/button";
 import {useAuth} from "@/components/contexts/AuthContext";
 import Link from "next/link";
-import {ParseErrorCodes} from "@/lib/parseErrorCodes";
 import UIText from "@/components/theme/UIText";
-import {useCurrentLocale, useScopedI18n} from "@/locales/client";
-import Loader from "@/components/loaders/loader";
+import {useScopedI18n} from "@/locales/client";
+import {Logo} from "@/components/nav/Logo";
 
 const Page = () => {
 
@@ -53,14 +50,7 @@ const Page = () => {
 	return(
 		<div className={'flex flex-col p-6 relative'}>
 
-			<Image
-				src={Logo}
-				alt="Logo"
-				className="mx-auto"
-				priority
-				width={200}
-				height={79}
-			/>
+			<Logo/>
 
 			{showError &&
 				<div className={'flex flex-col mt-20 mb-8 mx-4'}>

@@ -34,7 +34,7 @@ export const AuthProvider = ({ children }) => {
 			setUser(currentUser)
 			userPrefs = currentUser.prefs
 			Cookies.set(process.env.NEXT_PUBLIC_USER_SESSION_COOKIE_NAME, EncodeUserId(currentUser.$id), {sameSite: 'None', secure: true});
-			localStorage.setItem(LOCAL_THEME_NAME, currentUser?.prefs?.theme || DEFAULT_THEME)
+			localStorage.setItem(LOCAL_THEME_NAME, currentUser?.prefs?.theme || DEFAULT_THEME.name)
 
 			fetchGoogleUserData(currentSession.providerAccessToken)
 			.then((googleData) => {
@@ -70,10 +70,10 @@ export const AuthProvider = ({ children }) => {
 		if(!prefs.fontSize)
 			tempPrefs = {...tempPrefs, fontSize: 'base'}
 		if(!prefs.theme) {
-			tempPrefs = {...tempPrefs, theme: DEFAULT_THEME};
-			localStorage.setItem(LOCAL_THEME_NAME, DEFAULT_THEME)
+			tempPrefs = {...tempPrefs, theme: DEFAULT_THEME.name};
+			localStorage.setItem(LOCAL_THEME_NAME, DEFAULT_THEME.name)
 		}else{
-			localStorage.setItem(LOCAL_THEME_NAME, prefs.theme || DEFAULT_THEME)
+			localStorage.setItem(LOCAL_THEME_NAME, prefs.theme || DEFAULT_THEME.name)
 		}
 
 		await account.updatePrefs(tempPrefs)
