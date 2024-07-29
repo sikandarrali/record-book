@@ -4,6 +4,9 @@ All your records in one place. Say goodbye to your record diaries
 
 ## Changelog
 
+### 3.2.1.1
+- Fix logout issue: remove theme on logout
+
 ### 3.2.1
 - Fix logout issue
 

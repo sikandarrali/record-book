@@ -94,6 +94,7 @@ export const AuthProvider = ({ children }) => {
 			await account.deleteSession("current");
 			// await account.deleteSessions();
 			setUser(null);
+			localStorage.removeItem(LOCAL_THEME_NAME)
 			Cookies.remove(process.env.NEXT_PUBLIC_USER_SESSION_COOKIE_NAME);
 			Cookies.remove('Next-Locale');
 			setLoading(false)
