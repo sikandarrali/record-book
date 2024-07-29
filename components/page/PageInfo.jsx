@@ -108,7 +108,7 @@ const PageInfo = ({ pageData, setPageData, sum }) => {
 				variant={'outline'}
 				size={'icon'}
 			>
-				<SquarePen className={'w-5 h-5'} />
+				<SquarePen className={'w-5 h-5 text-primary'} />
 			</Button>
 
 			<UISheet
@@ -119,9 +119,10 @@ const PageInfo = ({ pageData, setPageData, sum }) => {
 				{/* Name & Badges */}
 				<div className={'flex items-center text-primary'} dir={'ltr'}>
 					{pageData?.$permissions.some(permission => permission === `delete("user:${user.$id}")`) &&
-						<PopupPageCreatedByYou side={'bottom'} align={'end'} className={'max-w-56 bg-muted'}/>
+						<PopupPageCreatedByYou side={'right'} align={'start'} className={'max-w-56 bg-muted'}/>
 					}
 
+					{/* Book Type */}
 					<div className={'flex justify-center flex-1'}>
 						{pageData?.type === "khaataBook" &&
 							<Badge variant={'secondary'} className={'px-2 py-1.5'}>
@@ -136,7 +137,7 @@ const PageInfo = ({ pageData, setPageData, sum }) => {
 					</div>
 
 					{pageData?.teamId &&
-						<PopupPageSharedWithGroup teamId={pageData?.teamId} side={'bottom'} align={'start'} className={'flex bg-muted flex-col gap-2'}/>
+						<PopupPageSharedWithGroup teamId={pageData?.teamId} side={'left'} align={'start'} className={'flex bg-muted flex-col gap-2'}/>
 					}
 				</div>
 

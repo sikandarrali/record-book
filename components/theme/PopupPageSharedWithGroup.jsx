@@ -17,8 +17,7 @@ export const PopupPageSharedWithGroup = ({teamId, className, side, align}) =>{
                 </Button>
             </PopoverTrigger>
             <PopoverContent className={className} side={side} align={align}>
-                <UIText text={t('pages.records.badgeSharedWithGroup')} />
-                <UIText weight={'semibold'} className={'text-primary'} text={userGroups?.find((grp)=> grp.$id===teamId)?.name} />
+                <UIText text={t('pages.records.badgeSharedWithGroup', {groupName: <UIText weight={'semibold'} className={'text-primary px-1'} text={userGroups?.find((grp)=> grp.$id===teamId)?.name}/>})} />
             </PopoverContent>
         </Popover>
     )

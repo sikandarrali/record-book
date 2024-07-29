@@ -22,7 +22,7 @@ const LoadingFallback = ({hideMessage}) => {
 	}, []);
 
 	return (
-		<div className="fixed inset-0 z-[10000] bg-muted flex flex-col gap-4 items-center justify-center">
+		<div className="fixed inset-0 z-[10000] dark:bg-foreground flex flex-col gap-4 items-center justify-center">
 			{timedOut ? <p className="text-sm">Cannot load, looks like you are not connected to internet.<br/>Please make sure you have a working internet.</p>
 			:
 				<>

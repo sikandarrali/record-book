@@ -18,12 +18,12 @@ import {useApp} from "@/components/contexts/AppContext";
 const modes = [
     { id: "light", label: "Light" },
     { id: "dark", label: "Dark" },
-    { id: "system", label: "System" },
+    {id: "system", label: "System"}
 ];
 
 export function DarkModeToggle() {
     const { theme, setTheme } = useTheme();
-    const {darkMode, setDarkMode} = useApp()
+    const {setDarkMode, systemMode} = useApp()
 
     return (
         <DropdownMenu>
@@ -43,7 +43,12 @@ export function DarkModeToggle() {
                         }
                         if(selectedMode === 'dark') {
                             setDarkMode(true)
-                        }else setDarkMode (false)
+                        }else if(selectedMode === 'light') {
+                            setDarkMode(false)
+                        }else {
+                            if(systemMode === "system" && systemMode) setDarkMode(true)
+                            if(systemMode === "system" && !systemMode) setDarkMode(false)
+                        }
                     }}
                 >
                     {modes.map((mode) => (

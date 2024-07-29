@@ -8,11 +8,13 @@ import {
 } from "@/lib/defaults";
 import {GetCurrentTheme} from "@/lib/utils";
 import { ToastContainer } from "react-toastify";
+import {useTheme} from "next-themes";
 
 const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
     const [isDarkMode, setIsDarkMode] = useState(false);
+    const [systemMode, setSystemMode] = useState('');
     const [currentTheme, setCurrentTheme] = useState(localStorage.getItem(LOCAL_THEME_NAME));
     const htmlElement = document.documentElement;
 
@@ -20,6 +22,7 @@ export const AppProvider = ({ children }) => {
     useLayoutEffect(() => {
         if (typeof document !== 'undefined') {
             setIsDarkMode(htmlElement.classList.contains('dark'));
+            setSystemMode(window.matchMedia('(prefers-color-scheme: dark)').matches);
             // setCurrentTheme(localStorage.getItem(LOCAL_THEME_NAME));
         }
     }, []);
@@ -49,7 +52,8 @@ export const AppProvider = ({ children }) => {
         currentTheme,
         setCurrentTheme,
         darkMode: isDarkMode,
-        setDarkMode: setIsDarkMode
+        setDarkMode: setIsDarkMode,
+        systemMode
     };
 
     return (

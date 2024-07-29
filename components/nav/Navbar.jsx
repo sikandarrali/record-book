@@ -47,7 +47,7 @@ const Navbar = () => {
 						{user &&
 							<>
 								{user?.prefs?.picture ?
-									<div className={'flex gap-4'}>
+									<div className={'flex items-center gap-2'}>
 
 										{/* Image */}
 										<div className="p-3 rounded-2xl overflow-hidden self-start bg-primary shrink-0 relative w-12 h-12">
@@ -59,9 +59,12 @@ const Navbar = () => {
 										</div>
 
 										{/* Name */}
-										<div className={'flex flex-col'} dir={'ltr'}>
+										<div className={'flex flex-col text-ellipsis overflow-hidden'}>
 											<UIText text={t('navbar.hello')} variant={'xs'} textOrientation={'left'}/>
-											<UIText text={user?.name} variant={'xs'} weight={'semibold'} textOrientation={"left"} />
+											<UIText text={user?.name} className="pr-8 line-clamp-1 overflow-hidden" variant={'xs'} weight={'semibold'} textOrientation={"left"} />
+										</div>
+										<div className={'flex flex-col'} dir={'ltr'}>
+
 										</div>
 									</div>
 									:
@@ -152,7 +155,6 @@ const Sidebar = ({ open, onOpenChange, isPWAInstalled }) => {
 										{user?.name?.charAt(0)}
 									</div>
 								}
-
 
 								{/* Name */}
 								<div className={'flex flex-col text-ellipsis overflow-hidden'}>

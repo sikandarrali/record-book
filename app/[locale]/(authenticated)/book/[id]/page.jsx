@@ -211,10 +211,10 @@ const Page = () => {
 							{/* Badges */}
 							<div className={'flex items-center gap-4 justify-end -mt-6 mb-4'} dir={"ltr"}>
 								{pageData?.$permissions.some(permission => permission === `delete("user:${user.$id}")`) &&
-									<PopupPageCreatedByYou side={'bottom'} align={'start'} className={'max-w-56 bg-muted'}/>
+									<PopupPageCreatedByYou side={'left'} align={'start'} className={'max-w-56 bg-muted'}/>
 								}
 								{pageData?.teamId &&
-									<PopupPageSharedWithGroup teamId={pageData?.teamId} side={'bottom'} align={'start'} className={'flex bg-muted flex-col gap-2'}/>
+									<PopupPageSharedWithGroup teamId={pageData?.teamId} side={'left'} align={'start'} className={'flex bg-muted flex-col gap-2'}/>
 								}
 							</div>
 
@@ -303,7 +303,7 @@ const Page = () => {
 										</motion.div>
 									))}
 
-									{/* Load More / Loading  Loaded Buttons  && All Items Loaded Message */}
+									{/* Load More/Loaded Buttons & Loading/All Items Loaded Message */}
 									{searchValue === "" && items.length > 0 &&
 										<div className={'flex flex-col w-full justify-center items-center mt-8 !border-t-0'}>
 											{!hasMoreItems &&
