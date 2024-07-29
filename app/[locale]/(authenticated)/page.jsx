@@ -16,9 +16,11 @@ import {LockKeyhole, Users2} from "lucide-react";
 import {LOCALE_PUBLIC_ROUTES} from "@/lib/routes";
 import {Button} from "@/components/ui/button";
 import ScrollToTopButton from "@/components/page/ScrollToTopButton";
+import Loader from "@/components/loaders/loader";
 
 export default function Home() {
 	const [openAddModal, setOpenAddModal] = useState(false);
+	const [localLoading, setLocalLoading] = useState(true)
 	const scrollRef = useRef(null);
 	const [refreshItems, setRefreshItems] = useState(false)
 	const [events, setEvents] = useState([])
@@ -35,6 +37,9 @@ export default function Home() {
 			setEvents(response.documents)
 		} catch (error) {
 			// console.error("Error fetching event items:", error);
+		}
+		finally {
+			setLocalLoading(false)
 		}
 	}
 
@@ -87,58 +92,64 @@ export default function Home() {
 	return (
 		<PageContainer title={t('pages.home.title')}>
 
-			<motion.div
-				initial={{ opacity: 0 }}
-				animate={{
-					opacity: 1,
-					transition: { duration: 0.3, delay: 0.4 },
-				}}
-				exit={{ opacity: 0 }}
-				className="flex flex-col gap-4 -mx-4 px-4 mt-2 pb-20"
-				ref={scrollRef}
-			>
 
-				{/* Add New Button */}
+
+			{localLoading ?
+				<Loader/>
+				:
 				<motion.div
-					initial={{ opacity: 0, y: 5 }}
+					initial={{ opacity: 0 }}
 					animate={{
 						opacity: 1,
-						y: 0,
-						transition: { delay: 0.3 },
+						transition: { duration: 0.3, delay: 0.4 },
 					}}
-					onClick={() => setOpenAddModal(!openAddModal)}
-					className="border-4 w-full hover:bg-muted border-dotted border-primary cursor-pointer text-center justify-center flex items-center px-6 py-9 rtl:py-6 rounded-md"
+					exit={{ opacity: 0 }}
+					className="flex flex-col gap-4 -mx-4 px-4 mt-2 pb-20"
+					ref={scrollRef}
 				>
-					<UIText variant={'heading'} text={t('pages.home.addNew')}/>
-				</motion.div>
 
-				{/* Book List */}
-				{events.length === 0 ?
-					<div className={'p-4 text-center mt-4 text-destructive'}>
-						<UIText text={t('pages.home.noBooks')} weight={'semibold'}/>
-					</div>
-					:
-					events.map((event, i) => (
+					{/* Add New Button */}
 					<motion.div
 						initial={{ opacity: 0, y: 5 }}
 						animate={{
 							opacity: 1,
 							y: 0,
-							transition: { delay: 0.3 + i / 10 },
+							transition: { delay: 0.3 },
 						}}
-						key={event.$id}
+						onClick={() => setOpenAddModal(!openAddModal)}
+						className="border-4 w-full hover:bg-muted border-dotted border-primary cursor-pointer text-center justify-center flex items-center px-6 py-9 rtl:py-6 rounded-md"
 					>
-						<Link
-							href={`/book/${event.$id}`}
-							className={'relative p-8 hover:bg-muted border cursor-pointer flex items-center justify-center shadow-sm rounded-lg text-center outline-none'}
-						>
-							<UIText variant={'heading'} className={'break-all'} text={event?.name} textOrientation={'center'} />
-							{event.$permissions.some(permission => permission === `delete("user:${user.$id}")`) && <LockKeyhole className={'absolute left-2 top-2 w-5 h-5 text-primary'}/>}
-							{event.teamId && <Users2 className={'absolute right-2 top-2 w-5 h-5 text-primary'}/>}
-						</Link>
+						<UIText variant={'heading'} text={t('pages.home.addNew')}/>
 					</motion.div>
-				))}
-			</motion.div>
+
+					{/* Book List */}
+					{events.length === 0 ?
+						<div className={'p-4 text-center mt-4 text-destructive'}>
+							<UIText text={t('pages.home.noBooks')} weight={'semibold'}/>
+						</div>
+						:
+						events.map((event, i) => (
+						<motion.div
+							initial={{ opacity: 0, y: 5 }}
+							animate={{
+								opacity: 1,
+								y: 0,
+								transition: { delay: 0.3 + i / 10 },
+							}}
+							key={event.$id}
+						>
+							<Link
+								href={`/book/${event.$id}`}
+								className={'relative p-8 hover:bg-muted border cursor-pointer flex items-center justify-center shadow-sm rounded-lg text-center outline-none'}
+							>
+								<UIText variant={'heading'} className={'break-all'} text={event?.name} textOrientation={'center'} />
+								{event.$permissions.some(permission => permission === `delete("user:${user.$id}")`) && <LockKeyhole className={'absolute left-2 top-2 w-5 h-5 text-primary'}/>}
+								{event.teamId && <Users2 className={'absolute right-2 top-2 w-5 h-5 text-primary'}/>}
+							</Link>
+						</motion.div>
+					))}
+				</motion.div>
+			}
 
 			<AddPage
 				open={openAddModal}

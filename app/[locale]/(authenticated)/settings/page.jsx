@@ -5,13 +5,14 @@ import {useState} from "react";
 import {useScopedI18n} from "@/locales/client";
 import {useAuth} from "@/components/contexts/AuthContext";
 import {Button} from "@/components/ui/button";
-import {Globe, Paintbrush, Pencil, TypeOutline} from "lucide-react";
+import {Globe, Paintbrush, Pencil, TypeOutline, User} from "lucide-react";
 import {EditProfile} from "@/components/settings/EditProfile";
 import {EditLanguage} from "@/components/settings/EditLanguage";
 import {EditFontSize} from "@/components/settings/EditFontSize";
 import {GetCurrentFontSize, GetCurrentLanguage, GetCurrentTheme} from "@/lib/utils";
 import {EditTheme} from "@/components/settings/EditTheme";
 import {useApp} from "@/components/contexts/AppContext";
+import {version} from "./../../../../package.json";
 
 export default function Settings() {
     const t = useScopedI18n('settings');
@@ -31,7 +32,7 @@ export default function Settings() {
 
                 {/* Profile */}
                 <SettingsMenu
-                    icon={<Globe className={'w-5 h-5 text-primary'}/>}
+                    icon={<User className={'w-5 h-5 text-primary'}/>}
                     label={t('profile.title')}
                     settingsValue={user?.name}
                     toggleEdit={()=> setOpenEditProfile(true)}
@@ -64,7 +65,7 @@ export default function Settings() {
             </div>
 
             <div className={'px-6 py-8 gap-2 text-center mt-10 text-sm text-muted-foreground'}>
-                App Version <span className={'font-semibold'}>3.0</span>
+                App Version <span className={'font-semibold'}>{version}</span>
             </div>
 
             <EditProfile open={openEditProfile} onOpenChange={setOpenEditProfile} />
@@ -78,24 +79,25 @@ export default function Settings() {
 
 const SettingsMenu = ({icon, label, settingsValue, toggleEdit}) =>{
     return(
-        <div className={'flex items-center justify-between px-6 py-8 gap-2'}>
+        <div className={'flex flex-col px-6 py-6 gap-4 cursor-pointer hover:bg-muted'} onClick={toggleEdit}>
+
             <div className={'flex items-center gap-4'}>
                 {icon}
-                <UIText text={label} weight={'semibold'} className={''}/>
-            </div>
-
-            <div className={'flex justify-between items-center gap-4'}>
-                <UIText text={settingsValue} weight={'medium'}/>
-
+                <UIText text={label} weight={'medium'} className={'text-muted-foreground'}/>
                 <Button
-                    size={'icon'}
-                    className={'border rtl:mt-3 rounded-md'}
-                    onClick={toggleEdit}
-                    variant={'outline'}
+                    size={'ghost'}
+                    className={'rtl:mt-3 rounded-md ml-auto p-2'}
+                    // onClick={toggleEdit}
+                    variant={'ghost'}
                 >
                     <Pencil className={'w-4 h-4'}/>
                 </Button>
             </div>
+
+            <div className={'flex flex-col gap-2 px-9'}>
+                <UIText text={settingsValue} weight={'semibold'}/>
+            </div>
+
         </div>
     )
 }

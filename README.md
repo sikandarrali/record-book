@@ -4,6 +4,9 @@ All your records in one place. Say goodbye to your record diaries
 
 ## Changelog
 
+### 3.1
+- Enhanced Dark Mode implementation
+
 ### 3.0
 - Fixed ViewPort Colors and other Multiple Theme Issues
 
