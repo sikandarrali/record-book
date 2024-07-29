@@ -37,7 +37,7 @@ export const EditTheme = ({ open, onOpenChange }) => {
     const {currentTheme, setCurrentTheme} = useApp()
 
     const [openThemeDropdown, setOpenThemeDropdown] = useState(false)
-    const [selectedTheme, setSelectedTheme] = useState(user?.prefs?.theme || DEFAULT_THEME)
+    const [selectedTheme, setSelectedTheme] = useState(currentTheme)
 
     const tempCurrentTheme = currentTheme;
 
@@ -101,25 +101,25 @@ export const EditTheme = ({ open, onOpenChange }) => {
                                     <CommandGroup>
                                         {SupportedThemes.map((theme)=>(
                                             <CommandItem
-                                                key={theme.value}
-                                                value={theme.value}
+                                                key={theme.name}
+                                                value={theme.name}
                                                 onSelect={(currentValue) => {
                                                     setSelectedTheme(currentValue === selectedTheme ? "" : currentValue)
                                                     setOpenThemeDropdown(false)
                                                 }}
                                                 className={cn(
                                                     'gap-4 cursor-pointer',
-                                                    selectedTheme === theme.value && "!text-primary"
+                                                    selectedTheme === theme.name && "!text-primary"
                                                 )}
                                             >
                                                 <Check
                                                     className={cn(
                                                         "mr-2 h-5 w-5 rtl:mt-1.5 stroke-[2.5]",
-                                                        selectedTheme === theme.value ? "opacity-100" : "opacity-0",
+                                                        selectedTheme === theme.name ? "opacity-100" : "opacity-0",
                                                     )}
                                                 />
-                                                <div className={'w-6 h-6'} style={{background: theme.accentColor}} />
-                                                <UIText weight={selectedTheme === theme.value && "semibold"} text={t(theme.label)}/>
+                                                <div className={'w-6 h-6'} style={{background: theme.colors.accent}} />
+                                                <UIText weight={selectedTheme === theme.name && "semibold"} text={t(theme.label)}/>
                                             </CommandItem>
                                         ))}
                                     </CommandGroup>

@@ -2,13 +2,12 @@
 import { useAuth } from "@/components/contexts/AuthContext";
 import PageContainer from "@/components/providers/PageContainer";
 import { Button } from "@/components/ui/button";
-import Image from "next/image";
-import Logo from "../../../public/logo.png"
 import {useScopedI18n} from "@/locales/client";
 import UIText from "@/components/theme/UIText";
 import Link from "next/link";
 import {redirect} from "next/navigation";
 import {HOMEPAGE_ROUTE} from "@/lib/routes";
+import {Logo} from "@/components/nav/Logo";
 
 export default function Home() {
 	const { onGoogleWithLogin, user } = useAuth();
@@ -20,16 +19,8 @@ export default function Home() {
 	}
 
 	return (
-		<PageContainer hideNavbar>
+		<PageContainer hideBackButton>
 			<div className="flex flex-col pt-8 w-full flex-1">
-				<Image
-					src={Logo}
-					alt="Logo"
-					className="mx-auto"
-					priority
-					width={200}
-					height={79}
-				/>
 
 				<Button
 					onClick={() => onGoogleWithLogin()}
