@@ -6,10 +6,10 @@ import {
 	Edit,
 	Home,
 	LogOut,
-	MenuIcon,
+	MenuIcon, Moon,
 	MoveLeft,
 	RefreshCw,
-	SettingsIcon, SquarePen,
+	SettingsIcon, SquarePen, Sun,
 	Users
 } from "lucide-react";
 import Image from "next/image";
@@ -31,7 +31,7 @@ import {Logo} from "@/components/nav/Logo";
 const Navbar = () => {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	const isPWAInstalled = usePWAStatus();
-	const {user} = useAuth()
+	const {user, setLoading} = useAuth()
 	const pathname = usePathname();
 	const locale = useCurrentLocale()
 	const t = useI18n()
@@ -80,6 +80,18 @@ const Navbar = () => {
 
 				{/* Menu & Dark Mode Toggle */}
 				<div className={'flex  items-center gap-4'}>
+
+					<Button
+						onClick={()=> {
+							setLoading(true);
+							window.location.reload();
+						}}
+						variant={'outline'}
+						className="dark:border-muted-foreground dark:bg-transparent rounded-lg group cursor-pointer flex items-center justify-center select-none w-10 h-9 p-1"
+					>
+						<RefreshCw className="w-5 h-5" />
+					</Button>
+
 					<DarkModeToggle/>
 					<Button
 						variant={'outline'}
@@ -165,8 +177,6 @@ const Sidebar = ({ open, onOpenChange, isPWAInstalled }) => {
 										<Users className={cn("w-[18px] h-[18px] rtl:mt-1", pathname === "/groups"  && "text-muted")} />
 									}
 								/>
-
-
 							</div>
 
 						</>
