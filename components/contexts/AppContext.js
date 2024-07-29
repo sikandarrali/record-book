@@ -60,7 +60,7 @@ export const AppProvider = ({ children }) => {
                 autoClose={1000}
                 position="top-center"
                 pauseOnFocusLoss
-                draggable={'touch'}
+                draggable
                 theme={isDarkMode ? "dark" : "light"}
             />
         </AppContext.Provider>
