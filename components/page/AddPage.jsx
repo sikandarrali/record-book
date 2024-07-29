@@ -19,8 +19,8 @@ import {DropdownSelectFieldWithLabel} from "@/components/theme/form/DropdownSele
 import {UISheet} from "@/components/theme/UISheet";
 import {Button} from "@/components/ui/button";
 import {UISheetFooterInForm} from "@/components/theme/UISheetFooterInForm";
-import {BookTypeToggleGroup} from "@/components/event/BookTypeToggleGroup";
-import {RecordTypeToggleGroup} from "@/components/event-items/RecordTypeToggleGroup";
+import {BookTypeToggleGroup} from "@/components/page/BookTypeToggleGroup";
+import {RecordTypeToggleGroup} from "@/components/record/RecordTypeToggleGroup";
 import FormLabel from "@/components/theme/FormLabel";
 
 export const AddPage = ({ open, onOpenChange, userOwnedGroups }) => {

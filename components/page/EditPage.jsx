@@ -35,7 +35,7 @@ import * as React from "react";
 import {DatePickerWithLabel} from "@/components/theme/form/DatePickerWithLabel";
 import {TextareaWithLabel} from "@/components/theme/form/TextareaWithLabel";
 import {UISheet} from "@/components/theme/UISheet";
-import {BookTypeToggleGroup} from "@/components/event/BookTypeToggleGroup";
+import {BookTypeToggleGroup} from "@/components/page/BookTypeToggleGroup";
 
 export const EditPage = ({ open, onOpenChange, pageData, setPageData, setGroup }) => {
 	const isDesktop = useMediaQuery({

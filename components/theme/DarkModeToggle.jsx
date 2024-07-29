@@ -13,6 +13,7 @@ import {
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import {Button} from "@/components/ui/button";
+import {useApp} from "@/components/contexts/AppContext";
 
 const modes = [
     { id: "light", label: "Light" },
@@ -20,13 +21,14 @@ const modes = [
     { id: "system", label: "System" },
 ];
 
-export function ThemeModeToggle() {
+export function DarkModeToggle() {
     const { theme, setTheme } = useTheme();
+    const {darkMode, setDarkMode} = useApp()
 
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant={'outline'} className="rounded-lg group cursor-pointer flex items-center justify-center select-none w-10 h-9 p-1">
+                <Button variant={'outline'} className="dark:border-muted-foreground dark:bg-transparent rounded-lg group cursor-pointer flex items-center justify-center select-none w-10 h-9 p-1">
                     <Sun className="w-6 h-6 flex dark:hidden" />
                     <Moon className="w-6 h-6 hidden dark:flex" />
                     <span className="sr-only">Toggle theme</span>
@@ -39,6 +41,9 @@ export function ThemeModeToggle() {
                         if (theme !== selectedMode) {
                             setTheme(selectedMode);
                         }
+                        if(selectedMode === 'dark') {
+                            setDarkMode(true)
+                        }else setDarkMode (false)
                     }}
                 >
                     {modes.map((mode) => (

@@ -24,7 +24,7 @@ import {RecordSchema} from "@/lib/schemas/RecordSchema";
 import { Toggle } from "@/components/ui/toggle"
 import {ChevronDown, ChevronUp, Minus, Plus, TrendingDown, TrendingUp} from "lucide-react";
 import {ToggleGroup, ToggleGroupItem} from "@/components/ui/toggle-group";
-import {RecordTypeToggleGroup} from "@/components/event-items/RecordTypeToggleGroup";
+import {RecordTypeToggleGroup} from "@/components/record/RecordTypeToggleGroup";
 import {UISheet} from "@/components/theme/UISheet";
 import * as React from "react";
 import {DatePickerWithLabel} from "@/components/theme/form/DatePickerWithLabel";
@@ -88,7 +88,6 @@ export const AddRecord = ({open, onOpenChange, pageData}) => {
 					scrollToTop()
 				}, function (error) {
 					toast.error(t('alerts.exception'), ToastOptions);
-					console.log(error)
 				});
 
 			}else{
@@ -103,7 +102,6 @@ export const AddRecord = ({open, onOpenChange, pageData}) => {
 					onOpenChange(false);
 					scrollToTop()
 				}, function (error) {
-					console.log(error)
 					toast.error(t('alerts.exception'), ToastOptions);
 				});
 			}

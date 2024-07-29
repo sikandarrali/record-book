@@ -187,11 +187,11 @@ const SingleGroup = ({ data }) => {
 
                         <div className={'flex flex-col divide-y bg-muted rounded-lg mt-6'}>
                             {eventInThisGroup.length === 0 ?
-                                <UIText className={'p-4 text-destructive text-center mt-4'} weight={'semibold'} text={t('labelNoEventsSharedWithThisGroup')}/>
+                                <UIText className={'p-4 text-destructive text-center mt-4 px-6'} weight={'semibold'} text={t('labelNoEventsSharedWithThisGroup')}/>
                                 :
                                 <div className={'flex flex-col divide-y divide-muted-foreground'}>
                                     {eventInThisGroup?.map((event)=>(
-                                    <Link key={event.$id} href={`/page/${event.$id}`} className={'py-4 px-6 flex justify-between items-center gap-6 hover:bg-background'}>
+                                    <Link key={event.$id} href={`/book/${event.$id}`} className={'py-4 px-6 flex justify-between items-center gap-6 hover:bg-background'}>
                                         <UIText weight={'medium'} text={event.name}/>
                                         <MoveRight className={'rtl:hidden text-primary'}/>
                                         <MoveLeft className={'ltr:hidden text-primary'}/>

@@ -17,7 +17,7 @@ import {UITextArea} from "@/components/theme/UITextArea";
 import {useAuth} from "@/components/contexts/AuthContext";
 import {UINumberInput} from "@/components/theme/UINumberInput";
 import {ChevronDown, ChevronUp} from "lucide-react";
-import {RecordTypeToggleGroup} from "@/components/event-items/RecordTypeToggleGroup";
+import {RecordTypeToggleGroup} from "@/components/record/RecordTypeToggleGroup";
 import {RecordSchema} from "@/lib/schemas/RecordSchema";
 import * as React from "react";
 import {DatePickerWithLabel} from "@/components/theme/form/DatePickerWithLabel";
@@ -75,7 +75,6 @@ export const EditRecord = ({ open, onOpenChange, item }) => {
 			setDisabled(false);
 		} catch (error) {
 			toast.error(t('alerts.exception'), ToastOptions);
-			console.log(error)
 			setAdding(false);
 			setDisabled(false);
 		}

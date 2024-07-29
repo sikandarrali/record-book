@@ -1,3 +1,4 @@
+"use client"
 import axios from "axios";
 import {useRouter } from "next/navigation";
 import {createContext, useContext, useEffect, useLayoutEffect, useMemo, useState} from "react";
@@ -6,8 +7,7 @@ import LoadingFallback from "../loaders/LoadingFallback";
 import {useCurrentLocale} from "@/locales/client";
 import Cookies from 'js-cookie'
 import {EncodeUserId} from "@/lib/EncodeDecode";
-import {COOKIE_THEME_NAME, DEFAULT_THEME, LOCAL_STORAGE_THEME_NAME_ITEM, USER_THEME_COOKIE} from "@/lib/defaults";
-
+import {LOCAL_THEME_NAME, DEFAULT_THEME} from "@/lib/defaults";
 
 const AuthContext = createContext();
 
@@ -34,7 +34,7 @@ export const AuthProvider = ({ children }) => {
 			setUser(currentUser)
 			userPrefs = currentUser.prefs
 			Cookies.set(process.env.NEXT_PUBLIC_USER_SESSION_COOKIE_NAME, EncodeUserId(currentUser.$id), {sameSite: 'None', secure: true});
-			localStorage.setItem(COOKIE_THEME_NAME, currentUser?.prefs?.theme)
+			localStorage.setItem(LOCAL_THEME_NAME, currentUser?.prefs?.theme || DEFAULT_THEME)
 
 			fetchGoogleUserData(currentSession.providerAccessToken)
 			.then((googleData) => {
@@ -71,9 +71,9 @@ export const AuthProvider = ({ children }) => {
 			tempPrefs = {...tempPrefs, fontSize: 'base'}
 		if(!prefs.theme) {
 			tempPrefs = {...tempPrefs, theme: DEFAULT_THEME};
-			localStorage.setItem(COOKIE_THEME_NAME, DEFAULT_THEME)
+			localStorage.setItem(LOCAL_THEME_NAME, DEFAULT_THEME)
 		}else{
-			localStorage.setItem(COOKIE_THEME_NAME, prefs.theme)
+			localStorage.setItem(LOCAL_THEME_NAME, prefs.theme || DEFAULT_THEME)
 		}
 
 		await account.updatePrefs(tempPrefs)
@@ -106,10 +106,6 @@ export const AuthProvider = ({ children }) => {
 			// router.replace("/login");
 		}
 	};
-
-	// useLayoutEffect(() => {
-	// 	if(user) router.replace(HOMEPAGE_ROUTE)
-	// }, [router]);
 
 	const memoedValues = useMemo(
 		() => ({

@@ -59,13 +59,11 @@ export default async function middleware(request) {
     return I18nMiddleware(request)
 }
 
+const otherConfig = ['/((?!api|_next|.*\\..*).*)'];
+const matcher = otherConfig.concat(LOCALE_PROTECTED_ROUTES());
+
+console.log("matcher: ", matcher)
+
 export const config = {
-    matcher: [
-        '/((?!api|_next|.*\\..*).*)',
-        '/login',
-        '/logout',
-        '/',
-        '/page',
-        '/logout'
-    ]
+    matcher: ['/((?!api|_next|.*\\..*).*)']
 }

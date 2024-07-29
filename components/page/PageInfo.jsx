@@ -1,17 +1,6 @@
 import UIText from "@/components/theme/UIText";
 import { Button } from "@/components/ui/button";
-import {
-	Info,
-	LockKeyhole, MoveLeft,
-	Pen,
-	Settings,
-	Settings2,
-	Settings2Icon,
-	SquarePen,
-	Trash2,
-	Users2,
-	XIcon
-} from "lucide-react";
+import {SquarePen} from "lucide-react";
 import { useRouter } from "next/navigation";
 import {useLayoutEffect, useState} from "react";
 import { NumericFormat } from "react-number-format";
@@ -19,25 +8,9 @@ import { EditPage } from "./EditPage";
 import {db} from "@/components/appwrite/database";
 import {toast} from "react-toastify";
 import {ToastOptions} from "@/lib/ToastOptions";
-import {
-	Sheet,
-	SheetContent,
-	SheetDescription,
-	SheetHeader,
-	SheetTitle,
-} from "@/components/ui/sheet"
 import {Query} from "appwrite";
-import {cn} from "@/lib/utils";
-import {useMediaQuery} from "react-responsive";
-import {useI18n, useScopedI18n} from "@/locales/client";
+import {useI18n} from "@/locales/client";
 import {UISheetInfoFooter} from "@/components/theme/UISheetInfoFooter";
-import {
-	Accordion,
-	AccordionContent,
-	AccordionItem,
-	AccordionTrigger,
-} from "@/components/ui/accordion"
-
 import {useData} from "@/components/contexts/DataContext";
 import {EnglishMonths} from "@/lib/defaultData";
 import {useAuth} from "@/components/contexts/AuthContext";
@@ -47,15 +20,15 @@ import {CreatedUpdatedBy} from "@/components/theme/CreatedUpdatedBy";
 import {HOMEPAGE_ROUTE} from "@/lib/routes";
 import {UISheet} from "@/components/theme/UISheet";
 import {Badge} from "@/components/ui/badge";
+import {PopupPageCreatedByYou} from "@/components/theme/PopupPageCreatedByYou";
+import {PopupPageSharedWithGroup} from "@/components/theme/PopupPageSharedWithGroup";
 
 const PageInfo = ({ pageData, setPageData, sum }) => {
-	const isDesktop = useMediaQuery({ query: "(min-width: 1024px)" })
 	const [openDetails, setOpenDetails] = useState(false);
 	const [openEdit, setOpenEdit] = useState(false);
 	const [openDelete, setOpenDelete] = useState(false);
 	const router = useRouter();
 	const [group, setGroup] = useState(null)
-	const tEvents = useScopedI18n('events')
 	const t = useI18n()
 	const {userGroups} = useData()
 	const {user} = useAuth()
@@ -129,13 +102,13 @@ const PageInfo = ({ pageData, setPageData, sum }) => {
 
 	return (
 		<>
+			{/* Page Info Button */}
 			<Button
 				onClick={()=> setOpenDetails(true)}
-				className={'p-2 w-12 h-12 -mr-2 rounded-2xl cursor-pointer'}
-				size={'icon'}
 				variant={'outline'}
+				size={'icon'}
 			>
-				<SquarePen className={'w-6 h-6'} />
+				<SquarePen className={'w-5 h-5'} />
 			</Button>
 
 			<UISheet
@@ -143,18 +116,31 @@ const PageInfo = ({ pageData, setPageData, sum }) => {
 				onOpenChange={setOpenDetails}
 				defaultOpen={false}
 			>
-				<div className={'grid grid-cols-5 gap-4 items-center text-primary'}>
-					{pageData?.$permissions.some(permission => permission === `delete("user:${user.$id}")`) && <LockKeyhole className={'w-5 h-5'}/>}
+				{/* Name & Badges */}
+				<div className={'flex items-center text-primary'} dir={'ltr'}>
+					{pageData?.$permissions.some(permission => permission === `delete("user:${user.$id}")`) &&
+						<PopupPageCreatedByYou side={'bottom'} align={'end'} className={'max-w-56 bg-muted'}/>
+					}
 
-					<div className={'flex justify-center col-span-3'}>
-						{pageData?.type === "khaataBook" && <Badge variant={'secondary'} className={'px-2 py-1.5'}>{t('labels.khaataBook')}</Badge>}
-						{pageData?.type === "recordBook" && <Badge variant={'secondary'} className={'px-2 py-1.5'}>{t('labels.recordBook')}</Badge>}
+					<div className={'flex justify-center flex-1'}>
+						{pageData?.type === "khaataBook" &&
+							<Badge variant={'secondary'} className={'px-2 py-1.5'}>
+								<UIText text={t('labels.khaataBook')} variant={'xs'}/>
+							</Badge>
+						}
+						{pageData?.type === "recordBook" &&
+							<Badge variant={'secondary'} className={'px-2 py-1.5'}>
+								<UIText text={t('labels.recordBook')} variant={'xs'}/>
+							</Badge>
+						}
 					</div>
 
-					{pageData?.teamId && <Users2 className={'w-5 h-5 ltr:ml-auto rtl:mr-auto'}/>}
+					{pageData?.teamId &&
+						<PopupPageSharedWithGroup teamId={pageData?.teamId} side={'bottom'} align={'start'} className={'flex bg-muted flex-col gap-2'}/>
+					}
 				</div>
 
-
+				{/* Amount */}
 				<div className="flex flex-col justify-center text-center items-center gap-5 mt-10 mb-10 lg:mt-32">
 					<UIText variant={"heading"} text={pageData?.name} className={'break-all'}/>
 
@@ -178,8 +164,10 @@ const PageInfo = ({ pageData, setPageData, sum }) => {
 					</div>
 				</div>
 
-
+				{/* Page Data */}
 				<div className={'flex flex-col divide-y divide-muted lg:mt-16'}>
+
+					{/* Group */}
 					<div className={'flex py-4 items-center'}>
 						<div className={'w-1/4 flex shrink-0'}>
 							<UIText weight={'medium'} text={t('labels.group')}/>
@@ -193,6 +181,7 @@ const PageInfo = ({ pageData, setPageData, sum }) => {
 						</div>
 					</div>
 
+					{/* Date */}
 					<div className={'flex py-4 items-center'}>
 						<div className={'w-1/4 flex shrink-0'}>
 							<UIText weight={'medium'} text={t('labels.date')}/>
@@ -202,6 +191,7 @@ const PageInfo = ({ pageData, setPageData, sum }) => {
 						</div>
 					</div>
 
+					{/* Details */}
 					<div className={'flex py-4 items-center'}>
 						<div className={'w-1/4 flex shrink-0'}>
 							<UIText weight={'medium'} text={t('labels.details')}/>
@@ -211,6 +201,7 @@ const PageInfo = ({ pageData, setPageData, sum }) => {
 						</div>
 					</div>
 
+					{/* Created Updated BY */}
 					<CreatedUpdatedBy data={pageData} createdDate={renderedCreatedDate} updatedDate={renderedUpdatedDate}/>
 				</div>
 

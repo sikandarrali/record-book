@@ -1,5 +1,4 @@
 "use client";
-import {Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle} from "@/components/ui/sheet";
 import {cn, GetCurrentTheme} from "@/lib/utils";
 import {useState} from "react";
 import { useMediaQuery } from "react-responsive";
@@ -8,16 +7,13 @@ import {toast} from "react-toastify";
 import {account} from "@/components/appwrite/appwrite";
 import {useAuth} from "@/components/contexts/AuthContext";
 import UIText from "@/components/theme/UIText";
-import {useChangeLocale, useCurrentLocale, useScopedI18n} from "@/locales/client";
+import {useScopedI18n} from "@/locales/client";
 import * as React from "react"
 import { Check, ChevronsUpDown } from "lucide-react"
-
 import { Button } from "@/components/ui/button"
 import {
     Command,
-    CommandEmpty,
     CommandGroup,
-    CommandInput,
     CommandItem,
     CommandList,
 } from "@/components/ui/command"
@@ -27,25 +23,18 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover"
 import {UISheetFooterWithAction} from "@/components/theme/UISheetFooterWithAction";
-import {useRouter} from "next/navigation";
-import {COOKIE_THEME_NAME, DEFAULT_THEME, LOCAL_STORAGE_THEME_NAME_ITEM} from "@/lib/defaults";
-import Cookies from "js-cookie";
-import {useData} from "@/components/contexts/DataContext";
+import {DEFAULT_THEME} from "@/lib/defaults";
 import {UISheet} from "@/components/theme/UISheet";
 import {SupportedThemes} from "@/lib/defaultData";
+import {useApp} from "@/components/contexts/AppContext";
 
 
 export const EditTheme = ({ open, onOpenChange }) => {
-    const isDesktop = useMediaQuery({
-        query: "(min-width: 1024px)",
-    });
-
     const [adding, setAdding] = useState(false);
     const [disabled, setDisabled] = useState(false);
     const {user, setUser} = useAuth()
     const t = useScopedI18n('settings.theme');
-    const locale = useCurrentLocale();
-    const {currentTheme, setCurrentTheme} = useData()
+    const {currentTheme, setCurrentTheme} = useApp()
 
     const [openThemeDropdown, setOpenThemeDropdown] = useState(false)
     const [selectedTheme, setSelectedTheme] = useState(user?.prefs?.theme || DEFAULT_THEME)
@@ -62,11 +51,8 @@ export const EditTheme = ({ open, onOpenChange }) => {
                 setCurrentTheme(selectedTheme);
 
                 let prefs = {...userPrefs, theme: selectedTheme}
-                const response =  await account.updatePrefs(prefs)
-
+                await account.updatePrefs(prefs)
                 document.body.classList.remove(tempCurrentTheme)
-                // localStorage.setItem(COOKIE_THEME_NAME, selectedTheme)
-
                 toast.success(t('alertUpdated'), ToastOptions);
                 // if(response){
                 //     setTimeout(()=>{
@@ -122,7 +108,7 @@ export const EditTheme = ({ open, onOpenChange }) => {
                                                     setOpenThemeDropdown(false)
                                                 }}
                                                 className={cn(
-                                                    'gap-4',
+                                                    'gap-4 cursor-pointer',
                                                     selectedTheme === theme.value && "!text-primary"
                                                 )}
                                             >

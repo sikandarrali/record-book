@@ -5,8 +5,6 @@ import Providers from "@/components/providers/Providers";
 import {cn} from "@/lib/utils";
 import {Inter, Noto_Nastaliq_Urdu} from "@next/font/google";
 import localFont from "@next/font/local";
-import {APP_THEME, COOKIE_THEME_NAME} from "@/lib/defaults";
-import Cookies from "js-cookie";
 
 
 const fontSans = Inter({
@@ -18,6 +16,12 @@ const fontUrdu = Noto_Nastaliq_Urdu({
 	subsets: ["latin"],
 	weight: ["variable"],
 	variable: "--font-urdu",
+});
+
+const fontUrduHeading = localFont({
+	display: "swap",
+	src: "../../fonts/Nafees Riqa.ttf",
+	variable: "--font-urdu-heading",
 });
 
 const APP_NAME = "Record Book";
@@ -61,9 +65,9 @@ export const metadata = {
 	},
 };
 
-export const viewport = {
-	themeColor: APP_THEME.VIEWPORT,
-};
+// export const viewport = {
+// 	themeColor: APP_THEME.VIEWPORT,
+// };
 
 
 export default async function RootLayout({ children, params }) {
@@ -79,6 +83,7 @@ export default async function RootLayout({ children, params }) {
 			<link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png"/>
 			<link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png"/>
 			<link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png"/>
+			<meta name="theme-color" content="#0B0A0A" id="theme-color" />
 		</head>
 		<body
 			dir={params.locale === 'ur' ? 'rtl' : 'ltr'}
@@ -86,13 +91,8 @@ export default async function RootLayout({ children, params }) {
 				"min-h-screen font-sans antialiased",
 				fontSans.variable,
 				fontUrdu.variable,
-				// "theme-violet",
-				// "theme-blue",
-				// "theme-rose",
-				// "theme-orange",
-				// "theme-slate",
-				// "theme-stone",
-				// "theme-green",
+				fontUrduHeading.variable,
+				"bg-muted"
 			)}
 		>
 

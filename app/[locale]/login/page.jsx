@@ -4,11 +4,9 @@ import PageContainer from "@/components/providers/PageContainer";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Logo from "../../../public/logo.png"
-import {useI18n, useScopedI18n} from "@/locales/client";
+import {useScopedI18n} from "@/locales/client";
 import UIText from "@/components/theme/UIText";
 import Link from "next/link";
-import Cookies from "js-cookie";
-import LoadingFallback from "@/components/loaders/LoadingFallback";
 import {redirect} from "next/navigation";
 import {HOMEPAGE_ROUTE} from "@/lib/routes";
 

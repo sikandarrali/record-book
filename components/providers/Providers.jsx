@@ -3,17 +3,13 @@ import { AuthProvider } from "../contexts/AuthContext";
 import {TooltipProvider} from "@/components/ui/tooltip";
 import {DataProvider} from "@/components/contexts/DataContext";
 import LoadingFallback from "@/components/loaders/LoadingFallback";
-import {useParams, useRouter} from "next/navigation";
-import {ToastContainer} from "react-toastify";
+import {useParams} from "next/navigation";
 import 'react-toastify/dist/ReactToastify.css';
 import {I18nProviderClient} from "@/locales/client";
 import {NextJSThemeProvider} from "@/components/providers/NextJSThemeProvider";
-import {useLayoutEffect, useState} from "react";
-import Cookies from "js-cookie";
-import {COOKIE_THEME_NAME, DEFAULT_THEME} from "@/lib/defaults";
-// import PullToRefresh from "pulltorefreshjs";
+import {AppProvider} from "@/components/contexts/AppContext";
 
-const Providers = ({ children }) => {
+const  Providers = ({ children }) => {
 
 	const params = useParams()
 
@@ -24,28 +20,23 @@ const Providers = ({ children }) => {
 			fallback={<LoadingFallback />}
 		>
 			<AuthProvider>
-				<DataProvider>
-					<NextJSThemeProvider
-						attribute="class"
-						defaultTheme="system"
-						enableSystem
-						disableTransitionOnChange
-					>
-						<TooltipProvider>
-							<ToastContainer
-								limit={1}
-								autoClose={1500}
-								position="top-center"
-								pauseOnFocusLoss
-								draggable={'touch'}
-								theme="light"
-							/>
-							<div className="relative max-w-screen-lg lg:max-w-lg mx-auto">
-								{children}
-							</div>
-						</TooltipProvider>
-					</NextJSThemeProvider>
-				</DataProvider>
+				<AppProvider>
+					<DataProvider>
+						<NextJSThemeProvider
+							attribute="class"
+							defaultTheme="system"
+							enableSystem
+							disableTransitionOnChange
+						>
+							<TooltipProvider>
+								{/* Toast Container is in AppProvider */}
+								<div className="relative max-w-screen-lg lg:max-w-lg mx-auto">
+									{children}
+								</div>
+							</TooltipProvider>
+						</NextJSThemeProvider>
+					</DataProvider>
+				</AppProvider>
 			</AuthProvider>
 		</I18nProviderClient>
 	);

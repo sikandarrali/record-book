@@ -20,50 +20,50 @@ import {Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle} from "..
 import {Badge} from "@/components/ui/badge";
 import {cn} from "@/lib/utils";
 import {usePathname, useRouter} from "next/navigation";
-import {useCurrentLocale, useScopedI18n} from "@/locales/client";
+import {useCurrentLocale, useI18n, useScopedI18n} from "@/locales/client";
 import UIText from "@/components/theme/UIText";
-import Logo from "../../public/logo.png"
 import usePWAStatus from "@/lib/hooks/usePWAStatus";
-import InstallApp from "@/components/InstallApp/InstallApp";
 import {Button} from "@/components/ui/button";
-import useIsIOS from "@/lib/hooks/useIsIOS";
 import {HOMEPAGE_ROUTE} from "@/lib/routes";
-import {ThemeModeToggle} from "@/components/theme/ThemeModeToggle";
-import {Separator} from "@/components/ui/separator";
+import {DarkModeToggle} from "@/components/theme/DarkModeToggle";
+import {Logo} from "@/components/nav/Logo";
 
 const Navbar = () => {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	const isPWAInstalled = usePWAStatus();
-	const {user, setLoading} = useAuth()
-	const isIOS = useIsIOS();
+	const {user} = useAuth()
 	const pathname = usePathname();
 	const locale = useCurrentLocale()
-
-	const router = useRouter()
+	const t = useI18n()
 
 	return (
 		<div className="flex flex-col p-6 pt-8" dir={'ltr'}>
 
 			<div className={'flex justify-between items-start gap-4'}>
+
+				{/* Logo & User's Name/Photo (only for home page */}
 				{pathname === HOMEPAGE_ROUTE || pathname === `/${locale}` ?
 					<>
 						{user?.prefs?.picture ?
 							<div className={'flex gap-4'}>
+
+								{/* Image */}
 								<div className="p-3 rounded-2xl overflow-hidden self-start bg-primary shrink-0 relative w-12 h-12">
 									<Image
 										src={user?.prefs?.picture}
-										// width={40}
-										// height={40}
 										fill
 										alt=""
 									/>
 								</div>
-								<div className={'flex flex-col'}>
-									<UIText text={'Hello,'}/>
-									<UIText text={user?.name} variant={'xs'} weight={'semibold'}/>
+
+								{/* Name */}
+								<div className={'flex flex-col'} dir={'ltr'}>
+									<UIText text={t('navbar.hello')} variant={'xs'} textOrientation={'left'}/>
+									<UIText text={user?.name} variant={'xs'} weight={'semibold'} textOrientation={"left"} />
 								</div>
 							</div>
 							:
+							// User's Name initials when no image is found
 							<div className={"rounded-full border-4 border-primary w-12 p-4 h-12 self-start bg-muted text-primary text-4xl flex items-center justify-center font-medium"}>
 								{user?.name?.charAt(0)}
 							</div>
@@ -71,20 +71,16 @@ const Navbar = () => {
 
 					</>
 					:
-					<Button
-						onClick={()=> router.back()}
-						variant={'ghost'}
-						className={'rounded-2xl cursor-pointer -ml-2 shrink-0 flex w-12 h-11 p-1'}
-					>
-						<MoveLeft />
-					</Button>
+					// Logo
+					<Logo/>
 				}
 
+				{/* Menu & Dark Mode Toggle */}
 				<div className={'flex  items-center gap-4'}>
-					<ThemeModeToggle/>
+					<DarkModeToggle/>
 					<Button
 						variant={'outline'}
-						className={'border p-3 rounded-2xl cursor-pointer'}
+						className={'dark:border-muted-foreground dark:bg-transparent p-3 rounded-2xl cursor-pointer'}
 						onClick={() => setIsMenuOpen(!isMenuOpen)}
 					>
 						<svg className={'fill-primary'} width="24" height="20.57" viewBox="0 0 72 61" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -92,12 +88,11 @@ const Navbar = () => {
 							<rect width="60.7074" strokeLinecap={"round"} height="11.1666" rx="5.58328" transform="matrix(-1 0 0 1 71.9545 25.2947)"/>
 							<rect width="71.7074" strokeLinecap={"round"} height="11.1666" rx="5.58328" transform="matrix(-1 0 0 1 71.9545 49.7117)"/>
 						</svg>
-
 					</Button>
 				</div>
 			</div>
 
-
+			{/* Sidebar */}
 			<Sidebar open={isMenuOpen} onOpenChange={setIsMenuOpen} isPWAInstalled={isPWAInstalled} />
 		</div>
 	);
@@ -115,8 +110,16 @@ const Sidebar = ({ open, onOpenChange, isPWAInstalled }) => {
 		<Sheet open={open} onOpenChange={onOpenChange}>
 			<SheetContent className="bg-muted border-l-0 px-0 outline-0 stroke-none">
 				<div className={'hidden'}><SheetHeader><SheetTitle/><SheetDescription/></SheetHeader></div>
-				<div className="h-full flex flex-col">
+				<div className="h-full flex flex-col relative">
+
+					{/* Logged In By Account Badge */}
+					<Badge className={'self-start px-2 absolute top-2 lg:top-10 left-1/2 -translate-x-1/2'}>
+						<UIText variant={'xs'} text={t('googleAccount')}/>
+					</Badge>
+
 					<div className="flex items-center -ml-4 mt-14 mb-10" dir={'ltr'}>
+
+						{/* Image */}
 						{user?.prefs?.picture ?
 							<div className="p-3 rounded-full self-start bg-muted shrink-0">
 								<Image
@@ -133,11 +136,10 @@ const Sidebar = ({ open, onOpenChange, isPWAInstalled }) => {
 							</div>
 						}
 
+
+						{/* Name */}
 						<div className={'flex flex-col text-ellipsis overflow-hidden'}>
-							<Badge className={'self-start px-2 '}>
-								<UIText variant={'xs'} text={t('googleAccount')}/>
-							</Badge>
-							<UIText weight={'semibold'} className="pr-8 mt-2" text={user?.name}/>
+							<UIText weight={'semibold'} className="pr-8 mt-2" text={user?.name} textOrientation={'left'}/>
 							<UIText variant={'sm'} className="pr-8 text-ellipsis overflow-hidden" text={user?.email}/>
 						</div>
 					</div>
