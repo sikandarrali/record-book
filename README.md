@@ -4,6 +4,10 @@ All your records in one place. Say goodbye to your record diaries
 
 ## Changelog
 
+### 3.3
+- Fix TextOrientation of Added/Updated By Info
+- Feat: When a shared Book is edited and Group is removed from it, the items added by other members are allotted to Admin of Book and their name is now shown in UpdatedBy Info
+
 ### 3.2.1.1
 - Fix logout issue: remove theme on logout
 

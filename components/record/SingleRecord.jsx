@@ -127,7 +127,7 @@ export const SingleRecord = ({ item }) => {
 			>
 				<div className="flex flex-col w-full min-h-full pt-4 justify-start">
 
-				<div className="flex flex-col justify-center items-center my-8 lg:mt-32">
+				<div className="flex flex-col justify-center items-center my-8 lg:mt-10">
 
 					{item?.date &&
 						<Badge variant={'outline'} className={'self-start mb-10'}>

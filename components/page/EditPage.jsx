@@ -60,15 +60,16 @@ export const EditPage = ({ open, onOpenChange, pageData, setPageData, setGroup }
 		]);
 
 		for (const item of getItems.documents) {
-			let tempItem = {
-				name: item?.name,
-				details: item?.details,
-				type: item?.type,
-				[PARENT_FIELD_IN_SINGLE_RECORD]: item?.pageId,
-				amount: item?.amount,
-				date: item?.date,
-			}
 			if(teamId){
+				let tempItem = {
+					name: item?.name,
+					details: item?.details,
+					type: item?.type,
+					[PARENT_FIELD_IN_SINGLE_RECORD]: item?.pageId,
+					amount: item?.amount,
+					date: item?.date,
+				}
+
 				await db.records.update(tempItem, item.$id, [
 					Permission.read(Role.team(teamId, "member")),
 					Permission.update(Role.team(teamId, "member")),
@@ -77,6 +78,17 @@ export const EditPage = ({ open, onOpenChange, pageData, setPageData, setGroup }
 					Permission.delete(Role.user(user.$id)),
 				]);
 			}else{
+				const tempUpdatedBy = [user?.name, user?.email];
+				let tempItem = {
+					name: item?.name,
+					details: item?.details,
+					type: item?.type,
+					[PARENT_FIELD_IN_SINGLE_RECORD]: item?.pageId,
+					amount: item?.amount,
+					date: item?.date,
+					addedBy: item.addedBy,
+					updatedBy: tempUpdatedBy,
+				}
 				await db.records.update(tempItem, item.$id, [
 					Permission.read(Role.user(user.$id)),
 					Permission.update(Role.user(user.$id)),
