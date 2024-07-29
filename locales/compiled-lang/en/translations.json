@@ -18,81 +18,8 @@
   "edit": {
     "alertUpdated": "Name Updated Successfully!"
   },
-  "events": {
-    "addEvent": "Add New Page",
-    "addEventItem": "Add New Record",
-    "addMoreDetailsText": "Add Date, Venue & Details etc.",
-    "showDetailsFieldText": "Add Date, Venue & Details etc.",
-    "alertEventCreated": "Page Created",
-    "alertEventDeleted": "Page Deleted",
-    "alertEventItemCreated": "Record Created",
-    "alertEventItemDeleted": "Record Deleted",
-    "alertEventItemUpdated": "Record Updated",
-    "alertEventUpdated": "Page Updated",
-    "alertException": "Unable to process your request",
-    "alertNothingToUpdate": "Nothing to update",
-    "allItemsShown": "All {count} items loaded",
-    "btnCancel": "Cancel",
-    "btnLoadMore": "Load more",
-    "btnLoading": "Loading...",
-    "btnSaveEntry": "Save Entry",
-    "deleteEvent": "Delete Event",
-    "deleteEventItem": "Delete record",
-    "deleteEventItemText": "This will permanently delete",
-    "deleteEventText": "This will permanently delete",
-    "editEvent": "Page Event",
-    "editEventItem": "Edit Record",
-    "eventInfo": {
-      "addedBy": "Added By: ",
-      "atTime": "at",
-      "labelDate": "Date:",
-      "labelDetails": "Details:",
-      "labelGroup": "Group:",
-      "labelVenue": "Venue:",
-      "labelViewCreatedEditedBy": "More details:",
-      "notSharedWithGroup": "Not shared with any group",
-      "onDay": "on",
-      "updatedBy": "Updated By: "
-    },
-    "eventItemInfo": {
-      "addedBy": "Added By: ",
-      "atTime": "at",
-      "labelViewCreatedEditedBy": "More details:",
-      "onDay": "on",
-      "updatedBy": "Updated By: "
-    },
-    "groupNotFound": "No Groups found, add first",
-    "labelDate": "Date",
-    "labelDetails": "Details",
-    "labelGroup": "Group",
-    "labelItemAmount": "Amount",
-    "labelItemDetails": "Details",
-    "labelItemName": "Name",
-    "labelName": "Event Name",
-    "labelShareWithGroup": "Share with Group",
-    "labelVenue": "Venue",
-    "numOfItemsMatchingSearch": "Items found:",
-    "pickDate": "Pick a date",
-    "searchNoItems": "No items matching your search",
-    "searchPlaceholder": "Type to Search...",
-    "selectGroupPlaceholder": "Select Group",
-    "title": "Pages",
-    "totalEntries": "Total Entries: "
-  },
   "general": {
-    "btn": {
-      "add": "Add",
-      "cancel": "Cancel",
-      "installApp": "Install App",
-      "saveChanges": "Save Changes",
-      "saveEntry": "Save Entry",
-      "yesDelete": "Yes, delete"
-    },
     "comma": ",",
-    "label": {
-      "invalid": "Invalid email",
-      "required": "Required"
-    },
     "loadingData": "Loading data, please wait..."
   },
   "groups": {
@@ -165,6 +92,7 @@
     "addMoreDetailsShort": "Add Details etc.",
     "amount": "Amount",
     "atTime": "at",
+    "bookType": "Book Type",
     "createdBy": "Added by",
     "date": "Date",
     "details": "Details",
@@ -187,7 +115,7 @@
     "required": "required",
     "selectGroup": "Select Group",
     "shareWithGroup": "Share with Group",
-    "bookType": "Book Type",
+    "type": "Type",
     "updatedBy": "Updated by",
     "viewCreatedEditedBy": "More Information"
   },
@@ -201,6 +129,7 @@
   "months": {
     "april": "April",
     "august": "August",
+    "comma": ",",
     "december": "December",
     "february": "February",
     "january": "January",
@@ -210,22 +139,17 @@
     "may": "May",
     "november": "November",
     "october": "October",
-    "september": "September",
-    "comma": ","
+    "september": "September"
   },
   "navbar": {
     "googleAccount": "Google Account",
-    "linkEvents": "Pages",
-    "linkGroups": "Groups",
-    "linkLogout": "Logout",
-    "linkSettings": "Settings",
+    "hello": "Hello,",
     "links": {
       "groups": "Groups",
       "home": "Home",
       "logout": "Logout",
       "settings": "Settings"
-    },
-    "hello": "Hello,"
+    }
   },
   "pageNotFound": {
     "btnGoBack": "Back home",
@@ -238,15 +162,15 @@
       "deletePage": "Delete Book",
       "deletePageText": "This will permanently delete",
       "editPage": "Edit Book",
-      "title": "Books",
-      "noBooks": "No Books Found, Add New"
+      "noBooks": "No Books Found, Add New",
+      "title": "Books"
     },
     "records": {
       "add": "Add Record",
       "addNew": "Add New Record",
       "allItemsShown": "All {count} items loaded",
       "badgeCreatedByYou": "You're Admin of this Book",
-      "badgeSharedWithGroup": "This Book is shared with:",
+      "badgeSharedWithGroup": "This Book is shared with {groupName} group:",
       "deletePage": "Delete Record",
       "deletePageText": "This will permanently delete",
       "editPage": "Edit Record",
@@ -292,18 +216,18 @@
       "title": "Profile"
     },
     "theme": {
-      "alertException": "Unable to Change Theme",
-      "alertUpdated": "Theme Changed",
-      "alertNoChanges": "Nothing to update",
-      "editTitle": "Choose Theme",
-      "label": "Theme",
-      "Violet": "Violet",
-      "Rose": "Rose",
-      "Green": "Green",
-      "Slate": "Slate",
       "Blue": "Blue",
+      "Green": "Green",
+      "Orange": "Orange",
+      "Rose": "Rose",
+      "Slate": "Slate",
       "Stone": "Stone",
-      "Orange": "Orange"
+      "Violet": "Violet",
+      "alertException": "Unable to Change Theme Now",
+      "alertNoChanges": "Nothing to update",
+      "alertUpdated": "Theme Changed",
+      "editTitle": "Choose Theme",
+      "label": "Theme"
     },
     "title": "Settings"
   }
