@@ -3,6 +3,7 @@ import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import {Button} from "@/components/ui/button";
 import {useRouter} from "next/navigation";
+import Lottie from "lottie-react";
 
 const LoadingFallback = ({hideMessage}) => {
 	const [showSlowNetworkMessage, setShowSlowNetworkMessage] = useState(false);
@@ -26,7 +27,7 @@ const LoadingFallback = ({hideMessage}) => {
 			:
 				<>
 					<div
-						className={"border-primary/20 h-8 w-8 rounded-full border-4 border-t-primary dark:border-primary/30 dark:border-t-primary"}
+						className={"border-muted-foreground/20 h-8 w-8 rounded-full border-4 border-t-muted-foreground dark:border-muted-foreground/20 dark:border-t-muted-foreground"}
 						style={{animation: "spin 1s linear infinite"}}
 					/>
 					{!hideMessage && showSlowNetworkMessage && (

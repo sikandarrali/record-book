@@ -1,5 +1,5 @@
 "use client";
-import { AddPage } from "@/components/event/AddPage";
+import { AddPage } from "@/components/page/AddPage";
 import PageContainer from "@/components/providers/PageContainer";
 import UIText from "@/components/theme/UIText";
 import {FixStickyHeaderScrollError} from "@/lib/utils";
@@ -15,7 +15,7 @@ import Link from "next/link";
 import {LockKeyhole, Users2} from "lucide-react";
 import {LOCALE_PUBLIC_ROUTES} from "@/lib/routes";
 import {Button} from "@/components/ui/button";
-import ScrollToTopButton from "@/components/event/ScrollToTopButton";
+import ScrollToTopButton from "@/components/page/ScrollToTopButton";
 
 export default function Home() {
 	const [openAddModal, setOpenAddModal] = useState(false);
@@ -85,9 +85,7 @@ export default function Home() {
 	// console.log(LOCALE_PUBLIC_ROUTES())
 
 	return (
-		<PageContainer hideTopbar>
-
-			<UIText variant="heading" className={'!text-primary mb-4'} text={t('pages.home.title')}/>
+		<PageContainer title={t('pages.home.title')}>
 
 			<motion.div
 				initial={{ opacity: 0 }}
@@ -99,6 +97,8 @@ export default function Home() {
 				className="flex flex-col gap-4 -mx-4 px-4 mt-2 pb-20"
 				ref={scrollRef}
 			>
+
+				{/* Add New Button */}
 				<motion.div
 					initial={{ opacity: 0, y: 5 }}
 					animate={{
@@ -112,6 +112,7 @@ export default function Home() {
 					<UIText variant={'heading'} text={t('pages.home.addNew')}/>
 				</motion.div>
 
+				{/* Book List */}
 				{events.length === 0 ?
 					<div className={'p-4 text-center mt-4 text-destructive'}>
 						<UIText text={t('pages.home.noBooks')} weight={'semibold'}/>
@@ -131,15 +132,13 @@ export default function Home() {
 							href={`/book/${event.$id}`}
 							className={'relative p-8 hover:bg-muted border cursor-pointer flex items-center justify-center shadow-sm rounded-lg text-center outline-none'}
 						>
-							<UIText variant={'heading'} className={'break-all'} text={event?.name} />
+							<UIText variant={'heading'} className={'break-all'} text={event?.name} textOrientation={'center'} />
 							{event.$permissions.some(permission => permission === `delete("user:${user.$id}")`) && <LockKeyhole className={'absolute left-2 top-2 w-5 h-5 text-primary'}/>}
 							{event.teamId && <Users2 className={'absolute right-2 top-2 w-5 h-5 text-primary'}/>}
 						</Link>
 					</motion.div>
 				))}
 			</motion.div>
-
-			<ScrollToTopButton/>
 
 			<AddPage
 				open={openAddModal}
@@ -148,6 +147,9 @@ export default function Home() {
 				setRefreshItems={setRefreshItems}
 				userOwnedGroups={userOwnedGroups}
 			/>
+
+			{/* Scroll to Top Button */}
+			<ScrollToTopButton/>
 
 		</PageContainer>
 	);

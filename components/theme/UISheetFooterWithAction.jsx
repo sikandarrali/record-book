@@ -9,7 +9,6 @@ export const UISheetFooterWithAction = ({disabled, onSubmit, adding, onOpenChang
         <div className={'flex flex-col w-full gap-2.5'}>
             <Button
                 size="2xl"
-                stretched
                 disabled={disabled}
                 type="submit"
                 onClick={()=> onSubmit()}
@@ -23,7 +22,6 @@ export const UISheetFooterWithAction = ({disabled, onSubmit, adding, onOpenChang
             </Button>
             <Button
                 size="2xl"
-                stretched
                 disabled={disabled}
                 variant={'outline'}
                 type={'button'}

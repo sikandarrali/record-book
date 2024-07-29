@@ -9,7 +9,6 @@ export const UISheetFooterInForm = ({disabled, adding, onOpenChange, labelAction
         <div className={'flex flex-col w-full gap-2.5'}>
             <Button
                 size="2xl"
-                stretched
                 disabled={disabled}
                 type="submit"
             >
@@ -22,13 +21,12 @@ export const UISheetFooterInForm = ({disabled, adding, onOpenChange, labelAction
             </Button>
             <Button
                 size="2xl"
-                stretched
                 disabled={disabled}
                 variant={'outline'}
                 type={'button'}
                 onClick={()=> onOpenChange(false)}
             >
-               <UIText variant={'button'} className={'text-background dark:text-foreground'} text={labelCancel || t('buttons.cancel')}/>
+               <UIText variant={'button'} text={labelCancel || t('buttons.cancel')}/>
             </Button>
         </div>
     )

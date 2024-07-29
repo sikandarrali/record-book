@@ -1,21 +1,17 @@
 "use client";
 import PageContainer from "@/components/providers/PageContainer";
 import UIText from "@/components/theme/UIText";
-import {useRef, useState} from "react";
+import {useState} from "react";
 import {useScopedI18n} from "@/locales/client";
 import {useAuth} from "@/components/contexts/AuthContext";
 import {Button} from "@/components/ui/button";
-import {Globe, Paintbrush, Pencil, TypeOutline, User} from "lucide-react";
+import {Globe, Paintbrush, Pencil, TypeOutline} from "lucide-react";
 import {EditProfile} from "@/components/settings/EditProfile";
 import {EditLanguage} from "@/components/settings/EditLanguage";
 import {EditFontSize} from "@/components/settings/EditFontSize";
-import {SupportedLanguages} from "@/lib/defaultData";
 import {GetCurrentFontSize, GetCurrentLanguage, GetCurrentTheme} from "@/lib/utils";
-import {UITextInput} from "@/components/theme/UITextInput";
 import {EditTheme} from "@/components/settings/EditTheme";
-import {APP_THEME, COOKIE_THEME_NAME, DEFAULT_THEME} from "@/lib/defaults";
-import Cookies from "js-cookie";
-import {useData} from "@/components/contexts/DataContext";
+import {useApp} from "@/components/contexts/AppContext";
 
 export default function Settings() {
     const t = useScopedI18n('settings');
@@ -26,12 +22,10 @@ export default function Settings() {
     const [openEditFontSize, setOpenEditFontSize] = useState(false)
     const [openEditTheme, setOpenEditTheme] = useState(false)
 
-    const {currentTheme} = useData()
+    const {currentTheme} = useApp()
 
     return (
-        <PageContainer hideTopbar>
-
-            <UIText variant="heading" className={'!text-primary mb-6'} text={t('title')}/>
+        <PageContainer title={t('title')}>
 
             <div className={'flex flex-col divide-y -mx-6 last:border-0'}>
 
@@ -70,7 +64,7 @@ export default function Settings() {
             </div>
 
             <div className={'px-6 py-8 gap-2 text-center mt-10 text-sm text-muted-foreground'}>
-                App Version <span className={'font-semibold'}>3.3</span>
+                App Version <span className={'font-semibold'}>3.0</span>
             </div>
 
             <EditProfile open={openEditProfile} onOpenChange={setOpenEditProfile} />
@@ -99,7 +93,7 @@ const SettingsMenu = ({icon, label, settingsValue, toggleEdit}) =>{
                     onClick={toggleEdit}
                     variant={'outline'}
                 >
-                    <Pencil className={'w-5 h-5'}/>
+                    <Pencil className={'w-4 h-4'}/>
                 </Button>
             </div>
         </div>

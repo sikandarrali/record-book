@@ -1,11 +1,11 @@
 "use client";
-import { AddRecord } from "@/components/event-items/AddRecord";
-import { SingleRecord } from "@/components/event-items/SingleRecord";
-import PageInfo from "@/components/event/PageInfo";
+import { AddRecord } from "@/components/record/AddRecord";
+import { SingleRecord } from "@/components/record/SingleRecord";
+import PageInfo from "@/components/page/PageInfo";
 import UIText from "@/components/theme/UIText";
 import { Button } from "@/components/ui/button";
 import {AnimatePresence, motion} from "framer-motion";
-import {LockKeyhole, MoveLeft, Plus, Users2, XIcon} from "lucide-react";
+import {Plus, XIcon} from "lucide-react";
 import {useCallback, useEffect, useLayoutEffect, useRef, useState} from "react";
 import { NumericFormat } from "react-number-format";
 import {db} from "@/components/appwrite/database";
@@ -22,19 +22,21 @@ import {ReloadIcon} from "@radix-ui/react-icons";
 import {useI18n, useScopedI18n} from "@/locales/client";
 import {useParams, useRouter} from "next/navigation";
 import PageContainer from "@/components/providers/PageContainer";
-import ScrollToTopButton from "@/components/event/ScrollToTopButton";
-import Link from "next/link";
+import ScrollToTopButton from "@/components/page/ScrollToTopButton";
 import {UITextInput} from "@/components/theme/UITextInput";
 import Loader from "@/components/loaders/loader";
 import {useAuth} from "@/components/contexts/AuthContext";
 import {HOMEPAGE_ROUTE} from "@/lib/routes";
-import {Badge} from "@/components/ui/badge";
+import {useData} from "@/components/contexts/DataContext";
+import {PopupPageCreatedByYou} from "@/components/theme/PopupPageCreatedByYou";
+import {PopupPageSharedWithGroup} from "@/components/theme/PopupPageSharedWithGroup";
 
 const Page = () => {
 	const headerRef = useRef(null);
 	const t = useI18n();
 	const [localLoading, setLocalLoading] = useState(true)
 	const {user} = useAuth()
+	const {userGroups} = useData()
 
 	const [openAddModal, setOpenAddModal] = useState(false);
 	const [totalSum, setTotalSum] = useState(0);
@@ -206,13 +208,18 @@ const Page = () => {
 					>
 						<div className={'relative flex flex-col flex-1'}>
 
-							<div className={'flex items-center gap-4 justify-center mb-4'}>
-								{pageData?.$permissions.some(permission => permission === `delete("user:${user.$id}")`) && <Badge variant={'secondary'}>{t('pages.records.badgeCreatedByYou')} </Badge>}
-								{pageData?.teamId && <Badge>{t('pages.records.badgeSharedWithGroup')}</Badge>}
+							{/* Badges */}
+							<div className={'flex items-center gap-4 justify-end -mt-6 mb-4'} dir={"ltr"}>
+								{pageData?.$permissions.some(permission => permission === `delete("user:${user.$id}")`) &&
+									<PopupPageCreatedByYou side={'bottom'} align={'start'} className={'max-w-56 bg-muted'}/>
+								}
+								{pageData?.teamId &&
+									<PopupPageSharedWithGroup teamId={pageData?.teamId} side={'bottom'} align={'start'} className={'flex bg-muted flex-col gap-2'}/>
+								}
 							</div>
 
-							{/* header */}
-							<div className="flex gap-4 pb-4 pt-2.5 justify-between items-center w-full border-b border-border relative" ref={headerRef}>
+							{/* Name & Info Icon */}
+							<div className="flex gap-6 pb-4 pt-2.5 justify-between items-center w-full border-b border-border relative" ref={headerRef}>
 
 								<div className={'flex items-center justify-center text-center break-all gap-4 relative'}>
 									<UIText variant={"heading"} text={pageData?.name} className={'self-center !text-primary'} />
@@ -226,6 +233,7 @@ const Page = () => {
 
 							</div>
 
+							{/* Total Amount */}
 							<motion.div className="flex flex-1 py-8 justify-center col-span-4 items-center gap-2 relative select-none pointer-events-none" dir={'ltr'}>
 								<span className="text-sm font-semibold">Rs</span>
 								<UIText
@@ -245,6 +253,7 @@ const Page = () => {
 							</motion.div>
 
 							<div className="flex flex-col pb-44">
+
 								{/* search */}
 								<div className="relative h-14 mb-4">
 									<UITextInput
@@ -267,6 +276,7 @@ const Page = () => {
 									)}
 								</div>
 
+								{/* Number of Records & Search Result Items */}
 								<div className={cn(
 									'py-1.5 flex items-center justify-center px-6 gap-2 text-muted-foreground',
 									(user?.prefs?.fontSize === "lg" || user?.prefs?.fontSize === "xl")  && "!my-5"
@@ -286,12 +296,14 @@ const Page = () => {
 
 								<div className="flex flex-col overflow-y-auto -mx-8">
 
+									{/* Records List */}
 									{visibleItems.map((item, i) => (
 										<motion.div key={item.$id}>
 											<SingleRecord item={item} />
 										</motion.div>
 									))}
 
+									{/* Load More / Loading  Loaded Buttons  && All Items Loaded Message */}
 									{searchValue === "" && items.length > 0 &&
 										<div className={'flex flex-col w-full justify-center items-center mt-8 !border-t-0'}>
 											{!hasMoreItems &&
@@ -335,6 +347,8 @@ const Page = () => {
 				}
 			</AnimatePresence>
 			<div className={'relative'}>
+
+				{/* Add Record Button */}
 				<div
 					className="w-[4.5rem] h-[4.5rem] fixed bottom-16 left-1/2 -translate-x-1/2 shadow-lg flex items-center justify-center rounded-full bg-primary text-primary-foreground cursor-pointer"
 					onClick={() => {
@@ -346,14 +360,14 @@ const Page = () => {
 				>
 					<Plus className="w-10 h-10" />
 				</div>
-
-				<ScrollToTopButton/>
-
 				<AddRecord
 					open={openAddModal}
 					onOpenChange={setOpenAddModal}
 					pageData={pageData}
 				/>
+
+				{/* Scroll to Top Button */}
+				<ScrollToTopButton/>
 			</div>
 		</PageContainer>
 	);

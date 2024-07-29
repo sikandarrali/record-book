@@ -25,10 +25,7 @@ module.exports = {
 			fontFamily: {
 				sans: ["var(--font-sans)", ...defaultTheme.fontFamily.sans],
 				urdu: ["var(--font-urdu)"],
-				"urdu-2": ["var(--font-urdu-2)"],
-				"urdu-3": ["var(--font-urdu-3)"],
-				"urdu-4": ["var(--font-urdu-3)"],
-				"urdu-5": ["var(--font-urdu-5)"],
+				"urdu-heading": ["var(--font-urdu-heading)"],
 			},
 			fontSize: {
 				"urdu-body": '1.563rem',

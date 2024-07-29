@@ -14,11 +14,11 @@ export const RecordTypeToggleGroup = ({value, setFieldValue}) =>{
             value={value}
             className="grid grid-flow-row grid-cols-2"
         >
-            <ToggleGroupItem value={"expense"} className="data-[state=on]:bg-destructive">
+            <ToggleGroupItem value={"expense"} className="data-[state=on]:bg-destructive data-[state=on]:text-white">
                 {/*{t('labels.recordTypeOut')}*/}
                 <Minus/>
             </ToggleGroupItem>
-            <ToggleGroupItem value={"income"} className="data-[state=on]:bg-green-500">
+            <ToggleGroupItem value={"income"} className="data-[state=on]:bg-green-500 data-[state=on]:text-white">
                 {/*{t('labels.recordTypeIn')}*/}
                 <Plus/>
             </ToggleGroupItem>

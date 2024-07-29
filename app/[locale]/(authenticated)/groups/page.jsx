@@ -20,10 +20,12 @@ export default function Page() {
     const [localLoading, setLocalLoading] = useState(true)
 
     return (
-        <PageContainer hideTopbar>
-            <UIText variant="heading" className={'text-primary'} text={t('title')}/>
+        <PageContainer hideTopbar title={t('title')}>
+
+            {/* Page Sub-header text */}
             <UIText text={t('text')}/>
 
+            {/* Group Information */}
             <div className={'border border-border py-4 px-6 rounded-lg mt-6 cursor-pointer'} onClick={()=> setShowInformation(!showInformation)} >
                 <div className={'flex items-center justify-between gap-2 font-medium text-primary'}>
                     <div className={'flex items-center gap-2'}>
@@ -41,8 +43,10 @@ export default function Page() {
                 }
             </div>
 
+            {/* Your Groups Label */}
             <UIText variant={'lg'} className={'py-2 mt-4 text-primary'} weight={'medium'} text={t('labelYourGroups')}/>
 
+            {/* List of Groups */}
             <motion.div
                 initial={{opacity: 0, y: 10}}
                 animate={{opacity: 1, y: 0,
@@ -68,6 +72,8 @@ export default function Page() {
 
             </motion.div>
 
+
+            {/* Create New Group Button */}
             <motion.div
                 initial={{opacity: 0, y: 10}}
                 animate={{opacity: 1, y: 0,
@@ -75,9 +81,8 @@ export default function Page() {
                 }}
             >
                 <Button
-                    stretched
-                    size="2xl"
-                    type={'submit'}
+                    
+                    size="2xl"    type={'submit'}
                     className={'mt-5'} onClick={()=> setOpenAddGroup(true)}
                 >
                     <UIText variant={'button'} text={t('btnCreateNewGroup')}/>

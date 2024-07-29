@@ -224,7 +224,8 @@
       "home": "Home",
       "logout": "Logout",
       "settings": "Settings"
-    }
+    },
+    "hello": "Hello,"
   },
   "pageNotFound": {
     "btnGoBack": "Back home",
@@ -244,8 +245,8 @@
       "add": "Add Record",
       "addNew": "Add New Record",
       "allItemsShown": "All {count} items loaded",
-      "badgeCreatedByYou": "Created by You",
-      "badgeSharedWithGroup": "Shared with Group",
+      "badgeCreatedByYou": "You're Admin of this Book",
+      "badgeSharedWithGroup": "This Book is shared with:",
       "deletePage": "Delete Record",
       "deletePageText": "This will permanently delete",
       "editPage": "Edit Record",

@@ -8,7 +8,7 @@ const Loader = ({hideText}) => {
 	return (
 		<div className="px-10 py-16 flex flex-col gap-6 items-center justify-center ">
 			<div
-				className={"border-primary/20 h-8 w-8 rounded-full border-4 border-t-primary dark:border-primary/30 dark:border-t-primary"}
+				className={"border-muted-foreground/20 h-8 w-8 rounded-full border-4 border-t-muted-foreground dark:border-muted-foreground/20 dark:border-t-muted-foreground"}
 				style={{animation: "spin 1s linear infinite"}}
 			/>
 
