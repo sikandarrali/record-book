@@ -295,12 +295,12 @@ const Page = () => {
 									{searchValue === "" ?
 										<>
 											<UIText text={t('pages.records.totalEntries')} weight={'medium'} />
-											<UIText variant={'heading'} weight={'bold'} className={'!text-primary rtl:mt-2'} text={items.length}/>
+											<UIText variant={'heading'} weight={'bold'} className={'!text-primary rtl:-mt-1'} text={items.length}/>
 										</>
 										:
 										<>
 											<UIText text={t('pages.records.numOfItemsMatchingSearch')} weight={'medium'} />
-											<UIText variant={'heading'} weight={'bold'} className={'!text-primary rtl:mt-2'} text={visibleItems.length}/>
+											<UIText variant={'heading'} weight={'bold'} className={'!text-primary rtl:-mt-1'} text={visibleItems.length}/>
 										</>
 									}
 								</div>

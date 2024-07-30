@@ -64,7 +64,7 @@ export default function Settings() {
             </div>
 
             <div className={'px-6 py-8 gap-2 text-center mt-10 text-sm text-muted-foreground'}>
-                App Version <span className={'font-semibold'}>4.1</span>
+                App Version <span className={'font-semibold'}>4.1.1</span>
             </div>
 
             <EditProfile open={openEditProfile} onOpenChange={setOpenEditProfile} />
@@ -85,7 +85,7 @@ const SettingsMenu = ({icon, label, settingsValue, toggleEdit}) =>{
                 <UIText text={label} weight={'medium'} className={'text-muted-foreground'}/>
                 <Button
                     size={'ghost'}
-                    className={'rtl:mt-3 rounded-md ml-auto p-2'}
+                    className={'rtl:mt-3 rounded-md ltr:ml-auto rtl:mr-auto p-2'}
                     // onClick={toggleEdit}
                     variant={'ghost'}
                 >

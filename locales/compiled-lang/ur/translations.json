@@ -107,6 +107,8 @@
     "max20characters": "زیادہ سے زیادہ 20 حروف",
     "max300characters": "زیادہ سے زیادہ 300 حروف",
     "max50characters": "زیادہ سے زیادہ 50 حروف",
+    "max10numbers": "زیادہ سے زیادہ 10 حروف",
+    "max10characters": "زیادہ سے زیادہ 10 نمبر",
     "name": "نام",
     "noGroups": "کوئی گروپ نہیں ملا، پہلے شامل کریں",
     "notSharedWithGroup": "کسی گروپ کے ساتھ شیئر نہیں کیا گیا",
@@ -143,6 +145,11 @@
     "november": "نومبر",
     "october": "اکتوبر",
     "september": "ستمبر"
+  },
+  "currencies": {
+    "pkr": "پاکستانی روپیہ",
+    "euro": "یورو",
+    "usd": "امریکی ڈالر"
   },
   "navbar": {
     "googleAccount": "گوگل اکاؤنٹ",

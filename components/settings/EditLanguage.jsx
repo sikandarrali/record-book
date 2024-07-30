@@ -57,9 +57,7 @@ export const EditLanguage = ({ open, onOpenChange }) => {
                 const response =  await account.updatePrefs(prefs)
                 toast.success(t('alertSuccess'), ToastOptions);
                 if(response){
-                    setTimeout(()=>{
-                        ChangeLocale(selectedLanguage)
-                    }, 500)
+                    ChangeLocale(selectedLanguage)
                 }
             }
             catch (e){
