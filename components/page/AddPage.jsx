@@ -15,13 +15,13 @@ import * as React from "react";
 import {InputFieldWithLabel} from "@/components/theme/form/InputFieldWithLabel";
 import {DatePickerWithLabel} from "@/components/theme/form/DatePickerWithLabel";
 import {TextareaWithLabel} from "@/components/theme/form/TextareaWithLabel";
-import {DropdownSelectFieldWithLabel} from "@/components/theme/form/DropdownSelectFieldWithLabel";
+import {DropdownGroupSelectFieldWithLabel} from "@/components/theme/form/DropdownGroupSelectFieldWithLabel";
 import {UISheet} from "@/components/theme/UISheet";
-import {Button} from "@/components/ui/button";
 import {UISheetFooterInForm} from "@/components/theme/UISheetFooterInForm";
 import {BookTypeToggleGroup} from "@/components/page/BookTypeToggleGroup";
-import {RecordTypeToggleGroup} from "@/components/record/RecordTypeToggleGroup";
 import FormLabel from "@/components/theme/FormLabel";
+import {SupportedCurrencies} from "@/lib/defaultData";
+import {DropdownSelectFieldWithLabel} from "@/components/theme/form/DropdownSelectFieldWithLabel";
 
 export const AddPage = ({ open, onOpenChange, userOwnedGroups }) => {
 
@@ -59,7 +59,8 @@ export const AddPage = ({ open, onOpenChange, userOwnedGroups }) => {
 				details: values.details.trim(),
 				teamId: values.teamId,
 				createdBy: tempCreatedBy,
-				updatedBy: []
+				updatedBy: [],
+				currency: values.currency
 			};
 
 			if(values.teamId){
@@ -124,6 +125,7 @@ export const AddPage = ({ open, onOpenChange, userOwnedGroups }) => {
 						teamId: "",
 						createdBy: "",
 						updatedBy: "",
+						currency: "pkr"
 					}}
 					validationSchema={PageSchema}
 					onSubmit={(values) => {
@@ -147,7 +149,7 @@ export const AddPage = ({ open, onOpenChange, userOwnedGroups }) => {
 							</div>
 
 							{/* Select Group */}
-							<DropdownSelectFieldWithLabel
+							<DropdownGroupSelectFieldWithLabel
 								label={t('labels.group')}
 								data={userOwnedGroups}
 								onSelect={(value)=> {
@@ -190,6 +192,19 @@ export const AddPage = ({ open, onOpenChange, userOwnedGroups }) => {
 										disabled={disabled}
 										fieldValue={values.date}
 										onClear={()=> setFieldValue('date', '')}
+									/>
+
+									{/* Currency */}
+									<DropdownSelectFieldWithLabel
+										label={t('labels.currency')}
+										data={SupportedCurrencies}
+										onSelect={(value)=> {
+											setFieldValue('currency', value)
+										}}
+										onClear={()=>{
+											setFieldValue("currency", "");
+										}}
+										fieldValue={values.currency}
 									/>
 
 									{/* Details */}

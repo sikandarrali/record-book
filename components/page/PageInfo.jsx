@@ -1,6 +1,6 @@
 import UIText from "@/components/theme/UIText";
 import { Button } from "@/components/ui/button";
-import {SquarePen} from "lucide-react";
+import {Minus, Plus, SquarePen} from "lucide-react";
 import { useRouter } from "next/navigation";
 import {useLayoutEffect, useState} from "react";
 import { NumericFormat } from "react-number-format";
@@ -23,6 +23,8 @@ import {Badge} from "@/components/ui/badge";
 import {PopupPageCreatedByYou} from "@/components/theme/PopupPageCreatedByYou";
 import {PopupPageSharedWithGroup} from "@/components/theme/PopupPageSharedWithGroup";
 import {BookType} from "@/components/page/BookType";
+import {getCurrentCurrency} from "@/lib/utils";
+import {FormattedCurrency} from "@/components/theme/FormattedCurrency";
 
 const PageInfo = ({ pageData, setPageData, sum }) => {
 	const [openDetails, setOpenDetails] = useState(false);
@@ -137,20 +139,23 @@ const PageInfo = ({ pageData, setPageData, sum }) => {
 				<div className="flex flex-col justify-center text-center items-center gap-5 mt-10 mb-10">
 					<UIText variant={"heading"} text={pageData?.name} className={'break-all'}/>
 
-					<div className="flex flex-1 justify-center col-span-4 items-center gap-2 relative select-none pointer-events-none" dir={'ltr'}>
-						<span className="text-sm font-semibold">Rs</span>
+					<div className="flex flex-1 justify-center col-span-4 items-center relative select-none pointer-events-none" dir={'ltr'}>
+						<span className="text-sm font-semibold">
+							{getCurrentCurrency(pageData?.currency).symbol}
+						</span>
+						{sum < 0 ?
+							<Minus className={'text-primary w-5 h-5 stroke-[2.5] ml-2'}/>
+							:
+							<Plus className={'text-primary w-5 h-5 stroke-[2.5] ml-2'}/>
+						}
 						<UIText
 							className="!text-primary"
 							weight={'semibold'}
 							variant={'heading'}
 							text={
-								<NumericFormat
-									allowNegative={false}
+								<FormattedCurrency
 									value={Number(sum)}
-									thousandSeparator={","}
-									decimalSeparator={"."}
-									displayType="text"
-									decimalScale={2}
+									currency={getCurrentCurrency(pageData?.currency)}
 								/>
 							}
 						/>

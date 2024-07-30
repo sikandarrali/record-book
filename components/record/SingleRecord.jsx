@@ -15,7 +15,7 @@ import {
 	SheetTitle, SheetTrigger
 } from "@/components/ui/sheet";
 import {useMediaQuery} from "react-responsive";
-import {cn} from "@/lib/utils";
+import {cn, getCurrentCurrency} from "@/lib/utils";
 import {useI18n} from "@/locales/client";
 import {UISheetInfoFooter} from "@/components/theme/UISheetInfoFooter";
 import {EnglishMonths} from "@/lib/defaultData";
@@ -26,8 +26,9 @@ import {Button} from "@/components/ui/button";
 import {UISheet} from "@/components/theme/UISheet";
 import {Badge} from "@/components/ui/badge";
 import {UrduDate} from "@/lib/UrduDate";
+import {FormattedCurrency} from "@/components/theme/FormattedCurrency";
 
-export const SingleRecord = ({ item }) => {
+export const SingleRecord = ({ item, bookCurrency }) => {
 	const isDesktop = useMediaQuery({ query: "(min-width: 1024px)" })
 	const [isOpen, setIsOpen] = useState(false);
 	const [openEdit, setOpenEdit] = useState(false);
@@ -86,7 +87,9 @@ export const SingleRecord = ({ item }) => {
 					</div>
 
 					<div className="flex justify-end items-center relative shrink-0 select-none" dir={'ltr'}>
-						<span className="text-sm select-none font-semibold mr-2">Rs</span>
+						<span className="text-sm select-none font-semibold mr-2">
+							{getCurrentCurrency(bookCurrency).symbol}
+						</span>
 						{item.type==='expense' ?
 							<Minus className={'text-destructive w-4 h-4 stroke-[2.5]'}/>
 							:
@@ -97,13 +100,9 @@ export const SingleRecord = ({ item }) => {
 							variant={'lg'}
 							className={cn(item.type==='expense' ? "text-destructive" : "text-primary")}
 							text={
-								<NumericFormat
-									allowNegative={false}
+								<FormattedCurrency
 									value={item.amount}
-									thousandSeparator={","}
-									decimalSeparator={"."}
-									displayType="text"
-									decimalScale={2}
+									currency={getCurrentCurrency(bookCurrency)}
 								/>
 							}
 						/>
@@ -140,7 +139,7 @@ export const SingleRecord = ({ item }) => {
 
 					{/* Amount */}
 					<div className="flex mt-8 justify-center items-center relative select-none pointer-events-none" dir={'ltr'}>
-						<UIText weight={'bold'} className="mr-2" text={'Rs'}/>
+						<UIText weight={'bold'} className="mr-2" text={getCurrentCurrency(bookCurrency).symbol}/>
 						{item.type==='expense' ?
 							<Minus className={'text-destructive w-5 h-5 stroke-[2.5]'}/>
 							:
@@ -151,14 +150,9 @@ export const SingleRecord = ({ item }) => {
 							className={cn(item.type==='expense' ? "text-destructive" : "text-primary")}
 							variant={'heading'}
 							text={
-								<NumericFormat
-									allowNegative={false}
+								<FormattedCurrency
 									value={item.amount}
-									thousandSeparator={","}
-									decimalSeparator={"."}
-									displayType="text"
-									decimalScale={2}
-									className={'text-primary'}
+									currency={getCurrentCurrency(bookCurrency)}
 								/>
 							}
 						/>

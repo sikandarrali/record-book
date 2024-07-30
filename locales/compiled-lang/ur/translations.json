@@ -88,12 +88,13 @@
     "titleUnableToJoin": "گروپ میں شامل ہونے سے قاصر"
   },
   "labels": {
-    "addMoreDetails": "تاریخ اور تفصیلات وغیرہ شامل کریں۔",
+    "addMoreDetails": "تاریخ، کرنسی اور تفصیلات وغیرہ شامل کریں۔",
     "addMoreDetailsShort": "تفصیلات وغیرہ شامل کریں۔",
     "amount": "رقم",
     "atTime": "بوقت",
     "bookType": "بُک کی قسم",
     "createdBy": "اندراج کردہ",
+    "currency": "کرنسی",
     "date": "تاریخ",
     "delete": "حذف کریں",
     "details": "تفصیلات",

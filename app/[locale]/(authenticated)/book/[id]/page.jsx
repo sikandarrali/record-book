@@ -5,7 +5,7 @@ import PageInfo from "@/components/page/PageInfo";
 import UIText from "@/components/theme/UIText";
 import { Button } from "@/components/ui/button";
 import {AnimatePresence, motion} from "framer-motion";
-import {Plus, XIcon} from "lucide-react";
+import {Minus, Plus, XIcon} from "lucide-react";
 import {useCallback, useEffect, useLayoutEffect, useRef, useState} from "react";
 import { NumericFormat } from "react-number-format";
 import {db} from "@/components/appwrite/database";
@@ -17,7 +17,7 @@ import {
 	DATABASE_ID,
 	databases, PARENT_FIELD_IN_SINGLE_RECORD
 } from "@/components/appwrite/appwrite";
-import {cn, SortItemsByDateAndCreatedAt} from "@/lib/utils";
+import {cn, getCurrentCurrency, SortItemsByDateAndCreatedAt} from "@/lib/utils";
 import {ReloadIcon} from "@radix-ui/react-icons";
 import {useI18n, useScopedI18n} from "@/locales/client";
 import {useParams, useRouter} from "next/navigation";
@@ -31,6 +31,7 @@ import {useData} from "@/components/contexts/DataContext";
 import {PopupPageCreatedByYou} from "@/components/theme/PopupPageCreatedByYou";
 import {PopupPageSharedWithGroup} from "@/components/theme/PopupPageSharedWithGroup";
 import {BookType} from "@/components/page/BookType";
+import {FormattedCurrency} from "@/components/theme/FormattedCurrency";
 
 const data = [
 	{id: 1, name: 'a', date:'2024-07-29T21:00:07.364Z', createdAt: '2024-07-28T21:00:07.364Z'},
@@ -249,19 +250,23 @@ const Page = () => {
 							</div>
 
 							{/* Total Amount */}
-							<motion.div className="flex flex-1 py-8 justify-center col-span-4 items-center gap-2 relative select-none pointer-events-none" dir={'ltr'}>
-								<span className="text-sm font-semibold">Rs</span>
+							<motion.div className="flex flex-1 py-8 justify-center col-span-4 items-center relative select-none pointer-events-none" dir={'ltr'}>
+								<span className="text-sm font-semibold">
+									{getCurrentCurrency(pageData?.currency).symbol}
+								</span>
+								{totalSum < 0 ?
+									<Minus className={'text-primary w-5 h-5 stroke-[2.5] ml-2'}/>
+									:
+									<Plus className={'text-primary w-5 h-5 stroke-[2.5] ml-2'}/>
+								}
 								<UIText
 									weight={'bold'}
 									className="!text-primary"
 									variant={'heading'}
 									text={
-										<NumericFormat
+										<FormattedCurrency
 											value={totalSum}
-											thousandSeparator={","}
-											decimalSeparator={"."}
-											displayType="text"
-											decimalScale={2}
+											currency={getCurrentCurrency(pageData?.currency)}
 										/>
 									}
 								/>
@@ -314,7 +319,7 @@ const Page = () => {
 									{/* Records List */}
 									{SortItemsByDateAndCreatedAt(visibleItems).map((item, i) => (
 										<motion.div key={item.$id}>
-											<SingleRecord item={item} />
+											<SingleRecord item={item} bookCurrency={pageData?.currency} />
 										</motion.div>
 									))}
 

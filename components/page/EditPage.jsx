@@ -30,12 +30,14 @@ import {UITextInput} from "@/components/theme/UITextInput";
 import {UITextArea} from "@/components/theme/UITextArea";
 import {PageSchema} from "@/lib/schemas/pageSchema";
 import {InputFieldWithLabel} from "@/components/theme/form/InputFieldWithLabel";
-import {DropdownSelectFieldWithLabel} from "@/components/theme/form/DropdownSelectFieldWithLabel";
+import {DropdownGroupSelectFieldWithLabel} from "@/components/theme/form/DropdownGroupSelectFieldWithLabel";
 import * as React from "react";
 import {DatePickerWithLabel} from "@/components/theme/form/DatePickerWithLabel";
 import {TextareaWithLabel} from "@/components/theme/form/TextareaWithLabel";
 import {UISheet} from "@/components/theme/UISheet";
 import {BookTypeToggleGroup} from "@/components/page/BookTypeToggleGroup";
+import {DropdownSelectFieldWithLabel} from "@/components/theme/form/DropdownSelectFieldWithLabel";
+import {SupportedCurrencies} from "@/lib/defaultData";
 
 export const EditPage = ({ open, onOpenChange, pageData, setPageData, setGroup }) => {
 	const isDesktop = useMediaQuery({
@@ -67,7 +69,7 @@ export const EditPage = ({ open, onOpenChange, pageData, setPageData, setGroup }
 					type: item?.type,
 					[PARENT_FIELD_IN_SINGLE_RECORD]: item?.pageId,
 					amount: item?.amount,
-					date: item?.date,
+					date: item?.date
 				}
 
 				await db.records.update(tempItem, item.$id, [
@@ -87,7 +89,7 @@ export const EditPage = ({ open, onOpenChange, pageData, setPageData, setGroup }
 					amount: item?.amount,
 					date: item?.date,
 					addedBy: item.addedBy,
-					updatedBy: tempUpdatedBy,
+					updatedBy: tempUpdatedBy
 				}
 				await db.records.update(tempItem, item.$id, [
 					Permission.read(Role.user(user.$id)),
@@ -113,7 +115,8 @@ export const EditPage = ({ open, onOpenChange, pageData, setPageData, setGroup }
 				details: values.details.trim(),
 				teamId: values.teamId,
 				createdBy: pageData.createdBy,
-				updatedBy: tempUpdatedBy
+				updatedBy: tempUpdatedBy,
+				currency: values.currency
 			};
 
 			if(isOwner){
@@ -192,7 +195,8 @@ export const EditPage = ({ open, onOpenChange, pageData, setPageData, setGroup }
 						date: pageData?.date,
 						details: pageData?.details,
 						teamId: pageData?.teamId,
-						type: pageData?.type
+						type: pageData?.type,
+						currency: pageData?.currency
 					}}
 					validationSchema={PageSchema}
 					onSubmit={(values) => {
@@ -216,7 +220,7 @@ export const EditPage = ({ open, onOpenChange, pageData, setPageData, setGroup }
 							</div>
 
 							{/* Select Group */}
-							<DropdownSelectFieldWithLabel
+							<DropdownGroupSelectFieldWithLabel
 								label={t('labels.group')}
 								data={userOwnedGroups}
 								fieldValue={pageData.teamId}
@@ -259,6 +263,19 @@ export const EditPage = ({ open, onOpenChange, pageData, setPageData, setGroup }
 										disabled={disabled}
 										fieldValue={values.date}
 										onClear={()=> setFieldValue('date', '')}
+									/>
+
+									{/* Currency */}
+									<DropdownSelectFieldWithLabel
+										label={t('labels.currency')}
+										data={SupportedCurrencies}
+										onSelect={(value)=> {
+											setFieldValue('currency', value)
+										}}
+										onClear={()=>{
+											setFieldValue("currency", "");
+										}}
+										fieldValue={values.currency}
 									/>
 
 									{/* Details */}
