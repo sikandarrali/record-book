@@ -11,7 +11,7 @@ import {useI18n} from "@/locales/client";
 import {useData} from "@/components/contexts/DataContext";
 import {ClearFieldButton} from "@/components/theme/ClearFieldButton";
 
-export const DropdownSelectFieldWithLabel = ({data, fieldValue, onSelect, onClear, label}) =>{
+export const DropdownGroupSelectFieldWithLabel = ({data, isOwner, fieldValue, onSelect, onClear, label}) =>{
 
     const [openDropdown, setOpenDropdown] = useState(false)
     const [selected, setSelected] = useState(fieldValue || '')
@@ -25,7 +25,13 @@ export const DropdownSelectFieldWithLabel = ({data, fieldValue, onSelect, onClea
                 <UIText variant={'label'} className="shrink-0" text={label}/>
             </Label>
 
-            <div className={'flex items-center gap-4'}>
+            {!isOwner ?
+                <div className={cn("flex justify-between border rounded-lg p-6 cursor-not-allowed")}>
+                    <UIText text={userGroups.find((group)=> group.$id===fieldValue)?.name} className={'ltr:pr-14 rtl:pl-14'}/>
+                    <span className={'absolute rtl:left-10 ltr:right-10'}><LockKeyhole className={'text-destructive'}/> </span>
+                </div>
+            :
+                <div className={'flex items-center gap-4'}>
                 <Popover open={openDropdown} onOpenChange={setOpenDropdown}>
                     <PopoverTrigger asChild>
                         <Button
@@ -38,7 +44,7 @@ export const DropdownSelectFieldWithLabel = ({data, fieldValue, onSelect, onClea
                             )}
                         >
                             {selected ?
-                                <UIText text={data.find((item)=> item.name === selected)?.label}/>
+                                <UIText text={data.find((item)=> item.$id === selected)?.name}/>
                                 :
                                 <UIText className={"rtl:pr-2"} text={t('labels.selectGroup')}/>
                             }
@@ -56,10 +62,10 @@ export const DropdownSelectFieldWithLabel = ({data, fieldValue, onSelect, onClea
                                     {/*		<UIText className={'text-muted-foreground'} variant={'sm'} text={t('labels.noGroups')}/>*/}
                                     {/*	</SelectItem>*/}
                                     {/*}*/}
-                                    {data?.map((item)=>(
+                                    {data?.map((group)=>(
                                         <CommandItem
-                                            key={item.name}
-                                            value={item.name}
+                                            key={group.$id}
+                                            value={group.$id}
                                             onSelect={(currentValue) => {
                                                 setSelected(currentValue)
                                                 onSelect && onSelect(currentValue)
@@ -70,10 +76,10 @@ export const DropdownSelectFieldWithLabel = ({data, fieldValue, onSelect, onClea
                                             <Check
                                                 className={cn(
                                                     "mr-2 h-5 w-5 rtl:mt-1.5 stroke-[2.5]",
-                                                    selected === item.name ? "opacity-100" : "opacity-0"
+                                                    selected === group.$id ? "opacity-100" : "opacity-0"
                                                 )}
                                             />
-                                            <UIText text={t(item.label)}/>
+                                            <UIText text={t(group.name)}/>
                                         </CommandItem>
                                     ))}
                                 </CommandGroup>
@@ -91,6 +97,7 @@ export const DropdownSelectFieldWithLabel = ({data, fieldValue, onSelect, onClea
                     />
                 }
             </div>
+            }
 
         </div>
     )

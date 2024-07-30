@@ -88,12 +88,13 @@
     "titleUnableToJoin": "Unable to Join Group"
   },
   "labels": {
-    "addMoreDetails": "Add Date & Details etc.",
+    "addMoreDetails": "Add Date, Currency & Details etc.",
     "addMoreDetailsShort": "Add Details etc.",
     "amount": "Amount",
     "atTime": "at",
     "bookType": "Book Type",
     "createdBy": "Added by",
+    "currency": "Currency",
     "date": "Date",
     "delete": "Delete",
     "details": "Details",
