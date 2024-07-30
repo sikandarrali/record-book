@@ -87,14 +87,6 @@ export const SingleRecord = ({ item, bookCurrency }) => {
 					</div>
 
 					<div className="flex justify-end items-center relative shrink-0 select-none" dir={'ltr'}>
-						<span className="text-sm select-none font-semibold mr-2">
-							{getCurrentCurrency(bookCurrency).symbol}
-						</span>
-						{item.type==='expense' ?
-							<Minus className={'text-destructive w-4 h-4 stroke-[2.5]'}/>
-							:
-							<Plus className={'w-4 h-4 stroke-[2.5]'}/>
-						}
 						<UIText
 							weight={'semibold'}
 							variant={'lg'}
@@ -103,6 +95,7 @@ export const SingleRecord = ({ item, bookCurrency }) => {
 								<FormattedCurrency
 									value={item.amount}
 									currency={getCurrentCurrency(bookCurrency)}
+									type={item.type}
 								/>
 							}
 						/>
@@ -139,12 +132,6 @@ export const SingleRecord = ({ item, bookCurrency }) => {
 
 					{/* Amount */}
 					<div className="flex mt-8 justify-center items-center relative select-none pointer-events-none" dir={'ltr'}>
-						<UIText weight={'bold'} className="mr-2" text={getCurrentCurrency(bookCurrency).symbol}/>
-						{item.type==='expense' ?
-							<Minus className={'text-destructive w-5 h-5 stroke-[2.5]'}/>
-							:
-							<Plus className={'text-primary w-5 h-5 stroke-[2.5]'}/>
-						}
 						<UIText
 							weight={'bold'}
 							className={cn(item.type==='expense' ? "text-destructive" : "text-primary")}
@@ -153,6 +140,7 @@ export const SingleRecord = ({ item, bookCurrency }) => {
 								<FormattedCurrency
 									value={item.amount}
 									currency={getCurrentCurrency(bookCurrency)}
+									type={item.type}
 								/>
 							}
 						/>
@@ -185,6 +173,7 @@ export const SingleRecord = ({ item, bookCurrency }) => {
 				item={item}
 				open={openEdit}
 				onOpenChange={setOpenEdit}
+				currency={bookCurrency}
 			/>
 			{hasDeletePermission &&
 				<DeleteDialog

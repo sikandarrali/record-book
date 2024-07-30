@@ -4,7 +4,7 @@ import * as React from "react";
 import {cn} from "@/lib/utils";
 import {UINumberInput} from "@/components/theme/UINumberInput";
 
-export const NumberInputFieldWithLabel = ({rootClass, value, errors, touched, label, className, onChange, onBlur, disabled, name, defaultValue}) =>{
+export const NumberInputFieldWithLabel = ({rootClass, value, errors, touched, currency, label, className, onChange, onBlur, disabled, name, defaultValue}) =>{
     return(
         <div className={cn(
             "flex flex-col",
@@ -23,6 +23,7 @@ export const NumberInputFieldWithLabel = ({rootClass, value, errors, touched, la
                 defaultValue={defaultValue}
                 className={cn(className)}
                 value={value}
+                currency={currency}
             />
         </div>
     )

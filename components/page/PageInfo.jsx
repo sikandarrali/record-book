@@ -12,7 +12,7 @@ import {Query} from "appwrite";
 import {useI18n} from "@/locales/client";
 import {UISheetInfoFooter} from "@/components/theme/UISheetInfoFooter";
 import {useData} from "@/components/contexts/DataContext";
-import {EnglishMonths} from "@/lib/defaultData";
+import {EnglishMonths, SupportedCurrencies} from "@/lib/defaultData";
 import {useAuth} from "@/components/contexts/AuthContext";
 import {DeleteDialog} from "@/components/theme/DeleteDialog";
 import {PARENT_FIELD_IN_SINGLE_RECORD} from "@/components/appwrite/appwrite";
@@ -23,7 +23,7 @@ import {Badge} from "@/components/ui/badge";
 import {PopupPageCreatedByYou} from "@/components/theme/PopupPageCreatedByYou";
 import {PopupPageSharedWithGroup} from "@/components/theme/PopupPageSharedWithGroup";
 import {BookType} from "@/components/page/BookType";
-import {getCurrentCurrency} from "@/lib/utils";
+import {cn, getCurrentCurrency} from "@/lib/utils";
 import {FormattedCurrency} from "@/components/theme/FormattedCurrency";
 
 const PageInfo = ({ pageData, setPageData, sum }) => {
@@ -137,19 +137,11 @@ const PageInfo = ({ pageData, setPageData, sum }) => {
 
 				{/* Amount */}
 				<div className="flex flex-col justify-center text-center items-center gap-5 mt-10 mb-10">
-					<UIText variant={"heading"} text={pageData?.name} className={'break-all'}/>
+					<UIText variant={"heading"} text={pageData?.name} className={'break-all text-primary'}/>
 
 					<div className="flex flex-1 justify-center col-span-4 items-center relative select-none pointer-events-none" dir={'ltr'}>
-						<span className="text-sm font-semibold">
-							{getCurrentCurrency(pageData?.currency).symbol}
-						</span>
-						{sum < 0 ?
-							<Minus className={'text-primary w-5 h-5 stroke-[2.5] ml-2'}/>
-							:
-							<Plus className={'text-primary w-5 h-5 stroke-[2.5] ml-2'}/>
-						}
 						<UIText
-							className="!text-primary"
+							className={cn(Number(sum) < 0 && "text-destructive")}
 							weight={'semibold'}
 							variant={'heading'}
 							text={
@@ -186,6 +178,16 @@ const PageInfo = ({ pageData, setPageData, sum }) => {
 						</div>
 						<div className={'w-3/4 flex items-center pl-4'}>
 							{pageData?.date ? <UIText text={`${day} ${t(`months.${month.toLowerCase()}`)+t('general.comma')} ${year}`}/> : '-'}
+						</div>
+					</div>
+
+					{/* Currency */}
+					<div className={'flex py-4 items-center'}>
+						<div className={'w-1/4 flex shrink-0'}>
+							<UIText weight={'medium'} text={t('labels.currency')}/>
+						</div>
+						<div className={'w-3/4 flex items-center pl-4'}>
+							{pageData?.currency ? <UIText text={t(`currencies.${SupportedCurrencies.find((item)=> item.name === pageData?.currency)?.name}`)}/> : '-'}
 						</div>
 					</div>
 

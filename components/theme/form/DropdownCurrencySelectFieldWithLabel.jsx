@@ -11,7 +11,7 @@ import {useI18n} from "@/locales/client";
 import {useData} from "@/components/contexts/DataContext";
 import {ClearFieldButton} from "@/components/theme/ClearFieldButton";
 
-export const DropdownSelectFieldWithLabel = ({data, fieldValue, onSelect, onClear, label}) =>{
+export const DropdownCurrencySelectFieldWithLabel = ({data, fieldValue, onSelect, onClear, label}) =>{
 
     const [openDropdown, setOpenDropdown] = useState(false)
     const [selected, setSelected] = useState(fieldValue || '')
@@ -38,7 +38,7 @@ export const DropdownSelectFieldWithLabel = ({data, fieldValue, onSelect, onClea
                             )}
                         >
                             {selected ?
-                                <UIText text={data.find((item)=> item.name === selected)?.label}/>
+                                <UIText text={t(`currencies.${data.find((item)=> item.name === selected)?.name}`)}/>
                                 :
                                 <UIText className={"rtl:pr-2"} text={t('labels.selectGroup')}/>
                             }
@@ -73,7 +73,7 @@ export const DropdownSelectFieldWithLabel = ({data, fieldValue, onSelect, onClea
                                                     selected === item.name ? "opacity-100" : "opacity-0"
                                                 )}
                                             />
-                                            <UIText text={t(item.label)}/>
+                                            <UIText text={t(`currencies.${item.name}`)}/>
                                         </CommandItem>
                                     ))}
                                 </CommandGroup>

@@ -11,7 +11,7 @@ import {
 import useScrollToView from "@/lib/hooks/useScrollToView";
 import {useMediaQuery} from "react-responsive";
 import UIText from "@/components/theme/UIText";
-import {scrollToTop} from "@/lib/utils";
+import {getCurrentCurrency, scrollToTop} from "@/lib/utils";
 import {ID, Permission, Role} from "appwrite";
 import {useAuth} from "@/components/contexts/AuthContext";
 import {UISheetFooterInForm} from "@/components/theme/UISheetFooterInForm";
@@ -164,6 +164,7 @@ export const AddRecord = ({open, onOpenChange, pageData}) => {
 							onBlur={handleBlur}
 							name="amount"
 							disabled={disabled}
+							currency={getCurrentCurrency(pageData?.currency)}
 						/>
 
 						{/* Date */}
@@ -203,6 +204,7 @@ export const AddRecord = ({open, onOpenChange, pageData}) => {
 							adding={adding}
 							disabled={disabled}
 							onOpenChange={onOpenChange}
+							labelAction={t('pages.records.add')}
 						/>
 					</Form>
 				)}
