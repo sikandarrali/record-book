@@ -21,7 +21,7 @@ import {UISheetFooterInForm} from "@/components/theme/UISheetFooterInForm";
 import {BookTypeToggleGroup} from "@/components/page/BookTypeToggleGroup";
 import FormLabel from "@/components/theme/FormLabel";
 import {SupportedCurrencies} from "@/lib/defaultData";
-import {DropdownSelectFieldWithLabel} from "@/components/theme/form/DropdownSelectFieldWithLabel";
+import {DropdownCurrencySelectFieldWithLabel} from "@/components/theme/form/DropdownCurrencySelectFieldWithLabel";
 
 export const AddPage = ({ open, onOpenChange, userOwnedGroups }) => {
 
@@ -195,7 +195,7 @@ export const AddPage = ({ open, onOpenChange, userOwnedGroups }) => {
 									/>
 
 									{/* Currency */}
-									<DropdownSelectFieldWithLabel
+									<DropdownCurrencySelectFieldWithLabel
 										label={t('labels.currency')}
 										data={SupportedCurrencies}
 										onSelect={(value)=> {

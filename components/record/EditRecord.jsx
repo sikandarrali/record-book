@@ -25,8 +25,9 @@ import {TextareaWithLabel} from "@/components/theme/form/TextareaWithLabel";
 import {InputFieldWithLabel} from "@/components/theme/form/InputFieldWithLabel";
 import {NumberInputFieldWithLabel} from "@/components/theme/form/NumberInputFieldWithLabel";
 import {UISheet} from "@/components/theme/UISheet";
+import {getCurrentCurrency} from "@/lib/utils";
 
-export const EditRecord = ({ open, onOpenChange, item }) => {
+export const EditRecord = ({ open, onOpenChange, item, currency }) => {
 	const isDesktop = useMediaQuery({
 		query: "(min-width: 1024px)",
 	});
@@ -136,6 +137,7 @@ export const EditRecord = ({ open, onOpenChange, item }) => {
 								name="amount"
 								disabled={disabled}
 								defaultValue={item.amount}
+								currency={getCurrentCurrency(currency)}
 							/>
 
 							{/* Date */}

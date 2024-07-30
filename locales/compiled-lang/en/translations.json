@@ -104,9 +104,11 @@
     "khaataBook": "Khaata Book",
     "max100characters": "max 100 characters",
     "max200characters": "max 200 characters",
+    "max10characters": "max 10 characters",
     "max20characters": "max 20 characters",
     "max300characters": "max 300 characters",
     "max50characters": "max 50 characters",
+    "max10numbers": "max 10 numbers",
     "name": "Name",
     "noGroups": "No Groups found, Add First",
     "notSharedWithGroup": "Not Shared with any Group",
@@ -182,6 +184,11 @@
       "searchPlaceholder": "Type to Search...",
       "totalEntries": "Total Entries: "
     }
+  },
+  "currencies": {
+    "pkr": "PKR - Pakistani Rupee",
+    "euro": "€ - Euro",
+    "usd": "$ - US Dollar"
   },
   "settings": {
     "fontSize": {

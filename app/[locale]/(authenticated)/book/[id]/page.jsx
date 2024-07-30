@@ -84,7 +84,6 @@ const Page = () => {
 					setItemsDefault(response.documents)
 				}
 			}catch (e){
-				console.log(e)
 				router.replace(HOMEPAGE_ROUTE)
 			}
 			finally {
@@ -251,17 +250,9 @@ const Page = () => {
 
 							{/* Total Amount */}
 							<motion.div className="flex flex-1 py-8 justify-center col-span-4 items-center relative select-none pointer-events-none" dir={'ltr'}>
-								<span className="text-sm font-semibold">
-									{getCurrentCurrency(pageData?.currency).symbol}
-								</span>
-								{totalSum < 0 ?
-									<Minus className={'text-primary w-5 h-5 stroke-[2.5] ml-2'}/>
-									:
-									<Plus className={'text-primary w-5 h-5 stroke-[2.5] ml-2'}/>
-								}
 								<UIText
 									weight={'bold'}
-									className="!text-primary"
+									className={cn(totalSum < 0 && "text-destructive")}
 									variant={'heading'}
 									text={
 										<FormattedCurrency

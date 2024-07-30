@@ -99,10 +99,7 @@ export const AuthProvider = ({ children }) => {
 			Cookies.remove('Next-Locale');
 			setLoading(false)
 			router.replace("/login");
-		}catch (e){
-			// console.log(e)
-			console.log('logout error:', e)
-		}
+		}catch (e){}
 		finally {
 			setLoading(false)
 			router.replace("/login");

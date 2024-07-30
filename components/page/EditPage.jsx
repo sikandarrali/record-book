@@ -36,7 +36,7 @@ import {DatePickerWithLabel} from "@/components/theme/form/DatePickerWithLabel";
 import {TextareaWithLabel} from "@/components/theme/form/TextareaWithLabel";
 import {UISheet} from "@/components/theme/UISheet";
 import {BookTypeToggleGroup} from "@/components/page/BookTypeToggleGroup";
-import {DropdownSelectFieldWithLabel} from "@/components/theme/form/DropdownSelectFieldWithLabel";
+import {DropdownCurrencySelectFieldWithLabel} from "@/components/theme/form/DropdownCurrencySelectFieldWithLabel";
 import {SupportedCurrencies} from "@/lib/defaultData";
 
 export const EditPage = ({ open, onOpenChange, pageData, setPageData, setGroup }) => {
@@ -266,7 +266,7 @@ export const EditPage = ({ open, onOpenChange, pageData, setPageData, setGroup }
 									/>
 
 									{/* Currency */}
-									<DropdownSelectFieldWithLabel
+									<DropdownCurrencySelectFieldWithLabel
 										label={t('labels.currency')}
 										data={SupportedCurrencies}
 										onSelect={(value)=> {
