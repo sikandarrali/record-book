@@ -7,9 +7,10 @@ import {useAuth} from "@/components/contexts/AuthContext";
 import {cva} from "class-variance-authority";
 import {NumericFormat} from "react-number-format";
 
-export const UINumberInput = ({className, variant, type, onChange, currency, ...props}) => {
+export const UINumberInput = ({className, variant, type, onChange, ...props}) => {
 
     const [localValue, setLocalValue] = useState("")
+    const inputRef = useRef(null)
     const {user} = useAuth()
     const prefs = user?.prefs
     const isUrdu = isStringUrdu(localValue)
@@ -61,12 +62,13 @@ export const UINumberInput = ({className, variant, type, onChange, currency, ...
     return (
         <NumericFormat
             allowNegative={false}
-            thousandSeparator={currency.thousandSeparator}
-            decimalSeparator={currency.decimalSeparator}
-            decimalScale={currency.decimalScale}
-            thousandsGroupStyle={currency.name === 'pkr' ? "lakh" : "thousand"}
+            thousandSeparator={","}
+            decimalSeparator={"."}
+            decimalScale={2}
             name="amount"
-            inputMode="numeric"
+            thousandsGroupStyle={'lakh'}
+            // inputMode="numeric"
+            inputMode="decimal"
             autoComplete="off"
             className={cn(
                 inputVariants({variant, className}),
