@@ -90,7 +90,7 @@ export const SingleRecord = ({ item, bookCurrency }) => {
 						<UIText
 							weight={'semibold'}
 							variant={'lg'}
-							className={cn(item.type==='expense' ? "text-destructive" : "text-primary")}
+							className={cn(item.type==='expense' && "text-destructive")}
 							text={
 								<FormattedCurrency
 									value={item.amount}

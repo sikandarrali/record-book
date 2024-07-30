@@ -58,9 +58,7 @@ export const EditFontSize = ({ open, onOpenChange }) => {
                 const response =  await account.updatePrefs(prefs)
                 toast.success(t('alertSuccess'), ToastOptions);
                 if(response){
-                    setTimeout(()=>{
-                        window.location.reload();
-                    }, 500)
+                    window.location.reload();
                 }
             }
             catch (e){
