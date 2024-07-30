@@ -4,6 +4,9 @@ All your records in one place. Say goodbye to your record diaries
 
 ## Changelog
 
+### 4.1.2
+- Removed Euro/USD thousand/decimal separators from Number Input 
+
 ### 4.1.1
 - Add missing translations
 
