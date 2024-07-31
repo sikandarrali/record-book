@@ -62,6 +62,7 @@ export const UITextInput = ({className, currency, variant, type, onChange, ...pr
         <input
             type={type}
             autoComplete="off"
+            autoCapitalize={"words"}
             className={cn(
                 inputVariants({variant, className}),
                 isUrdu ? 'font-urdu' : 'font-sans',
