@@ -4,6 +4,10 @@ All your records in one place. Say goodbye to your record diaries
 
 ## Changelog
 
+### 4.1.5
+- Add `autocapitalize="words"` to Text Input and Textarea
+- Change Color of Single Book in List to Primary
+
 ### 4.1.4
 - Fixed number input to allow decimal inputs
 

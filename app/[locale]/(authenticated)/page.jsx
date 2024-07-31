@@ -139,7 +139,7 @@ export default function Home() {
 								href={`/book/${event.$id}`}
 								className={'relative p-8 hover:bg-muted border cursor-pointer flex items-center justify-center shadow-sm rounded-lg text-center outline-none'}
 							>
-								<UIText variant={'heading'} className={'break-all'} text={event?.name} textOrientation={'center'} />
+								<UIText variant={'heading'} className={'break-all text-primary'} text={event?.name} textOrientation={'center'} />
 								{event.$permissions.some(permission => permission === `delete("user:${user.$id}")`) && <LockKeyhole className={'absolute left-2 top-2 w-5 h-5 text-primary'}/>}
 								{event.teamId && <Users2 className={'absolute right-2 top-2 w-5 h-5 text-primary'}/>}
 							</Link>
