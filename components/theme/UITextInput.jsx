@@ -6,7 +6,7 @@ import {useRef, useState} from "react";
 import {useAuth} from "@/components/contexts/AuthContext";
 import {cva} from "class-variance-authority";
 
-export const UITextInput = ({className, variant, type, onChange, ...props}) => {
+export const UITextInput = ({className, currency, variant, type, onChange, ...props}) => {
 
     const [localValue, setLocalValue] = useState("")
     const inputRef = useRef(null)
