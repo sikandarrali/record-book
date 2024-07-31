@@ -4,6 +4,8 @@ All your records in one place. Say goodbye to your record diaries
 
 ## Changelog
 
+### 4.1.4
+- Fixed number input to allow decimal inputs
 
 ### 4.1.3
 - Fixed number input to allow decimal inputs
