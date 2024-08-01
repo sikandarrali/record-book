@@ -81,7 +81,7 @@ export default function Page() {
 					key={"separator"}
 					className={''}
 				>
-					<Separator/>
+					{/*<Separator/>*/}
 				</motion.div>
 
 				<motion.div
