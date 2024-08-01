@@ -130,7 +130,7 @@ const Sidebar = ({ open, onOpenChange, isPWAInstalled }) => {
 								</div>
 							</div>
 
-							<div className="flex flex-col px-6 h-full lg:mt-10 gap-0.5">
+							<div className="flex flex-col px-6 mt-auto mb-6 lg:mt-10 gap-0.5">
 								<MenuItem
 									label={t('links.home')}
 									href={"/"}
@@ -162,9 +162,6 @@ const Sidebar = ({ open, onOpenChange, isPWAInstalled }) => {
 										<Users className={cn("w-[18px] h-[18px] rtl:mt-1", pathname === "/groups"  && "text-muted")} />
 									}
 								/>
-							</div>
-
-							<div className="mb-0 mx-2 px-4 flex flex-col gap-0.5">
 								<MenuItem
 									label={t('links.settings')}
 									href={"/settings"}

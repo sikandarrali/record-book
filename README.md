@@ -4,6 +4,9 @@ All your records in one place. Say goodbye to your record diaries
 
 ## Changelog
 
+### 5.0.2
+- UI changes
+
 ### 5.0.1
 - Add missing Translations
 
