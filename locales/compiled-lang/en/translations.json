@@ -1,7 +1,5 @@
 {
   "alerts": {
-    "added": "Added Successfully",
-    "deleted": "Deleted Successfully",
     "exception": "Unable to process your request",
     "noChanges": "Nothing to update",
     "updated": "Updated Successfully"
@@ -169,8 +167,7 @@
       "deletePage": "Delete Book",
       "deletePageText": "This will permanently delete",
       "editPage": "Edit Book",
-      "noBooks": "No Books Found, Add New",
-      "titleBooks": "Books"
+      "noBooks": "No Books Found, Add New"
     },
     "diaries": {
       "deletePageText": "This will permanently delete",
@@ -200,6 +197,23 @@
       "numOfItemsMatchingSearch": "Items found:",
       "searchPlaceholder": "Type to Search...",
       "totalEntries": "Total Entries: "
+    },
+    "home": {
+      "books": {
+        "p1": "Manage your Daily Expenses and All Monetary Transactions.",
+        "p2": "e.g. Roznamcha, Shadi Expenses etc.",
+        "title": "Books"
+      },
+      "diaries": {
+        "title": "Diaries",
+        "p1": "Manage your day-to-day Tasks.",
+        "p2": "e.g. To-do List, Task Planner etc."
+      },
+      "groups": {
+        "title": "Groups",
+        "p1": "Share your Books & Diaries Data with other users"
+      },
+      "welcome": "Welcome, "
     }
   },
   "currencies": {
