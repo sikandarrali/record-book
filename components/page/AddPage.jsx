@@ -75,6 +75,7 @@ export const AddPage = ({ open, onOpenChange, userOwnedGroups }) => {
 					toast.success(t("alerts.added"), ToastOptions);
 				}, function (error) {
 					toast.error(t('alerts.exception'), ToastOptions);
+					console.log(error)
 				});
 			}else{
 				const response = databases.createDocument(
@@ -88,6 +89,7 @@ export const AddPage = ({ open, onOpenChange, userOwnedGroups }) => {
 					toast.success(t("alerts.added"), ToastOptions);
 				}, function (error) {
 					toast.error(t('alerts.exception'), ToastOptions);
+					console.log(error)
 				});
 			}
 			onOpenChange(false);
@@ -96,6 +98,7 @@ export const AddPage = ({ open, onOpenChange, userOwnedGroups }) => {
 			scrollToTop()
 		} catch (error) {
 			toast.error(t('alerts.exception'), ToastOptions);
+			console.log(error)
 			setAdding(false);
 			setDisabled(false);
 		} finally {

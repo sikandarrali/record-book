@@ -4,6 +4,9 @@ All your records in one place. Say goodbye to your record diaries
 
 ## Changelog
 
+### 5.0.3
+- Missing translations, fix navbar ui, add environment variables to vercel. 
+
 ### 5.0.2
 - UI changes
 
