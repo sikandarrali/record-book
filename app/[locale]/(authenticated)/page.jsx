@@ -16,13 +16,12 @@ export default function Page() {
 	return (
 		<PageContainer>
 
+			<div className={'-mt-5 mb-8 px-2'}>
+				<UIText text={t('pages.home.welcome')}/>
+				<UIText text={user.name} weight={'semibold'}/>
+			</div>
+
 			<div className={'flex flex-col w-full gap-10'}>
-
-				<div>
-					<UIText text={t('pages.home.welcome')}/>
-					<UIText text={user.name} weight={'semibold'}/>
-				</div>
-
 				<motion.div
 					initial={{ opacity: 0, y: 10 }}
 					animate={{
@@ -71,18 +70,18 @@ export default function Page() {
 					</Link>
 				</motion.div>
 
-				<motion.div
-					initial={{ opacity: 0, y: 10 }}
-					animate={{
-						opacity: 1,
-						y: 0,
-						transition: { delay: 0.9, ease: "easeInOut" },
-					}}
-					key={"separator"}
-					className={''}
-				>
-					{/*<Separator/>*/}
-				</motion.div>
+				{/*<motion.div*/}
+				{/*	initial={{ opacity: 0, y: 10 }}*/}
+				{/*	animate={{*/}
+				{/*		opacity: 1,*/}
+				{/*		y: 0,*/}
+				{/*		transition: { delay: 0.9, ease: "easeInOut" },*/}
+				{/*	}}*/}
+				{/*	key={"separator"}*/}
+				{/*	className={''}*/}
+				{/*>*/}
+				{/*	<Separator/>*/}
+				{/*</motion.div>*/}
 
 				<motion.div
 					initial={{ opacity: 0, y: 10 }}
