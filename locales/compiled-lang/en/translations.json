@@ -167,7 +167,8 @@
       "deletePage": "Delete Book",
       "deletePageText": "This will permanently delete",
       "editPage": "Edit Book",
-      "noBooks": "No Books Found, Add New"
+      "noBooks": "No Books Found, Add New",
+      "titleBooks": "Books"
     },
     "diaries": {
       "deletePageText": "This will permanently delete",

@@ -143,7 +143,7 @@ const Sidebar = ({ open, onOpenChange, isPWAInstalled }) => {
 									label={t('links.books')}
 									href={"/books"}
 									icon={
-										<NotebookPen className={cn("w-[18px] h-[18px] rtl:mt-1", pathname === "/"  && "text-muted")} />
+										<NotebookPen className={cn("w-[18px] h-[18px] rtl:mt-1", pathname === "/books"  && "text-muted")} />
 									}
 								/>
 
@@ -151,7 +151,7 @@ const Sidebar = ({ open, onOpenChange, isPWAInstalled }) => {
 									label={t('links.diaries')}
 									href={"/diaries"}
 									icon={
-										<CircleCheckBig className={cn("w-[18px] h-[18px] rtl:mt-1", pathname === "/"  && "text-muted")} />
+										<CircleCheckBig className={cn("w-[18px] h-[18px] rtl:mt-1", pathname === "/diaries"  && "text-muted")} />
 									}
 								/>
 
