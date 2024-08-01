@@ -9,27 +9,24 @@ import {ID, Permission, Role} from "appwrite";
 import {useAuth} from "@/components/contexts/AuthContext";
 import UIText from "@/components/theme/UIText";
 import {useI18n} from "@/locales/client";
-import {COLLECTION_ID_BOOKS, DATABASE_ID, databases} from "@/components/appwrite/appwrite";
-import {PageSchema} from "@/lib/schemas/pageSchema";
+import {COLLECTION_ID_DIARIES, DATABASE_ID, databases} from "@/components/appwrite/appwrite";
 import * as React from "react";
 import {InputFieldWithLabel} from "@/components/theme/form/InputFieldWithLabel";
-import {DatePickerWithLabel} from "@/components/theme/form/DatePickerWithLabel";
 import {TextareaWithLabel} from "@/components/theme/form/TextareaWithLabel";
 import {DropdownGroupSelectFieldWithLabel} from "@/components/theme/form/DropdownGroupSelectFieldWithLabel";
 import {UISheet} from "@/components/theme/UISheet";
 import {UISheetFooterInForm} from "@/components/theme/UISheetFooterInForm";
-import {BookTypeToggleGroup} from "@/components/page/BookTypeToggleGroup";
-import FormLabel from "@/components/theme/FormLabel";
-import {SupportedCurrencies} from "@/lib/defaultData";
-import {DropdownCurrencySelectFieldWithLabel} from "@/components/theme/form/DropdownCurrencySelectFieldWithLabel";
+import {useData} from "@/components/contexts/DataContext";
+import {DiarySchema} from "@/lib/schemas/diarySchema";
 
-export const AddPage = ({ open, onOpenChange, userOwnedGroups }) => {
+export const AddDiary = ({ open, onOpenChange }) => {
 
 	const [adding, setAdding] = useState(false);
 	const [disabled, setDisabled] = useState(false);
 	const {user} = useAuth()
 	const [addEventDetails, setAddEventDetails] = useState(false)
 	const t = useI18n()
+	const {userOwnedGroups} = useData()
 
 
 	const onAdd = async (values) => {
@@ -52,42 +49,40 @@ export const AddPage = ({ open, onOpenChange, userOwnedGroups }) => {
 		const tempCreatedBy = [user?.name, user?.email];
 
 		try {
-			const eventData = {
+			const diaryData = {
 				name: values.name.trim(),
-				date: values.date,
-				type: values.type,
-				details: values.details.trim(),
 				teamId: values.teamId,
 				createdBy: tempCreatedBy,
 				updatedBy: [],
-				currency: values.currency,
 			};
 
 			if(values.teamId){
 				const response = databases.createDocument(
 					DATABASE_ID,
-					COLLECTION_ID_BOOKS,
+					COLLECTION_ID_DIARIES,
 					ID.unique(),
-					eventData,
+					diaryData,
 					teamPermissions
 				);
 				response.then(function (response) {
 					toast.success(t("alerts.added"), ToastOptions);
 				}, function (error) {
 					toast.error(t('alerts.exception'), ToastOptions);
+					console.log(error)
 				});
 			}else{
 				const response = databases.createDocument(
 					DATABASE_ID,
-					COLLECTION_ID_BOOKS,
+					COLLECTION_ID_DIARIES,
 					ID.unique(),
-					eventData,
+					diaryData,
 					userPermissions
 				);
 				response.then(function (response) {
 					toast.success(t("alerts.added"), ToastOptions);
 				}, function (error) {
 					toast.error(t('alerts.exception'), ToastOptions);
+					console.log(error)
 				});
 			}
 			onOpenChange(false);
@@ -96,6 +91,7 @@ export const AddPage = ({ open, onOpenChange, userOwnedGroups }) => {
 			scrollToTop()
 		} catch (error) {
 			toast.error(t('alerts.exception'), ToastOptions);
+			console.log(error)
 			setAdding(false);
 			setDisabled(false);
 		} finally {
@@ -112,22 +108,19 @@ export const AddPage = ({ open, onOpenChange, userOwnedGroups }) => {
 			<UIText
 				variant={'heading'}
 				className="text-primary mb-4"
-				text={t('pages.books.add')}
+				text={t('pages.diaries.add')}
 			/>
 
 			<div className="flex flex-col gap-5 w-full items-center justify-center py-6 lg:py-10">
 				<Formik
 					initialValues={{
 						name: "",
-						date: "",
 						details: "",
-						type: "khaataBook",
 						teamId: "",
 						createdBy: "",
 						updatedBy: "",
-						currency: "pkr"
 					}}
-					validationSchema={PageSchema}
+					validationSchema={DiarySchema}
 					onSubmit={(values) => {
 						onAdd(values);
 					}}
@@ -142,27 +135,6 @@ export const AddPage = ({ open, onOpenChange, userOwnedGroups }) => {
 					  }) => (
 						<Form className="flex flex-col w-full space-y-8">
 
-							{/* Book Type */}
-							<div className={'flex flex-col'}>
-								<FormLabel title={t('labels.bookType')}/>
-								<BookTypeToggleGroup value={values.type} setFieldValue={setFieldValue} />
-							</div>
-
-							{/* Select Group */}
-							<DropdownGroupSelectFieldWithLabel
-								label={t('labels.group')}
-								data={userOwnedGroups}
-								onSelect={(value)=> {
-									setFieldValue('teamId', value)
-								}}
-								onClear={()=>{
-									setFieldValue("teamId", "");
-								}}
-								isOwner={true}
-								fieldValue={values.teamId}
-							/>
-
-
 							{/* Name */}
 							<InputFieldWithLabel
 								label={t('labels.name')}
@@ -174,51 +146,21 @@ export const AddPage = ({ open, onOpenChange, userOwnedGroups }) => {
 								disabled={disabled}
 							/>
 
-							<div
-								className={'flex items-center rtl:items-start justify-center gap-1.5 rtl:gap-3 cursor-pointer text-primary dark:text-foreground'}
-								onClick={()=> setAddEventDetails(!addEventDetails)}
-							>
-								<UIText variant={'sm'} className={'font-medium'} text={t('labels.addMoreDetails')}/>
-								{addEventDetails ? <ChevronUp className={'w-6 h-6 stroke-[3] rtl:mt-2 text-primary'}/> : <ChevronDown className={'w-6 h-6 stroke-[3] rtl:mt-2 text-primary'}/>}
-							</div>
 
-							{addEventDetails &&
-								<>
-									{/* Date */}
-									<DatePickerWithLabel
-										label={t('labels.date')}
-										setFieldValue={setFieldValue}
-										name={'date'}
-										disabled={disabled}
-										fieldValue={values.date}
-										onClear={()=> setFieldValue('date', '')}
-									/>
+							{/* Select Group */}
+							<DropdownGroupSelectFieldWithLabel
+								label={t('labels.shareWithGroup')}
+								data={userOwnedGroups}
+								onSelect={(value)=> {
+									setFieldValue('teamId', value)
+								}}
+								onClear={()=>{
+									setFieldValue("teamId", "");
+								}}
+								isOwner={true}
+								fieldValue={values.teamId}
+							/>
 
-									{/* Currency */}
-									<DropdownCurrencySelectFieldWithLabel
-										label={t('labels.currency')}
-										data={SupportedCurrencies}
-										onSelect={(value)=> {
-											setFieldValue('currency', value)
-										}}
-										onClear={()=>{
-											setFieldValue("currency", "");
-										}}
-										fieldValue={values.currency}
-									/>
-
-									{/* Details */}
-									<TextareaWithLabel
-										label={t('labels.details')}
-										errors={errors.details}
-										touched={touched.details}
-										onChange={handleChange}
-										onBlur={handleBlur}
-										name="details"
-										disabled={disabled}
-									/>
-								</>
-							}
 
 							<div className={'mt-auto'}/>
 							<UISheetFooterInForm
@@ -236,4 +178,4 @@ export const AddPage = ({ open, onOpenChange, userOwnedGroups }) => {
 	);
 };
 
-export default  AddPage
+export default  AddDiary

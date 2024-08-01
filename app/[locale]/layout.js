@@ -92,7 +92,6 @@ export default async function RootLayout({ children, params }) {
 				fontSans.variable,
 				fontUrdu.variable,
 				fontUrduHeading.variable,
-				// "bg-muted"
 			)}
 		>
 

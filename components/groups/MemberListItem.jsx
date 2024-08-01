@@ -1,5 +1,11 @@
 import {useState} from "react";
-import {teams} from "@/components/appwrite/appwrite";
+import {
+    COLLECTION_ID_BOOKS_RECORDS,
+    DATABASE_ID,
+    databases,
+    PARENT_BOOK_ID_FIELD_NAME,
+    teams
+} from "@/components/appwrite/appwrite";
 import {toast} from "react-toastify";
 import {ToastOptions} from "@/lib/ToastOptions";
 import {Trash2} from "lucide-react";
@@ -14,9 +20,11 @@ import {
 import {Button} from "@/components/ui/button";
 import {useScopedI18n} from "@/locales/client";
 import UIText from "@/components/theme/UIText";
+import {db} from "@/components/appwrite/database";
+import {Permission, Query, Role} from "appwrite";
 
 
-export const MemberListItem = ({data, teamID, setUsersInGroup, groupName, isGroupOwner}) =>{
+export const MemberListItem = ({data, eventInThisGroup, teamID, setUsersInGroup, groupName, isGroupOwner}) =>{
 
     const isOwner =  data.roles.includes('owner');
     const isMember = !isOwner
@@ -31,9 +39,58 @@ export const MemberListItem = ({data, teamID, setUsersInGroup, groupName, isGrou
             data.$id // membershipId
         );
         if(result){
+            updateRecordsPermissions()
             toast.success(t('alertGroupMemberRemoved'), ToastOptions);
             setUsersInGroup(prev=> prev.filter((item)=> item.$id !== data.$id))
         }
+    }
+
+    const updateRecordsPermissions =  async () =>{
+
+        const eventIDs = eventInThisGroup.reduce((acc, item) => {
+            acc.push(item.$id);
+            return acc;
+        }, []);
+
+        const getItemsForIDs = async (IDs) => {
+            const allItems = [];
+
+            for (const id of IDs) {
+                try {
+                    const items = await db.records.list([
+                        Query.equal(PARENT_BOOK_ID_FIELD_NAME, id),
+                    ]);
+
+                    const docs = items.documents
+
+                    allItems.push([...docs]);
+                } catch (error) {
+                    // console.error(`Error fetching items for ID ${id}:`, error);
+                }
+            }
+
+            return allItems.flat();
+        };
+
+        try {
+            const items = await getItemsForIDs(eventIDs);
+
+            for (const item of items) {
+
+                await databases.updateDocument(DATABASE_ID, COLLECTION_ID_BOOKS_RECORDS, item.$id, {}, [
+                    Permission.read(Role.team(teamID, "member")),
+                    Permission.update(Role.team(teamID, "member")),
+                    Permission.read(Role.user(user.$id)),
+                    Permission.update(Role.user(user.$id)),
+                    Permission.delete(Role.user(user.$id)),
+                ])
+            }
+            // Proceed with updating records permissions using the fetched items
+        } catch (error) {
+            console.error('Error updating records permissions:', error);
+        }
+
+
     }
 
     return(

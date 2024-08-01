@@ -12,13 +12,13 @@ import {db} from "@/components/appwrite/database";
 import {Query} from "appwrite";
 import {
 	client,
-	COLLECTION_ID_BOOKS_RECORDS,
-	COLLECTION_ID_BOOKS,
+	COLLECTION_ID_DIARIES_RECORDS,
+	COLLECTION_ID_DIARIES,
 	DATABASE_ID,
-	databases, PARENT_BOOK_ID_FIELD_NAME
+	databases, PARENT_DIARY_ID_FIELD_NAME
 } from "@/components/appwrite/appwrite";
 import {cn, getCurrentCurrency, SortItemsByDateAndCreatedAt} from "@/lib/utils";
-import {ReloadIcon} from "@radix-ui/react-icons";
+import {CheckIcon, ReloadIcon} from "@radix-ui/react-icons";
 import {useI18n, useScopedI18n} from "@/locales/client";
 import {useParams, useRouter} from "next/navigation";
 import PageContainer from "@/components/providers/PageContainer";
@@ -32,6 +32,12 @@ import {PopupPageCreatedByYou} from "@/components/theme/PopupPageCreatedByYou";
 import {PopupPageSharedWithGroup} from "@/components/theme/PopupPageSharedWithGroup";
 import {BookType} from "@/components/page/BookType";
 import {FormattedCurrency} from "@/components/theme/FormattedCurrency";
+import {AddDiaryRecord} from "@/components/diaryRecord/AddDiaryRecord";
+import {SingleDiaryRecord} from "@/components/diaryRecord/SingleDiaryRecord";
+import DiaryInfo from "@/components/diary/DiaryInfo";
+import {Badge} from "@/components/ui/badge";
+import {toast} from "react-toastify";
+import {ToastOptions} from "@/lib/ToastOptions";
 
 const data = [
 	{id: 1, name: 'a', date:'2024-07-29T21:00:07.364Z', createdAt: '2024-07-28T21:00:07.364Z'},
@@ -49,7 +55,7 @@ const Page = () => {
 
 	const [openAddModal, setOpenAddModal] = useState(false);
 	const [totalSum, setTotalSum] = useState(0);
-	const [pageData, setPageData] = useState(null)
+	const [diaryData, setDiaryData] = useState(null)
 
 	const [items, setItems] = useState([])
 	const [itemsDefault, setItemsDefault] = useState([])
@@ -66,32 +72,32 @@ const Page = () => {
 
 	// get event & items
 	useLayoutEffect(() => {
-		const getEventItems = async () => {
+		const getDiaryItems = async () => {
 			try{
 				const getEvent = await databases.getDocument(
 					DATABASE_ID,
-					COLLECTION_ID_BOOKS,
+					COLLECTION_ID_DIARIES,
 					params.id
 				);
 				if(getEvent){
-					setPageData(getEvent)
-					const response = await db.records.list([
-						Query.equal(PARENT_BOOK_ID_FIELD_NAME, params.id),
-						Query.orderDesc("$createdAt"),
-						Query.orderDesc("date"),
+					setDiaryData(getEvent)
+					const response = await db.diariesRecords.list([
+						Query.equal(PARENT_DIARY_ID_FIELD_NAME, params.id),
+						Query.orderDesc("$createdAt")
 					]);
 					setItems(response.documents)
 					setItemsDefault(response.documents)
 				}
 			}catch (e){
-				router.replace(HOMEPAGE_ROUTE)
+				console.log(e)
+				// router.replace(HOMEPAGE_ROUTE)
 			}
 			finally {
 				setLocalLoading(false)
 			}
 		}
 		if(user){
-			getEventItems();
+			getDiaryItems();
 		}else{
 			router.replace('/login')
 		}
@@ -99,18 +105,18 @@ const Page = () => {
 	//
 	// appwrite realtime functionality
 	useEffect(() => {
-		const unsubscribe = client.subscribe(`databases.${DATABASE_ID}.collections.${COLLECTION_ID_BOOKS_RECORDS}.documents`, (response) => {
+		const unsubscribe = client.subscribe(`databases.${DATABASE_ID}.collections.${COLLECTION_ID_DIARIES_RECORDS}.documents`, (response) => {
 
 			if(response.events.includes("databases.*.collections.*.documents.*.create")){
-				if(response.payload[PARENT_BOOK_ID_FIELD_NAME] === params.id){
+				if(response.payload[PARENT_DIARY_ID_FIELD_NAME] === params.id){
 					// const sorted = SortItemsByDateAndCreatedAt()
-					setItems(prev=> SortItemsByDateAndCreatedAt([response.payload, ...prev]))
-					setItemsDefault(prev=> SortItemsByDateAndCreatedAt([response.payload, ...prev]))
+					setItems(prev=> [response.payload, ...prev])
+					setItemsDefault(prev=> [response.payload, ...prev])
 				}
 			}
 			if(response.events.includes("databases.*.collections.*.documents.*.delete")){
-				setItems(prev=> SortItemsByDateAndCreatedAt(prev.filter(item=> item.$id !== response.payload.$id)))
-				setItemsDefault(prev=> SortItemsByDateAndCreatedAt(prev.filter(item=> item.$id !== response.payload.$id)))
+				setItems(prev=> prev.filter(item=> item.$id !== response.payload.$id))
+				setItemsDefault(prev=> prev.filter(item=> item.$id !== response.payload.$id))
 			}
 			if (response.events.includes("databases.*.collections.*.documents.*.update")) {
 				setItems(prev => {
@@ -120,9 +126,9 @@ const Page = () => {
 						// Create a new array with the updated item
 						const updatedItems = [...prev];
 						updatedItems[index] = response.payload; // Assuming response.payload contains the updated document data
-						return SortItemsByDateAndCreatedAt(updatedItems);
+						return updatedItems;
 					}
-					return SortItemsByDateAndCreatedAt([...prev, response.payload]);
+					return [...prev, response.payload];
 
 				});
 				setItemsDefault(prev => {
@@ -132,9 +138,9 @@ const Page = () => {
 						// Create a new array with the updated item
 						const updatedItemsDefault = [...prev];
 						updatedItemsDefault[index] = response.payload; // Assuming response.payload contains the updated document data
-						return SortItemsByDateAndCreatedAt(updatedItemsDefault);
+						return updatedItemsDefault;
 					}
-					return SortItemsByDateAndCreatedAt([...prev, response.payload]);
+					return [...prev, response.payload];
 
 				});
 			}
@@ -143,17 +149,6 @@ const Page = () => {
 		return ()=> unsubscribe()
 	}, []);
 
-	useEffect(() => {
-		setTotalSum(
-			itemsDefault?.reduce((acc, item) => {
-				return item.type === 'income'
-					? acc + item.amount
-					: acc - item.amount;
-			}, 0)
-		);
-	}, [itemsDefault]);
-	//
-	//
 	// Function to load more items
 	const loadMorePosts = useCallback(() => {
 		if (loadingItems) return; // If already loadingItems, don't load more
@@ -183,28 +178,25 @@ const Page = () => {
 		setLoadingItems(false)
 	}, [itemsDefault]);
 
+	const onMarkAsDone = async (itemID) => {
 
-	const onSearch = (userValue) => {
-		setSearchValue(userValue);
-		if (userValue !== "") {
-			const temp = itemsDefault?.filter((item) =>
-				item.name.toLowerCase().includes(userValue.toLowerCase())
-			);
-			if(temp.length === 0){
-				setSearchResultsMessage('pages.records.noSearchItemsFound')
-			}else{
-				setSearchResultsMessage('')
-			}
-			setVisibleItems(temp);
-		}else{
-			resetSearch()
+		const getItem = await databases.getDocument(DATABASE_ID, COLLECTION_ID_DIARIES_RECORDS, itemID);
+
+		const tempUpdatedBy = [user?.name, user?.email];
+		const diaryItems = {
+			name: getItem.name,
+			markedAsDone: !getItem.markedAsDone,
+			createdBy: getItem.createdBy,
+			updatedBy: tempUpdatedBy
+		};
+
+		try {
+			await db.diariesRecords.update(diaryItems, itemID);
+		} catch (error) {
+			// toast.error(t('alerts.exception'), ToastOptions);
 		}
 	};
-	const resetSearch = () =>{
-		setSearchValue('')
-		setHasMoreItems(true)
-		setVisibleItems(itemsDefault.slice(0, itemsPerPage))
-	}
+
 
 	return (
 		<PageContainer noPadding>
@@ -221,135 +213,62 @@ const Page = () => {
 						<div className={'relative flex flex-col flex-1'}>
 
 							{/* Badges */}
-							<div className={'flex items-center gap-2 justify-end -mt-6 mb-4'} dir={"ltr"}>
-								{pageData?.$permissions.some(permission => permission === `delete("user:${user.$id}")`) &&
+							<div className={'flex items-center relative gap-2 justify-end -mt-6 mb-4'} dir={"ltr"}>
+								{diaryData?.$permissions.some(permission => permission === `delete("user:${user.$id}")`) &&
 									<PopupPageCreatedByYou side={'left'} align={'start'} className={'max-w-56 bg-muted'}/>
 								}
-								{pageData?.teamId &&
-									<PopupPageSharedWithGroup teamId={pageData?.teamId} side={'left'} align={'start'} className={'flex bg-muted flex-col gap-2'}/>
+
+								{/* Diary Badge */}
+								<Badge className={'absolute position-center-horizontally'}><UIText text={t("pages.diaries.titleDiary")} variant={'xs'}/></Badge>
+
+								{diaryData?.teamId &&
+									<PopupPageSharedWithGroup teamId={diaryData?.teamId} side={'left'} align={'start'} className={'flex bg-muted flex-col gap-2'}/>
 								}
 							</div>
 
 							{/* Book Type */}
-							<div className={'absolute position-center-horizontally -top-5'}><BookType type={pageData?.type}/></div>
+							<div className={'absolute position-center-horizontally -top-5'}><BookType type={diaryData?.type}/></div>
 
 							{/* Name & Info Icon */}
-							<div className="flex gap-6 pb-4 pt-2.5 justify-between items-center w-full border-b border-border relative" ref={headerRef}>
+							<div className="flex gap-6 my-8 pb-4 pt-2.5 justify-between items-center w-full border-b border-border relative" ref={headerRef}>
 
 								<div className={'flex items-center justify-center text-center break-all gap-4 relative'}>
-									<UIText variant={"heading"} text={pageData?.name} className={'self-center !text-primary'} />
+									<UIText variant={"heading"} text={diaryData?.name} className={'self-center !text-primary'} />
 								</div>
 
-								<PageInfo
-									pageData={pageData}
-									setPageData={setPageData}
-									sum={totalSum}
+								<DiaryInfo
+									diaryData={diaryData}
+									setDiaryData={setDiaryData}
 								/>
 
 							</div>
 
-							{/* Total Amount */}
-							<motion.div className="flex flex-1 py-8 justify-center col-span-4 items-center relative select-none pointer-events-none" dir={'ltr'}>
-								<UIText
-									weight={'bold'}
-									className={cn(totalSum < 0 && "text-destructive")}
-									variant={'heading'}
-									text={
-										<FormattedCurrency
-											value={totalSum}
-											currency={getCurrentCurrency(pageData?.currency)}
-										/>
-									}
-								/>
-							</motion.div>
-
 							<div className="flex flex-col pb-44">
-
-								{/* search */}
-								<div className="relative h-14 mb-4">
-									<UITextInput
-										placeholder={t('pages.records.searchPlaceholder')}
-										value={searchValue}
-										onChange={(e) => onSearch(e.target.value)}
-									/>
-
-									{searchValue !== "" && (
-										<XIcon
-											className="w-4 h-4 !text-primary absolute ltr:right-0 -mt-1 rtl:left-0 top-1/2 -translate-y-1/2 ltr:mr-3 rtl:ml-3 cursor-pointer hover:scale-125 duration-300"
-											onClick={() => resetSearch()}
-										/>
-									)}
-
-									{searchValue !== '' && searchResultsMessage !== '' && (
-										<div className="flex flex-col justify-center items-center gap-10 px-6 mt-20 ">
-											<UIText variant={'heading'} weight={'medium'} className={'!text-destructive'} text={t(searchResultsMessage)}/>
-										</div>
-									)}
-								</div>
-
-								{/* Number of Records & Search Result Items */}
-								<div className={cn(
-									'py-1.5 flex items-center justify-center px-6 gap-2 text-muted-foreground',
-									(user?.prefs?.fontSize === "lg" || user?.prefs?.fontSize === "xl")  && "!my-5"
-								)}>
-									{searchValue === "" ?
-										<>
-											<UIText text={t('pages.records.totalEntries')} weight={'medium'} />
-											<UIText variant={'heading'} weight={'bold'} className={'!text-primary rtl:-mt-1'} text={items.length}/>
-										</>
-										:
-										<>
-											<UIText text={t('pages.records.numOfItemsMatchingSearch')} weight={'medium'} />
-											<UIText variant={'heading'} weight={'bold'} className={'!text-primary rtl:-mt-1'} text={visibleItems.length}/>
-										</>
-									}
-								</div>
 
 								<div className="flex flex-col overflow-y-auto -mx-8">
 
 									{/* Records List */}
-									{SortItemsByDateAndCreatedAt(visibleItems).map((item, i) => (
-										<motion.div key={item.$id}>
-											<SingleRecord item={item} bookCurrency={pageData?.currency} />
-										</motion.div>
-									))}
-
-									{/* Load More/Loaded Buttons & Loading/All Items Loaded Message */}
-									{searchValue === "" && items.length > 0 &&
-										<div className={'flex flex-col w-full justify-center items-center mt-8 !border-t-0'}>
-											{!hasMoreItems &&
-												<UIText
-													text={t('pages.records.allItemsShown', { count: <span className={'!text-primary px-2 font-sans text-2xl ltr:-mt-1 rlt:mt-1 font-bold'}>{items.length}</span> })}
-													className="mt-4 text-muted-foreground text-center flex items-center"
-													weight={'medium'}
-												/>
-											}
-
-											{loadingItems ? (
-													<Button
-														disabled={loadingItems}
-														onClick={loadMorePosts}
-														variant={'outline'}
-														className={'w-40 rtl:w-60 gap-2 rtl:py-3'}
-														dir={'ltr'}
-													>
-														<ReloadIcon className="h-4 w-4 animate-spin" />
-														<UIText variant={'button'} text={t('buttons.btnLoading')}/>
-													</Button>
-												) :
-												hasMoreItems && items.length > itemsPerPage && (
-													<Button
-														onClick={loadMorePosts}
-														variant={'secondary'}
-														className={'w-40 rtl:w-60 rtl:py-3'}
-													>
-														<UIText variant={'button'} text={t('buttons.btnLoadMore')}/>
-													</Button>
-												)
-											}
+									{visibleItems?.length === 0 ?
+										<div className={'px-8 text-center pt-10'}>
+											<UIText text={t('pages.diaries.noDiariesRecords')} variant={'lg'}/>
 										</div>
+									:
+										visibleItems.map((item, i) => (
+											<motion.div key={item.$id} className={'flex group items-center ltr:pl-8 rtl:pr-8 gap-4'}>
+												<div className={'cursor-pointer p-2 flex items-center justify-center shrink-0'} onClick={()=> onMarkAsDone(item.$id)}>
+													<div
+														className={cn(
+															"border-2 border-border flex items-center justify-center rounded-full w-10 h-10 shrink-0 cursor-pointer",
+															item.markedAsDone && "bg-primary border-primary"
+														)}
+													>
+														{item.markedAsDone && <CheckIcon className={'text-primary-foreground w-7 h-7 stroke-[2.5]'}/>}
+													</div>
+												</div>
+												<SingleDiaryRecord item={item}/>
+											</motion.div>
+										))
 									}
-
 								</div>
 							</div>
 							{/*</Suspense>*/}
@@ -359,7 +278,7 @@ const Page = () => {
 			</AnimatePresence>
 			<div className={'relative'}>
 
-				{/* Add Record Button */}
+				{/* Add Record Button*/}
 				<div className={'fixed bottom-10 position-center-horizontally max-w-lg z-20 flex items-center justify-center px-6 left-0 w-full'}>
 					<Button
 						onClick={() => setOpenAddModal(true)}
@@ -368,6 +287,8 @@ const Page = () => {
 						<UIText variant={'heading'} text={t('pages.records.add')}/>
 					</Button>
 				</div>
+
+				{/* Add Record Button Round*/}
 				{/*<div*/}
 				{/*	className="w-[4.5rem] h-[4.5rem] fixed bottom-16 left-1/2 -translate-x-1/2 shadow-lg flex items-center justify-center rounded-full bg-primary text-primary-foreground cursor-pointer"*/}
 				{/*	onClick={() => {*/}
@@ -379,11 +300,10 @@ const Page = () => {
 				{/*>*/}
 				{/*	<Plus className="w-10 h-10" />*/}
 				{/*</div>*/}
-
-				<AddRecord
+				<AddDiaryRecord
 					open={openAddModal}
 					onOpenChange={setOpenAddModal}
-					pageData={pageData}
+					diaryData={diaryData}
 				/>
 
 				{/* Scroll to Top Button */}

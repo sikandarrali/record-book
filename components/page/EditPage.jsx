@@ -19,10 +19,10 @@ import {useI18n} from "@/locales/client";
 import {Label} from "@/components/ui/label";
 import UIText from "@/components/theme/UIText";
 import {
-	COLLECTION_ID_PAGES,
+	COLLECTION_ID_BOOKS,
 	DATABASE_ID,
 	databases,
-	PARENT_FIELD_IN_SINGLE_RECORD
+	PARENT_BOOK_ID_FIELD_NAME
 } from "@/components/appwrite/appwrite";
 import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar"
@@ -58,7 +58,7 @@ export const EditPage = ({ open, onOpenChange, pageData, setPageData, setGroup }
 
 		const getItems = await db.records.list([
 			Query.orderDesc("$createdAt"),
-			Query.equal(PARENT_FIELD_IN_SINGLE_RECORD, pageData?.$id)
+			Query.equal(PARENT_BOOK_ID_FIELD_NAME, pageData?.$id)
 		]);
 
 		for (const item of getItems.documents) {
@@ -67,9 +67,11 @@ export const EditPage = ({ open, onOpenChange, pageData, setPageData, setGroup }
 					name: item?.name,
 					details: item?.details,
 					type: item?.type,
-					[PARENT_FIELD_IN_SINGLE_RECORD]: item?.pageId,
+					[PARENT_BOOK_ID_FIELD_NAME]: item?.pageId,
 					amount: item?.amount,
-					date: item?.date
+					date: item?.date,
+					createdBy: item?.createdBy,
+					updatedBy: item?.updatedBy,
 				}
 
 				await db.records.update(tempItem, item.$id, [
@@ -85,11 +87,11 @@ export const EditPage = ({ open, onOpenChange, pageData, setPageData, setGroup }
 					name: item?.name,
 					details: item?.details,
 					type: item?.type,
-					[PARENT_FIELD_IN_SINGLE_RECORD]: item?.pageId,
+					[PARENT_BOOK_ID_FIELD_NAME]: item?.pageId,
 					amount: item?.amount,
 					date: item?.date,
-					addedBy: item.addedBy,
-					updatedBy: tempUpdatedBy
+					createdBy: item?.createdBy,
+					updatedBy: item?.updatedBy,
 				}
 				await db.records.update(tempItem, item.$id, [
 					Permission.read(Role.user(user.$id)),
@@ -124,7 +126,7 @@ export const EditPage = ({ open, onOpenChange, pageData, setPageData, setGroup }
 				if(values.teamId){
 					result = await databases.updateDocument(
 						DATABASE_ID,
-						COLLECTION_ID_PAGES,
+						COLLECTION_ID_BOOKS,
 						pageData?.$id,
 						pageDataValues,
 						[
@@ -138,7 +140,7 @@ export const EditPage = ({ open, onOpenChange, pageData, setPageData, setGroup }
 				}else{
 					result = await databases.updateDocument(
 						DATABASE_ID,
-						COLLECTION_ID_PAGES,
+						COLLECTION_ID_BOOKS,
 						pageData?.$id,
 						pageDataValues,
 						[
@@ -155,7 +157,7 @@ export const EditPage = ({ open, onOpenChange, pageData, setPageData, setGroup }
 			}else{
 				const result = await databases.updateDocument(
 					DATABASE_ID,
-					COLLECTION_ID_PAGES,
+					COLLECTION_ID_BOOKS,
 					pageData?.$id,
 					pageDataValues
 				);
@@ -185,7 +187,7 @@ export const EditPage = ({ open, onOpenChange, pageData, setPageData, setGroup }
 			<UIText
 				variant={'heading'}
 				className="text-primary mb-4"
-				text={t('pages.home.editPage')}
+				text={t('pages.books.editPage')}
 			/>
 
 			<div className="flex flex-col gap-5 w-full items-center justify-center py-6 lg:py-10">

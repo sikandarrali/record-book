@@ -18,7 +18,7 @@ import {UISheetFooterInForm} from "@/components/theme/UISheetFooterInForm";
 import {useI18n} from "@/locales/client";
 import {UITextInput} from "@/components/theme/UITextInput";
 import {UITextArea} from "@/components/theme/UITextArea";
-import {COLLECTION_ID_BOOKS_RECORDS, DATABASE_ID, databases} from "@/components/appwrite/appwrite";
+import {COLLECTION_ID_DIARIES_RECORDS, DATABASE_ID, databases} from "@/components/appwrite/appwrite";
 import {UINumberInput} from "@/components/theme/UINumberInput";
 import {RecordSchema} from "@/lib/schemas/RecordSchema";
 import { Toggle } from "@/components/ui/toggle"
@@ -31,17 +31,15 @@ import {DatePickerWithLabel} from "@/components/theme/form/DatePickerWithLabel";
 import {InputFieldWithLabel} from "@/components/theme/form/InputFieldWithLabel";
 import {NumberInputFieldWithLabel} from "@/components/theme/form/NumberInputFieldWithLabel";
 import {TextareaWithLabel} from "@/components/theme/form/TextareaWithLabel";
+import {DiaryRecordSchema} from "@/lib/schemas/DiaryRecordSchema";
 
 // @TODO: store last type in localstorage
 
-export const AddRecord = ({open, onOpenChange, pageData}) => {
+export const AddDiaryRecord = ({open, onOpenChange, diaryData}) => {
 	const [adding, setAdding] = useState(false);
 	const [disabled, setDisabled] = useState(false);
-	const isDesktop = useMediaQuery({
-		query: "(min-width: 1024px)",
-	});
 	const {user} = useAuth()
-	const pageID = pageData?.$id
+	const diaryID = diaryData?.$id
 	const t = useI18n()
 	const [showAddDetails, setShowAddDetails ] = useState(false)
 
@@ -51,35 +49,31 @@ export const AddRecord = ({open, onOpenChange, pageData}) => {
 		setAdding(true);
 		setDisabled(true);
 
-		let cleanAmount = parseFloat(values.amount.replace(/,/g, ""));
 		const tempCreatedBy = [user?.name, user?.email];
 
 		let teamPermissions = [
-			Permission.read(Role.team(pageData?.teamId, "member")),
-			Permission.update(Role.team(pageData?.teamId, "member")),
+			Permission.read(Role.team(diaryData?.teamId, "member")),
+			Permission.update(Role.team(diaryData?.teamId, "member")),
 			Permission.read(Role.user(user.$id)),
 			Permission.update(Role.user(user.$id)),
 			Permission.delete(Role.user(user.$id)),
 		]
 
 		try {
-			const eventItemData = {
+			const diaryItems = {
 				name: values.name.trim(),
-				amount: cleanAmount,
-				type: values.type,
-				date: values.date,
-				details: values.details.trim(),
-				pageId: pageID,
+				diaryId: diaryID,
+				markedAsDone: false,
 				createdBy: tempCreatedBy,
 				updatedBy: []
 			};
 
-			if(pageData?.teamId){
+			if(diaryData?.teamId){
 				const response = databases.createDocument(
 					DATABASE_ID,
-					COLLECTION_ID_BOOKS_RECORDS,
+					COLLECTION_ID_DIARIES_RECORDS,
 					ID.unique(),
-					eventItemData,
+					diaryItems,
 					teamPermissions
 				);
 				response.then(function (response) {
@@ -88,14 +82,15 @@ export const AddRecord = ({open, onOpenChange, pageData}) => {
 					scrollToTop()
 				}, function (error) {
 					toast.error(t('alerts.exception'), ToastOptions);
+					console.log(error)
 				});
 
 			}else{
 				const response = databases.createDocument(
 					DATABASE_ID,
-					COLLECTION_ID_BOOKS_RECORDS,
+					COLLECTION_ID_DIARIES_RECORDS,
 					ID.unique(),
-					eventItemData
+					diaryItems
 				);
 				response.then(function (response) {
 					toast.success(t("alerts.added"), ToastOptions);
@@ -103,10 +98,12 @@ export const AddRecord = ({open, onOpenChange, pageData}) => {
 					scrollToTop()
 				}, function (error) {
 					toast.error(t('alerts.exception'), ToastOptions);
+					console.log(error)
 				});
 			}
 		} catch (error) {
 			toast.error(t('alerts.exception'), ToastOptions);
+			console.log(error)
 		}
 		setAdding(false);
 		setDisabled(false);
@@ -118,12 +115,9 @@ export const AddRecord = ({open, onOpenChange, pageData}) => {
 			<Formik
 				initialValues={{
 					name: "",
-					amount: "",
-					date: pageData?.type === "khaataBook" ? new Date() : '',
-					type: pageData?.type === "recordBook" ? "income" : "expense",
-					details: "",
+					markedAsDone: false
 				}}
-				validationSchema={RecordSchema}
+				validationSchema={DiaryRecordSchema}
 				onSubmit={(values) => {
 					onAdd(values);
 				}}
@@ -138,10 +132,9 @@ export const AddRecord = ({open, onOpenChange, pageData}) => {
 				  }) => (
 					<Form className="flex flex-col w-full space-y-6">
 
-						{/* Record Type */}
+						{/* Name */}
 						<div className={'flex justify-between items-center py-6 mb-4'}>
 							<UIText className={"text-primary self-start"} weight={'semibold'} variant={'heading'} text={t('pages.records.add')}/>
-							<RecordTypeToggleGroup value={values.type} setFieldValue={setFieldValue} />
 						</div>
 
 						{/* Name */}
@@ -152,53 +145,9 @@ export const AddRecord = ({open, onOpenChange, pageData}) => {
 							onChange={handleChange}
 							onBlur={handleBlur}
 							name="name"
+							value={values.name}
 							disabled={disabled}
 						/>
-
-						{/* Amount */}
-						<NumberInputFieldWithLabel
-							label={t('labels.amount')}
-							errors={errors.amount}
-							touched={touched.amount}
-							onChange={handleChange}
-							onBlur={handleBlur}
-							name="amount"
-							disabled={disabled}
-							currency={getCurrentCurrency(pageData?.currency)}
-						/>
-
-						{/* Date */}
-						<DatePickerWithLabel
-							label={t('labels.date')}
-							setFieldValue={setFieldValue}
-							name={'date'}
-							disabled={disabled}
-							fieldValue={values.date}
-							onClear={()=> setFieldValue('date', '')}
-						/>
-
-						<div
-							className={'flex items-center rtl:items-start justify-center gap-1.5 rtl:gap-3 cursor-pointer text-primary dark:text-foreground'}
-							onClick={()=> setShowAddDetails(!showAddDetails)}
-						>
-							<UIText variant={'sm'} className={'font-medium'} text={t('labels.addMoreDetailsShort')}/>
-							{showAddDetails ? <ChevronUp className={'w-6 h-6 stroke-[3] rtl:mt-2 text-primary'}/> : <ChevronDown className={'w-6 h-6 stroke-[3] rtl:mt-2 text-primary'}/>}
-						</div>
-
-						{showAddDetails &&
-							<>
-								{/* Details */}
-								<TextareaWithLabel
-									label={t('labels.details')}
-									errors={errors.details}
-									touched={touched.details}
-									onChange={handleChange}
-									onBlur={handleBlur}
-									name="details"
-									disabled={disabled}
-								/>
-							</>
-						}
 
 						<UISheetFooterInForm
 							adding={adding}

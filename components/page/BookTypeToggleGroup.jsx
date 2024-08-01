@@ -18,7 +18,8 @@ export const BookTypeToggleGroup = ({value, setFieldValue}) =>{
             className="grid grid-flow-row grid-cols-2 gap-4"
         >
             <ToggleGroupItem value={"khaataBook"} className="data-[state=on]:bg-muted group">
-                <CheckIcon className="w-4 h-4 group-data-[state=on]:flex group-data-[state=off]:hidden mr-2" />                {t('labels.khaataBook')}
+                <CheckIcon className="w-4 h-4 group-data-[state=on]:flex group-data-[state=off]:hidden mr-2" />
+                {t('labels.khaataBook')}
             </ToggleGroupItem>
             <ToggleGroupItem value={"recordBook"} className="data-[state=on]:bg-muted group">
                 <CheckIcon className="w-4 h-4 group-data-[state=on]:flex group-data-[state=off]:hidden mr-2" />

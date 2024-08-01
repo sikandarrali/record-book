@@ -156,6 +156,7 @@ const SingleGroup = ({ data }) => {
                                             groupName={data.name}
                                             isGroupOwner={isOwner}
                                             setUsersInGroup={setUsersInGroup}
+                                            eventInThisGroup={eventInThisGroup}
                                         />
                                     ))}
                             </div>

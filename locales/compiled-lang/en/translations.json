@@ -152,6 +152,8 @@
     "links": {
       "groups": "Groups",
       "home": "Home",
+      "diaries": "Diaries",
+      "books": "Books",
       "logout": "Logout",
       "settings": "Settings"
     }
@@ -161,14 +163,29 @@
     "text": "Page not found"
   },
   "pages": {
-    "home": {
+    "books": {
       "add": "Add Book",
       "addNew": "Add New Book",
       "deletePage": "Delete Book",
       "deletePageText": "This will permanently delete",
       "editPage": "Edit Book",
       "noBooks": "No Books Found, Add New",
-      "title": "Books"
+      "titleBooks": "Books"
+    },
+    "diaries": {
+      "deletePageText": "This will permanently delete",
+      "add": "Add Diary",
+      "addNew": "Add New Diary",
+      "deleteDiary": "Delete Diary",
+      "editDiary": "Edit Diary",
+      "noDiaries": "No Diaries Found, Add New",
+      "titleDiaries": "Diaries",
+      "titleDiary": "Diary",
+      "noDiariesRecords": "No Records in the Diary, Add New"
+    },
+    "diariesRecords": {
+      "badgeCreatedByYou": "You're Admin of this Diary.",
+      "badgeSharedWithGroup": "This Diary is shared with {groupName} group."
     },
     "records": {
       "add": "Add Record",
