@@ -4,7 +4,7 @@ import {Minus, Plus, SquarePen} from "lucide-react";
 import { useRouter } from "next/navigation";
 import {useLayoutEffect, useState} from "react";
 import { NumericFormat } from "react-number-format";
-import { EditPage } from "./EditPage";
+import { EditDiary } from "./EditDiary";
 import {db} from "@/components/appwrite/database";
 import {toast} from "react-toastify";
 import {ToastOptions} from "@/lib/ToastOptions";
@@ -15,7 +15,7 @@ import {useData} from "@/components/contexts/DataContext";
 import {EnglishMonths, SupportedCurrencies} from "@/lib/defaultData";
 import {useAuth} from "@/components/contexts/AuthContext";
 import {DeleteDialog} from "@/components/theme/DeleteDialog";
-import {PARENT_BOOK_ID_FIELD_NAME} from "@/components/appwrite/appwrite";
+import {PARENT_DIARY_ID_FIELD_NAME} from "@/components/appwrite/appwrite";
 import {CreatedUpdatedBy} from "@/components/theme/CreatedUpdatedBy";
 import {HOMEPAGE_ROUTE} from "@/lib/routes";
 import {UISheet} from "@/components/theme/UISheet";
@@ -26,7 +26,7 @@ import {BookType} from "@/components/page/BookType";
 import {cn, getCurrentCurrency} from "@/lib/utils";
 import {FormattedCurrency} from "@/components/theme/FormattedCurrency";
 
-const PageInfo = ({ pageData, setPageData, sum }) => {
+const DiaryInfo = ({ diaryData, setDiaryData, sum }) => {
 	const [openDetails, setOpenDetails] = useState(false);
 	const [openEdit, setOpenEdit] = useState(false);
 	const [openDelete, setOpenDelete] = useState(false);
@@ -36,33 +36,33 @@ const PageInfo = ({ pageData, setPageData, sum }) => {
 	const {userGroups} = useData()
 	const {user} = useAuth()
 
-	const hasDeletePermission =  pageData?.$permissions.some(permission => permission === `delete("user:${user.$id}")`)
+	const hasDeletePermission =  diaryData?.$permissions.some(permission => permission === `delete("user:${user.$id}")`)
 
 	const onDelete = async () => {
-		await db.pages.delete(pageData?.$id);
-		await DeleteAllItemsInThisEvent()
+		await db.diaries.delete(diaryData?.$id);
+		await DeleteAllItemsInThisDiary()
 		setOpenDelete(false);
 		setOpenDetails(false);
 		toast.success(t('alerts.deleted'), ToastOptions);
 		router.replace(HOMEPAGE_ROUTE);
 	};
 
-	const DeleteAllItemsInThisEvent = async () => {
-		const getItems = await db.records.list([
+	const DeleteAllItemsInThisDiary = async () => {
+		const getItems = await db.diariesRecords.list([
 			Query.orderDesc("$createdAt"),
-			Query.equal(PARENT_BOOK_ID_FIELD_NAME, pageData?.$id)
+			Query.equal(PARENT_DIARY_ID_FIELD_NAME, diaryData?.$id)
 		]);
 		// Iterate over each document and delete it
 		for (const item of getItems.documents) {
-			await db.records.delete(item.$id);
+			await db.diariesRecords.delete(item.$id);
 		}
 	};
 
 	// set group
 	useLayoutEffect(() => {
 		const unsub = async () =>{
-			if(pageData?.teamId){
-				const response = userGroups.find((item)=> item.$id === pageData?.teamId)
+			if(diaryData?.teamId){
+				const response = userGroups.find((item)=> item.$id === diaryData?.teamId)
 				setGroup(response)
 			}else{
 				setGroup(null)
@@ -72,13 +72,13 @@ const PageInfo = ({ pageData, setPageData, sum }) => {
 	}, [openDetails]);
 
 	// Parse the date string
-	const date = new Date(pageData?.date);
+	const date = new Date(diaryData?.date);
 	const year = date.getFullYear();
 	const day = date.getDate();
 	const monthIndex = date.getMonth(); // getMonth() returns a zero-based index (0 for January, 11 for December)
 	const month = EnglishMonths[monthIndex];
 
-	const createdAtDate = new Date(pageData?.$createdAt);
+	const createdAtDate = new Date(diaryData?.$createdAt);
 	const renderedCreatedDate = {
 		year: createdAtDate.getFullYear(),
 		day: createdAtDate.getDate(),
@@ -88,7 +88,7 @@ const PageInfo = ({ pageData, setPageData, sum }) => {
 		seconds: String(createdAtDate.getSeconds()).padStart(2, '0')
 	}
 
-	const updatedAtDate = new Date(pageData?.$updatedAt);
+	const updatedAtDate = new Date(diaryData?.$updatedAt);
 	const renderedUpdatedDate = {
 		year: updatedAtDate.getFullYear(),
 		day: updatedAtDate.getDate(),
@@ -100,7 +100,7 @@ const PageInfo = ({ pageData, setPageData, sum }) => {
 
 	const deleteTexts = [
 		<UIText key={1} text={t('pages.books.deletePageText')}/>,
-		<UIText key={2} variant={'lg'} className={'!text-primary'} weight={'semibold'} text={pageData?.name}/>
+		<UIText key={2} variant={'lg'} className={'!text-primary'} weight={'semibold'} text={diaryData?.name}/>
 	]
 
 	return (
@@ -123,36 +123,23 @@ const PageInfo = ({ pageData, setPageData, sum }) => {
 			>
 				{/* Name & Badges */}
 				<div className={'flex relative items-center justify-between text-primary'} dir={'ltr'}>
-					{pageData?.$permissions.some(permission => permission === `delete("user:${user.$id}")`) &&
+					{diaryData?.$permissions.some(permission => permission === `delete("user:${user.$id}")`) &&
 						<PopupPageCreatedByYou side={'right'} align={'start'} className={'max-w-56 bg-muted'}/>
 					}
 
-					{/* Book Type */}
-					<div className={'absolute position-center-horizontally'}><BookType type={pageData?.type}/></div>
+					{/* Diary Badge */}
+					<Badge className={'absolute position-center-horizontally'}><UIText text={t("pages.diaries.titleDiary")} variant={'xs'}/></Badge>
 
-					{pageData?.teamId &&
-						<PopupPageSharedWithGroup teamId={pageData?.teamId} side={'left'} align={'start'} className={'flex bg-muted flex-col gap-2'}/>
+					{diaryData?.teamId &&
+						<PopupPageSharedWithGroup teamId={diaryData?.teamId} side={'left'} align={'start'} className={'flex bg-muted flex-col gap-2'}/>
 					}
 				</div>
 
-				{/* Amount */}
+				{/* Name */}
 				<div className="flex flex-col justify-center text-center items-center gap-5 mt-10 mb-10">
-					<UIText variant={"heading"} text={pageData?.name} className={'break-all text-primary'}/>
-
-					<div className="flex flex-1 justify-center col-span-4 items-center relative select-none pointer-events-none" dir={'ltr'}>
-						<UIText
-							className={cn(Number(sum) < 0 && "text-destructive")}
-							weight={'semibold'}
-							variant={'heading'}
-							text={
-								<FormattedCurrency
-									value={Number(sum)}
-									currency={getCurrentCurrency(pageData?.currency)}
-								/>
-							}
-						/>
-					</div>
+					<UIText variant={"heading"} text={diaryData?.name} className={'break-all text-primary'}/>
 				</div>
+
 
 				{/* Page Data */}
 				<div className={'flex flex-col divide-y divide-muted lg:mt-16'}>
@@ -171,38 +158,8 @@ const PageInfo = ({ pageData, setPageData, sum }) => {
 						</div>
 					</div>
 
-					{/* Date */}
-					<div className={'flex py-4 items-center'}>
-						<div className={'w-1/4 flex shrink-0'}>
-							<UIText weight={'medium'} text={t('labels.date')}/>
-						</div>
-						<div className={'w-3/4 flex items-center pl-4'}>
-							{pageData?.date ? <UIText text={`${day} ${t(`months.${month.toLowerCase()}`)+t('general.comma')} ${year}`}/> : '-'}
-						</div>
-					</div>
-
-					{/* Currency */}
-					<div className={'flex py-4 items-center'}>
-						<div className={'w-1/4 flex shrink-0'}>
-							<UIText weight={'medium'} text={t('labels.currency')}/>
-						</div>
-						<div className={'w-3/4 flex items-center pl-4'}>
-							{pageData?.currency ? <UIText text={t(`currencies.${SupportedCurrencies.find((item)=> item.name === pageData?.currency)?.name}`)}/> : '-'}
-						</div>
-					</div>
-
-					{/* Details */}
-					<div className={'flex py-4 items-center'}>
-						<div className={'w-1/4 flex shrink-0'}>
-							<UIText weight={'medium'} text={t('labels.details')}/>
-						</div>
-						<div className={'w-3/4 flex items-center pl-4'}>
-							<UIText text={pageData?.details || '-'}/>
-						</div>
-					</div>
-
 					{/* Created Updated BY */}
-					<CreatedUpdatedBy data={pageData} createdDate={renderedCreatedDate} updatedDate={renderedUpdatedDate}/>
+					<CreatedUpdatedBy data={diaryData} createdDate={renderedCreatedDate} updatedDate={renderedUpdatedDate}/>
 				</div>
 
 				<UISheetInfoFooter
@@ -213,11 +170,11 @@ const PageInfo = ({ pageData, setPageData, sum }) => {
 				/>
 			</UISheet>
 
-			<EditPage
+			<EditDiary
 				open={openEdit}
 				onOpenChange={setOpenEdit}
-				pageData={pageData}
-				setPageData={setPageData}
+				diaryData={diaryData}
+				setDiaryData={setDiaryData}
 				setGroup={setGroup}
 			/>
 			{hasDeletePermission &&
@@ -233,6 +190,6 @@ const PageInfo = ({ pageData, setPageData, sum }) => {
 	);
 };
 
-export default PageInfo;
+export default DiaryInfo;
 
 

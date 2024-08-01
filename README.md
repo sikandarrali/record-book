@@ -4,6 +4,10 @@ All your records in one place. Say goodbye to your record diaries
 
 ## Changelog
 
+### 5.0.0
+- Add Diaries Feature
+- Redesigned Home Page
+
 ### 4.1.5
 - Add `autocapitalize="words"` to Text Input and Textarea
 - Change Color of Single Book in List to Primary

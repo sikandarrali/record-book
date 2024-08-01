@@ -1,17 +1,33 @@
-import {COLLECTION_ID_PAGES, COLLECTION_ID_RECORDS, DATABASE_ID, databases} from "./appwrite";
+import {
+	COLLECTION_ID_BOOKS,
+	COLLECTION_ID_BOOKS_RECORDS,
+	COLLECTION_ID_DIARIES, COLLECTION_ID_DIARIES_RECORDS,
+	DATABASE_ID,
+	databases
+} from "./appwrite";
 
 import { ID } from "appwrite";
 
 const collections = [
 	{
 		databaseID: DATABASE_ID,
-		id: COLLECTION_ID_PAGES,
+		id: COLLECTION_ID_BOOKS,
 		name: "pages",
 	},
 	{
 		databaseID: DATABASE_ID,
-		id: COLLECTION_ID_RECORDS,
+		id: COLLECTION_ID_BOOKS_RECORDS,
 		name: "records",
+	},
+	{
+		databaseID: DATABASE_ID,
+		id: COLLECTION_ID_DIARIES,
+		name: "diaries",
+	},
+	{
+		databaseID: DATABASE_ID,
+		id: COLLECTION_ID_DIARIES_RECORDS,
+		name: "diariesRecords",
 	},
 ];
 

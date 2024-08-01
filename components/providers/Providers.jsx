@@ -30,7 +30,7 @@ const  Providers = ({ children }) => {
 						>
 							<TooltipProvider>
 								{/* Toast Container is in AppProvider */}
-								<div className="relative max-w-screen-lg lg:max-w-lg mx-auto">
+								<div className="relative max-w-lg mx-auto">
 									{children}
 								</div>
 							</TooltipProvider>

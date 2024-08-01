@@ -1,13 +1,13 @@
 "use client";
 
 import {
-	CalendarRange,
+	CalendarRange, CircleCheckBig,
 	Copyright,
 	Edit,
 	Home,
 	LogOut,
 	MenuIcon, Moon,
-	MoveLeft,
+	MoveLeft, NotebookPen,
 	RefreshCw,
 	SettingsIcon, SquarePen, Sun,
 	Users
@@ -104,7 +104,7 @@ const Sidebar = ({ open, onOpenChange, isPWAInstalled }) => {
 								<UIText variant={'xs'} text={t('googleAccount')}/>
 							</Badge>
 
-							<div className="flex items-center -ml-4 mt-14 mb-10" dir={'ltr'}>
+							<div className="flex items-center -ml-4 mt-14 lg:mb-10" dir={'ltr'}>
 
 								{/* Image */}
 								{user?.prefs?.picture ?
@@ -130,12 +130,28 @@ const Sidebar = ({ open, onOpenChange, isPWAInstalled }) => {
 								</div>
 							</div>
 
-							<div className="flex flex-col px-6 h-full mt-10 gap-0.5">
+							<div className="flex flex-col px-6 h-full lg:mt-10 gap-0.5">
 								<MenuItem
 									label={t('links.home')}
 									href={"/"}
 									icon={
 										<Home className={cn("w-[18px] h-[18px] rtl:mt-1", pathname === "/"  && "text-muted")} />
+									}
+								/>
+
+								<MenuItem
+									label={t('links.books')}
+									href={"/books"}
+									icon={
+										<NotebookPen className={cn("w-[18px] h-[18px] rtl:mt-1", pathname === "/"  && "text-muted")} />
+									}
+								/>
+
+								<MenuItem
+									label={t('links.diaries')}
+									href={"/diaries"}
+									icon={
+										<CircleCheckBig className={cn("w-[18px] h-[18px] rtl:mt-1", pathname === "/"  && "text-muted")} />
 									}
 								/>
 
