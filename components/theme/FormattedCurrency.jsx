@@ -2,13 +2,16 @@ import {NumericFormat} from "react-number-format";
 
 export const FormattedCurrency = ({value, currency, type, hidePlusMinus}) =>{
 
+    // const plusMinus = !hidePlusMinus
+    //     ? type === "income"
+    //         ? "\u002B"
+    //         : type === "expense" || value < 0
+    //             ? "\u2212"
+    //             : ""
+    //     : "";
+
     const plusMinus = !hidePlusMinus
-        ? type === "income"
-            ? "\u002B"
-            : type === "expense" || value < 0
-                ? "\u2212"
-                : ""
-        : "";
+        && type === "expense" || value < 0 ? "\u2212" : "";
 
     const space = "\u00a0";
 

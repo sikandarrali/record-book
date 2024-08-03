@@ -4,8 +4,14 @@ All your records in one place. Say goodbye to your record diaries
 
 ## Changelog
 
+### 5.0.4
+- Removed plus sign from positive numbers
+- missing translations
+
 ### 5.0.3
-- Missing translations, fix navbar ui, add environment variables to vercel. 
+- Missing translations
+- Fix Navbar UI, 
+- Add environment variables to Vercel. 
 
 ### 5.0.2
 - UI changes
