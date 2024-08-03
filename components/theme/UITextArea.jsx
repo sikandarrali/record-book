@@ -60,7 +60,6 @@ export const UITextArea = ({className, variant, onChange, ...props}) => {
 
     return (
         <textarea
-            autoCapitalize={"words"}
             className={cn(
                 inputVariants({variant, className}),
                 isUrdu ? 'font-urdu' : 'font-sans',
