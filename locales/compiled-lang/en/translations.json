@@ -1,6 +1,7 @@
 {
   "alerts": {
     "added": "Added Successfully",
+    "deleted": "Deleted Successfully",
     "exception": "Unable to process your request",
     "noChanges": "Nothing to update",
     "updated": "Updated Successfully"
