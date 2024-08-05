@@ -16,6 +16,7 @@ import ScrollToTopButton from "@/components/page/ScrollToTopButton";
 import Loader from "@/components/loaders/loader";
 import {useData} from "@/components/contexts/DataContext";
 import AddDiary from "@/components/diary/AddDiary";
+import {AddButtonWrapper} from "@/components/theme/AddButtonWrapper";
 
 export default function Page() {
     const [openAddModal, setOpenAddModal] = useState(false);
@@ -127,14 +128,14 @@ export default function Page() {
             }
 
             {/* Add New Button */}
-            <div className={'fixed bottom-10 position-center-horizontally max-w-lg z-20 flex items-center justify-center px-6 left-0 w-full'}>
+            <AddButtonWrapper>
                 <Button
                     onClick={() => setOpenAddModal(!openAddModal)}
                     className="flex flex-1 min-h-14"
                 >
                     <UIText variant={'heading'} text={t('pages.diaries.addNew')}/>
                 </Button>
-            </div>
+            </AddButtonWrapper>
 
             <AddDiary
                 open={openAddModal}

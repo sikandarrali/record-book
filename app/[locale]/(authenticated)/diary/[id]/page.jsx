@@ -25,6 +25,7 @@ import {PopupPageSharedWithGroup} from "@/components/theme/PopupPageSharedWithGr
 import {AddDiaryRecord} from "@/components/diaryRecord/AddDiaryRecord";
 import {SingleDiaryRecord} from "@/components/diaryRecord/SingleDiaryRecord";
 import DiaryInfo from "@/components/diary/DiaryInfo";
+import {AddButtonWrapper} from "@/components/theme/AddButtonWrapper";
 
 const Page = () => {
 	const t = useI18n();
@@ -194,27 +195,15 @@ const Page = () => {
 			<div className={'relative'}>
 
 				{/* Add Record Button*/}
-				<div className={'fixed bottom-10 position-center-horizontally max-w-lg z-20 flex items-center justify-center px-6 left-0 w-full'}>
+				<AddButtonWrapper>
 					<Button
 						onClick={() => setOpenAddModal(true)}
 						className="flex flex-1 min-h-14"
 					>
 						<UIText variant={'heading'} text={t('pages.records.add')}/>
 					</Button>
-				</div>
+				</AddButtonWrapper>
 
-				{/* Add Record Button Round*/}
-				{/*<div*/}
-				{/*	className="w-[4.5rem] h-[4.5rem] fixed bottom-16 left-1/2 -translate-x-1/2 shadow-lg flex items-center justify-center rounded-full bg-primary text-primary-foreground cursor-pointer"*/}
-				{/*	onClick={() => {*/}
-				{/*		setOpenAddModal(true)*/}
-				{/*		if (headerRef.current) {*/}
-				{/*			headerRef.current.scrollIntoView({ behavior: 'smooth' });*/}
-				{/*		}*/}
-				{/*	}}*/}
-				{/*>*/}
-				{/*	<Plus className="w-10 h-10" />*/}
-				{/*</div>*/}
 				<AddDiaryRecord
 					open={openAddModal}
 					onOpenChange={setOpenAddModal}
