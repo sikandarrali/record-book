@@ -4,6 +4,10 @@ All your records in one place. Say goodbye to your record diaries
 
 ## Changelog
 
+### 6.0.3
+- Fix bug in counting Sum
+- Add missing translations
+
 ### 6.0.2
 - Fixed search issue
 - Moved Add Button a little higher

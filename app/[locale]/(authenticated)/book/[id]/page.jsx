@@ -108,6 +108,13 @@ const Page = () => {
 			Query.orderDesc("date")
 		]);
 		setCount(response.total)
+		setTotalSum(
+			response?.documents?.reduce((acc, item) => {
+				return item.type === 'income'
+					? acc + item.amount
+					: acc - item.amount;
+			}, 0)
+		);
 	}
 
 	// appwrite realtime functionality
