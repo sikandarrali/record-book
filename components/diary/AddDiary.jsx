@@ -1,7 +1,6 @@
 "use client";
 import {scrollToTop} from "@/lib/utils";
 import { Form, Formik } from "formik";
-import {ChevronDown, ChevronUp, Loader2Icon} from "lucide-react";
 import {useState} from "react";
 import {toast} from "react-toastify";
 import {ToastOptions} from "@/lib/ToastOptions";
@@ -12,7 +11,6 @@ import {useI18n} from "@/locales/client";
 import {COLLECTION_ID_DIARIES, DATABASE_ID, databases} from "@/components/appwrite/appwrite";
 import * as React from "react";
 import {InputFieldWithLabel} from "@/components/theme/form/InputFieldWithLabel";
-import {TextareaWithLabel} from "@/components/theme/form/TextareaWithLabel";
 import {DropdownGroupSelectFieldWithLabel} from "@/components/theme/form/DropdownGroupSelectFieldWithLabel";
 import {UISheet} from "@/components/theme/UISheet";
 import {UISheetFooterInForm} from "@/components/theme/UISheetFooterInForm";
@@ -27,7 +25,6 @@ export const AddDiary = ({ open, onOpenChange }) => {
 	const [addEventDetails, setAddEventDetails] = useState(false)
 	const t = useI18n()
 	const {userOwnedGroups} = useData()
-
 
 	const onAdd = async (values) => {
 		setAdding(true);

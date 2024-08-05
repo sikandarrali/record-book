@@ -1,20 +1,11 @@
 "use client";
 import { db } from "@/components/appwrite/database";
 import UIText from "@/components/theme/UIText";
-import {CornerDownLeft, CornerDownRight, Minus, Plus} from "lucide-react";
+import {CornerDownLeft, CornerDownRight} from "lucide-react";
 import {useState} from "react";
-import { NumericFormat } from "react-number-format";
 import { EditRecord } from "./EditRecord";
 import {toast} from "react-toastify";
 import {ToastOptions} from "@/lib/ToastOptions";
-import {
-	Sheet,
-	SheetContent,
-	SheetDescription,
-	SheetHeader,
-	SheetTitle, SheetTrigger
-} from "@/components/ui/sheet";
-import {useMediaQuery} from "react-responsive";
 import {cn, getCurrentCurrency} from "@/lib/utils";
 import {useI18n} from "@/locales/client";
 import {UISheetInfoFooter} from "@/components/theme/UISheetInfoFooter";
@@ -22,14 +13,12 @@ import {EnglishMonths} from "@/lib/defaultData";
 import {useAuth} from "@/components/contexts/AuthContext";
 import {CreatedUpdatedBy} from "@/components/theme/CreatedUpdatedBy";
 import {DeleteDialog} from "@/components/theme/DeleteDialog";
-import {Button} from "@/components/ui/button";
 import {UISheet} from "@/components/theme/UISheet";
 import {Badge} from "@/components/ui/badge";
 import {UrduDate} from "@/lib/UrduDate";
 import {FormattedCurrency} from "@/components/theme/FormattedCurrency";
 
 export const SingleRecord = ({ item, bookCurrency }) => {
-	const isDesktop = useMediaQuery({ query: "(min-width: 1024px)" })
 	const [isOpen, setIsOpen] = useState(false);
 	const [openEdit, setOpenEdit] = useState(false);
 	const [openDelete, setOpenDelete] = useState(false);

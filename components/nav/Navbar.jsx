@@ -1,15 +1,11 @@
 "use client";
-
 import {
-	CalendarRange, CircleCheckBig,
+	CircleCheckBig,
 	Copyright,
-	Edit,
-	Home,
 	LogOut,
-	MenuIcon, Moon,
-	MoveLeft, NotebookPen,
+	NotebookPen,
 	RefreshCw,
-	SettingsIcon, SquarePen, Sun,
+	SettingsIcon,
 	Users
 } from "lucide-react";
 import Image from "next/image";
@@ -19,12 +15,12 @@ import { useAuth } from "../contexts/AuthContext";
 import {Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle} from "../ui/sheet";
 import {Badge} from "@/components/ui/badge";
 import {cn} from "@/lib/utils";
-import {usePathname, useRouter} from "next/navigation";
-import {useCurrentLocale, useI18n, useScopedI18n} from "@/locales/client";
+import {usePathname} from "next/navigation";
+import {useCurrentLocale, useScopedI18n} from "@/locales/client";
 import UIText from "@/components/theme/UIText";
 import usePWAStatus from "@/lib/hooks/usePWAStatus";
 import {Button} from "@/components/ui/button";
-import {HOMEPAGE_ROUTE, isActivePath} from "@/lib/routes";
+import {isActivePath} from "@/lib/routes";
 import {DarkModeToggle} from "@/components/theme/DarkModeToggle";
 import {Logo} from "@/components/nav/Logo";
 import {Separator} from "@/components/ui/separator";
@@ -32,10 +28,7 @@ import {Separator} from "@/components/ui/separator";
 const Navbar = () => {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	const isPWAInstalled = usePWAStatus();
-	const {user, setLoading} = useAuth()
-	const pathname = usePathname();
-	const locale = useCurrentLocale()
-	const t = useI18n()
+	const {setLoading} = useAuth()
 
 	return (
 		<div className="flex flex-col p-6 pt-8" dir={'ltr'}>

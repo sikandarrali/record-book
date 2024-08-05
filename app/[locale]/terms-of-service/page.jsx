@@ -1,6 +1,5 @@
 "use client";
 import PageContainer from "@/components/providers/PageContainer";
-import {useI18n, useScopedI18n} from "@/locales/client";
 import UIText from "@/components/theme/UIText";
 
 export default function Home() {

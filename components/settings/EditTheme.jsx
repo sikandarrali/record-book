@@ -1,7 +1,6 @@
 "use client";
 import {cn, GetCurrentTheme} from "@/lib/utils";
 import {useState} from "react";
-import { useMediaQuery } from "react-responsive";
 import {ToastOptions} from "@/lib/ToastOptions";
 import {toast} from "react-toastify";
 import {account} from "@/components/appwrite/appwrite";
@@ -23,7 +22,6 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover"
 import {UISheetFooterWithAction} from "@/components/theme/UISheetFooterWithAction";
-import {DEFAULT_THEME} from "@/lib/defaults";
 import {UISheet} from "@/components/theme/UISheet";
 import {SupportedThemes} from "@/lib/defaultData";
 import {useApp} from "@/components/contexts/AppContext";

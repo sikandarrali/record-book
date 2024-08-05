@@ -5,9 +5,8 @@ import PageInfo from "@/components/page/PageInfo";
 import UIText from "@/components/theme/UIText";
 import { Button } from "@/components/ui/button";
 import {AnimatePresence, motion} from "framer-motion";
-import {Minus, Plus, Search, SquarePen, XIcon} from "lucide-react";
-import {useCallback, useEffect, useLayoutEffect, useRef, useState} from "react";
-import { NumericFormat } from "react-number-format";
+import {Search} from "lucide-react";
+import {useEffect, useLayoutEffect, useRef, useState} from "react";
 import {db} from "@/components/appwrite/database";
 import {Query} from "appwrite";
 import {
@@ -19,54 +18,31 @@ import {
 } from "@/components/appwrite/appwrite";
 import {cn, getCurrentCurrency, SortItemsByDateAndCreatedAt} from "@/lib/utils";
 import {ReloadIcon} from "@radix-ui/react-icons";
-import {useI18n, useScopedI18n} from "@/locales/client";
+import {useI18n} from "@/locales/client";
 import {useParams, useRouter} from "next/navigation";
 import PageContainer from "@/components/providers/PageContainer";
 import ScrollToTopButton from "@/components/page/ScrollToTopButton";
-import {UITextInput} from "@/components/theme/UITextInput";
 import Loader from "@/components/loaders/loader";
 import {useAuth} from "@/components/contexts/AuthContext";
-import {HOMEPAGE_ROUTE} from "@/lib/routes";
-import {useData} from "@/components/contexts/DataContext";
 import {PopupPageCreatedByYou} from "@/components/theme/PopupPageCreatedByYou";
 import {PopupPageSharedWithGroup} from "@/components/theme/PopupPageSharedWithGroup";
-import {BookType} from "@/components/page/BookType";
 import {FormattedCurrency} from "@/components/theme/FormattedCurrency";
 import {SearchSheet} from "@/components/record/SearchSheet";
 
-const data = [
-	{id: 1, name: 'a', date:'2024-07-29T21:00:07.364Z', createdAt: '2024-07-28T21:00:07.364Z'},
-	{id: 2, name: 'b', date:'', createdAt: '2024-07-28T21:00:07.364Z'},
-	{id: 3, name: 'c', date:'2023-07-29T21:00:07.364Z', createdAt: '2024-07-28T21:00:07.364Z'},
-	{id: 4, name: 'd', date:'2023-07-29T21:00:07.364Z', createdAt: '2024-07-28T21:00:07.364Z'},
-]
-
 const Page = () => {
-	const headerRef = useRef(null);
 	const t = useI18n();
 	const [localLoading, setLocalLoading] = useState(true)
 	const {user} = useAuth()
-	const {userGroups} = useData()
-
 	const [openAddModal, setOpenAddModal] = useState(false);
 	const [totalSum, setTotalSum] = useState(0);
 	const [pageData, setPageData] = useState(null)
-
 	const [openSearch, setOpenSearch] = useState(false)
-
 	const [items, setItems] = useState([])
 	const router = useRouter()
-	const [searchValue, setSearchValue] = useState("");
-	const [searchResultsMessage, setSearchResultsMessage] = useState('')
 	const [count, setCount] = useState(0)
-
 	const limit = 25;
 	const [lastId, setLastId] = useState(null)
-
 	const params = useParams()
-
-	const itemsPerPage = 15;
-	const [hasMoreItems, setHasMoreItems] = useState(true); // Flag to check if more items are available
 	const [loadingItems, setLoadingItems] = useState(false); // To show loadingItems spinner
 
 	// get event & items

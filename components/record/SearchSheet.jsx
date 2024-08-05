@@ -1,49 +1,21 @@
 "use client";
-import FormLabel from "@/components/theme/FormLabel";
 import { Form, Formik } from "formik";
 import {useEffect, useState} from "react";
-import {toast} from "react-toastify";
-import {ToastOptions} from "@/lib/ToastOptions";
-import {
-    Sheet,
-    SheetContent, SheetDescription, SheetHeader, SheetTitle
-} from "@/components/ui/sheet";
-import useScrollToView from "@/lib/hooks/useScrollToView";
-import {useMediaQuery} from "react-responsive";
 import UIText from "@/components/theme/UIText";
-import {cn, getCurrentCurrency, scrollToTop, SortItemsByDateAndCreatedAt} from "@/lib/utils";
-import {ID, Permission, Query, Role} from "appwrite";
+import {cn, SortItemsByDateAndCreatedAt} from "@/lib/utils";
+import {Query} from "appwrite";
 import {useAuth} from "@/components/contexts/AuthContext";
-import {UISheetFooterInForm} from "@/components/theme/UISheetFooterInForm";
 import {useI18n} from "@/locales/client";
 import {UITextInput} from "@/components/theme/UITextInput";
-import {UITextArea} from "@/components/theme/UITextArea";
-import {
-    COLLECTION_ID_BOOKS_RECORDS,
-    DATABASE_ID,
-    databases,
-    PARENT_BOOK_ID_FIELD_NAME
-} from "@/components/appwrite/appwrite";
-import {UINumberInput} from "@/components/theme/UINumberInput";
-import {RecordSchema} from "@/lib/schemas/RecordSchema";
-import { Toggle } from "@/components/ui/toggle"
-import {Asterisk, ChevronDown, ChevronUp, Minus, Plus, Search, TrendingDown, TrendingUp, XIcon} from "lucide-react";
-import {ToggleGroup, ToggleGroupItem} from "@/components/ui/toggle-group";
-import {RecordTypeToggleGroup} from "@/components/record/RecordTypeToggleGroup";
+import {Search} from "lucide-react";
 import {UISheet} from "@/components/theme/UISheet";
 import * as React from "react";
-import {DatePickerWithLabel} from "@/components/theme/form/DatePickerWithLabel";
-import {InputFieldWithLabel} from "@/components/theme/form/InputFieldWithLabel";
-import {NumberInputFieldWithLabel} from "@/components/theme/form/NumberInputFieldWithLabel";
-import {TextareaWithLabel} from "@/components/theme/form/TextareaWithLabel";
 import {Button} from "@/components/ui/button";
 import {motion} from "framer-motion";
 import {SingleRecord} from "@/components/record/SingleRecord";
 import {db} from "@/components/appwrite/database";
 import Loader from "@/components/loaders/loader";
 import {SearchSchema} from "@/lib/schemas/SearchSchema";
-
-// @TODO: store last type in localstorage
 
 export const SearchSheet = ({open, onOpenChange, pageData}) => {
 

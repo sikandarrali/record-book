@@ -1,21 +1,13 @@
 "use client";
 import { db } from "@/components/appwrite/database";
-import FormLabel from "@/components/theme/FormLabel";
 import { Form, Formik } from "formik";
 import { useState } from "react";
-import { NumericFormat } from "react-number-format";
-import { useMediaQuery } from "react-responsive";
-import * as Yup from "yup";
 import {toast} from "react-toastify";
 import {ToastOptions} from "@/lib/ToastOptions";
-import {SheetDescription, SheetHeader, SheetTitle, SheetContent, Sheet} from "@/components/ui/sheet";
 import UIText from "@/components/theme/UIText";
 import {UISheetFooterInForm} from "@/components/theme/UISheetFooterInForm";
-import {useI18n, useScopedI18n} from "@/locales/client";
-import {UITextInput} from "@/components/theme/UITextInput";
-import {UITextArea} from "@/components/theme/UITextArea";
+import {useI18n} from "@/locales/client";
 import {useAuth} from "@/components/contexts/AuthContext";
-import {UINumberInput} from "@/components/theme/UINumberInput";
 import {ChevronDown, ChevronUp} from "lucide-react";
 import {RecordTypeToggleGroup} from "@/components/record/RecordTypeToggleGroup";
 import {RecordSchema} from "@/lib/schemas/RecordSchema";
@@ -28,9 +20,6 @@ import {UISheet} from "@/components/theme/UISheet";
 import {getCurrentCurrency} from "@/lib/utils";
 
 export const EditRecord = ({ open, onOpenChange, item, currency }) => {
-	const isDesktop = useMediaQuery({
-		query: "(min-width: 1024px)",
-	});
 	const t = useI18n()
 
 	const [adding, setAdding] = useState(false);

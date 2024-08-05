@@ -1,7 +1,6 @@
 "use client";
 import { db } from "@/components/appwrite/database";
 import { Form, Formik } from "formik";
-import {ChevronDown, ChevronUp} from "lucide-react";
 import { useState} from "react";
 import {ToastOptions} from "@/lib/ToastOptions";
 import {toast} from "react-toastify";
@@ -24,16 +23,12 @@ import {TextareaWithLabel} from "@/components/theme/form/TextareaWithLabel";
 import {UISheet} from "@/components/theme/UISheet";
 
 export const EditDiary = ({ open, onOpenChange, diaryData, setDiaryData, setGroup }) => {
-
 	const t = useI18n()
 	const [adding, setAdding] = useState(false);
 	const [disabled, setDisabled] = useState(false);
 	const {user} = useAuth()
 	const {userOwnedGroups, userGroups} = useData()
-	const [addEventDetails, setAddEventDetails] = useState(false)
-
 	let defaultTeamId = diaryData?.teamId || null;
-
 	const isOwner =  diaryData?.$permissions.some(permission => permission === `delete("user:${user.$id}")`)
 
 	const updateAllItemsInEvent = async (teamId) => {

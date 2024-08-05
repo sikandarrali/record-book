@@ -11,16 +11,12 @@ import {useScopedI18n} from "@/locales/client";
 import {Logo} from "@/components/nav/Logo";
 
 const Page = () => {
-
 	const searchParams = useSearchParams()
-
 	const membershipId = searchParams.get('membershipId');
 	const userId = searchParams.get('userId');
 	const secret = searchParams.get('secret');
 	const teamId = searchParams.get('teamId');
-
 	const t = useScopedI18n('joinGroup');
-
 	const {user} = useAuth()
 	const [error, setError] = useState({correct: true, text:''})
 	const [showError, setShowError] = useState(false)

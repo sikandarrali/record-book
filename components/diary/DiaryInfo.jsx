@@ -1,9 +1,8 @@
 import UIText from "@/components/theme/UIText";
 import { Button } from "@/components/ui/button";
-import {Minus, Plus, SquarePen} from "lucide-react";
+import {SquarePen} from "lucide-react";
 import { useRouter } from "next/navigation";
 import {useLayoutEffect, useState} from "react";
-import { NumericFormat } from "react-number-format";
 import { EditDiary } from "./EditDiary";
 import {db} from "@/components/appwrite/database";
 import {toast} from "react-toastify";
@@ -12,7 +11,7 @@ import {Query} from "appwrite";
 import {useI18n} from "@/locales/client";
 import {UISheetInfoFooter} from "@/components/theme/UISheetInfoFooter";
 import {useData} from "@/components/contexts/DataContext";
-import {EnglishMonths, SupportedCurrencies} from "@/lib/defaultData";
+import {EnglishMonths} from "@/lib/defaultData";
 import {useAuth} from "@/components/contexts/AuthContext";
 import {DeleteDialog} from "@/components/theme/DeleteDialog";
 import {PARENT_DIARY_ID_FIELD_NAME} from "@/components/appwrite/appwrite";
@@ -22,9 +21,6 @@ import {UISheet} from "@/components/theme/UISheet";
 import {Badge} from "@/components/ui/badge";
 import {PopupPageCreatedByYou} from "@/components/theme/PopupPageCreatedByYou";
 import {PopupPageSharedWithGroup} from "@/components/theme/PopupPageSharedWithGroup";
-import {BookType} from "@/components/page/BookType";
-import {cn, getCurrentCurrency} from "@/lib/utils";
-import {FormattedCurrency} from "@/components/theme/FormattedCurrency";
 
 const DiaryInfo = ({ diaryData, setDiaryData, sum }) => {
 	const [openDetails, setOpenDetails] = useState(false);

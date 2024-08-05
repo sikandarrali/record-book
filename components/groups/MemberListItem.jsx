@@ -23,7 +23,6 @@ import UIText from "@/components/theme/UIText";
 import {db} from "@/components/appwrite/database";
 import {Permission, Query, Role} from "appwrite";
 
-
 export const MemberListItem = ({data, eventInThisGroup, teamID, setUsersInGroup, groupName, isGroupOwner}) =>{
 
     const isOwner =  data.roles.includes('owner');

@@ -1,8 +1,6 @@
 "use client";
-import {Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle} from "@/components/ui/sheet";
 import {cn, GetCurrentLanguage} from "@/lib/utils";
 import {useState} from "react";
-import { useMediaQuery } from "react-responsive";
 import {ToastOptions} from "@/lib/ToastOptions";
 import {toast} from "react-toastify";
 import {account} from "@/components/appwrite/appwrite";
@@ -16,9 +14,7 @@ import { Check, ChevronsUpDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
     Command,
-    CommandEmpty,
     CommandGroup,
-    CommandInput,
     CommandItem,
     CommandList,
 } from "@/components/ui/command"
@@ -32,10 +28,6 @@ import {UISheet} from "@/components/theme/UISheet";
 
 
 export const EditLanguage = ({ open, onOpenChange }) => {
-    const isDesktop = useMediaQuery({
-        query: "(min-width: 1024px)",
-    });
-
     const [adding, setAdding] = useState(false);
     const [disabled, setDisabled] = useState(false);
     const {user, setUser} = useAuth()

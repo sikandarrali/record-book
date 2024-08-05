@@ -1,7 +1,7 @@
 "use client";
 import {scrollToTop} from "@/lib/utils";
 import { Form, Formik } from "formik";
-import {ChevronDown, ChevronUp, Loader2Icon} from "lucide-react";
+import {ChevronDown, ChevronUp} from "lucide-react";
 import {useState} from "react";
 import {toast} from "react-toastify";
 import {ToastOptions} from "@/lib/ToastOptions";
@@ -30,7 +30,6 @@ export const AddPage = ({ open, onOpenChange, userOwnedGroups }) => {
 	const {user} = useAuth()
 	const [addEventDetails, setAddEventDetails] = useState(false)
 	const t = useI18n()
-
 
 	const onAdd = async (values) => {
 		setAdding(true);

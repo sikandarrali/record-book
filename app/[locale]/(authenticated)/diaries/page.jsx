@@ -1,23 +1,19 @@
 "use client";
-import { AddPage } from "@/components/page/AddPage";
 import PageContainer from "@/components/providers/PageContainer";
 import UIText from "@/components/theme/UIText";
 import {FixStickyHeaderScrollError} from "@/lib/utils";
-import {AnimatePresence, motion} from "framer-motion";
+import { motion} from "framer-motion";
 import {useEffect, useRef, useState} from "react";
-import {client, COLLECTION_ID_BOOKS, COLLECTION_ID_DIARIES, DATABASE_ID, teams} from "@/components/appwrite/appwrite";
+import {client,COLLECTION_ID_DIARIES, DATABASE_ID} from "@/components/appwrite/appwrite";
 import {db} from "@/components/appwrite/database";
 import {Query} from "appwrite";
-import {useI18n, useScopedI18n} from "@/locales/client";
-import {useRouter} from "next/navigation";
+import {useI18n} from "@/locales/client";
 import {useAuth} from "@/components/contexts/AuthContext";
 import Link from "next/link";
 import {LockKeyhole, Users2} from "lucide-react";
-import {LOCALE_PUBLIC_ROUTES} from "@/lib/routes";
 import {Button} from "@/components/ui/button";
 import ScrollToTopButton from "@/components/page/ScrollToTopButton";
 import Loader from "@/components/loaders/loader";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {useData} from "@/components/contexts/DataContext";
 import AddDiary from "@/components/diary/AddDiary";
 

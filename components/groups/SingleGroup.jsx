@@ -36,7 +36,6 @@ const SingleGroup = ({ data }) => {
     const [eventInThisGroup, setEventInThisGroup] = useState([])
     const router = useRouter()
 
-
     useEffect(() => {
         const getUsersInGroup = async () => {
             if(open){

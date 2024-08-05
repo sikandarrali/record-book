@@ -7,7 +7,6 @@ import UIText from "@/components/theme/UIText";
 import Link from "next/link";
 import {redirect} from "next/navigation";
 import {HOMEPAGE_ROUTE} from "@/lib/routes";
-import {Logo} from "@/components/nav/Logo";
 
 export default function Home() {
 	const { onGoogleWithLogin, user } = useAuth();

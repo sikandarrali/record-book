@@ -1,11 +1,8 @@
 "use client";
 import FormLabel from "@/components/theme/FormLabel";
-import {Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle} from "@/components/ui/sheet";
-import {cn, scrollToTop} from "@/lib/utils";
+import {scrollToTop} from "@/lib/utils";
 import { Form, Formik } from "formik";
 import { useState } from "react";
-import { useMediaQuery } from "react-responsive";
-import * as Yup from "yup";
 import {ToastOptions} from "@/lib/ToastOptions";
 import {toast} from "react-toastify";
 import {account} from "@/components/appwrite/appwrite";
@@ -18,10 +15,6 @@ import {ProfileSchema} from "@/lib/schemas/profileSchema";
 import {UISheet} from "@/components/theme/UISheet";
 
 export const EditProfile = ({ open, onOpenChange }) => {
-    const isDesktop = useMediaQuery({
-        query: "(min-width: 1024px)",
-    });
-
     const [adding, setAdding] = useState(false);
     const [disabled, setDisabled] = useState(false);
     const {user, setUser} = useAuth()
