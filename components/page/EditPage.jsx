@@ -4,7 +4,6 @@ import FormLabel from "@/components/theme/FormLabel";
 import { Form, Formik } from "formik";
 import {ChevronDown, ChevronUp} from "lucide-react";
 import {useState} from "react";
-import { useMediaQuery } from "react-responsive";
 import {ToastOptions} from "@/lib/ToastOptions";
 import {toast} from "react-toastify";
 import {useAuth} from "@/components/contexts/AuthContext";
@@ -31,16 +30,12 @@ import {DropdownCurrencySelectFieldWithLabel} from "@/components/theme/form/Drop
 import {SupportedCurrencies} from "@/lib/defaultData";
 
 export const EditPage = ({ open, onOpenChange, pageData, setPageData, setGroup }) => {
-	const isDesktop = useMediaQuery({
-		query: "(min-width: 1024px)",
-	});
 	const t = useI18n()
 	const [adding, setAdding] = useState(false);
 	const [disabled, setDisabled] = useState(false);
 	const {user} = useAuth()
 	const {userOwnedGroups, userGroups} = useData()
 	const [addEventDetails, setAddEventDetails] = useState(false)
-
 	let defaultTeamId = pageData?.teamId || null;
 
 	const isOwner =  pageData?.$permissions.some(permission => permission === `delete("user:${user.$id}")`)

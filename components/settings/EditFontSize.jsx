@@ -1,14 +1,12 @@
 "use client";
-import {Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle} from "@/components/ui/sheet";
-import {cn, GetCurrentFontSize, GetCurrentLanguage} from "@/lib/utils";
+import {cn, GetCurrentFontSize} from "@/lib/utils";
 import {useState} from "react";
-import { useMediaQuery } from "react-responsive";
 import {ToastOptions} from "@/lib/ToastOptions";
 import {toast} from "react-toastify";
 import {account} from "@/components/appwrite/appwrite";
 import {useAuth} from "@/components/contexts/AuthContext";
 import UIText from "@/components/theme/UIText";
-import {useChangeLocale, useCurrentLocale, useScopedI18n} from "@/locales/client";
+import {useCurrentLocale, useScopedI18n} from "@/locales/client";
 import {SupportedFontSizes} from "@/lib/defaultData";
 import * as React from "react"
 import { Check, ChevronsUpDown } from "lucide-react"
@@ -31,12 +29,7 @@ import {UISheetFooterWithAction} from "@/components/theme/UISheetFooterWithActio
 import {useRouter} from "next/navigation";
 import {UISheet} from "@/components/theme/UISheet";
 
-
 export const EditFontSize = ({ open, onOpenChange }) => {
-    const isDesktop = useMediaQuery({
-        query: "(min-width: 1024px)",
-    });
-
     const [adding, setAdding] = useState(false);
     const [disabled, setDisabled] = useState(false);
     const {user, setUser} = useAuth()

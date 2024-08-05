@@ -1,39 +1,20 @@
 "use client";
-import FormLabel from "@/components/theme/FormLabel";
 import { Form, Formik } from "formik";
 import {useState} from "react";
 import {toast} from "react-toastify";
 import {ToastOptions} from "@/lib/ToastOptions";
-import {
-	Sheet,
-	SheetContent, SheetDescription, SheetHeader, SheetTitle
-} from "@/components/ui/sheet";
 import useScrollToView from "@/lib/hooks/useScrollToView";
-import {useMediaQuery} from "react-responsive";
 import UIText from "@/components/theme/UIText";
-import {getCurrentCurrency, scrollToTop} from "@/lib/utils";
+import {scrollToTop} from "@/lib/utils";
 import {ID, Permission, Role} from "appwrite";
 import {useAuth} from "@/components/contexts/AuthContext";
 import {UISheetFooterInForm} from "@/components/theme/UISheetFooterInForm";
 import {useI18n} from "@/locales/client";
-import {UITextInput} from "@/components/theme/UITextInput";
-import {UITextArea} from "@/components/theme/UITextArea";
 import {COLLECTION_ID_DIARIES_RECORDS, DATABASE_ID, databases} from "@/components/appwrite/appwrite";
-import {UINumberInput} from "@/components/theme/UINumberInput";
-import {RecordSchema} from "@/lib/schemas/RecordSchema";
-import { Toggle } from "@/components/ui/toggle"
-import {ChevronDown, ChevronUp, Minus, Plus, TrendingDown, TrendingUp} from "lucide-react";
-import {ToggleGroup, ToggleGroupItem} from "@/components/ui/toggle-group";
-import {RecordTypeToggleGroup} from "@/components/record/RecordTypeToggleGroup";
 import {UISheet} from "@/components/theme/UISheet";
 import * as React from "react";
-import {DatePickerWithLabel} from "@/components/theme/form/DatePickerWithLabel";
 import {InputFieldWithLabel} from "@/components/theme/form/InputFieldWithLabel";
-import {NumberInputFieldWithLabel} from "@/components/theme/form/NumberInputFieldWithLabel";
-import {TextareaWithLabel} from "@/components/theme/form/TextareaWithLabel";
 import {DiaryRecordSchema} from "@/lib/schemas/DiaryRecordSchema";
-
-// @TODO: store last type in localstorage
 
 export const AddDiaryRecord = ({open, onOpenChange, diaryData}) => {
 	const [adding, setAdding] = useState(false);
@@ -41,7 +22,6 @@ export const AddDiaryRecord = ({open, onOpenChange, diaryData}) => {
 	const {user} = useAuth()
 	const diaryID = diaryData?.$id
 	const t = useI18n()
-	const [showAddDetails, setShowAddDetails ] = useState(false)
 
 	useScrollToView()
 

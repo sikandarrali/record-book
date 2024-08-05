@@ -4,6 +4,9 @@ All your records in one place. Say goodbye to your record diaries
 
 ## Changelog
 
+### 6.0.1
+- Removed unused variables
+
 ### 6.0.0
 - Improved pagination to load from Server on each request by user instead of loading all: improves performance
 - Separated Search into new Modal

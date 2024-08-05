@@ -1,13 +1,8 @@
 "use client";
-import { AddRecord } from "@/components/record/AddRecord";
-import { SingleRecord } from "@/components/record/SingleRecord";
-import PageInfo from "@/components/page/PageInfo";
 import UIText from "@/components/theme/UIText";
 import { Button } from "@/components/ui/button";
 import {AnimatePresence, motion} from "framer-motion";
-import {Minus, Plus, XIcon} from "lucide-react";
-import {useCallback, useEffect, useLayoutEffect, useRef, useState} from "react";
-import { NumericFormat } from "react-number-format";
+import {useEffect, useLayoutEffect, useState} from "react";
 import {db} from "@/components/appwrite/database";
 import {Query} from "appwrite";
 import {
@@ -17,47 +12,29 @@ import {
 	DATABASE_ID,
 	databases, PARENT_DIARY_ID_FIELD_NAME
 } from "@/components/appwrite/appwrite";
-import {cn, getCurrentCurrency, SortItemsByDateAndCreatedAt} from "@/lib/utils";
-import {CheckIcon, ReloadIcon} from "@radix-ui/react-icons";
-import {useI18n, useScopedI18n} from "@/locales/client";
+import {cn} from "@/lib/utils";
+import {CheckIcon} from "@radix-ui/react-icons";
+import {useI18n} from "@/locales/client";
 import {useParams, useRouter} from "next/navigation";
 import PageContainer from "@/components/providers/PageContainer";
 import ScrollToTopButton from "@/components/page/ScrollToTopButton";
-import {UITextInput} from "@/components/theme/UITextInput";
 import Loader from "@/components/loaders/loader";
 import {useAuth} from "@/components/contexts/AuthContext";
-import {HOMEPAGE_ROUTE} from "@/lib/routes";
-import {useData} from "@/components/contexts/DataContext";
 import {PopupPageCreatedByYou} from "@/components/theme/PopupPageCreatedByYou";
 import {PopupPageSharedWithGroup} from "@/components/theme/PopupPageSharedWithGroup";
-import {BookType} from "@/components/page/BookType";
-import {FormattedCurrency} from "@/components/theme/FormattedCurrency";
 import {AddDiaryRecord} from "@/components/diaryRecord/AddDiaryRecord";
 import {SingleDiaryRecord} from "@/components/diaryRecord/SingleDiaryRecord";
 import DiaryInfo from "@/components/diary/DiaryInfo";
-import {Badge} from "@/components/ui/badge";
-import {toast} from "react-toastify";
-import {ToastOptions} from "@/lib/ToastOptions";
-
-const data = [
-	{id: 1, name: 'a', date:'2024-07-29T21:00:07.364Z', createdAt: '2024-07-28T21:00:07.364Z'},
-	{id: 2, name: 'b', date:'', createdAt: '2024-07-28T21:00:07.364Z'},
-	{id: 3, name: 'c', date:'2023-07-29T21:00:07.364Z', createdAt: '2024-07-28T21:00:07.364Z'},
-	{id: 4, name: 'd', date:'2023-07-29T21:00:07.364Z', createdAt: '2024-07-28T21:00:07.364Z'},
-]
 
 const Page = () => {
 	const t = useI18n();
 	const [localLoading, setLocalLoading] = useState(true)
 	const {user} = useAuth()
-
 	const [openAddModal, setOpenAddModal] = useState(false);
 	const [diaryData, setDiaryData] = useState(null)
-
 	const [items, setItems] = useState([])
 	const [itemsDefault, setItemsDefault] = useState([])
 	const router = useRouter()
-
 	const params = useParams()
 
 	// get event & items
@@ -78,10 +55,7 @@ const Page = () => {
 					]);
 					setItems(response.documents)
 				}
-			}catch (e){
-				// console.log(e)
-				// router.replace(HOMEPAGE_ROUTE)
-			}
+			}catch (e){}
 			finally {
 				setLocalLoading(false)
 			}

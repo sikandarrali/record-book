@@ -2,12 +2,11 @@
 import PageContainer from "@/components/providers/PageContainer";
 import UIText from "@/components/theme/UIText";
 import { motion } from "framer-motion";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import {Button} from "@/components/ui/button";
-import {ChevronDown, ChevronUp, Info, ShieldCheck, Users2} from "lucide-react";
+import {ChevronDown, ChevronUp, Info} from "lucide-react";
 import {AddGroup} from "@/components/groups/AddGroup";
 import SingleGroup from "@/components/groups/SingleGroup";
-import {teams} from "@/components/appwrite/appwrite";
 import {useScopedI18n} from "@/locales/client";
 import {useData} from "@/components/contexts/DataContext";
 
@@ -17,7 +16,6 @@ export default function Page() {
     const [showInformation, setShowInformation] = useState(false)
     const t = useScopedI18n('groups')
     const {userGroups} = useData()
-    const [localLoading, setLocalLoading] = useState(true)
 
     return (
         <PageContainer hideTopbar title={t('title')}>
