@@ -35,7 +35,7 @@ export const SearchSheet = ({open, onOpenChange, pageData}) => {
                 Query.search("name", values.value),
                 Query.orderDesc("$createdAt"),
                 Query.orderDesc("date"),
-                Query.limit(-1)
+                Query.limit(1000)
             ]);
 
             if(response.documents.length === 0){

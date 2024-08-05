@@ -28,6 +28,7 @@ import {PopupPageCreatedByYou} from "@/components/theme/PopupPageCreatedByYou";
 import {PopupPageSharedWithGroup} from "@/components/theme/PopupPageSharedWithGroup";
 import {FormattedCurrency} from "@/components/theme/FormattedCurrency";
 import {SearchSheet} from "@/components/record/SearchSheet";
+import {AddButtonWrapper} from "@/components/theme/AddButtonWrapper";
 
 const Page = () => {
 	const t = useI18n();
@@ -286,14 +287,14 @@ const Page = () => {
 			</AnimatePresence>
 
 			{/* Add Record Button */}
-			<div className={'fixed bottom-10 position-center-horizontally max-w-lg z-20 flex items-center justify-center px-6 left-0 w-full'}>
+			<AddButtonWrapper>
 				<Button
 					onClick={() => setOpenAddModal(true)}
 					className="flex flex-1 min-h-14"
 				>
 					<UIText variant={'heading'} text={t('pages.records.add')}/>
 				</Button>
-			</div>
+			</AddButtonWrapper>
 
 			<AddRecord
 				open={openAddModal}
