@@ -1,9 +1,9 @@
+"use client"
 import UIText from "@/components/theme/UIText";
 import { Button } from "@/components/ui/button";
-import {Minus, Plus, SquarePen} from "lucide-react";
+import {SquarePen} from "lucide-react";
 import { useRouter } from "next/navigation";
 import {useLayoutEffect, useState} from "react";
-import { NumericFormat } from "react-number-format";
 import { EditPage } from "./EditPage";
 import {db} from "@/components/appwrite/database";
 import {toast} from "react-toastify";
@@ -19,7 +19,6 @@ import {PARENT_BOOK_ID_FIELD_NAME} from "@/components/appwrite/appwrite";
 import {CreatedUpdatedBy} from "@/components/theme/CreatedUpdatedBy";
 import {HOMEPAGE_ROUTE} from "@/lib/routes";
 import {UISheet} from "@/components/theme/UISheet";
-import {Badge} from "@/components/ui/badge";
 import {PopupPageCreatedByYou} from "@/components/theme/PopupPageCreatedByYou";
 import {PopupPageSharedWithGroup} from "@/components/theme/PopupPageSharedWithGroup";
 import {BookType} from "@/components/page/BookType";
@@ -113,7 +112,7 @@ const PageInfo = ({ pageData, setPageData, sum }) => {
 				className={'px-3 gap-2'}
 			>
 				<SquarePen className={'w-4 h-4 text-primary'} />
-				<UIText text={t('labels.edit')} variant={'xs'}/>
+				<UIText text={t('labels.edit')} variant={'xs'} className={'rtl:-mt-1'}/>
 			</Button>
 
 			<UISheet

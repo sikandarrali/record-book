@@ -1,3 +1,4 @@
+"use client"
 import React, {useState} from 'react';
 import {Button} from "@/components/ui/button";
 import {ArrowUpCircle} from "lucide-react";
@@ -34,11 +35,11 @@ const ScrollToTopButton = () =>{
                    initial={{opacity: 0, x: 100}}
                    animate={{opacity: 1, x: 0, transition:{duration: 0.5}}}
                    exit={{opacity: 0, x: 100, transition:{duration: 0.5}}}
-                   className={'fixed bottom-28 right-8'}
+                   className={'fixed bottom-36 right-8'}
                    onClick={scrollToTop}
                >
                    <Button variant={'secondary'} className={'rounded-full h-12 w-12 p-2 hover:bg-muted-foreground/30'}>
-                       <ArrowUpCircle className={'w-6 h-6'}/>
+                       <ArrowUpCircle className={'w-6 h-6 text-primary'}/>
                    </Button>
                </motion.div>
            }

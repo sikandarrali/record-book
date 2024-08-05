@@ -101,6 +101,7 @@
     "group": "Group",
     "invalidEmail": "invalid email",
     "khaataBook": "Khaata Book",
+    "min1character": "min 1 character",
     "max100characters": "max 100 characters",
     "max200characters": "max 200 characters",
     "max20characters": "max 20 characters",
@@ -121,7 +122,10 @@
     "shareWithGroup": "Share with Group",
     "type": "Type",
     "updatedBy": "Updated by",
-    "viewCreatedEditedBy": "More Information"
+    "viewCreatedEditedBy": "More Information",
+    "search": "Search",
+    "searchRecords": "Search Records",
+    "searching": "Seaching, please wait..."
   },
   "login": {
     "withGoogle": "Login with Google"
@@ -197,8 +201,8 @@
       "editPage": "Edit Record",
       "noSearchItemsFound": "No Records found for your Search",
       "numOfItemsMatchingSearch": "Items found:",
-      "searchPlaceholder": "Type to Search...",
-      "totalEntries": "Total Entries: "
+      "searchPlaceholder": "Type here to Search...",
+      "totalEntries": "Total Records: "
     },
     "home": {
       "books": {

@@ -2,7 +2,7 @@
 import { AddPage } from "@/components/page/AddPage";
 import PageContainer from "@/components/providers/PageContainer";
 import UIText from "@/components/theme/UIText";
-import {FixStickyHeaderScrollError} from "@/lib/utils";
+import {cn, FixStickyHeaderScrollError} from "@/lib/utils";
 import {AnimatePresence, motion} from "framer-motion";
 import {useEffect, useRef, useState} from "react";
 import {client, COLLECTION_ID_BOOKS, DATABASE_ID, teams} from "@/components/appwrite/appwrite";
@@ -32,7 +32,8 @@ export default function Page() {
 	const getEvents = async () =>{
 		try {
 			const response = await db.pages.list([
-				Query.orderDesc("$createdAt")
+				Query.orderDesc("$createdAt"),
+				Query.limit(1000)
 			]);
 
 			setBooks(response.documents)
@@ -87,13 +88,10 @@ export default function Page() {
 			FixStickyHeaderScrollError(scrollRef.current);
 		}
 	}, []);
-	//
-	// console.log(LOCALE_PUBLIC_ROUTES())
 
-	const [activeTab, setActiveTab] = useState('books')
 
 	return (
-		<PageContainer title={t('pages.books.titleBooks')}>
+		<PageContainer title={t('pages.books.titleBooks')} hideBackButton>
 			{localLoading ?
 				<Loader/>
 				:
@@ -104,7 +102,7 @@ export default function Page() {
 						transition: { duration: 0.3, delay: 0.4 },
 					}}
 					exit={{ opacity: 0 }}
-					className="flex flex-col gap-8 rtl:gap-9 mt-10 pb-20"
+					className="flex flex-col gap-9 rtl:gap-10 mt-10 pb-20"
 					ref={scrollRef}
 				>
 					{/* Book List */}
@@ -124,8 +122,13 @@ export default function Page() {
 								key={book.$id}
 								className={'relative pt-4 group'}
 							>
-								<div className={'absolute -top-4 rtl:-top-5 left-0 group-hover:bg-muted rounded-lg rounded-bl-none rounded-br-none border-b-0 bg-background z-10 border px-2 py-1'}>
-									<UIText text={t(`labels.${book.type}`)} variant={'xs'}/>
+								<div className={cn(
+										'absolute -top-4 rtl:-top-5 left-0 group-hover:bg-muted rounded-lg rounded-bl-none rounded-br-none border-b-0 bg-background z-10 border px-2 py-1',
+										user?.prefs?.fontSize === "lg" && "rtl:-top-6 pb-2",
+										user?.prefs?.fontSize === "xl" && "rtl:-top-7 pb-2",
+									)}
+								>
+									<UIText text={t(`labels.${book.type}`)} weight={'medium'} variant={'xs'}/>
 								</div>
 								<div className={'absolute -top-4 right-0 flex gap-2 pt-2 pr-2'}>
 									{book.$permissions.some(permission => permission === `delete("user:${user.$id}")`) && <LockKeyhole className={'w-5 h-5 text-primary'}/>}
@@ -133,9 +136,9 @@ export default function Page() {
 								</div>
 								<Link
 									href={`/book/${book.$id}`}
-									className={'relative p-8 group-hover:bg-muted border cursor-pointer flex items-center justify-center shadow-sm rounded-lg rounded-tl-none text-center outline-none'}
+									className={'relative bg-background z-20 p-8 group-hover:bg-muted border cursor-pointer flex items-center justify-center shadow-sm rounded-lg rounded-tl-none text-center outline-none'}
 								>
-									<UIText variant={'heading'} className={'break-all text-primary'} text={book?.name} textOrientation={'center'} />
+									<UIText variant={'heading'} className={'break-words text-primary'} text={book?.name} textOrientation={'center'} />
 								</Link>
 							</motion.div>
 						))

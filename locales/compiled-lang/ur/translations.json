@@ -101,6 +101,7 @@
     "group": "گروپ",
     "invalidEmail": "غلط ای میل",
     "khaataBook": "کھاتہ بُک",
+    "min1character": "کم سے کم 1 حرف",
     "max100characters": "زیادہ سے زیادہ 100 حروف",
     "max200characters": "زیادہ سے زیادہ 200 حروف",
     "max20characters": "زیادہ سے زیادہ 20 حروف",
@@ -121,7 +122,10 @@
     "shareWithGroup": "گروپ کے ساتھ شئیر کریں",
     "type": "ریکارڈ کی قسم",
     "updatedBy": "ترمیم کردہ",
-    "viewCreatedEditedBy": "مزید معلومات"
+    "viewCreatedEditedBy": "مزید معلومات",
+    "search": "تلاش کریں",
+    "searchRecords": "ریکارڈ تلاش کریں",
+    "searching": "تلاش جاری ہے، برائے کرم انتظار کریں"
   },
   "login": {
     "withGoogle": "گوگل کے ساتھ لاگ ان کریں"
@@ -197,7 +201,7 @@
       "editPage": "ریکارڈ میں ترمیم کریں",
       "noSearchItemsFound": "آپ کی تلاش کے مطابق کوئی ریکارڈ موجود نہیں",
       "numOfItemsMatchingSearch": "تلاش کے نتائج:",
-      "searchPlaceholder": "تلاش کرنے کے لئے ٹائپ کریں۔۔۔",
+      "searchPlaceholder": "یہاں ٹائپ کریں۔۔۔",
       "totalEntries": "کل اندراج: "
     },
     "home": {

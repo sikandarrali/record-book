@@ -19,6 +19,11 @@ module.exports = {
 			},
 		},
 		extend: {
+			strokeWidth: {
+				'2.5': '2.5px',
+				'3': '3px',
+				'4': '4px'
+			},
 			inset: {
 				'center-horizontally': '3px',
 			},

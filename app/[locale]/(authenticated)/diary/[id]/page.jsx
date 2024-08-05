@@ -47,28 +47,18 @@ const data = [
 ]
 
 const Page = () => {
-	const headerRef = useRef(null);
 	const t = useI18n();
 	const [localLoading, setLocalLoading] = useState(true)
 	const {user} = useAuth()
-	const {userGroups} = useData()
 
 	const [openAddModal, setOpenAddModal] = useState(false);
-	const [totalSum, setTotalSum] = useState(0);
 	const [diaryData, setDiaryData] = useState(null)
 
 	const [items, setItems] = useState([])
 	const [itemsDefault, setItemsDefault] = useState([])
 	const router = useRouter()
-	const [searchValue, setSearchValue] = useState("");
-	const [searchResultsMessage, setSearchResultsMessage] = useState('')
 
 	const params = useParams()
-
-	const itemsPerPage = 15;
-	const [visibleItems, setVisibleItems] = useState([]); // Currently visible items
-	const [hasMoreItems, setHasMoreItems] = useState(true); // Flag to check if more items are available
-	const [loadingItems, setLoadingItems] = useState(false); // To show loadingItems spinner
 
 	// get event & items
 	useLayoutEffect(() => {
@@ -83,13 +73,13 @@ const Page = () => {
 					setDiaryData(getEvent)
 					const response = await db.diariesRecords.list([
 						Query.equal(PARENT_DIARY_ID_FIELD_NAME, params.id),
-						Query.orderDesc("$createdAt")
+						Query.orderDesc("$createdAt"),
+						Query.limit(1000)
 					]);
 					setItems(response.documents)
-					setItemsDefault(response.documents)
 				}
 			}catch (e){
-				console.log(e)
+				// console.log(e)
 				// router.replace(HOMEPAGE_ROUTE)
 			}
 			finally {
@@ -111,12 +101,10 @@ const Page = () => {
 				if(response.payload[PARENT_DIARY_ID_FIELD_NAME] === params.id){
 					// const sorted = SortItemsByDateAndCreatedAt()
 					setItems(prev=> [response.payload, ...prev])
-					setItemsDefault(prev=> [response.payload, ...prev])
 				}
 			}
 			if(response.events.includes("databases.*.collections.*.documents.*.delete")){
 				setItems(prev=> prev.filter(item=> item.$id !== response.payload.$id))
-				setItemsDefault(prev=> prev.filter(item=> item.$id !== response.payload.$id))
 			}
 			if (response.events.includes("databases.*.collections.*.documents.*.update")) {
 				setItems(prev => {
@@ -131,52 +119,11 @@ const Page = () => {
 					return [...prev, response.payload];
 
 				});
-				setItemsDefault(prev => {
-					// Find the index of the item to update
-					const index = prev.findIndex(item => item.$id === response.payload.$id);
-					if (index !== -1) {
-						// Create a new array with the updated item
-						const updatedItemsDefault = [...prev];
-						updatedItemsDefault[index] = response.payload; // Assuming response.payload contains the updated document data
-						return updatedItemsDefault;
-					}
-					return [...prev, response.payload];
-
-				});
 			}
 		});
 
 		return ()=> unsubscribe()
 	}, []);
-
-	// Function to load more items
-	const loadMorePosts = useCallback(() => {
-		if (loadingItems) return; // If already loadingItems, don't load more
-
-		setLoadingItems(true);
-		setTimeout(() => {
-			const currentLength = visibleItems.length;
-			const morePosts = items.slice(currentLength, currentLength + itemsPerPage);
-
-			setVisibleItems(prevVisiblePosts => [
-				...prevVisiblePosts,
-				...morePosts
-			]);
-
-			if (currentLength + morePosts.length >= items.length) {
-				setHasMoreItems(false);
-			}
-
-			setLoadingItems(false);
-		}, 1000); // Simulate loadingItems time
-	}, [visibleItems, items, loadingItems]);
-
-	useEffect(() => {
-		setItems(itemsDefault);
-		setVisibleItems(itemsDefault.slice(0, itemsPerPage));
-		setHasMoreItems(true)
-		setLoadingItems(false)
-	}, [itemsDefault]);
 
 	const onMarkAsDone = async (itemID) => {
 
@@ -212,48 +159,42 @@ const Page = () => {
 					>
 						<div className={'relative flex flex-col flex-1'}>
 
-							{/* Badges */}
-							<div className={'flex items-center relative gap-2 justify-end -mt-6 mb-4'} dir={"ltr"}>
-								{diaryData?.$permissions.some(permission => permission === `delete("user:${user.$id}")`) &&
-									<PopupPageCreatedByYou side={'left'} align={'start'} className={'max-w-56 bg-muted'}/>
-								}
+							<div className={'absolute -top-14 w-full'}>
 
-								{/* Diary Badge */}
-								<Badge className={'absolute position-center-horizontally'}><UIText text={t("pages.diaries.titleDiary")} variant={'xs'}/></Badge>
+								{/* Badges */}
+								<div className={'flex items-center relative gap-2 justify-end '} dir={"ltr"}>
+									{diaryData?.$permissions.some(permission => permission === `delete("user:${user.$id}")`) &&
+										<PopupPageCreatedByYou side={'left'} align={'start'} className={'max-w-56 bg-muted'}/>
+									}
 
-								{diaryData?.teamId &&
-									<PopupPageSharedWithGroup teamId={diaryData?.teamId} side={'left'} align={'start'} className={'flex bg-muted flex-col gap-2'}/>
-								}
-							</div>
-
-							{/* Book Type */}
-							<div className={'absolute position-center-horizontally -top-5'}><BookType type={diaryData?.type}/></div>
-
-							{/* Name & Info Icon */}
-							<div className="flex gap-6 my-8 pb-4 pt-2.5 justify-between items-center w-full border-b border-border relative" ref={headerRef}>
-
-								<div className={'flex items-center justify-center text-center break-all gap-4 relative'}>
-									<UIText variant={"heading"} text={diaryData?.name} className={'self-center !text-primary'} />
+									{diaryData?.teamId &&
+										<PopupPageSharedWithGroup teamId={diaryData?.teamId} side={'left'} align={'start'} className={'flex bg-muted flex-col gap-2'}/>
+									}
 								</div>
 
-								<DiaryInfo
-									diaryData={diaryData}
-									setDiaryData={setDiaryData}
-								/>
+								<div className={'absolute position-center-horizontally top-0'}>
+									<DiaryInfo
+										diaryData={diaryData}
+										setDiaryData={setDiaryData}
+									/>
+								</div>
 
 							</div>
+
+							{/* Name */}
+							<UIText variant={"heading"} text={diaryData?.name} className={'pt-4 pb-4 !text-primary self-center'} textOrientation={'center'} />
 
 							<div className="flex flex-col pb-44">
 
 								<div className="flex flex-col overflow-y-auto -mx-8">
 
 									{/* Records List */}
-									{visibleItems?.length === 0 ?
+									{items?.length === 0 ?
 										<div className={'px-8 text-center pt-10'}>
 											<UIText text={t('pages.diaries.noDiariesRecords')} variant={'lg'}/>
 										</div>
 									:
-										visibleItems.map((item, i) => (
+										items.map((item, i) => (
 											<motion.div key={item.$id} className={'flex group items-center ltr:pl-8 rtl:pr-8 gap-4'}>
 												<div className={'cursor-pointer p-2 flex items-center justify-center shrink-0'} onClick={()=> onMarkAsDone(item.$id)}>
 													<div

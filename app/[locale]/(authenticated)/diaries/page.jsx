@@ -34,7 +34,8 @@ export default function Page() {
     const getDiaries = async () =>{
         try {
             const response = await db.diaries.list([
-                Query.orderDesc("$createdAt")
+                Query.orderDesc("$createdAt"),
+                Query.limit(1000)
             ]);
 
             setDiaries(response.documents)

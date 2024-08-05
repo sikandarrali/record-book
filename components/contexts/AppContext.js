@@ -14,7 +14,6 @@ const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
     const [isDarkMode, setIsDarkMode] = useState(false);
-    // const [systemMode, setSystemMode] = useState('');
     const [currentTheme, setCurrentTheme] = useState(localStorage.getItem(LOCAL_THEME_NAME));
     const htmlElement = document.documentElement;
 

@@ -1,6 +1,6 @@
+"use client"
 import {ToggleGroup, ToggleGroupItem} from "@/components/ui/toggle-group";
 import {useI18n} from "@/locales/client";
-import {Check} from "lucide-react";
 import {CheckIcon} from "@radix-ui/react-icons";
 
 export const BookTypeToggleGroup = ({value, setFieldValue}) =>{

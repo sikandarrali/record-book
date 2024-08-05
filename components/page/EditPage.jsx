@@ -1,22 +1,17 @@
 "use client";
 import { db } from "@/components/appwrite/database";
 import FormLabel from "@/components/theme/FormLabel";
-import { Button } from "@/components/ui/button";
-import {Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle} from "@/components/ui/sheet";
-import { cn } from "@/lib/utils";
 import { Form, Formik } from "formik";
-import {CalendarIcon, ChevronDown, ChevronUp, LockKeyhole, XIcon} from "lucide-react";
-import {useEffect, useLayoutEffect, useState} from "react";
+import {ChevronDown, ChevronUp} from "lucide-react";
+import {useState} from "react";
 import { useMediaQuery } from "react-responsive";
 import {ToastOptions} from "@/lib/ToastOptions";
 import {toast} from "react-toastify";
-import {Select, SelectContent, SelectItem, SelectTrigger} from "@/components/ui/select";
 import {useAuth} from "@/components/contexts/AuthContext";
 import {Permission, Query, Role} from "appwrite";
 import {useData} from "@/components/contexts/DataContext";
 import {UISheetFooterInForm} from "@/components/theme/UISheetFooterInForm";
 import {useI18n} from "@/locales/client";
-import {Label} from "@/components/ui/label";
 import UIText from "@/components/theme/UIText";
 import {
 	COLLECTION_ID_BOOKS,
@@ -24,10 +19,6 @@ import {
 	databases,
 	PARENT_BOOK_ID_FIELD_NAME
 } from "@/components/appwrite/appwrite";
-import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
-import { Calendar } from "@/components/ui/calendar"
-import {UITextInput} from "@/components/theme/UITextInput";
-import {UITextArea} from "@/components/theme/UITextArea";
 import {PageSchema} from "@/lib/schemas/pageSchema";
 import {InputFieldWithLabel} from "@/components/theme/form/InputFieldWithLabel";
 import {DropdownGroupSelectFieldWithLabel} from "@/components/theme/form/DropdownGroupSelectFieldWithLabel";

@@ -24,9 +24,10 @@ import {useCurrentLocale, useI18n, useScopedI18n} from "@/locales/client";
 import UIText from "@/components/theme/UIText";
 import usePWAStatus from "@/lib/hooks/usePWAStatus";
 import {Button} from "@/components/ui/button";
-import {HOMEPAGE_ROUTE} from "@/lib/routes";
+import {HOMEPAGE_ROUTE, isActivePath} from "@/lib/routes";
 import {DarkModeToggle} from "@/components/theme/DarkModeToggle";
 import {Logo} from "@/components/nav/Logo";
+import {Separator} from "@/components/ui/separator";
 
 const Navbar = () => {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -131,44 +132,46 @@ const Sidebar = ({ open, onOpenChange, isPWAInstalled }) => {
 							</div>
 
 							<div className="flex flex-col px-6 mt-auto mb-6 lg:mt-10 gap-0.5">
-								<MenuItem
-									label={t('links.home')}
-									href={"/"}
-									icon={
-										<Home className={cn("w-[18px] h-[18px] rtl:mt-1", pathname === "/"  && "text-muted")} />
-									}
-								/>
 
 								<MenuItem
 									label={t('links.books')}
 									href={"/books"}
+									isActivePath={isActivePath(pathname, '/books')}
 									icon={
-										<NotebookPen className={cn("w-[18px] h-[18px] rtl:mt-1", pathname === "/books"  && "text-muted")} />
+										<NotebookPen className={cn("w-[18px] h-[18px] rtl:mt-1", isActivePath(pathname, '/books') && "text-muted")} />
 									}
 								/>
 
 								<MenuItem
 									label={t('links.diaries')}
 									href={"/diaries"}
+									isActivePath={isActivePath(pathname, '/diaries')}
 									icon={
-										<CircleCheckBig className={cn("w-[18px] h-[18px] rtl:mt-1", pathname === "/diaries"  && "text-muted")} />
+										<CircleCheckBig className={cn("w-[18px] h-[18px] rtl:mt-1", isActivePath(pathname, '/diaries')  && "text-muted")} />
 									}
 								/>
 
 								<MenuItem
 									label={t('links.groups')}
 									href={"/groups"}
+									isActivePath={isActivePath(pathname, '/groups')}
 									icon={
-										<Users className={cn("w-[18px] h-[18px] rtl:mt-1", pathname === "/groups"  && "text-muted")} />
+										<Users className={cn("w-[18px] h-[18px] rtl:mt-1", isActivePath(pathname, '/groups')  && "text-muted")} />
 									}
 								/>
+
+								<Separator/>
+
 								<MenuItem
 									label={t('links.settings')}
 									href={"/settings"}
+									isActivePath={isActivePath(pathname, '/settings')}
 									icon={
-										<SettingsIcon className={cn("w-[18px] h-[18px] rtl:mt-1", pathname === "/settings"  && "text-muted")} />
+										<SettingsIcon className={cn("w-[18px] h-[18px] rtl:mt-1", isActivePath(pathname, '/settings')  && "text-muted")} />
 									}
 								/>
+
+								<Separator/>
 
 								<div
 									onClick={onLogout}
@@ -196,7 +199,7 @@ const Sidebar = ({ open, onOpenChange, isPWAInstalled }) => {
 							href={'/privacy-policy'}
 							className={cn(
 								'font-medium',
-								pathname === "/privacy-policy"  && "font-semibold underline underline-offset-4"
+								isActivePath(pathname, "/privacy-policy")  && "font-semibold text-primary"
 							)}
 						>
 							Privacy Policy
@@ -206,7 +209,7 @@ const Sidebar = ({ open, onOpenChange, isPWAInstalled }) => {
 							href={'/terms-of-service'}
 							className={cn(
 								'font-medium',
-								pathname === "/terms-of-service"  && "font-semibold underline underline-offset-4"
+								isActivePath(pathname, "/terms-of-service") && "font-semibold text-primary"
 							)}
 						>
 							Terms of Service
@@ -219,7 +222,7 @@ const Sidebar = ({ open, onOpenChange, isPWAInstalled }) => {
 	);
 };
 
-const MenuItem = ({ label, href, icon }) => {
+const MenuItem = ({ label, href, isActivePath, icon }) => {
 	const pathname = usePathname()
 	const locale = useCurrentLocale()
 
@@ -228,14 +231,14 @@ const MenuItem = ({ label, href, icon }) => {
 			href={href}
 			className={cn(
 				"flex items-center gap-2 rtl:gap-4 px-4 py-4 rounded-md group hover:bg-muted-foreground hover:text-muted",
-				pathname === href  && "bg-muted-foreground"
+				isActivePath  && "bg-muted-foreground"
 			)}
 		>
 			{icon}
 			<UIText
 				weight={'semibold'}
 				className={cn(
-					pathname === href  && "text-muted"
+					isActivePath  && "text-muted"
 				)}
 				text={label}
 			/>

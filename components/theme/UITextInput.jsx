@@ -32,11 +32,11 @@ export const UITextInput = ({className, currency, variant, type, onChange, ...pr
         },
         {
             name: "lg",
-            body: `text-xl h-18 ${isUrdu && "leading-12 pb-3"}`,
+            body: `text-xl ${isUrdu && "leading-12 pb-3"}`,
         },
         {
             name: "xl",
-            body: `text-2xl h-20 ${isUrdu && "leading-14 pb-4"}`,
+            body: `text-2xl ${isUrdu && "leading-14 pb-4"}`,
         }
     ]
 
@@ -64,9 +64,10 @@ export const UITextInput = ({className, currency, variant, type, onChange, ...pr
             autoComplete="off"
             autoCapitalize={"words"}
             className={cn(
-                inputVariants({variant, className}),
+                inputVariants({variant}),
                 isUrdu ? 'font-urdu' : 'font-sans',
-                localValue === "" && "ltr:font-sans rtl:font-urdu"
+                localValue === "" && "ltr:font-sans rtl:font-urdu",
+                className
             )}
             ref={inputRef}
             onChange={(e)=> onInputChange(e)}

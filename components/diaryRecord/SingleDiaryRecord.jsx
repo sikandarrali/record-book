@@ -88,7 +88,7 @@ export const SingleDiaryRecord = ({ item, bookCurrency }) => {
 
 					<div className="flex flex-col justify-center items-center my-8 lg:mt-10">
 						{/* Name */}
-						<UIText weight={'medium'} variant={'lg'} className={'!text-center'} text={item.name}/>
+						<UIText weight={'medium'} variant={'heading'} className={'!text-center'} text={item.name}/>
 					</div>
 
 					{/*	Created Updated By*/}
