@@ -3,10 +3,10 @@ import {UITextInput} from "@/components/theme/UITextInput";
 import * as React from "react";
 import {cn} from "@/lib/utils";
 
-export const InputFieldWithLabel = ({rootClass, value, errors, touched, label, className, onChange, onBlur, disabled, name, defaultValue}) =>{
+export const InputFieldWithLabel = ({rootClass, value, errors, touched, placeholder, label, className, onChange, onBlur, disabled, name, defaultValue}) =>{
     return(
         <div className={cn(
-            "flex flex-col",
+            "flex w-full flex-col",
             rootClass
         )}>
             <FormLabel
@@ -20,8 +20,9 @@ export const InputFieldWithLabel = ({rootClass, value, errors, touched, label, c
                 name={name}
                 disabled={disabled}
                 defaultValue={defaultValue}
-                className={cn(className)}
+                className={className}
                 value={value}
+                placeholder={placeholder}
             />
         </div>
     )

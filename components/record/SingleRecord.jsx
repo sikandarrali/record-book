@@ -70,7 +70,6 @@ export const SingleRecord = ({ item, bookCurrency }) => {
 		<UIText key={2} variant={'lg'} className={'text-primary'} weight={'semibold'} text={item?.name}/>
 	]
 
-
 	return (
 		<>
 			{/* Trigger */}
@@ -78,18 +77,30 @@ export const SingleRecord = ({ item, bookCurrency }) => {
 				onClick={() => setIsOpen(true)}
 				className="flex flex-col w-full px-8 select-none py-4 cursor-pointer hover:bg-muted shadow-sm border-b border-border"
 			>
-				<div className="flex w-full justify-between gap-5">
+				<div className="flex w-full justify-between gap-4 flex-col lg:flex-row">
 					<div className={'flex flex-col gap-1'}>
 						{item?.date &&
-							<UIText text={UrduDate(item.date).day} variant={'sm'} className={'text-muted-foreground'} />
+							<UIText text={UrduDate(item.date).day} variant={'sm'} className={'text-muted-foreground mb-2'} />
 						}
+
 						<UIText variant={'heading'} weight={'medium'} text={item.name}/>
+
+
+						{item.details && item.details !== ""  && item.details !== " " &&
+							<div className={'flex items-center gap-2 mt-1'}>
+								<CornerDownRight className={'w-5 h-5 mt-1 text-muted-foreground rtl:hidden'}/>
+								<CornerDownLeft className={'w-5 h-5 mt-1 text-muted-foreground ltr:hidden'}/>
+								<p className={'overflow-hidden line-clamp-1 w-3/4 text-muted-foreground text text-left rtl:text-right'}>
+									<UIText text={item.details}/>
+								</p>
+							</div>
+						}
 					</div>
 
-					<div className="flex justify-end items-center relative shrink-0 select-none" dir={'ltr'}>
+					<div className="flex justify-end self-end items-center relative shrink-0 select-none" dir={'ltr'}>
 						<UIText
 							weight={'semibold'}
-							variant={'lg'}
+							variant={'heading'}
 							className={cn(item.type==='expense' && "text-destructive")}
 							text={
 								<FormattedCurrency
@@ -101,16 +112,6 @@ export const SingleRecord = ({ item, bookCurrency }) => {
 						/>
 					</div>
 				</div>
-
-				{item.details && item.details !== ""  && item.details !== " " &&
-					<div className={'flex items-center gap-2 mt-1'}>
-						<CornerDownRight className={'w-5 h-5 mt-1 text-muted-foreground rtl:hidden'}/>
-						<CornerDownLeft className={'w-5 h-5 mt-1 text-muted-foreground ltr:hidden'}/>
-						<p className={'overflow-hidden line-clamp-1 w-3/4 text-muted-foreground text text-left rtl:text-right'}>
-							<UIText text={item.details}/>
-						</p>
-					</div>
-				}
 			</div>
 
 			<UISheet
@@ -121,6 +122,7 @@ export const SingleRecord = ({ item, bookCurrency }) => {
 
 				<div className="flex flex-col justify-center items-center my-8 lg:mt-10">
 
+					{/* date */}
 					{item?.date &&
 						<Badge variant={'outline'} className={'self-start mb-10'}>
 							<UIText variant={'button'} text={UrduDate(item?.date).day}/>
@@ -128,7 +130,7 @@ export const SingleRecord = ({ item, bookCurrency }) => {
 					}
 
 					{/* Name */}
-					<UIText weight={'medium'} variant={'lg'} className={'!text-center'} text={item.name}/>
+					<UIText weight={'medium'} variant={'heading'} className={'!text-center'} text={item.name}/>
 
 					{/* Amount */}
 					<div className="flex mt-8 justify-center items-center relative select-none pointer-events-none" dir={'ltr'}>

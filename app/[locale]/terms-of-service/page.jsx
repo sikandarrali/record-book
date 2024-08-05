@@ -6,7 +6,7 @@ import UIText from "@/components/theme/UIText";
 export default function Home() {
 
     return (
-        <PageContainer title={'Terms of Service'}>
+        <PageContainer title={'Terms of Service'} headerTextOrientation={'left'} headerClass={'pt-0 rtl:mt-0 !text-left rtl:pt-0'}>
             <div className="flex flex-col pt-6 pb-20 w-full flex-1 gap-8" dir={'ltr'}>
 
                 <div className={'flex flex-col gap-1'}>

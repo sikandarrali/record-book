@@ -1,3 +1,4 @@
+"use client"
 import {Badge} from "@/components/ui/badge";
 import UIText from "@/components/theme/UIText";
 import {useI18n} from "@/locales/client";

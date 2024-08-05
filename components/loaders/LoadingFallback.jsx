@@ -1,25 +1,21 @@
 "use client";
-import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import {Button} from "@/components/ui/button";
-import {useRouter} from "next/navigation";
-import Lottie from "lottie-react";
 
 const LoadingFallback = ({hideMessage}) => {
 	const [showSlowNetworkMessage, setShowSlowNetworkMessage] = useState(false);
 	const [timedOut, setTimedOut] = useState(false)
-	const router = useRouter()
 
 	useEffect(() => {
 		setTimeout(() => {
 			setShowSlowNetworkMessage(true);
 		}, 5000);
 
-
 		setTimeout(() => {
 			setTimedOut(true);
 		}, 120000);
 	}, []);
+
 
 	return (
 		<div className="fixed inset-0 z-[10000] dark:bg-foreground flex flex-col gap-4 items-center justify-center">

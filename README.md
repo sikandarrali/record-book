@@ -4,6 +4,14 @@ All your records in one place. Say goodbye to your record diaries
 
 ## Changelog
 
+### 6.0.0
+- Improved pagination to load from Server on each request by user instead of loading all: improves performance
+- Separated Search into new Modal
+- Fix Page Title UI
+- Fix Nav Active Links
+- Redesigned Single Record List item
+- Removed homepages tabs and added Books Page as default route: Save multiple clicks
+
 ### 5.0.4
 - Removed plus sign from positive numbers
 - missing translations
