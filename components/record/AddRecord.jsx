@@ -21,8 +21,6 @@ import {InputFieldWithLabel} from "@/components/theme/form/InputFieldWithLabel";
 import {NumberInputFieldWithLabel} from "@/components/theme/form/NumberInputFieldWithLabel";
 import {TextareaWithLabel} from "@/components/theme/form/TextareaWithLabel";
 
-
-
 export const AddRecord = ({open, onOpenChange, pageData}) => {
 	const [adding, setAdding] = useState(false);
 	const [disabled, setDisabled] = useState(false);
@@ -74,6 +72,7 @@ export const AddRecord = ({open, onOpenChange, pageData}) => {
 					scrollToTop()
 				}, function (error) {
 					toast.error(t('alerts.exception'), ToastOptions);
+					console.log(error)
 				});
 
 			}else{
@@ -89,10 +88,12 @@ export const AddRecord = ({open, onOpenChange, pageData}) => {
 					scrollToTop()
 				}, function (error) {
 					toast.error(t('alerts.exception'), ToastOptions);
+					console.log(error)
 				});
 			}
 		} catch (error) {
 			toast.error(t('alerts.exception'), ToastOptions);
+			console.log(error)
 		}
 		setAdding(false);
 		setDisabled(false);
