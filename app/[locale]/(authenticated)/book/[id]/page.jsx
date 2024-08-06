@@ -86,7 +86,7 @@ const Page = () => {
 				setLastId(response.documents[response.documents.length-1].$id)
 			}
 		}catch (e){
-			console.log(e)
+			// console.log(e)
 			// router.replace(HOMEPAGE_ROUTE)
 		}
 		finally {
@@ -105,7 +105,8 @@ const Page = () => {
 		const response = await db.records.list([
 			Query.equal(PARENT_BOOK_ID_FIELD_NAME, params.id),
 			Query.orderDesc("$createdAt"),
-			Query.orderDesc("date")
+			Query.orderDesc("date"),
+			Query.limit(5000)
 		]);
 		setCount(response.total)
 		setTotalSum(
@@ -153,14 +154,8 @@ const Page = () => {
 	}, []);
 
 	useEffect(() => {
-		setTotalSum(
-			items?.reduce((acc, item) => {
-				return item.type === 'income'
-					? acc + item.amount
-					: acc - item.amount;
-			}, 0)
-		);
-	}, [items]);
+		return ()=> getCount()
+	}, []);
 
 	return (
 		<PageContainer noPadding>
