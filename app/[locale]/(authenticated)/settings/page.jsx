@@ -64,7 +64,7 @@ export default function Settings() {
             </div>
 
             <div className={'px-6 py-8 gap-2 text-center mt-10 text-sm text-muted-foreground'}>
-                App Version <span className={'font-semibold'}>6.0.3</span>
+                App Version <span className={'font-semibold'}>6.0.4</span>
             </div>
 
             <EditProfile open={openEditProfile} onOpenChange={setOpenEditProfile} />

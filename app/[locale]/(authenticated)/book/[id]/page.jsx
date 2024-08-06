@@ -85,10 +85,7 @@ const Page = () => {
 				setCount(response.total)
 				setLastId(response.documents[response.documents.length-1].$id)
 			}
-		}catch (e){
-			// console.log(e)
-			// router.replace(HOMEPAGE_ROUTE)
-		}
+		}catch (e){}
 		finally {
 			setLocalLoading(false)
 		}

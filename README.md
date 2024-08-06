@@ -4,6 +4,9 @@ All your records in one place. Say goodbye to your record diaries
 
 ## Changelog
 
+### 6.0.4
+- Fix bug in counting Sum
+
 ### 6.0.3
 - Fix bug in counting Sum
 - Add missing translations
