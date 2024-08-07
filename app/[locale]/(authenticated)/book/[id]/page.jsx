@@ -151,7 +151,7 @@ const Page = () => {
 	}, []);
 
 	useEffect(() => {
-		return ()=> getCount()
+		getCount()
 	}, []);
 
 	return (
