@@ -175,7 +175,8 @@ export const EditDiary = ({ open, onOpenChange, diaryData, setDiaryData, setGrou
 						  values,
 						  handleChange,
 						  handleBlur,
-						  setFieldValue
+						  setFieldValue,
+						  isSubmitting
 					  }) => (
 						<Form className="flex flex-col w-full space-y-6">
 
@@ -188,7 +189,7 @@ export const EditDiary = ({ open, onOpenChange, diaryData, setDiaryData, setGrou
 								onBlur={handleBlur}
 								name="name"
 								value={values.name}
-								disabled={disabled}
+								disabled={isSubmitting}
 							/>
 
 							{/* Select Group */}
@@ -206,8 +207,8 @@ export const EditDiary = ({ open, onOpenChange, diaryData, setDiaryData, setGrou
 							/>
 
 							<UISheetFooterInForm
-								adding={adding}
-								disabled={disabled}
+								adding={isSubmitting}
+								disabled={isSubmitting}
 								onOpenChange={onOpenChange}
 							/>
 						</Form>

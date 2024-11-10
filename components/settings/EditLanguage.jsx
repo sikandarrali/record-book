@@ -123,7 +123,7 @@ export const EditLanguage = ({ open, onOpenChange }) => {
             </div>
 
             <UISheetFooterWithAction
-                adding={adding}
+                adding={isSubmitting}
                 disabled={disabled}
                 onOpenChange={onOpenChange}
                 onSubmit={onUpdate}

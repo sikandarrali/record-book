@@ -4,9 +4,12 @@ All your records in one place. Say goodbye to your record diaries
 
 ## Changelog
 
+### 6.1.0
+- Fix: Disabled multiple clicks on Add Button when adding new record
+
 ### 6.0.5
 - Fix bug in counting Sum
-- 
+
 ### 6.0.4
 - Fix bug in counting Sum
 

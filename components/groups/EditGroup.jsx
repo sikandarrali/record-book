@@ -99,7 +99,8 @@ export const EditGroup = ({ open, onOpenChange, data}) => {
                                   touched,
                                   values,
                                   handleChange,
-                                  handleBlur
+                                  handleBlur,
+                                isSubmitting
                               }) => (
                                 <Form className="flex flex-col w-full space-y-6">
                                     <div className="flex flex-col">
@@ -112,14 +113,14 @@ export const EditGroup = ({ open, onOpenChange, data}) => {
                                             onChange={handleChange}
                                             onBlur={handleBlur}
                                             name="name"
-                                            disabled={disabled}
+                                            disabled={isSubmitting}
                                             value={values.name}
                                         />
                                     </div>
 
                                     <UISheetFooterInForm
-                                        adding={adding}
-                                        disabled={disabled}
+                                        adding={isSubmitting}
+                                        disabled={isSubmitting}
                                         onOpenChange={onOpenChange}
                                     />
                                 </Form>

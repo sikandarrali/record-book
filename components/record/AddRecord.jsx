@@ -32,8 +32,8 @@ export const AddRecord = ({open, onOpenChange, pageData}) => {
 	useScrollToView()
 
 	const onAdd = async (values) => {
-		setAdding(true);
-		setDisabled(true);
+		// setAdding(true);
+		// setDisabled(true);
 
 		let cleanAmount = parseFloat(values.amount.replace(/,/g, ""));
 		const tempCreatedBy = [user?.name, user?.email];
@@ -121,6 +121,7 @@ export const AddRecord = ({open, onOpenChange, pageData}) => {
 					  handleChange,
 					  handleBlur,
 					  setFieldValue,
+					  isSubmitting,
 					  values
 				  }) => (
 					<Form className="flex flex-col w-full space-y-6">
@@ -188,8 +189,8 @@ export const AddRecord = ({open, onOpenChange, pageData}) => {
 						}
 
 						<UISheetFooterInForm
-							adding={adding}
-							disabled={disabled}
+							adding={isSubmitting}
+							disabled={isSubmitting}
 							onOpenChange={onOpenChange}
 							labelAction={t('pages.records.add')}
 						/>

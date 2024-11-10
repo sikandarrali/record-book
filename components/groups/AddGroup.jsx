@@ -85,7 +85,8 @@ export const AddGroup = ({ open, onOpenChange }) => {
                                   touched,
                                   handleChange,
                                   handleBlur,
-                                  values
+                                  values,
+                                  isSubmitting
                               }) => (
                                 <Form className="flex flex-col w-full space-y-6">
                                     <div className="flex flex-col gap-2">
@@ -103,8 +104,8 @@ export const AddGroup = ({ open, onOpenChange }) => {
                                     </div>
 
                                     <UISheetFooterInForm
-                                        adding={adding}
-                                        disabled={disabled}
+                                        adding={isSubmitting}
+                                        disabled={isSubmitting}
                                         onOpenChange={onOpenChange}
                                         labelAction={t('createGroup')}
                                     />
