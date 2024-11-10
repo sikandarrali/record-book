@@ -108,7 +108,8 @@ export const AddDiaryRecord = ({open, onOpenChange, diaryData}) => {
 					  handleChange,
 					  handleBlur,
 					  setFieldValue,
-					  values
+					  values,
+					  isSubmitting
 				  }) => (
 					<Form className="flex flex-col w-full space-y-6">
 
@@ -126,12 +127,12 @@ export const AddDiaryRecord = ({open, onOpenChange, diaryData}) => {
 							onBlur={handleBlur}
 							name="name"
 							value={values.name}
-							disabled={disabled}
+							disabled={isSubmitting}
 						/>
 
 						<UISheetFooterInForm
-							adding={adding}
-							disabled={disabled}
+							// adding={isSubmitting}
+							disabled={isSubmitting}
 							onOpenChange={onOpenChange}
 							labelAction={t('pages.records.add')}
 						/>

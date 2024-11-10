@@ -69,6 +69,7 @@ export const AddGroupMember = ({groupID, setUsersInGroup}) =>{
                   handleChange,
                   handleBlur,
                   handleSubmit,
+                  isSubmitting,
                   setFieldValue,
               }) => (
                 <Form className="flex gap-4 w-full items-stretch justify-between" dir={'ltr'}>
@@ -84,7 +85,7 @@ export const AddGroupMember = ({groupID, setUsersInGroup}) =>{
                             onChange={handleChange}
                             onBlur={handleBlur}
                             name="email"
-                            disabled={disabled}
+                            disabled={isSubmitting}
                             placeholder={t('userEmailPlaceholder')}
                             value={values.email.trim()}
                             className={'lowercase ring-muted-foreground'}
@@ -93,7 +94,7 @@ export const AddGroupMember = ({groupID, setUsersInGroup}) =>{
                     </div>
 
                     <Button
-                        disabled={disabled}
+                        disabled={isSubmitting}
                         type={'submit'}
                         className={'flex-wrap items-center justify-center shrink-0'}
                     >

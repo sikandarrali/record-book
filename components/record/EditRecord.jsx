@@ -94,7 +94,8 @@ export const EditRecord = ({ open, onOpenChange, item, currency }) => {
 						  handleChange,
 						  handleBlur,
 						  setFieldValue,
-						  values
+						  values,
+						isSubmitting
 					  }) => (
 						<Form className="flex flex-col w-full space-y-6">
 
@@ -113,7 +114,7 @@ export const EditRecord = ({ open, onOpenChange, item, currency }) => {
 								onBlur={handleBlur}
 								name="name"
 								value={values.name}
-								disabled={disabled}
+								disabled={isSubmitting}
 							/>
 
 							{/* Amount */}
@@ -124,7 +125,7 @@ export const EditRecord = ({ open, onOpenChange, item, currency }) => {
 								onChange={handleChange}
 								onBlur={handleBlur}
 								name="amount"
-								disabled={disabled}
+								disabled={isSubmitting}
 								defaultValue={item.amount}
 								currency={getCurrentCurrency(currency)}
 							/>
@@ -134,7 +135,7 @@ export const EditRecord = ({ open, onOpenChange, item, currency }) => {
 								label={t('labels.date')}
 								setFieldValue={setFieldValue}
 								name={'date'}
-								disabled={disabled}
+								disabled={isSubmitting}
 								fieldValue={values.date}
 								onClear={()=> setFieldValue('date', '')}
 							/>
@@ -157,7 +158,7 @@ export const EditRecord = ({ open, onOpenChange, item, currency }) => {
 										onChange={handleChange}
 										onBlur={handleBlur}
 										name="details"
-										disabled={disabled}
+										disabled={isSubmitting}
 										value={values.details}
 									/>
 
@@ -165,8 +166,8 @@ export const EditRecord = ({ open, onOpenChange, item, currency }) => {
 							}
 
 							<UISheetFooterInForm
-								adding={adding}
-								disabled={disabled}
+								adding={isSubmitting}
+								disabled={isSubmitting}
 								onOpenChange={onOpenChange}
 							/>
 						</Form>

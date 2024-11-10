@@ -67,7 +67,8 @@ export const EditDiaryRecord = ({ open, onOpenChange, item, currency }) => {
 						  handleChange,
 						  handleBlur,
 						  setFieldValue,
-						  values
+						  values,
+						isSubmitting
 					  }) => (
 						<Form className="flex flex-col w-full space-y-6">
 
@@ -85,12 +86,12 @@ export const EditDiaryRecord = ({ open, onOpenChange, item, currency }) => {
 								onBlur={handleBlur}
 								name="name"
 								value={values.name}
-								disabled={disabled}
+								disabled={isSubmitting}
 							/>
 
 							<UISheetFooterInForm
-								adding={adding}
-								disabled={disabled}
+								adding={isSubmitting}
+								disabled={isSubmitting}
 								onOpenChange={onOpenChange}
 							/>
 						</Form>

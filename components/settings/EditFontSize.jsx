@@ -124,7 +124,7 @@ export const EditFontSize = ({ open, onOpenChange }) => {
             </div>
             <div className={'mt-auto'}>
                 <UISheetFooterWithAction
-                    adding={adding}
+                    adding={isSubmitting}
                     disabled={disabled}
                     onOpenChange={onOpenChange}
                     onSubmit={onUpdate}

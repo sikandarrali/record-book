@@ -140,7 +140,8 @@ export const AddPage = ({ open, onOpenChange, userOwnedGroups }) => {
 						  touched,
 						  handleChange,
 						  handleBlur,
-						  setFieldValue
+						  setFieldValue,
+						  isSubmitting
 					  }) => (
 						<Form className="flex flex-col w-full space-y-8">
 
@@ -173,7 +174,7 @@ export const AddPage = ({ open, onOpenChange, userOwnedGroups }) => {
 								onChange={handleChange}
 								onBlur={handleBlur}
 								name="name"
-								disabled={disabled}
+								disabled={isSubmitting}
 							/>
 
 							<div
@@ -191,7 +192,7 @@ export const AddPage = ({ open, onOpenChange, userOwnedGroups }) => {
 										label={t('labels.date')}
 										setFieldValue={setFieldValue}
 										name={'date'}
-										disabled={disabled}
+										disabled={isSubmitting}
 										fieldValue={values.date}
 										onClear={()=> setFieldValue('date', '')}
 									/>
@@ -217,15 +218,15 @@ export const AddPage = ({ open, onOpenChange, userOwnedGroups }) => {
 										onChange={handleChange}
 										onBlur={handleBlur}
 										name="details"
-										disabled={disabled}
+										disabled={isSubmitting}
 									/>
 								</>
 							}
 
 							<div className={'mt-auto'}/>
 							<UISheetFooterInForm
-								adding={adding}
-								disabled={disabled}
+								adding={isSubmitting}
+								disabled={isSubmitting}
 								onOpenChange={onOpenChange}
 								labelAction={t('buttons.save')}
 								labelCancel={t('buttons.cancel')}

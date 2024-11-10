@@ -128,7 +128,8 @@ export const AddDiary = ({ open, onOpenChange }) => {
 						  touched,
 						  handleChange,
 						  handleBlur,
-						  setFieldValue
+						  setFieldValue,
+						  isSubmitting
 					  }) => (
 						<Form className="flex flex-col w-full space-y-8">
 
@@ -140,7 +141,7 @@ export const AddDiary = ({ open, onOpenChange }) => {
 								onChange={handleChange}
 								onBlur={handleBlur}
 								name="name"
-								disabled={disabled}
+								disabled={isSubmitting}
 							/>
 
 
@@ -161,8 +162,8 @@ export const AddDiary = ({ open, onOpenChange }) => {
 
 							<div className={'mt-auto'}/>
 							<UISheetFooterInForm
-								adding={adding}
-								disabled={disabled}
+								adding={isSubmitting}
+								disabled={isSubmitting}
 								onOpenChange={onOpenChange}
 								labelAction={t('buttons.save')}
 								labelCancel={t('buttons.cancel')}

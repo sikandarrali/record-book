@@ -197,7 +197,8 @@ export const EditPage = ({ open, onOpenChange, pageData, setPageData, setGroup }
 						  values,
 						  handleChange,
 						  handleBlur,
-						  setFieldValue
+						  setFieldValue,
+						  isSubmitting
 					  }) => (
 						<Form className="flex flex-col w-full space-y-6">
 
@@ -230,7 +231,7 @@ export const EditPage = ({ open, onOpenChange, pageData, setPageData, setGroup }
 								onBlur={handleBlur}
 								name="name"
 								value={values.name}
-								disabled={disabled}
+								disabled={isSubmitting}
 							/>
 
 							<div
@@ -248,7 +249,7 @@ export const EditPage = ({ open, onOpenChange, pageData, setPageData, setGroup }
 										label={t('labels.date')}
 										setFieldValue={setFieldValue}
 										name={'date'}
-										disabled={disabled}
+										disabled={isSubmitting}
 										fieldValue={values.date}
 										onClear={()=> setFieldValue('date', '')}
 									/>
@@ -274,7 +275,7 @@ export const EditPage = ({ open, onOpenChange, pageData, setPageData, setGroup }
 										onChange={handleChange}
 										onBlur={handleBlur}
 										name="details"
-										disabled={disabled}
+										disabled={isSubmitting}
 										value={values.details}
 									/>
 
@@ -282,8 +283,8 @@ export const EditPage = ({ open, onOpenChange, pageData, setPageData, setGroup }
 							}
 
 							<UISheetFooterInForm
-								adding={adding}
-								disabled={disabled}
+								adding={isSubmitting}
+								disabled={isSubmitting}
 								onOpenChange={onOpenChange}
 							/>
 						</Form>
