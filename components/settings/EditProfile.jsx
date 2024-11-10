@@ -87,7 +87,7 @@ export const EditProfile = ({ open, onOpenChange }) => {
                                 </div>
 
                                 <UISheetFooterInForm
-                                    adding={isSubmitting}
+                                    adding={adding}
                                     disabled={disabled}
                                     onOpenChange={onOpenChange}
                                 />
