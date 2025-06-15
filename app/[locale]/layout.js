@@ -1,9 +1,9 @@
 import "@/styles/globals.css";
-import {NetworkStatusIndicator} from "@/components/NetworkStatus/NetworkStatusIndicator";
+import { NetworkStatusIndicator } from "@/components/NetworkStatus/NetworkStatusIndicator";
 import HolyLoader from "holy-loader";
 import Providers from "@/components/providers/Providers";
-import {cn} from "@/lib/utils";
-import {Inter, Noto_Nastaliq_Urdu} from "@next/font/google";
+import { cn } from "@/lib/utils";
+import { Inter, Noto_Nastaliq_Urdu } from "@next/font/google";
 import localFont from "@next/font/local";
 
 
@@ -76,43 +76,45 @@ export default async function RootLayout({ children, params }) {
 		<html
 			lang={params.locale}
 			suppressHydrationWarning
-			style={{width: "100%", height: "100%"}}
+			style={{ width: "100%", height: "100%" }}
 		>
-		<head>
-			<title>Record Book</title>
-			<link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png"/>
-			<link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png"/>
-			<link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png"/>
-			<meta name="theme-color" content="#0B0A0A" id="theme-color" />
-		</head>
-		<body
-			dir={params.locale === 'ur' ? 'rtl' : 'ltr'}
-			className={cn(
-				"min-h-screen font-sans antialiased",
-				fontSans.variable,
-				fontUrdu.variable,
-				fontUrduHeading.variable,
-			)}
-		>
+			<head>
+				<title>Record Book</title>
+				<link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png" media="(prefers-color-scheme: light)" />
+				<link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon-dark.png" media="(prefers-color-scheme: dark)" />
 
-		<NetworkStatusIndicator />
+				<link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png" />
+				<link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png" />
+				<meta name="theme-color" content="#0B0A0A" id="theme-color" />
+			</head>
+			<body
+				dir={params.locale === 'ur' ? 'rtl' : 'ltr'}
+				className={cn(
+					"min-h-screen font-sans antialiased",
+					fontSans.variable,
+					fontUrdu.variable,
+					fontUrduHeading.variable,
+				)}
+			>
 
-		{/* topbar loader */}
-		<HolyLoader
-			// color="#E11D48"
-			// color="#000"
-			color="linear-gradient(90deg, rgba(225,29,72,1) 0%, rgba(0,212,255,1) 100%)"
-			height="5px"
-			speed={250}
-			easing="linear"
-			showSpinner
-		/>
+				<NetworkStatusIndicator />
 
-			<Providers>
-				{children}
-			</Providers>
+				{/* topbar loader */}
+				<HolyLoader
+					// color="#E11D48"
+					// color="#000"
+					color="linear-gradient(90deg, rgba(225,29,72,1) 0%, rgba(0,212,255,1) 100%)"
+					height="5px"
+					speed={250}
+					easing="linear"
+					showSpinner
+				/>
 
-		</body>
+				<Providers>
+					{children}
+				</Providers>
+
+			</body>
 		</html>
 	);
 }
