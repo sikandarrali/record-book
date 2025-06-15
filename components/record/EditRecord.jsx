@@ -22,15 +22,11 @@ import {getCurrentCurrency} from "@/lib/utils";
 export const EditRecord = ({ open, onOpenChange, item, currency }) => {
 	const t = useI18n()
 
-	const [adding, setAdding] = useState(false);
-	const [disabled, setDisabled] = useState(false);
 	const {user} = useAuth()
 	const [showAddDetails, setShowAddDetails ] = useState(false)
 
 
 	const onEdit = async (values) => {
-		setAdding(true);
-		setDisabled(true);
 
 		let cleanAmount = parseFloat(values.amount.toString().replace(/,/g, ""));
 		const tempUpdatedBy = [user?.name, user?.email];
@@ -43,8 +39,6 @@ export const EditRecord = ({ open, onOpenChange, item, currency }) => {
 			values.type === item.type
 		) {
 			toast.info(t('alerts.noChanges'), ToastOptions);
-			setAdding(false);
-			setDisabled(false);
 			return;
 		}
 
@@ -61,12 +55,8 @@ export const EditRecord = ({ open, onOpenChange, item, currency }) => {
 
 			await db.records.update(eventItemData, item.$id);
 			toast.success(t('alerts.updated'), ToastOptions);
-			setAdding(false);
-			setDisabled(false);
 		} catch (error) {
 			toast.error(t('alerts.exception'), ToastOptions);
-			setAdding(false);
-			setDisabled(false);
 		}
 		onOpenChange(false);
 	};
