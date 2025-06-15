@@ -1,25 +1,25 @@
 import * as React from "react";
 
-import {cn, isFontSizeAllowed} from "@/lib/utils";
-import {isStringUrdu} from "@/lib/isStringUrdu";
-import {useRef, useState} from "react";
-import {useAuth} from "@/components/contexts/AuthContext";
-import {cva} from "class-variance-authority";
-import {NumericFormat} from "react-number-format";
+import { cn, isFontSizeAllowed } from "@/lib/utils";
+import { isStringUrdu } from "@/lib/isStringUrdu";
+import { useRef, useState } from "react";
+import { useAuth } from "@/components/contexts/AuthContext";
+import { cva } from "class-variance-authority";
+import { NumericFormat } from "react-number-format";
 
-export const UINumberInput = ({className, currency, variant, type, onChange, ...props}) => {
+export const UINumberInput = ({ className, currency, variant, type, onChange, ...props }) => {
 
     const [localValue, setLocalValue] = useState("")
     const inputRef = useRef(null)
-    const {user} = useAuth()
+    const { user } = useAuth()
     const prefs = user?.prefs
     const isUrdu = isStringUrdu(localValue)
 
     const fontSize = isFontSizeAllowed(prefs?.fontSize) ? prefs.fontSize : 'base';
 
-    const onInputChange = (event) =>{
+    const onInputChange = (event) => {
         setLocalValue(event.target.value)
-       if(onChange) onChange(event)
+        if (onChange) onChange(event)
     }
 
     const typography = [
@@ -71,11 +71,11 @@ export const UINumberInput = ({className, currency, variant, type, onChange, ...
             inputMode="decimal"
             autoComplete="off"
             className={cn(
-                inputVariants({variant, className}),
+                inputVariants({ variant, className }),
                 isUrdu ? 'font-urdu' : 'font-sans',
                 localValue === "" && "ltr:font-sans rtl:font-urdu"
             )}
-            onChange={(e)=> onInputChange(e)}
+            onChange={(e) => onInputChange(e)}
             {...props}
         />
     );
