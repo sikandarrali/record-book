@@ -1,13 +1,13 @@
 "use client"
 import axios from "axios";
-import {useRouter } from "next/navigation";
-import {createContext, useContext, useEffect, useLayoutEffect, useMemo, useState} from "react";
-import {account} from "../appwrite/appwrite";
+import { useRouter } from "next/navigation";
+import { createContext, useContext, useEffect, useLayoutEffect, useMemo, useState } from "react";
+import { account } from "../appwrite/appwrite";
 import LoadingFallback from "../loaders/LoadingFallback";
-import {useCurrentLocale} from "@/locales/client";
+import { useCurrentLocale } from "@/locales/client";
 import Cookies from 'js-cookie'
-import {EncodeUserId} from "@/lib/EncodeDecode";
-import {LOCAL_THEME_NAME, DEFAULT_THEME} from "@/lib/defaults";
+import { EncodeUserId } from "@/lib/EncodeDecode";
+import { LOCAL_THEME_NAME, DEFAULT_THEME } from "@/lib/defaults";
 
 const AuthContext = createContext();
 
@@ -18,7 +18,7 @@ export const AuthProvider = ({ children }) => {
 	const currentLocale = useCurrentLocale()
 
 	useLayoutEffect(() => {
-		getLoggedInGoogleUser().then(()=> setLoading(false));
+		getLoggedInGoogleUser().then(() => setLoading(false));
 	}, []);
 
 	const getLoggedInGoogleUser = async () => {
@@ -33,24 +33,24 @@ export const AuthProvider = ({ children }) => {
 			const currentUser = await account.get();
 			setUser(currentUser)
 			userPrefs = currentUser.prefs
-			Cookies.set(process.env.NEXT_PUBLIC_USER_SESSION_COOKIE_NAME, EncodeUserId(currentUser.$id), {sameSite: 'None', secure: true});
+			Cookies.set(process.env.NEXT_PUBLIC_USER_SESSION_COOKIE_NAME, EncodeUserId(currentUser.$id), { sameSite: 'None', secure: true });
 			localStorage.setItem(LOCAL_THEME_NAME, currentUser?.prefs?.theme || DEFAULT_THEME.name)
 
 			fetchGoogleUserData(currentSession.providerAccessToken)
-			.then((googleData) => {
-				if(googleData){
-					updateUserPrefs(userPrefs, googleData?.picture)
-				}
-			})
-			.catch((error) => {
-				// console.log(error)
-			});
+				.then((googleData) => {
+					if (googleData) {
+						updateUserPrefs(userPrefs, googleData?.picture)
+					}
+				})
+				.catch((error) => {
+					// console.log(error)
+				});
 
-			if(userPrefs?.lang === currentLocale){
+			if (userPrefs?.lang === currentLocale) {
 				setLoading(false)
 			}
 		}
-		catch (e){
+		catch (e) {
 			setUser(null)
 			setLoading(false)
 		}
@@ -60,19 +60,19 @@ export const AuthProvider = ({ children }) => {
 	};
 
 	useEffect(() => {
-		if(user) setLoading(false)
+		if (user) setLoading(false)
 	}, [router]);
 
 	const updateUserPrefs = async (prefs, picture) => {
-		let tempPrefs = {...prefs, picture:picture}
-		if(!prefs.lang)
-			tempPrefs = {...tempPrefs, lang: 'ur'}
-		if(!prefs.fontSize)
-			tempPrefs = {...tempPrefs, fontSize: 'base'}
-		if(!prefs.theme) {
-			tempPrefs = {...tempPrefs, theme: DEFAULT_THEME.name};
+		let tempPrefs = { ...prefs, picture: picture }
+		if (!prefs.lang)
+			tempPrefs = { ...tempPrefs, lang: 'ur' }
+		if (!prefs.fontSize)
+			tempPrefs = { ...tempPrefs, fontSize: 'base' }
+		if (!prefs.theme) {
+			tempPrefs = { ...tempPrefs, theme: DEFAULT_THEME.name };
 			localStorage.setItem(LOCAL_THEME_NAME, DEFAULT_THEME.name)
-		}else{
+		} else {
 			localStorage.setItem(LOCAL_THEME_NAME, prefs.theme || DEFAULT_THEME.name)
 		}
 
@@ -97,12 +97,10 @@ export const AuthProvider = ({ children }) => {
 			localStorage.removeItem(LOCAL_THEME_NAME)
 			Cookies.remove(process.env.NEXT_PUBLIC_USER_SESSION_COOKIE_NAME);
 			Cookies.remove('Next-Locale');
-			setLoading(false)
 			router.replace("/login");
-		}catch (e){}
+		} catch (e) { }
 		finally {
 			setLoading(false)
-			router.replace("/login");
 		}
 	};
 

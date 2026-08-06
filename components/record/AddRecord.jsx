@@ -1,33 +1,33 @@
 "use client";
 import { Form, Formik } from "formik";
-import {useState} from "react";
-import {toast} from "react-toastify";
-import {ToastOptions} from "@/lib/ToastOptions";
+import { useState } from "react";
+import { toast } from "react-toastify";
+import { ToastOptions } from "@/lib/ToastOptions";
 import useScrollToView from "@/lib/hooks/useScrollToView";
 import UIText from "@/components/theme/UIText";
-import {getCurrentCurrency, scrollToTop} from "@/lib/utils";
-import {ID, Permission, Role} from "appwrite";
-import {useAuth} from "@/components/contexts/AuthContext";
-import {UISheetFooterInForm} from "@/components/theme/UISheetFooterInForm";
-import {useI18n} from "@/locales/client";
-import {COLLECTION_ID_BOOKS_RECORDS, DATABASE_ID, databases} from "@/components/appwrite/appwrite";
-import {RecordSchema} from "@/lib/schemas/RecordSchema";
-import {ChevronDown, ChevronUp} from "lucide-react";
-import {RecordTypeToggleGroup} from "@/components/record/RecordTypeToggleGroup";
-import {UISheet} from "@/components/theme/UISheet";
+import { getCurrentCurrency, scrollToTop } from "@/lib/utils";
+import { ID, Permission, Role } from "appwrite";
+import { useAuth } from "@/components/contexts/AuthContext";
+import { UISheetFooterInForm } from "@/components/theme/UISheetFooterInForm";
+import { useI18n } from "@/locales/client";
+import { COLLECTION_ID_BOOKS_RECORDS, DATABASE_ID, databases } from "@/components/appwrite/appwrite";
+import { RecordSchema } from "@/lib/schemas/RecordSchema";
+import { ChevronDown, ChevronUp } from "lucide-react";
+import { RecordTypeToggleGroup } from "@/components/record/RecordTypeToggleGroup";
+import { UISheet } from "@/components/theme/UISheet";
 import * as React from "react";
-import {DatePickerWithLabel} from "@/components/theme/form/DatePickerWithLabel";
-import {InputFieldWithLabel} from "@/components/theme/form/InputFieldWithLabel";
-import {NumberInputFieldWithLabel} from "@/components/theme/form/NumberInputFieldWithLabel";
-import {TextareaWithLabel} from "@/components/theme/form/TextareaWithLabel";
+import { DatePickerWithLabel } from "@/components/theme/form/DatePickerWithLabel";
+import { InputFieldWithLabel } from "@/components/theme/form/InputFieldWithLabel";
+import { NumberInputFieldWithLabel } from "@/components/theme/form/NumberInputFieldWithLabel";
+import { TextareaWithLabel } from "@/components/theme/form/TextareaWithLabel";
 
-export const AddRecord = ({open, onOpenChange, pageData}) => {
+export const AddRecord = ({ open, onOpenChange, pageData }) => {
 	const [adding, setAdding] = useState(false);
 	const [disabled, setDisabled] = useState(false);
-	const {user} = useAuth()
+	const { user } = useAuth()
 	const pageID = pageData?.$id
 	const t = useI18n()
-	const [showAddDetails, setShowAddDetails ] = useState(false)
+	const [showAddDetails, setShowAddDetails] = useState(false)
 
 	useScrollToView()
 
@@ -58,7 +58,7 @@ export const AddRecord = ({open, onOpenChange, pageData}) => {
 				updatedBy: []
 			};
 
-			if(pageData?.teamId){
+			if (pageData?.teamId) {
 				const response = databases.createDocument(
 					DATABASE_ID,
 					COLLECTION_ID_BOOKS_RECORDS,
@@ -75,7 +75,7 @@ export const AddRecord = ({open, onOpenChange, pageData}) => {
 					console.log(error)
 				});
 
-			}else{
+			} else {
 				const response = databases.createDocument(
 					DATABASE_ID,
 					COLLECTION_ID_BOOKS_RECORDS,
@@ -116,19 +116,19 @@ export const AddRecord = ({open, onOpenChange, pageData}) => {
 				}}
 			>
 				{({
-					  errors,
-					  touched,
-					  handleChange,
-					  handleBlur,
-					  setFieldValue,
-					  isSubmitting,
-					  values
-				  }) => (
+					errors,
+					touched,
+					handleChange,
+					handleBlur,
+					setFieldValue,
+					isSubmitting,
+					values
+				}) => (
 					<Form className="flex flex-col w-full space-y-6">
 
 						{/* Record Type */}
 						<div className={'flex justify-between items-center py-6 mb-4'}>
-							<UIText className={"text-primary self-start"} weight={'semibold'} variant={'heading'} text={t('pages.records.add')}/>
+							<UIText className={"text-primary self-start"} weight={'semibold'} variant={'heading'} text={t('pages.records.add')} />
 							<RecordTypeToggleGroup value={values.type} setFieldValue={setFieldValue} />
 						</div>
 
@@ -162,15 +162,15 @@ export const AddRecord = ({open, onOpenChange, pageData}) => {
 							name={'date'}
 							disabled={disabled}
 							fieldValue={values.date}
-							onClear={()=> setFieldValue('date', '')}
+							onClear={() => setFieldValue('date', '')}
 						/>
 
 						<div
 							className={'flex items-center rtl:items-start justify-center gap-1.5 rtl:gap-3 cursor-pointer text-primary dark:text-foreground'}
-							onClick={()=> setShowAddDetails(!showAddDetails)}
+							onClick={() => setShowAddDetails(!showAddDetails)}
 						>
-							<UIText variant={'sm'} className={'font-medium'} text={t('labels.addMoreDetailsShort')}/>
-							{showAddDetails ? <ChevronUp className={'w-6 h-6 stroke-[3] rtl:mt-2 text-primary'}/> : <ChevronDown className={'w-6 h-6 stroke-[3] rtl:mt-2 text-primary'}/>}
+							<UIText variant={'sm'} className={'font-medium'} text={t('labels.addMoreDetailsShort')} />
+							{showAddDetails ? <ChevronUp className={'w-6 h-6 stroke-[3] rtl:mt-2 text-primary'} /> : <ChevronDown className={'w-6 h-6 stroke-[3] rtl:mt-2 text-primary'} />}
 						</div>
 
 						{showAddDetails &&
