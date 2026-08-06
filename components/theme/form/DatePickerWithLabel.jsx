@@ -1,20 +1,20 @@
 import FormLabel from "@/components/theme/FormLabel";
-import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
-import {cn} from "@/lib/utils";
-import {CalendarIcon} from "lucide-react";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
+import { CalendarIcon } from "lucide-react";
 import UIText from "@/components/theme/UIText";
-import {Calendar} from "@/components/ui/calendar";
-import {ClearFieldButton} from "@/components/theme/ClearFieldButton";
+import { Calendar } from "@/components/ui/calendar";
+import { ClearFieldButton } from "@/components/theme/ClearFieldButton";
 import * as React from "react";
-import {useState} from "react";
-import {useI18n} from "@/locales/client";
+import { useState } from "react";
+import { useI18n } from "@/locales/client";
 
-export const DatePickerWithLabel = ({rootClass, errors, touched, setFieldValue, label, disabled, fieldValue, name, onClear, defaultValue}) =>{
+export const DatePickerWithLabel = ({ rootClass, errors, touched, setFieldValue, label, disabled, fieldValue, name, onClear, defaultValue }) => {
 
     const [calendarOpen, setCalendarOpen] = useState()
     const t = useI18n()
 
-    return(
+    return (
         <div className="flex flex-col">
             <FormLabel
                 title={label}
@@ -40,7 +40,7 @@ export const DatePickerWithLabel = ({rootClass, errors, touched, setFieldValue, 
                                 <>{new Date(fieldValue).toLocaleDateString()}</>
                                 // <UIText weight={'medium'} className={'rtl:font-sans'} text={fieldValue.toLocaleDateString()}/>
                                 :
-                                <UIText weight={'medium'} text={t('labels.pickDate')}/>
+                                <UIText weight={'medium'} text={t('labels.pickDate')} />
                             }
                         </div>
                     </PopoverTrigger>
@@ -52,6 +52,7 @@ export const DatePickerWithLabel = ({rootClass, errors, touched, setFieldValue, 
                                 setFieldValue(name, date);
                                 setCalendarOpen(false);
                             }}
+                            captionLayout="dropdown"
                         />
                     </PopoverContent>
                 </Popover>
