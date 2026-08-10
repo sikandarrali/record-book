@@ -1,114 +1,56 @@
-
 # Record Book
-All your monetory records in one place. Say goodbye to your record diaries. Store your monetory gift records, create a group and share those with your family or friends.
 
+Record Book is a multilingual (English/Urdu), installable Progressive Web App for tracking books, records, diaries, and shared groups.
 
+<p>
+  <a href="https://rb.sikandar.info/">
+    <img alt="Demo" src="https://img.shields.io/badge/Demo-0B6DFD?style=for-the-badge&logo=vercel&logoColor=white" />
+  </a>
+</p>
 
+## Features
 
+- **Books & Records** — create books and log monetary records inside them
+- **Diaries** — a dedicated diary feature for freeform entries
+- **Groups & Sharing** — create groups and share books with family or friends, join groups via invite links
+- **Multiple Currencies** — support for PKR, Euro, and US Dollar with correct currency formatting
+- **Multilingual** — English and Urdu, including Urdu-specific date/text handling
+- **Theming** — multiple themes with light/dark mode support
+- **PWA / Mobile-first** — installable app with pull-to-refresh
+- **Auth** — session-based authentication backed by Appwrite
 
--------------
-# Changelog
+## Tech Stack
 
-### 6.1.1
-- Fix: App crashing when opening settings
+**Framework**
+- [Next.js 14](https://nextjs.org/) (App Router) — [react.org](https://react.dev/) / React 18
+- [@ducanh2912/next-pwa](https://github.com/DuCanhGH/next-pwa) — Progressive Web App support
 
-### 6.1.0
-- Fix: Disabled multiple clicks on Add Button when adding new record
+**Backend / Data**
+- [Appwrite](https://appwrite.io/) (`appwrite` client SDK + `node-appwrite` server SDK) — auth, database, and users
+- [node-mailjet](https://github.com/mailjet/mailjet-apiv3-nodejs) — transactional email
 
-### 6.0.5
-- Fix bug in counting Sum
+**Internationalization**
+- [next-intl](https://next-intl-docs.vercel.app/) and [next-international](https://next-international.vercel.app/) — routing and message translation
+- [Localazy](https://localazy.com/) — translation management (see `localazy.json`)
 
-### 6.0.4
-- Fix bug in counting Sum
+**UI**
+- [Tailwind CSS](https://tailwindcss.com/)
+- [Shadcn](https://ui.shadcn.com/)
+- [Lucide React](https://lucide.dev/) — icons
+- [Framer Motion](https://www.framer.com/motion/) — animation
+- [Lottie React](https://github.com/Gamote/lottie-react) — Lottie animations
 
-### 6.0.3
-- Fix bug in counting Sum
-- Add missing translations
+**Forms & Data**
+- [Formik](https://formik.org/) — form state management
+- [Yup](https://github.com/jquense/yup) — schema validation
+- [date-fns](https://date-fns.org/) — date utilities
+- [Axios](https://axios-http.com/) — HTTP client
 
-### 6.0.2
-- Fixed search issue
-- Moved Add Button a little higher
+**Tooling**
+- ESLint (`eslint-config-next`)
+- PostCSS + Tailwind CLI pipeline
+- Webpack (via Next.js build)
 
-### 6.0.1
-- Removed unused variables
+## Changelog
 
-### 6.0.0
-- Improved pagination to load from Server on each request by user instead of loading all: improves performance
-- Separated Search into new Modal
-- Fix Page Title UI
-- Fix Nav Active Links
-- Redesigned Single Record List item
-- Removed homepages tabs and added Books Page as default route: Save multiple clicks
-
-### 5.0.4
-- Removed plus sign from positive numbers
-- missing translations
-
-### 5.0.3
-- Missing translations
-- Fix Navbar UI, 
-- Add environment variables to Vercel. 
-
-### 5.0.2
-- UI changes
-
-### 5.0.1
-- Add missing Translations
-
-### 5.0.0
-- Add Diaries Feature
-- Redesigned Home Page
-
-### 4.1.5
-- Add `autocapitalize="words"` to Text Input and Textarea
-- Change Color of Single Book in List to Primary
-
-### 4.1.4
-- Fixed number input to allow decimal inputs
-
-### 4.1.3
-- Fixed number input to allow decimal inputs
-
-### 4.1.2
-- Removed Euro/USD thousand/decimal separators from Number Input 
-
-### 4.1.1
-- Add missing translations
-
-### 4.1
-- Fix Currency Format for all Currency Types
-
-### 4.0
-- Add Multiple Currencies support. (PKR, Euro, US Dollar)
-
-### 3.3
-- Fix TextOrientation of Added/Updated By Info
-- Feat: When a shared Book is edited and Group is removed from it, the items added by other members are allotted to Admin of Book and their name is now shown in UpdatedBy Info
-
-### 3.2.1.1
-- Fix logout issue: remove theme on logout
-
-### 3.2.1
-- Fix logout issue
-
-### 3.2
-- Fix: Delete Group Issue with Shared with Event
-- Add Sort by Date & createdAt for Records
-- Change Sheet Edit/Delete: Add Labels to Buttons
-- Add: Input Keyboard for email input in Add Group Member
-
-### 3.1
-- Enhanced Dark Mode implementation
-
-### 3.0
-- Fixed ViewPort Colors and other Multiple Theme Issues
-
-### 2.0
-- Implemented Multiple Themes
-- Added Dark Mode
-
-### 1.0
-- Manage, Books, Records, Groups
-- Multilingual (Urdu, English)
-- Multiple Font Size
-- PWA: Mobile First
+See [CHANGELOG.md](./CHANGELOG.md) for release history.
