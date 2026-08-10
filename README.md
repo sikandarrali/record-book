@@ -1,8 +1,13 @@
 
 # Record Book
-All your records in one place. Say goodbye to your record diaries
+All your monetory records in one place. Say goodbye to your record diaries. Store your monetory gift records, create a group and share those with your family or friends.
 
-## Changelog
+
+
+
+
+-------------
+# Changelog
 
 ### 6.1.1
 - Fix: App crashing when opening settings
