@@ -1,15 +1,12 @@
 {
-
   "upload": {
     "type": "json",
     "files": "locales/compiled-lang/en/translations.json"
   },
-
   "download": {
     "includeSourceLang": true,
     "files": [
       "locales/compiled-lang/${lang}/${file}"
     ]
   }
-
 }
