@@ -1,8 +1,5 @@
 {
 
-  "writeKey": "REMOVED",
-  "readKey": "REMOVED",
-
   "upload": {
     "type": "json",
     "files": "locales/compiled-lang/en/translations.json"
