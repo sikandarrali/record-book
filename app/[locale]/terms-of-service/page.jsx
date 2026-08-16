@@ -10,7 +10,7 @@ export default function Home() {
 
                 <div className={'flex flex-col gap-1'}>
                     <UIText textOrientation={'left'} variant={'lg'} weight={'semibold'} text={'Introduction'}/>
-                    <UIText textOrientation={'left'} text={`Welcome to Shadi Kharcha Record ("we", "our", "us"). These Terms of Service ("Terms") govern your use of our marriage expense and gift tracking services (the "Service").`}/>
+                    <UIText textOrientation={'left'} text={`Welcome to Record Book ("we", "our", "us"). These Terms of Service ("Terms") govern your use of our books, records, and diary tracking services (the "Service").`}/>
                 </div>
 
                 <div className={'flex flex-col gap-1'}>
@@ -53,7 +53,7 @@ export default function Home() {
 
                 <div className={'flex flex-col gap-4'}>
                     <UIText textOrientation={'left'} variant={'lg'} weight={'semibold'} text={'Groups Feature'}/>
-                    <UIText textOrientation={'left'} text={'You may use the groups feature to share your marriage expense data with other users. By using this feature, you agree to:'}/>
+                    <UIText textOrientation={'left'} text={'You may use the groups feature to share your record data with other users. By using this feature, you agree to:'}/>
                     <ul className={'list-disc ml-5'}>
                         <li>
                             <UIText textOrientation={'left'} text={'Only share data with users you trust.'}/>

@@ -10,7 +10,7 @@ export default function Home() {
 
                 <div className={'flex flex-col gap-1'}>
                     <UIText textOrientation={'left'} variant={'lg'} weight={'semibold'} text={'Introduction'}/>
-                    <UIText textOrientation={'left'} text={`Welcome to Shadi Kharcha Record ("we", "our", "us"). We are committed to protecting your privacy and ensuring that your personal information is handled in a safe and responsible manner. This Privacy Policy outlines how we collect, use, and protect your information when you use our marriage expense and gift tracking services (the "Service").`}/>
+                    <UIText textOrientation={'left'} text={`Welcome to Record Book ("we", "our", "us"). We are committed to protecting your privacy and ensuring that your personal information is handled in a safe and responsible manner. This Privacy Policy outlines how we collect, use, and protect your information when you use our books, records, and diary tracking services (the "Service").`}/>
                 </div>
 
                 <div className={'flex flex-col gap-8'}>
@@ -24,12 +24,12 @@ export default function Home() {
                                 <UIText textOrientation={'left'} text={'When you log in using your Google account, we collect your email address, name, and profile picture.'}/>
                             </li>
                             <li>
-                                <UIText textOrientation={'left'} weight={'semibold'} text={'Marriage Expense Data: '}/>
-                                <UIText textOrientation={'left'} text={'Information you input related to your marriage expenses, gifts, and other relevant data.'}/>
+                                <UIText textOrientation={'left'} weight={'semibold'} text={'Records Data: '}/>
+                                <UIText textOrientation={'left'} text={'Information you input related to your books, financial records, diaries, and other relevant data.'}/>
                             </li>
                             <li>
                                 <UIText textOrientation={'left'} weight={'semibold'} text={'Groups Data: '}/>
-                                <UIText textOrientation={'left'} text={'Information about the groups you create or join to share your marriage expense data with other users and users in it.'}/>
+                                <UIText textOrientation={'left'} text={'Information about the groups you create or join to share your records with other users and users in it.'}/>
                             </li>
                         </ul>
                     </div>
@@ -46,7 +46,7 @@ export default function Home() {
                     <ul className={'list-disc ml-5'}>
                         <li>
                             <UIText textOrientation={'left'} weight={'semibold'} text={'With Other Users: '}/>
-                            <UIText textOrientation={'left'} text={'When you use the groups feature, your marriage expense data is shared with other users in the group.'}/>
+                            <UIText textOrientation={'left'} text={'When you use the groups feature, your record data is shared with other users in the group.'}/>
                         </li>
                         <li>
                             <UIText textOrientation={'left'} weight={'semibold'} text={'With Service Providers: '}/>
