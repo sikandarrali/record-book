@@ -1,6 +1,6 @@
 # Record Book
 
-Record Book is a multilingual (English/Urdu), installable Progressive Web App for tracking books, records, diaries, and shared groups.
+Record Book is a mobile-first multilingual (English/Urdu), installable Progressive Web App for tracking books, records, diaries, and shared groups.
 
 <p>
   <a href="https://rb.sikandar.info/">
