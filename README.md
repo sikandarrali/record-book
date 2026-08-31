@@ -12,7 +12,7 @@ Record Book is a mobile-first multilingual (English/Urdu), installable Progressi
 
 - **Books & Records** — create books and log monetary records inside them
 - **Diaries** — a dedicated diary feature for freeform entries
-- **Groups & Sharing** — create groups and share books with family or friends, join groups via invite links
+- **Groups & Sharing** — create groups and share books/diaries with family or friends, join groups via invite links
 - **Multiple Currencies** — support for PKR, Euro, and US Dollar with correct currency formatting
 - **Multilingual** — English and Urdu, including Urdu-specific date/text handling
 - **Theming** — multiple themes with light/dark mode support
