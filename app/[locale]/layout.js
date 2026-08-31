@@ -29,7 +29,7 @@ const APP_DEFAULT_TITLE = "Record Book";
 const APP_TITLE_TEMPLATE = "Record Book";
 const APP_DESCRIPTION = "All your records in one place. Say goodbye to your record diaries";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://rb.sikandar.info";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://record-book.sikandar.info";
 
 const OG_IMAGE = {
 	url: "/og-image.png",
