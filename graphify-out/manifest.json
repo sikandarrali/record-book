@@ -55,8 +55,8 @@
     "semantic_hash": ""
   },
   "app/[locale]/layout.js": {
-    "mtime": 1788219089.0333192,
-    "ast_hash": "d175e2151b6e7480b2fb6c9f71d96761",
+    "mtime": 1788219769.864827,
+    "ast_hash": "a34f53baa8cebfe01a35f3095b6d5d97",
     "semantic_hash": ""
   },
   "app/[locale]/loading.jsx": {
@@ -860,8 +860,8 @@
     "semantic_hash": ""
   },
   "README.md": {
-    "mtime": 1786351270.0430503,
-    "ast_hash": "5ecebdfaa2c7520ea1b48e98fb7606d1",
+    "mtime": 1788219688.041276,
+    "ast_hash": "3e12d2e94706ca36031905b0e0e003af",
     "semantic_hash": ""
   },
   "public/icons/android-chrome-192-192.png": {
@@ -905,8 +905,8 @@
     "semantic_hash": ""
   },
   "public/og-image.png": {
-    "mtime": 1788219030.6029024,
-    "ast_hash": "ad60d7cf1d9139beda33091cd38cfb36",
+    "mtime": 1788219688.0707083,
+    "ast_hash": "8e29db6ff270e487ac1466bb6ddcd2d4",
     "semantic_hash": ""
   },
   "public/record-book-logo-500x500.png": {
