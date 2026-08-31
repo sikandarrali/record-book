@@ -29,7 +29,17 @@ const APP_DEFAULT_TITLE = "Record Book";
 const APP_TITLE_TEMPLATE = "Record Book";
 const APP_DESCRIPTION = "All your records in one place. Say goodbye to your record diaries";
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://rb.sikandar.info";
+
+const OG_IMAGE = {
+	url: "/og-image.png",
+	width: 1200,
+	height: 630,
+	alt: APP_NAME,
+};
+
 export const metadata = {
+	metadataBase: new URL(SITE_URL),
 	applicationName: APP_NAME,
 	title: {
 		default: APP_DEFAULT_TITLE,
@@ -54,14 +64,17 @@ export const metadata = {
 			template: APP_TITLE_TEMPLATE,
 		},
 		description: APP_DESCRIPTION,
+		url: SITE_URL,
+		images: [OG_IMAGE],
 	},
 	twitter: {
-		card: "summary",
+		card: "summary_large_image",
 		title: {
 			default: APP_DEFAULT_TITLE,
 			template: APP_TITLE_TEMPLATE,
 		},
 		description: APP_DESCRIPTION,
+		images: [OG_IMAGE],
 	},
 };
 
