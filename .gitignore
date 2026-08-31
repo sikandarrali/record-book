@@ -42,3 +42,8 @@ next-env.d.ts
 
 # IDE
 .idea
+
+# local AI/editor tooling
+.claude/
+.mcp.json
+CLAUDE.md
