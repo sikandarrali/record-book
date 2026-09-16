@@ -5,22 +5,30 @@ import { NextResponse } from "next/server";
 import { HOMEPAGE_ROUTE, LOCALE_NEUTRAL_ROUTES, LOCALE_PROTECTED_ROUTES, LOCALE_PUBLIC_ROUTES } from "@/lib/routes";
 import { cookies } from "next/headers";
 import Cookies from "js-cookie";
-const sdk = require('node-appwrite');
-
-let client = new sdk.Client();
-client
-    .setEndpoint(ENDPOINT) // Your API Endpoint
-    .setProject(PROJECT_ID) // Your project ID
-    .setKey(process.env.APPWRITE_API_KEY) // Your secret API key
-    ;
-const users = new sdk.Users(client);
 
 const getCurrentUser = async (userSessionCookie) => {
     let response = null
     try {
-        response = await users.get(DecodeUserId(userSessionCookie.value));
+        if (!userSessionCookie) {
+            console.log('[mw] no session cookie present')
+            return null
+        }
+        const userId = DecodeUserId(userSessionCookie.value)
+        const url = `${ENDPOINT}/users/${userId}`
+        const res = await fetch(url, {
+            headers: {
+                'X-Appwrite-Project': PROJECT_ID,
+                'X-Appwrite-Key': process.env.APPWRITE_API_KEY,
+            },
+        });
+        if (!res.ok) {
+            const body = await res.text()
+            console.log('[mw] appwrite users.get failed', { url, status: res.status, body })
+        }
+        response = res.ok ? await res.json() : null;
     }
     catch (e) {
+        console.log('[mw] getCurrentUser threw', e?.message)
         response = null
     }
     return response
@@ -35,6 +43,8 @@ export default async function middleware(request) {
     const isPublicPath = LOCALE_PUBLIC_ROUTES().includes(pathname);
     const isProtectedPath = LOCALE_PROTECTED_ROUTES().includes(pathname);
     const locale = user?.prefs?.lang || "en";
+
+    console.log('[mw]', { pathname, hasCookie: !!userSessionCookie, hasUser: !!user, isPublicPath, isProtectedPath })
 
     if (user && isPublicPath) {
         return NextResponse.redirect(new URL(locale + HOMEPAGE_ROUTE, request.url))

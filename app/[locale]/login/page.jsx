@@ -5,15 +5,22 @@ import { Button } from "@/components/ui/button";
 import {useScopedI18n} from "@/locales/client";
 import UIText from "@/components/theme/UIText";
 import Link from "next/link";
-import {redirect} from "next/navigation";
+import {useRouter} from "next/navigation";
+import {useEffect} from "react";
 import {HOMEPAGE_ROUTE} from "@/lib/routes";
 
 export default function Home() {
 	const { onGoogleWithLogin, user } = useAuth();
 	const t = useScopedI18n('login')
+	const router = useRouter();
+
+	useEffect(() => {
+		if (user) {
+			router.replace(HOMEPAGE_ROUTE)
+		}
+	}, [user, router]);
 
 	if(user) {
-		redirect(HOMEPAGE_ROUTE)
 		return <></>
 	}
 

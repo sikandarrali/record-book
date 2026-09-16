@@ -34,7 +34,7 @@ export const AddGroupMember = ({groupID, setUsersInGroup}) =>{
                 values.email, // email
                 undefined, // userId - optional
                 undefined, // phone - optional
-                process.env.NEXT_PUBLIC_CALLBACK_ADD_USER_TO_GROUP,
+                `${window.location.origin}/join-group`,
                 undefined // name - optional
             );
             if(promise){
